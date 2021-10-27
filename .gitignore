@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+server
+client
+
+# Extra
+*.pdf
+.idea/*
+vgcore.*
+*.zip
+*.dump
+build/*
+*/cmake-build-debug/*
+*.xml

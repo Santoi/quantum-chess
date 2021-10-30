@@ -1,0 +1,11 @@
+language: cpp
+compiler:
+  - gcc
+install:
+  - bash build.sh
+script:
+  - bash test.sh
+notifications:
+  email:
+    on_success: change
+    on_failure: always

@@ -1,3 +1,8 @@
+# google test
+googletest/*
+build/*
+cmake-build-debug/*
+
 # Prerequisites
 *.d
 

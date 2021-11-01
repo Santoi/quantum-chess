@@ -1,18 +1,34 @@
-//
-// Created by matias on 30/10/21.
-//
-
 #ifndef QUANTUM_CHESS_PROJ_CHESSMAN_H
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
 
+#include "position.h"
+
+
+// Primera version.
+// TODO luego validar con el tablero.
+// TODO luego hacer comer.
+// TODO validar con color.
+
 class Chessman {
-    int value;
-
+protected:
+    Position position;
 public:
-    explicit Chessman(int value);
+    explicit Chessman(const Position & position_);
 
-    int getValue() const;
+    virtual void move(const Position & new_position) = 0;
+
+    virtual bool canMove(const Position & new_position) = 0;
+};
+
+class Pawn: public Chessman {
+    bool first_move;
+public:
+    explicit Pawn(const Position & position_);
+
+    void move(const Position & new_position) override;
+
+    bool canMove(const Position &new_position) override;
 };
 
 

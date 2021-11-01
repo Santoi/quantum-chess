@@ -4,8 +4,8 @@ set(This quantum-chess)
 
 project(${This} C CXX)
 
-set(Headers chessman.h)
-set(Sources chessman.cpp)
+set(Headers chessman.h quantum_position_tree.h position.h)
+set(Sources chessman.cpp quantum_position_tree.cpp position.cpp)
 
 add_executable(${This} main.cpp ${Sources} ${Headers})
 

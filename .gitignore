@@ -3,6 +3,9 @@ googletest/*
 build/*
 cmake-build-debug/*
 
+
+*.save
+
 # Prerequisites
 *.d
 

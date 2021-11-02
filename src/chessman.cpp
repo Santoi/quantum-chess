@@ -1,23 +1,50 @@
 #include <stdexcept>
 #include "chessman.h"
 
-Chessman::Chessman(const Position & position_): position(position_) {}
+// TODO implementar comer.
 
-void Pawn::move(const Position &new_position) {
-    if(!canMove(new_position))
+Chessman::Chessman(const Position & position_, Board & board_): tree(QuantumPositionTree(position_)), board(board_), quantum(false) {}
+
+void Pawn::move(const Position & initial, const Position & final) {
+    std::vector<Chessman *> chessman_in_path;
+    if(!canMoveAndCatchMiddleChessmen(initial, final, &chessman_in_path))
         throw std::invalid_argument("la ficha no se puede mover a esa posicion");
-    position = new_position;
+    tree.move(initial, final);
     first_move = false;
 }
 
-bool Pawn::canMove(const Position &new_position) {
-    if (new_position.x() != position.x())
+bool Pawn::canMoveAndCatchMiddleChessmen(const Position &initial, const Position & final, std::vector<Chessman *> * chessmen_in_path) {
+    std::vector<Position> path;
+    path.reserve(MAX_PATH_LENGTH);
+    if (initial.x() != final.x())
         return false;
-    if (position.y() + 2 == new_position.y() && first_move)
-        return true;
-    if (position.y() + 1 == new_position.y())
+    if (initial.y() + 2 == final.y() && first_move) {
+        path.push_back(Position(initial.y() + 2, initial.x()));
+        path.push_back(Position(initial.y() + 1, initial.x()));
+    }
+    if (initial.y() + 1 == final.y())
+        path.push_back(Position(initial.y() + 1, initial.x()));
+    if (!path.empty() && checkFreeMove(path, chessmen_in_path))
         return true;
     return false;
 }
 
-Pawn::Pawn(const Position &position_) : Chessman(position_), first_move(true) {}
+bool Chessman::canMove(const Position & initial, const Position & final) {
+    return canMoveAndCatchMiddleChessmen(initial, final, nullptr);
+}
+
+bool Chessman::checkFreeMove(const std::vector<Position> & path, std::vector<Chessman *> * chessmen) {
+    if(chessmen)
+        chessmen->reserve(MAX_PATH_LENGTH);
+    for (auto & position : path) {
+        if(Chessman * chessman = board.getChessmanAt(position)) {
+            if (!chessman->quantum && chessmen)
+                return false;
+            if (chessmen)
+                chessmen->push_back(chessman);
+        }
+    }
+    return true;
+}
+
+Pawn::Pawn(const Position &position_, Board & board_) : Chessman(position_, board_), first_move(true) {}

@@ -4,33 +4,34 @@
 #include <cstdint>
 #include <algorithm>
 #include <vector>
+#include "position.h"
 
 // TODO pensar propagacion de probs cuando pierde.
 
-class QuantumPositionTree;
-
-class QuantumPosition {
-    int data;
-    double probability;
-    QuantumPosition * top;
-    QuantumPosition * left;
-    QuantumPosition * right;
-
-    friend class QuantumPositionTree;
-
-    explicit QuantumPosition(const int & data, const double & probability_);
-    QuantumPosition(const int & data, const double & probability_, QuantumPosition * top_);
-    QuantumPosition * addLeft(const int & data);
-    QuantumPosition * addRight(const int & data);
-    ~QuantumPosition();
-    int getData() const;
-};
+typedef std::pair<Position &, Position &> PositionPair;
 
 class QuantumPositionTree {
+    class QuantumPosition {
+            Position position;
+            double probability;
+            QuantumPosition * top;
+            QuantumPosition * left;
+            QuantumPosition * right;
+
+            friend class QuantumPositionTree;
+    public:
+            explicit QuantumPosition(const Position & pos, const double & probability_);
+            QuantumPosition(const Position & pos, const double & probability_, QuantumPosition * top_);
+            QuantumPosition * addLeft(const Position & pos);
+            QuantumPosition * addRight(const Position & pos);
+            ~QuantumPosition() = default;
+            Position getData() const;
+    };
+
     QuantumPosition * root;
     uint32_t size_;
 
-    std::vector<const QuantumPosition *> leaves{};
+    std::vector<QuantumPosition *> leaves{};
 
     void deleteRecursive(QuantumPosition * node);
 
@@ -38,25 +39,25 @@ class QuantumPositionTree {
 
     bool isThere(QuantumPosition *now_node, QuantumPosition *search);
 
+    std::vector<QuantumPositionTree::QuantumPosition *>::iterator findLeaveWithPosition(const Position & position);
+
 public:
-    explicit QuantumPositionTree(const int & data);
+    explicit QuantumPositionTree(const Position & position);
 
     ~QuantumPositionTree();
 
-    std::pair<QuantumPosition *, QuantumPosition *> split(QuantumPosition * node, const int & data_1, const int & data_2);
+    void split(const Position & in_position, const Position & position_1, const Position & position_2);
 
     // TODO revisar
     void measure(QuantumPosition * node);
-
-    void move(QuantumPosition * node, const int & data);
 
     uint32_t size() const;
 
     uint32_t leavesSize() const;
 
-    QuantumPosition * getRoot() const;
+    std::vector<Position> getLeavesData();
 
-    std::vector<int> getLeavesData();
+    void move(const Position &initial, const Position &final);
 };
 
 #endif //QUANTUM_CHESS_PROJ_QUANTUM_POSITION_TREE_H

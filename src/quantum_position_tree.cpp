@@ -2,27 +2,25 @@
 #include <algorithm>
 #include <stdexcept>
 
-QuantumPosition::QuantumPosition(const int &data_, const double & probability_): data(data_), probability(probability_), top(nullptr), left(nullptr), right(nullptr) {}
+QuantumPositionTree::QuantumPosition::QuantumPosition(const Position & pos, const double & probability_): position(pos), probability(probability_), top(nullptr), left(nullptr), right(nullptr) {}
 
-QuantumPosition::QuantumPosition(const int & data_, const double & probability_, QuantumPosition * top_): data(data_), probability(probability_), top(top_), left(nullptr), right(nullptr) {}
+QuantumPositionTree::QuantumPosition::QuantumPosition(const Position & pos, const double & probability_, QuantumPosition * top_): position(pos), probability(probability_), top(top_), left(nullptr), right(nullptr) {}
 
-QuantumPosition::~QuantumPosition() = default;
-
-QuantumPosition * QuantumPosition::addRight(const int &data) {
-    right = new QuantumPosition(data, probability/2, this);
+QuantumPositionTree::QuantumPosition * QuantumPositionTree::QuantumPosition::addRight(const Position & pos) {
+    right = new QuantumPosition(pos, probability/2, this);
     return right;
 }
 
-QuantumPosition * QuantumPosition::addLeft(const int &data) {
-    left = new QuantumPosition(data, probability/2, this);
+QuantumPositionTree::QuantumPosition * QuantumPositionTree::QuantumPosition::addLeft(const Position & pos) {
+    left = new QuantumPosition(pos, probability/2, this);
     return left;
 }
 
-int QuantumPosition::getData() const {
-    return data;
+Position QuantumPositionTree::QuantumPosition::getData() const {
+    return position;
 }
 
-QuantumPositionTree::QuantumPositionTree(const int & data): root(new QuantumPosition(data, 1)), size_(1), leaves(1, root) {}
+QuantumPositionTree::QuantumPositionTree(const Position & position): root(new QuantumPosition(position, 1)), size_(1), leaves(1, root) {}
 
 QuantumPositionTree::~QuantumPositionTree(){
     deleteRecursive(root);
@@ -38,17 +36,18 @@ void QuantumPositionTree::deleteRecursive(QuantumPosition * node){
         deleteRecursive(right_);
 }
 
-std::pair<QuantumPosition *, QuantumPosition *> QuantumPositionTree::split(QuantumPosition * node, const int & data_1, const int & data_2) {
-    auto it = std::find(leaves.begin(), leaves.end(), node);
+
+
+void QuantumPositionTree::split(const Position & in_position, const Position & position_1, const Position & position_2) {
+    auto it = findLeaveWithPosition(in_position);
     if (it == leaves.end())
-        throw std::invalid_argument("el nodo no es una hoja");
-    QuantumPosition *left = node->addLeft(data_1);
-    QuantumPosition *right = node->addRight(data_2);
+        throw std::invalid_argument("no hay ninguna hoja con esa posicion");
+    QuantumPosition *left = (*it)->addLeft(position_1);
+    QuantumPosition *right = (*it)->addRight(position_2);
     it = leaves.erase(it);
     it = leaves.insert(it, left);
     leaves.insert(++it, right);
     size_ += 2;
-    return {left, right};
 }
 
 uint32_t QuantumPositionTree::leavesSize() const {
@@ -57,10 +56,6 @@ uint32_t QuantumPositionTree::leavesSize() const {
 
 uint32_t QuantumPositionTree::size() const {
     return size_;
-}
-
-QuantumPosition * QuantumPositionTree::getRoot() const{
-    return root;
 }
 
 void QuantumPositionTree::measure(QuantumPosition * node) {
@@ -79,7 +74,7 @@ void QuantumPositionTree::measure(QuantumPosition * node) {
     node->top = nullptr;
     root = node;
     // TODO propagar probabilidad.
-    leaves = std::vector<const QuantumPosition *>();
+    leaves = std::vector<QuantumPosition *>();
     size_ = 0;
     updateSizeAndLeaves(root);
 }
@@ -94,8 +89,8 @@ void QuantumPositionTree::updateSizeAndLeaves(QuantumPosition * node) {
     updateSizeAndLeaves(node->right);
 }
 
-std::vector<int> QuantumPositionTree::getLeavesData(){
-    std::vector<int> leaves_data;
+std::vector<Position> QuantumPositionTree::getLeavesData(){
+    std::vector<Position> leaves_data;
     leaves_data.reserve(leaves.size());
     for (auto & leave : leaves){
         leaves_data.push_back(leave->getData());
@@ -115,6 +110,19 @@ bool QuantumPositionTree::isThere(QuantumPosition * now_node, QuantumPosition * 
     return false;
 }
 
-void QuantumPositionTree::move(QuantumPosition *node, const int & data) {
-    node->data = data;
+void QuantumPositionTree::move(const Position & initial, const Position & final) {
+    auto it = findLeaveWithPosition(initial);
+    if (it != leaves.end())
+        (*it)->position = final;
+    else
+        throw std::invalid_argument("la posicion no se encuentra en una hoja");
+}
+
+std::vector<QuantumPositionTree::QuantumPosition *>::iterator QuantumPositionTree::findLeaveWithPosition(const Position &position) {
+    auto it = leaves.begin();
+    for (; it != leaves.end(); ++it){
+        if ((*it)->position == position)
+            break;
+    }
+    return it;
 }

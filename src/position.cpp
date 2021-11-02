@@ -16,4 +16,25 @@ uint8_t Position::y() const {
     return y_;
 }
 
+bool Position::operator==(const Position &other) const {
+    return x_ == other.x_ && y_ == other.y_;
+}
+
+bool Position::operator!=(const Position &other) const {
+    return x_ != other.x_ || y_ != other.y_;
+}
+
+Position & Position::operator=(const Position & orig) {
+    x_ = orig.x_;
+    y_ = orig.y_;
+    return *this;
+}
+
+bool operator<(const Position &a, const Position &b) {
+    return ( a.x_ < b.x_ ) ||
+           (( a.x_ == b.x_) && ( a.y_ < b.y_ ));
+}
+
+
+
 

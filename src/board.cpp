@@ -1,4 +1,5 @@
 #include "board.h"
+#include <utility>
 
 // TODO crear tablero inicializado
 Board::Board(): chessmen(), board() {}
@@ -15,7 +16,7 @@ Chessman *Board::getChessmanAt(const Position &position) {
     try {
         chessman = board.at(position);
     }
-    catch (const std::out_of_range & e){
+    catch(const std::out_of_range & e){
         return nullptr;
     }
     return chessman;

@@ -4,11 +4,12 @@
 #include <map>
 #include "position.h"
 #include "chessman.h"
+#include <vector>
 
 class Chessman;
 
 class Board {
-    std::vector<Chessman *> chessmen;
+    std::vector<Chessman> chessmen;
     std::map<const Position, Chessman *> board;
 
 public:

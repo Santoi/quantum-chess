@@ -1,9 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_CHESSMAN_H
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
+#include <vector>
 #include "position.h"
 #include "quantum_position_tree.h"
 #include "board.h"
+
 
 #define MAX_PATH_LENGTH 8
 
@@ -19,32 +21,37 @@ class Chessman {
 protected:
     QuantumPositionTree tree;
     Board & board;
-    bool quantum;
+    bool white;
 
-    bool checkFreeMove(const std::vector<Position> & path, std::vector<Chessman *> * chessmen);
+    bool checkFreeMove(const std::vector<Position> & path,
+                       std::vector<Chessman *> * chessmen);
 
-    virtual bool canMoveAndCatchMiddleChessmen(const Position &initial, const Position & final, std::vector<Chessman *> * chessmen_in_path) = 0;
+    virtual bool checkMiddleChessmen(const Position &initial,
+                                     const Position & final,
+                                     std::vector<Chessman *> *
+                                             chessmen_in_path) = 0;
 
 
 public:
-    Chessman(const Position & position_, Board & board_);
+    Chessman(const Position & position_, bool white_, Board & board_);
 
-    virtual void move(const Position & initial, const Position & final) = 0;
+    virtual void move(const Position & initial, const Position & final);
 
     bool canMove(const Position & initial, const Position & final);
 
+    bool isQuantum() const;
 };
 
 class Pawn: public Chessman {
     bool first_move;
 
-    bool canMoveAndCatchMiddleChessmen(const Position &initial, const Position & final, std::vector<Chessman *> * chessmen_in_path) override;
+    bool checkMiddleChessmen(const Position &initial, const Position & final,
+                             std::vector<Chessman *> * chessmen_in_path)
+                             override;
 public:
-    explicit Pawn(const Position & position_, Board & board_);
+    explicit Pawn(const Position & position_, bool white_, Board & board_);
 
-    void move(const Position &initial, const Position &final);
-
-
+    void move(const Position & initial, const Position & final) override;
 };
 
 

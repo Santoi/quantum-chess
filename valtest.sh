@@ -1,2 +1,2 @@
 cd build/test
-valgrind ./quantum-chess-test
+valgrind --leak-check=full ./quantum-chess-test

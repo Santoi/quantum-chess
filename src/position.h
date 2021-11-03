@@ -11,8 +11,8 @@ public:
 
     Position(const Position & orig) = default;
 
-    uint8_t x() const;
-    uint8_t y() const;
+    int8_t x() const;
+    int8_t y() const;
 
     bool operator==(const Position & other) const;
     bool operator!=(const Position & other) const;

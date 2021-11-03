@@ -8,11 +8,11 @@ Position::Position(uint8_t x, uint8_t y): x_(0), y_(0) {
     y_ = y;
 }
 
-uint8_t Position::x() const {
+int8_t Position::x() const {
     return x_;
 }
 
-uint8_t Position::y() const {
+int8_t Position::y() const {
     return y_;
 }
 
@@ -34,6 +34,9 @@ bool operator<(const Position &a, const Position &b) {
     return (a.x_ < b.x_) ||
            ((a.x_ == b.x_) && (a.y_ < b.y_));
 }
+
+
+
 
 
 

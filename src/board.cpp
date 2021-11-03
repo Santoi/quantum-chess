@@ -2,7 +2,19 @@
 #include <utility>
 
 // TODO crear tablero inicializado
-Board::Board(): chessmen(), board() {}
+Board::Board(): chessmen(), board() {
+    chessmen.reserve(32);
+}
+
+void Board::addChessman(Chessman * chessman){
+    // TODO debug method.
+    // TODO ver de solucionar este tema de los punteros y eso
+    // TODO podria hacer algo asi como un wrapper RAII.
+    if (!chessman)
+        return;
+    chessmen.push_back(chessman);
+    board.insert(std::pair<Position, Chessman *>(chessman->getPosition(), chessman));
+}
 
 void Board::move(const Position & initial, const Position & final) {
     Chessman * chessman = board.at(initial);
@@ -12,12 +24,7 @@ void Board::move(const Position & initial, const Position & final) {
 }
 
 Chessman *Board::getChessmanAt(const Position &position) {
-    Chessman * chessman = nullptr;
-    try {
-        chessman = board.at(position);
-    }
-    catch(const std::out_of_range & e){
-        return nullptr;
-    }
-    return chessman;
+    if (board.count(position))
+        return board.at(position);
+    return nullptr;
 }

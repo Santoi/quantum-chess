@@ -3,13 +3,13 @@
 
 #include <map>
 #include "position.h"
-#include "chessman.h"
+#include "chessman/chessman.h"
 #include <vector>
 
 class Chessman;
 
 class Board {
-    std::vector<Chessman> chessmen;
+    std::vector<Chessman *> chessmen;
     std::map<const Position, Chessman *> board;
 
 public:
@@ -18,6 +18,8 @@ public:
     void move(const Position & initial, const Position & final);
 
     Chessman * getChessmanAt(const Position & position);
+
+    void addChessman(Chessman * chessman);
 };
 
 

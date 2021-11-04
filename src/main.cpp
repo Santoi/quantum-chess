@@ -8,23 +8,10 @@
 
 
 int main() {
-    // TODO hacer dinamica de turnos.
-    try{
-        Board board;
-        board.load();
-        AsciiChess ascii_chess(board);
-        ascii_chess.draw();
-        while(1) {
-            try {
-                if(ascii_chess.readCommand())
-                    break;
-                ascii_chess.draw();
-            }
-            catch(const std::exception & e){
-                std::cerr << "Error: " << e.what() << std::endl;
-            }
-        }
-    }
+    try {
+		AsciiChess ascii_chess;
+		ascii_chess.execute();
+	}
     catch(const std::exception & e){
         std::cerr << "Error: " << e.what() << std::endl;
     }

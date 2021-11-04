@@ -3,15 +3,21 @@
 
 #include "board.h"
 
+// Clase que ejecuta el ajedrez en formato ASCII.
 class AsciiChess {
-    Board & board;
-
-public:
-    explicit AsciiChess(Board & board);
-
+    Board board;
+    
+    // Dibuja el tablero.
     void draw();
 
+	// Lee comandos de entrada.
     bool readCommand();
+
+public:
+    AsciiChess();
+    
+    // Ejecuta el juego.
+    void execute();
 };
 
 

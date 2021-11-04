@@ -1,6 +1,24 @@
 #include <sstream>
 #include "ascii_chess.h"
 
+AsciiChess::AsciiChess(): board() {}
+
+void AsciiChess::execute() {
+	board.load();
+	draw();
+	while(true) {
+		try {
+			if (readCommand())
+				break;
+			draw();
+		}
+		// TODO cambiar por ChessException
+		catch(const std::exception & e){
+			std::cerr << "Error: " << e.what() << std::endl;
+		}
+	}
+}
+
 void AsciiChess::draw() {
     for (int8_t i = 7; i >= 0; i--) {
         std::cout << (uint) i << " ";
@@ -20,8 +38,6 @@ void AsciiChess::draw() {
         std::cout << (char) (j + 'A') << "  ";
     std::cout << std::endl;
 }
-
-AsciiChess::AsciiChess(Board &board_): board(board_){}
 
 bool AsciiChess::readCommand() {
     std::string line;

@@ -7,7 +7,7 @@
 #include "../board.h"
 
 #define RESET   "\033[0m"
-#define WHITE_     "\033[31m"
+#define RED     "\033[31m"
 #define GREEN   "\033[32m"
 
 // TODO CHEQUEAR SI TODOS LOS QUE ESTAN EN EL MEDIO SUMAN 100 % PROBA.

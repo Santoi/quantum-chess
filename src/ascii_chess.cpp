@@ -27,7 +27,7 @@ bool AsciiChess::readCommand() {
     std::string line;
     std::string op;
 
-    std::string color = (board.nextWhite()) ? "blancas" : "negras";
+    std::string color = (board.isNextWhite()) ? "blancas" : "negras";
     std::cout << "Juegan las " << color << " >>  ";
 
     std::getline(std::cin, line);

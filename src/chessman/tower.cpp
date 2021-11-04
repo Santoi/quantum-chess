@@ -7,7 +7,7 @@ void Tower::calculatePosibleMoves(const Position & initial, std::vector<Position
     posible_moves = std::vector<Position>();
     posible_moves.reserve(14);
     std::vector<Position> path;
-    // Chequeo en la columna.
+    // Se chequea la columna.
     for (uint8_t i = 0; i < 8; i++) {
         Position position = Position(initial.x(), i);
         if (initial != position) {
@@ -16,7 +16,7 @@ void Tower::calculatePosibleMoves(const Position & initial, std::vector<Position
                 posible_moves.push_back(position);
         }
     }
-    // Chequeo en la fila.
+    // Se chequea la fila.
     for (uint8_t i = 0; i < 8; i++) {
         Position position = Position(i, initial.y());
         if (initial != position) {

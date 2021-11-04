@@ -3,9 +3,8 @@
 #include <iostream>
 #include "chessman.h"
 
-// TODO implementar comer.
 // TODO ver que excepciones cambiar a ChessError (revisar todas)
-// TODO aclarar no importa como se calcule el path siempre se deja el final al final.
+
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
                    position(position_),
                    board(board_), white(white_) {}
@@ -13,22 +12,19 @@ Chessman::Chessman(const Position & position_, bool white_, Board & board_):
 
 void Chessman::move(const Position & initial, const Position & final) {
     std::vector<Chessman *> chessmen_in_path;
-    // TODO desharcodear
-    // TODO encapsular en canMove();
+   
     checkCanMove(initial, final, chessmen_in_path);
-    // TODO deberia chequearlo en calculatePosibleMoves
+    
     if (Chessman * final_chessman = board.getChessmanAt(final)) {
         if(final_chessman->isQuantum())
-            int hola = 5; // TODO capture o measure.
+            int hola = 5; // measure.
         else if (final_chessman->white != white)
             board.removeChessmanOf(final);
         else
             throw std::invalid_argument("la pieza no se puede mover alli, hay una pieza no cuantica del mismo color");
     }
-    // TODO editar el board desde aca?
     position = final;
     board.addChessmanOfIn(initial, final);
-    // TODO LOGICA DE COMER (VA A DIFERIR EN PAWN) ENTRELAZAMIENTO, MEASURE ETC.
 }
 
 void Chessman::checkCanMove(Position initial, Position final, std::vector<Chessman *> & chessmen_in_path) const{
@@ -36,9 +32,11 @@ void Chessman::checkCanMove(Position initial, Position final, std::vector<Chessm
     std::vector<Position> posible_moves;
     if (initial != position)
         throw std::invalid_argument("la ficha no está en esa posicion");
+        
     calculatePosibleMoves(initial, posible_moves);
     if (std::find(posible_moves.begin(), posible_moves.end(), final) == posible_moves.end())
         throw std::invalid_argument("la pieza no se puede mover alli");
+        
     calculatePath(initial, final, path);
     getPathMiddleChessmen(path, &chessmen_in_path);
 }
@@ -48,10 +46,14 @@ bool Chessman::checkFreePath(const std::vector<Position> & path) const {
 }
 
 bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path, std::vector<Chessman *> * chessmen) const {
-    if(chessmen) {
+    // Si se pasa puntero es que se quiere guardar los elementos del medio.
+    if (chessmen) {
         *chessmen = std::vector<Chessman *>();
         chessmen->reserve(7);
     }
+    /* Se itera por el camino y se guardan los elementos cuanticos,
+     * si se encuentra uno no cuantico que no este al final, y no
+     * sea de distinto color, se devuelve false. */
     for (size_t i = 0; i < path.size(); i++) {
         if (Chessman *chessman = board.getChessmanAt(path[i])) {
             if (!(chessman->isQuantum() || ((i == path.size() - 1) && chessman->white != white))) {
@@ -65,8 +67,7 @@ bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path, std::ve
 }
 
 bool Chessman::isQuantum() const {
-    // TODO ver si cuando es tradicional solo tiene una el arbol directamente.
-    // TODO desharcodear.
+	// TODO desharcodear cuando se codee la parte cuantica.
     return false;
 }
 
@@ -75,11 +76,11 @@ bool Chessman::isWhite() const {
 }
 
 Position Chessman::getPosition() {
+	// TODO modificar cuando se haga cuantica.
     return position;
 }
 
 void Chessman::calculatePath(const Position & initial, const Position & final, std::vector<Position> & path) const {
-    // aclarar no importa como se calcule el path siempre se deja el final al final.
     if (initial == final)
         std::invalid_argument("no se puede calcular el camino entre posiciones iguales");
     if (initial.y() == final.y())
@@ -88,7 +89,6 @@ void Chessman::calculatePath(const Position & initial, const Position & final, s
         calculateRowPath(initial, final, path);
     else if (abs((initial.x() - final.x()) / (initial.y() - final.y())) == 1)
         calculateDiagonalPath(initial, final, path);
-    // TODO calcular el caso de diagonal.
     else
         throw std::invalid_argument("ese movimiento es imposible");
 }

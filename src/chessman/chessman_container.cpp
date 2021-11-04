@@ -30,6 +30,7 @@ ChessmanContainer::ChessmanContainer(char chessman_, Position position, bool whi
         default:
             throw std::invalid_argument("esa letra no representa ninguna pieza");
     }
+    // Se valida si se pudo pedir memoria correctamente.
     if (!pointer)
         throw std::runtime_error("no se pudo alocar memoria");
 }

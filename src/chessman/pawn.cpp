@@ -20,7 +20,7 @@ void Pawn::calculatePosibleMoves(const Position &initial, std::vector<Position> 
     }
     if ((i = initial.x() + 1) < 8 && (j = initial.y() + sum) >= 0 && j < 8) {
         position = Position(i, j);
-        // Si hay algo en la casilla, lo agrego y sigo.
+        // Si hay algo en la casilla, se agrega
         if (board.getChessmanAt(position)) {
             calculatePath(initial, position, path);
             if (checkFreePath(path))
@@ -29,7 +29,7 @@ void Pawn::calculatePosibleMoves(const Position &initial, std::vector<Position> 
     }
     if ((i = initial.x() - 1) >= 0 && (j = initial.y() + sum) >= 0 && j < 8) {
         position = Position(i, j);
-        // Si hay algo en la casilla, lo agrego y sigo.
+        // Si hay algo en la casilla, se agrega.
         if (board.getChessmanAt(position)) {
             calculatePath(initial, position, path);
             if (checkFreePath(path))
@@ -44,14 +44,13 @@ void Pawn::calculatePosibleMoves(const Position &initial, std::vector<Position> 
     }
 }
 
-
-std::string Pawn::print() const {
-    return "P";
-}
-
 void Pawn::move(const Position &initial, const Position &final) {
     Chessman::move(initial, final);
     first_move = false;
+}
+
+std::string Pawn::print() const {
+    return "P";
 }
 
 

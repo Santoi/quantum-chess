@@ -11,11 +11,12 @@ private:
 
 public:
     Knight(const Position & position, bool white_, Board & board_);
+    
     void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const override;
 
-    ~Knight() override = default;
-
     void calculatePath(const Position &initial, const Position &final, std::vector<Position> &path) const override;
+
+    ~Knight() override = default;
 };
 
 

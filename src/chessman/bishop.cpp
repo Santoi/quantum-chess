@@ -8,7 +8,7 @@ void Bishop::calculatePosibleMoves(const Position &initial, std::vector<Position
     posible_moves.reserve(14);
     std::vector<Position> path;
 
-    // Primero la diagonal hacia la derecha.
+    // Primero se recorre la diagonal hacia la derecha.
     int8_t min = std::min(initial.x(), initial.y());
     for (int8_t i = initial.x() - min, j = initial.y() - min; i < 8 && j < 8; i++, j++) {
         Position position = Position(i, j);

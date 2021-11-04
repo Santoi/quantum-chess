@@ -8,6 +8,7 @@ void Queen::calculatePosibleMoves(const Position &initial, std::vector<Position>
     posible_moves.reserve(28);
     std::vector<Position> path;
 
+	// Se cheuqea la columna
     for (uint8_t i = 0; i < 8; i++) {
         Position position = Position(initial.x(), i);
         if (initial != position) {
@@ -16,7 +17,8 @@ void Queen::calculatePosibleMoves(const Position &initial, std::vector<Position>
                 posible_moves.push_back(position);
         }
     }
-    // Chequeo en la fila.
+
+	// Se chequea la fila
     for (uint8_t i = 0; i < 8; i++) {
         Position position = Position(i, initial.y());
         if (initial != position) {
@@ -26,7 +28,7 @@ void Queen::calculatePosibleMoves(const Position &initial, std::vector<Position>
         }
     }
 
-    // Primero la diagonal hacia la derecha.
+    // Se chequea la diagonal hacia la derecha.
     int8_t min = std::min(initial.x(), initial.y());
     for (int8_t i = initial.x() - min, j = initial.y() - min; i < 8 && j < 8; i++, j++) {
         Position position = Position(i, j);
@@ -36,7 +38,7 @@ void Queen::calculatePosibleMoves(const Position &initial, std::vector<Position>
                 posible_moves.push_back(position);
         }
     }
-    // Se recorre para el otro lado
+    // Se chequea la diagonal hacia la izquierda.
     min = std::min(7 - initial.x(), (int) initial.y());
     for (int8_t i = initial.x() + min, j = initial.y() - min; i >= 0 && j < 8; i--, j++) {
         Position position = Position(i, j);

@@ -63,29 +63,5 @@ public:
 
     bool isWhite() const;
 };
-/*
-class Pawn: public Chessman {
-    bool first_move;
-
-    bool checkMoveAndMiddleChessmen(const Position &initial,
-                                    const Position & final,
-                                    std::vector<Chessman *> *
-                                            chessmen_in_path)
-                                    override;
-public:
-    Pawn(const Position & position_, bool white_, Board & board_);
-
-    void move(const Position & initial, const Position & final) override;
-};
-
-class Knight: public Chessman {
-    bool checkMoveAndMiddleChessmen(const Position &initial,
-                                    const Position & final,
-                                    std::vector<Chessman *> * chessmen_in_path)
-                                    override;
-public:
-    Knight(const Position & position, bool white_, Board & board_);
-};*/
-
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

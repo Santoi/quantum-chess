@@ -228,6 +228,7 @@ TEST(Bishop, BadMoveWithEmptyBoard) {
     EXPECT_THROW(bishop->move(Position(5, 1), Position(5, 2)), std::invalid_argument);
 }
 
+// Se testea movimientos del rey.
 TEST(King, CalculatePosibleMovesWithEmptyBoard) {
     Board board;
     ChessmanContainer container('K', Position(2, 1), true, board);
@@ -246,4 +247,102 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
     EXPECT_EQ(posible_moves, posible_moves_gt);
 }
 
-// TODO test pieza en el medio.
+// Del caballo se testean sus movimientos rodeado por piezas.
+TEST(Knight, CalculatePosibleMovesSurrounded) {
+	Board board;
+	std::vector<ChessmanContainer> container;
+	std::vector<Position> sorround = {
+		Position(5, 4), Position(5, 5),
+		Position(4, 5), Position(3, 5),
+		Position(3, 4), Position(3, 3),
+		Position(4, 3), Position(5, 3)
+	};
+	std::vector<Position> posible_moves_gt = {
+		Position(6, 5), Position(5, 6),
+		Position(3, 6), Position(2, 5),
+		Position(2, 3), Position(3, 2),
+		Position(5, 2), Position(6, 3),
+	};
+	
+	for (size_t i = 0; i < sorround.size(); i++){
+		board.addChessman(std::move(ChessmanContainer('T', sorround[i], true, board)));
+	}
+	
+	ChessmanContainer horse('H', Position(4, 4), true, board);
+	
+	Chessman * chessman = horse.get();
+	board.addChessman(std::move(horse));
+	
+	std::vector<Position> posible_moves;
+	chessman->calculatePosibleMoves(Position(4, 4), posible_moves);
+	
+	EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(Pawn, PosibleMoveWithEmptyBoard) {
+	Board board;
+	ChessmanContainer pawn('P', Position(1, 1), true, board);
+	
+	Chessman * chessman = pawn.get();
+	board.addChessman(std::move(pawn));
+	
+	std::vector<Position> posible_moves_gt = {
+		Position(1, 2), Position(1, 3),
+	};
+	
+	std::vector<Position> posible_moves;
+	chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+	
+	EXPECT_EQ(posible_moves, posible_moves_gt);
+	
+	chessman->move(Position(1, 1), Position(1, 3));
+	
+	posible_moves_gt = {
+		Position(1, 4)
+	};
+	
+	chessman->calculatePosibleMoves(Position(1, 3), posible_moves);
+	
+	EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(Pawn, PosibleMoveWithChessmanInPositionToCaptureButSameColor) {
+	Board board;
+	ChessmanContainer pawn('P', Position(1, 1), true, board);
+	
+	Chessman * chessman = pawn.get();
+	board.addChessman(std::move(pawn));
+	
+	board.addChessman(std::move(ChessmanContainer('P', Position(2, 2), true, board)));
+	board.addChessman(std::move(ChessmanContainer('P', Position(0, 2), true, board)));
+	
+	std::vector<Position> posible_moves_gt = {
+		Position(1, 2), Position(1, 3)
+	};
+	
+	std::vector<Position> posible_moves;
+	chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+	
+	EXPECT_EQ(posible_moves, posible_moves_gt);
+}		
+
+TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
+	Board board;
+	ChessmanContainer pawn('P', Position(1, 1), true, board);
+	
+	Chessman * chessman = pawn.get();
+	board.addChessman(std::move(pawn));
+	
+	board.addChessman(std::move(ChessmanContainer('P', Position(2, 2), false, board)));
+	board.addChessman(std::move(ChessmanContainer('P', Position(0, 2), false, board)));
+	
+	std::vector<Position> posible_moves_gt = {
+		Position(1, 2), Position(2, 2),
+		Position(0, 2), Position(1, 3)
+	};
+	
+	std::vector<Position> posible_moves;
+	chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+	
+	EXPECT_EQ(posible_moves, posible_moves_gt);
+}

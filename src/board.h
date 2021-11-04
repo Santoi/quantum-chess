@@ -4,13 +4,17 @@
 #include <map>
 #include "position.h"
 #include "chessman/chessman.h"
+#include "chessman/chessman_container.h"
 #include <vector>
 
 class Chessman;
+class ChessmanContainer;
 
 class Board {
-    std::vector<Chessman *> chessmen;
+    std::vector<ChessmanContainer> chessmen;
+    // TODO CAMBIAR POR CHESSMAN &?
     std::map<const Position, Chessman *> board;
+    bool next_white;
 
 public:
     Board();
@@ -19,7 +23,15 @@ public:
 
     Chessman * getChessmanAt(const Position & position);
 
-    void addChessman(Chessman * chessman);
+    void removeChessmanOf(const Position &position);
+
+    void addChessmanOfIn(const Position &initial, const Position &final);
+
+    void load();
+
+    void addChessman(ChessmanContainer &&chessman_cont);
+
+    bool nextWhite() const;
 };
 
 

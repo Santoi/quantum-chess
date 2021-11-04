@@ -11,7 +11,7 @@ public:
 
     void draw();
 
-    void readCommand(std::string first, std::string second, std::string third, std::string forth, std::string fifth);
+    bool readCommand();
 };
 
 

@@ -1,32 +1,74 @@
 #include "board.h"
+#include "chessman/chessman_container.h"
 #include <utility>
 
 // TODO crear tablero inicializado
-Board::Board(): chessmen(), board() {
-    chessmen.reserve(32);
+Board::Board(): chessmen(), board(), next_white(true) {}
+
+void Board::load() {
+    // TODO hacer con el add.
+    addChessman(std::move(ChessmanContainer('T', Position(0, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('H', Position(1, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('B', Position(2, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('Q', Position(3, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('K', Position(4, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('B', Position(5, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('H', Position(6, 0), true, *this)));
+    addChessman(std::move(ChessmanContainer('T', Position(7, 0), true, *this)));
+
+    for(uint8_t i = 0; i < 8; i++)
+        addChessman(std::move(ChessmanContainer('P', Position(i, 1), true, *this)));
+
+    addChessman(std::move(ChessmanContainer('T', Position(0, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('H', Position(1, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('B', Position(2, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('Q', Position(3, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('K', Position(4, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('B', Position(5, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('H', Position(6, 7), false, *this)));
+    addChessman(std::move(ChessmanContainer('T', Position(7, 7), false, *this)));
+    for(uint8_t i = 0; i < 8; i++)
+        addChessman(std::move(ChessmanContainer('P', Position(i, 6), false, *this)));
 }
 
-void Board::addChessman(Chessman * chessman){
+void Board::addChessman(ChessmanContainer && chessman_cont){
     // TODO debug method.
     // TODO ver de solucionar este tema de los punteros y eso
     // TODO podria hacer algo asi como un wrapper RAII.
-    if (!chessman)
-        return;
-    chessmen.push_back(chessman);
-    // TODO Proteccion si ya hay uno.
+    Chessman * chessman = chessman_cont.get();
+    chessmen.push_back(std::move(chessman_cont));
+    // TODO Proteccion si ya hay uno, que hacer?
     board.insert(std::pair<Position, Chessman *>(chessman->getPosition(), chessman));
 }
 
 void Board::move(const Position & initial, const Position & final) {
-    Chessman * chessman = board.at(initial);
+    Chessman * chessman = getChessmanAt(initial);
+    if (!chessman)
+        throw std::invalid_argument("no hay ninguna pieza ahi");
+    if (chessman->isWhite() != next_white)
+        throw std::invalid_argument("no es tu turno");
     chessman->move(initial, final);
+    next_white = !next_white;
+}
+
+void Board::removeChessmanOf(const Position & position) {
+    board.erase(position);
+}
+
+void Board::addChessmanOfIn(const Position & initial, const Position & final) {
+    Chessman * chessman = getChessmanAt(initial);
+    if (!chessman)
+        throw std::invalid_argument("no hay ninguna pieza ahi");
     board.erase(initial);
-    board.erase(final);
-    board.insert(std::pair<const Position, Chessman *>(final, chessman));
+    board.insert(std::pair<Position, Chessman *>(final, chessman));
 }
 
 Chessman *Board::getChessmanAt(const Position &position) {
     if (board.count(position))
         return board.at(position);
     return nullptr;
+}
+
+bool Board::nextWhite() const{
+    return next_white;
 }

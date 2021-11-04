@@ -8,28 +8,16 @@
 
 
 int main() {
+    // TODO hacer dinamica de turnos.
     try{
         Board board;
-        Tower tower(Position(0, 0), true, board);
-        Tower tower2(Position(0, 7), false, board);
-        Queen queen(Position(3, 0), true, board);
-        Bishop bishop(Position(2, 0), true, board);
-        King king(Position(4, 0), true, board);
-        board.addChessman(&tower);
-        board.addChessman((&tower2));
-        board.addChessman(&bishop);
-        board.addChessman(&queen);
-        board.addChessman(&king);
+        board.load();
         AsciiChess ascii_chess(board);
         ascii_chess.draw();
         while(1) {
             try {
-                std::string first, second, three, fourth, fifth;
-                std::cin >> first;
-                if (first == "q")
+                if(ascii_chess.readCommand())
                     break;
-                std::cin >> second >> three >> fourth >> fifth;
-                ascii_chess.readCommand(first, second, three, fourth, fifth);
                 ascii_chess.draw();
             }
             catch(const std::exception & e){

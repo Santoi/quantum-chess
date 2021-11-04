@@ -19,6 +19,7 @@
 // TODO CHEQUEAR SI TODOS LOS QUE ESTAN EN EL MEDIO SUMAN 100 % PROBA.
 
 class Board;
+class ChessmanContainer;
 
 class Chessman {
 protected:
@@ -28,7 +29,7 @@ protected:
 
     bool checkFreePath(const std::vector<Position> & path) const;
 
-    void calculatePath(const Position &initial, const Position &final, std::vector<Position> &path) const;
+    virtual void calculatePath(const Position &initial, const Position &final, std::vector<Position> &path) const;
 
     void calculateFilePath(const Position &initial, const Position &final, std::vector<Position> &path) const;
 
@@ -38,9 +39,11 @@ protected:
 
     bool getPathMiddleChessmen(const std::vector<Position> &path, std::vector<Chessman *> *chessmen) const;
 
-    virtual void checkCanMove(Position initial, Position final, std::vector<Chessman *> &chessmen_in_path) const;
+    void checkCanMove(Position initial, Position final, std::vector<Chessman *> &chessmen_in_path) const;
 
     virtual std::string print() const = 0;
+
+
 
 public:
     Chessman(const Position & position_, bool white_, Board & board_);
@@ -55,6 +58,10 @@ public:
     virtual void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const = 0;
 
     friend std::ostream & operator<<(std::ostream & os, const Chessman & chessman);
+
+    virtual ~Chessman() = default;
+
+    bool isWhite() const;
 };
 /*
 class Pawn: public Chessman {

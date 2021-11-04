@@ -12,6 +12,7 @@ public:
     King(const Position & position, bool white_, Board & board_);
     void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const override;
 
+    ~King() override = default;
 };
 
 

@@ -34,7 +34,7 @@ bool AsciiChess::readCommand() {
     std::istringstream iss(line);
 
     iss >> op;
-    if (op == "q")
+    if (op == "q" || op == "Q")
         return true;
 
     if (op == "m" || op == "M") {

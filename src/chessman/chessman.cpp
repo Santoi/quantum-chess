@@ -111,8 +111,8 @@ void Chessman::calculateDiagonalPath(const Position & initial, const Position fi
     path = std::vector<Position> ();
     path.reserve(6);
 
-    for (uint8_t i = initial.x() + sumador_x, j = initial.y() + sumador_y;
-            i < final.x() && j < final.y(); i += sumador_x, j += sumador_y)
+    for (int8_t i = initial.x() + sumador_x, j = initial.y() + sumador_y;
+            i * sumador_x < final.x() * sumador_x && j * sumador_y < final.y() * sumador_y; i += sumador_x, j += sumador_y)
         path.push_back(Position(i, j));
 }
 

@@ -9,7 +9,7 @@ set(Sources chessman/chessman.cpp quantum_position_tree.cpp position.cpp board.c
 
 add_subdirectory(chessman)
 
-add_executable(${This} main.cpp ${Sources} ${Headers})
+add_executable(${This} main.cpp ${Sources} ${Headers} ascii_chess.cpp ascii_chess.h)
 
 add_library(${This}-lib STATIC ${Sources} ${Headers})
 

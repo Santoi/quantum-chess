@@ -3,6 +3,7 @@
 #include "../src/chessman/chessman.h"
 #include "../src/board.h"
 #include "../src/chessman/tower.h"
+#include "../src/chessman/bishop.h"
 
 TEST(Chessman, MoveFromANonExistingPosition) {
     Board board;
@@ -100,53 +101,92 @@ TEST(Tower, BadMoveWithEmptyBoard) {
 
     EXPECT_THROW(tower.move(Position(5, 1), Position(2, 3)), std::invalid_argument);
 }
-/*
-TEST(Pawn, PawnMovementFirstMove) {
+// Se testea el alfil para probar el movimiento diagonal
+TEST(Bishop, CalculatePosibleMovesWithEmptyBoard) {
     Board board;
-    Pawn pawn(Position(0, 1), true, board);
+    Bishop bishop(Position(2, 1), true, board);
+    std::vector<Position> posible_moves;
 
-    EXPECT_TRUE(pawn.canMove(Position(0, 1), Position(0, 2)));
-    EXPECT_TRUE(pawn.canMove(Position(0, 1), Position(0, 3)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 1), Position(0, 0)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 1), Position(0, 4)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 1), Position(1, 1)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 1), Position(1, 2)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 1), Position(0, 1)));
+    bishop.calculatePosibleMoves(Position(2, 1), posible_moves);
+
+    std::vector<Position> posible_moves_gt = {
+            Position(1, 0), Position(3, 2),
+            Position(4, 3), Position(5, 4),
+            Position(6, 5), Position(7, 6),
+            Position(3, 0), Position(1, 2),
+            Position(0, 3)
+    };
+
+    EXPECT_EQ(posible_moves, posible_moves_gt);
 }
 
-TEST(Pawn, PawnMovement) {
+TEST(Bishop, MoveWithEmptyBoard) {
     Board board;
-    Pawn pawn(Position(0, 1), true, board);
-    pawn.move(Position(0, 1), Position(0, 2));
+    Bishop bishop(Position(7, 7), true, board);
 
-    EXPECT_TRUE(pawn.canMove(Position(0, 2), Position(0, 3)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 2), Position(0, 1)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 2), Position(0, 4)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 2), Position(1, 1)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 2), Position(1, 2)));
-    EXPECT_FALSE(pawn.canMove(Position(0, 2), Position(0, 2)));
+    bishop.move(Position(7, 7), Position(4, 4));
+    bishop.move(Position(4, 4), Position(1, 7));
+
+    EXPECT_EQ(Position(1, 7), bishop.getPosition());
 }
 
-TEST(Knight, KnightCanMove) {
+TEST(Bishop, MoveWithChessmanInTheBoard) {
     Board board;
-    Knight knight(Position(4, 3), true, board);
+    // Se crea pieza en (5, 1)
+    Bishop bishop(Position(5, 1), true, board);
+    // Se crea pieza en (8, 3) y se agrega al tablero.
+    Tower tower_2(Position(7, 3), true, board);
+    board.addChessman(&tower_2);
 
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(2, 2)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(2, 4)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(3, 1)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(3, 5)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(5, 1)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(5, 5)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(6, 2)));
-    EXPECT_TRUE(knight.canMove(Position(4, 3), Position(6, 4)));
+    bishop.move(Position(5, 1), Position(6, 2));
+
+    EXPECT_EQ(Position(6, 2), bishop.getPosition());
+
+    bishop.move(Position(6, 2), Position(5, 3));
+    EXPECT_EQ(Position(5, 3), bishop.getPosition());
 }
 
-TEST(Knight, KnightCantMove) {
+TEST(Bishop, BadMoveToChessmanSameColorPosition) {
     Board board;
-    Knight knight(Position(4, 3), true, board);
+    // Se crea pieza en (5, 1)
+    Bishop bishop(Position(5, 5), true, board);
+    // Se crea pieza en (8, 3) y se agrega al tablero.
+    Tower tower_2(Position(7, 7), true, board);
+    board.addChessman(&tower_2);
 
-    EXPECT_FALSE(knight.canMove(Position(4, 3), Position(4, 4)));
-    EXPECT_FALSE(knight.canMove(Position(4, 3), Position(5, 4)));
+    EXPECT_THROW(bishop.move(Position(5, 5), Position(7, 7)), std::invalid_argument);
 }
-*/
+
+TEST(Bishop, MoveToChessmanDiffColorPosition) {
+    Board board;
+    // Se crea pieza en (5, 1)
+    Bishop bishop(Position(1, 0), true, board);
+    // Se crea pieza en (8, 3) y se agrega al tablero.
+    Tower tower_2(Position(0, 1), false, board);
+    board.addChessman(&tower_2);
+
+    bishop.move(Position(1, 0), Position(0, 1));
+
+    EXPECT_EQ(Position(0, 1), bishop.getPosition());
+}
+
+TEST(Bishop, BadMoveWithChessmanInTheMiddle) {
+    Board board;
+    // Se crea pieza en (5, 1)
+    Bishop bishop(Position(7, 2), true, board);
+    // Se crea pieza en (8, 3) y se agrega al tablero.
+    Tower tower_2(Position(6, 3), true, board);
+    board.addChessman(&tower_2);
+
+    EXPECT_THROW(bishop.move(Position(7, 2), Position(5, 4)), std::invalid_argument);
+}
+
+TEST(Bishop, BadMoveWithEmptyBoard) {
+    Board board;
+    Bishop bishop(Position(5, 1), true, board);
+    std::vector<Position> posible_moves;
+
+    EXPECT_THROW(bishop.move(Position(5, 1), Position(5, 2)), std::invalid_argument);
+}
+
 // TODO test pieza en el medio.

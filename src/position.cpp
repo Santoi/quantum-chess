@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <iostream>
 #include "position.h"
 
 Position::Position(uint8_t x, uint8_t y): x_(0), y_(0) {
@@ -8,11 +9,11 @@ Position::Position(uint8_t x, uint8_t y): x_(0), y_(0) {
     y_ = y;
 }
 
-int8_t Position::x() const {
+uint8_t Position::x() const {
     return x_;
 }
 
-int8_t Position::y() const {
+uint8_t Position::y() const {
     return y_;
 }
 
@@ -33,6 +34,11 @@ Position & Position::operator=(const Position & orig) {
 bool operator<(const Position &a, const Position &b) {
     return (a.x_ < b.x_) ||
            ((a.x_ == b.x_) && (a.y_ < b.y_));
+}
+
+std::ostream & operator<<(std::ostream & os, const Position & position){
+    os << "(" << (uint) position.x_ << ", " << (uint) position.y_ << ")";
+    return os;
 }
 
 

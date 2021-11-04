@@ -4,6 +4,7 @@
 #include "../src/board.h"
 #include "../src/chessman/tower.h"
 #include "../src/chessman/bishop.h"
+#include "../src/chessman/king.h"
 
 TEST(Chessman, MoveFromANonExistingPosition) {
     Board board;
@@ -187,6 +188,23 @@ TEST(Bishop, BadMoveWithEmptyBoard) {
     std::vector<Position> posible_moves;
 
     EXPECT_THROW(bishop.move(Position(5, 1), Position(5, 2)), std::invalid_argument);
+}
+
+TEST(King, CalculatePosibleMovesWithEmptyBoard) {
+    Board board;
+    King king(Position(2, 1), true, board);
+    std::vector<Position> posible_moves;
+
+    king.calculatePosibleMoves(Position(2, 1), posible_moves);
+
+    std::vector<Position> posible_moves_gt = {
+            Position(3, 1), Position(3, 2),
+            Position(2, 2), Position(1, 2),
+            Position(1, 1), Position(1, 0),
+            Position(2, 0), Position(3, 0)
+    };
+
+    EXPECT_EQ(posible_moves, posible_moves_gt);
 }
 
 // TODO test pieza en el medio.

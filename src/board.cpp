@@ -13,6 +13,7 @@ void Board::addChessman(Chessman * chessman){
     if (!chessman)
         return;
     chessmen.push_back(chessman);
+    // TODO Proteccion si ya hay uno.
     board.insert(std::pair<Position, Chessman *>(chessman->getPosition(), chessman));
 }
 
@@ -20,6 +21,7 @@ void Board::move(const Position & initial, const Position & final) {
     Chessman * chessman = board.at(initial);
     chessman->move(initial, final);
     board.erase(initial);
+    board.erase(final);
     board.insert(std::pair<const Position, Chessman *>(final, chessman));
 }
 

@@ -1,12 +1,30 @@
 #include <iostream>
-#include "bishop.h"
+#include "queen.h"
 
-Bishop::Bishop(const Position &position, bool white_, Board &board_) : Chessman(position, white_, board_) {}
+Queen::Queen(const Position &position, bool white_, Board &board_) : Chessman(position, white_, board_) {}
 
-void Bishop::calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const {
+void Queen::calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const {
     posible_moves = std::vector<Position>();
-    posible_moves.reserve(14);
+    posible_moves.reserve(28);
     std::vector<Position> path;
+
+    for (uint8_t i = 0; i < 8; i++) {
+        Position position = Position(initial.x(), i);
+        if (initial != position) {
+            calculatePath(initial, position, path);
+            if(checkFreePath(path))
+                posible_moves.push_back(position);
+        }
+    }
+    // Chequeo en la fila.
+    for (uint8_t i = 0; i < 8; i++) {
+        Position position = Position(i, initial.y());
+        if (initial != position) {
+            calculatePath(initial, position, path);
+            if (checkFreePath(path))
+                posible_moves.push_back(position);
+        }
+    }
 
     // Primero la diagonal hacia la derecha.
     int8_t min = std::min(initial.x(), initial.y());
@@ -30,8 +48,8 @@ void Bishop::calculatePosibleMoves(const Position &initial, std::vector<Position
     }
 }
 
-std::string Bishop::print() const {
-    return "B";
+std::string Queen::print() const {
+    return "Q";
 }
 
 

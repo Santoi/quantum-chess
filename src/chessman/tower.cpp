@@ -26,3 +26,7 @@ void Tower::calculatePosibleMoves(const Position & initial, std::vector<Position
         }
     }
 }
+
+std::string Tower::print() const {
+    return "T";
+}

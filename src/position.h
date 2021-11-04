@@ -22,6 +22,8 @@ public:
     friend bool operator<(const Position & a, const Position & b);
 
     friend std::ostream & operator<<(std::ostream & os, const Position & position);
+
+    Position();
 };
 
 

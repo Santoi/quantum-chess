@@ -41,6 +41,8 @@ std::ostream & operator<<(std::ostream & os, const Position & position){
     return os;
 }
 
+Position::Position(): x_(0), y_(0) {}
+
 
 
 

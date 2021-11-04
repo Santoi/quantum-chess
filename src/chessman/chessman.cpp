@@ -1,4 +1,3 @@
-
 #include <stdexcept>
 #include <vector>
 #include <iostream>
@@ -16,6 +15,7 @@ void Chessman::move(const Position & initial, const Position & final) {
     // TODO desharcodear
     // TODO encapsular en canMove();
     checkCanMove(initial, final, chessmen_in_path);
+    // TODO deberia chequearlo en calculatePosibleMoves
     if (Chessman * final_chessman = board.getChessmanAt(final)) {
         if(final_chessman->isQuantum() || final_chessman->white != white)
             int hola = 5; // TODO capture o measure.
@@ -114,6 +114,14 @@ void Chessman::calculateDiagonalPath(const Position & initial, const Position fi
     for (int8_t i = initial.x() + sumador_x, j = initial.y() + sumador_y;
             i * sumador_x < final.x() * sumador_x && j * sumador_y < final.y() * sumador_y; i += sumador_x, j += sumador_y)
         path.push_back(Position(i, j));
+}
+
+std::ostream &operator<<(std::ostream &os, const Chessman &chessman) {
+    if (chessman.white)
+        os << GREEN << chessman.print() << RESET;
+    else
+        os << RED << chessman.print() << RESET;
+    return os;
 }
 
 /*

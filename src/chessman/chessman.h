@@ -6,6 +6,9 @@
 #include "../quantum_position_tree.h"
 #include "../board.h"
 
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
 
 #define MAX_PATH_LENGTH 8
 
@@ -37,6 +40,8 @@ protected:
 
     virtual void checkCanMove(Position initial, Position final, std::vector<Chessman *> &chessmen_in_path) const;
 
+    virtual std::string print() const = 0;
+
 public:
     Chessman(const Position & position_, bool white_, Board & board_);
 
@@ -46,7 +51,10 @@ public:
 
     Position getPosition();
 
+    // TODO deberia revisar la ultima posicion tambien!!! porque sino no la voy a mostrar.
     virtual void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const = 0;
+
+    friend std::ostream & operator<<(std::ostream & os, const Chessman & chessman);
 };
 /*
 class Pawn: public Chessman {

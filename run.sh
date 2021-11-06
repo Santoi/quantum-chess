@@ -1,2 +1,2 @@
-cd build/src
-./quantum-chess
+cd build/src/ascii_chess
+./ascii-chess

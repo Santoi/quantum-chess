@@ -1,12 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(This quantum-chess)
+set(This quantum-chess-src)
 
 project(${This} C CXX)
 
-set(Headers chessman.h)
-set(Sources chessman.cpp)
-
-add_executable(${This} main.cpp ${Sources} ${Headers})
-
-add_library(${This}-lib STATIC ${Sources} ${Headers})
+add_subdirectory(quantum_chess)
+add_subdirectory(ascii_chess)

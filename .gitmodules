@@ -1,3 +1,6 @@
 [submodule "googletest"]
 	path = googletest
 	url = git@github.com:google/googletest
+[submodule "extlib/libSDL2pp"]
+	path = extlib/libSDL2pp
+	url = git@github.com:libSDL2pp/libSDL2pp.git

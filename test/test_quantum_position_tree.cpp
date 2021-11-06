@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <vector>
-#include "../src/quantum_position_tree.h"
-#include "../src/chess_exception.h"
+#include "../src/quantum_chess/quantum_position_tree.h"
+#include "../src/quantum_chess/chess_exception.h"
 
 TEST(QuantumPositionTree, CreateAndAddANode) {
     QuantumPositionTree binary_tree(Position(5, 2));

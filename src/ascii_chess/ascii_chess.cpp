@@ -1,7 +1,7 @@
 #include <sstream>
 #include <string>
 #include "ascii_chess.h"
-#include "chess_exception.h"
+#include "../quantum_chess/chess_exception.h"
 
 AsciiChess::AsciiChess(): board() {}
 

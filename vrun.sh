@@ -1,2 +1,2 @@
-cd build/src
-valgrind --leak-check=yes ./quantum-chess
+cd build/src/ascii_chess
+valgrind --leak-check=yes ./ascii-chess

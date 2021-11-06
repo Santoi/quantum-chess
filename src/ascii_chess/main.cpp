@@ -1,10 +1,6 @@
 #include <iostream>
-#include "board.h"
-#include "chessman/tower.h"
-#include "chessman/bishop.h"
-#include "chessman/queen.h"
+#include "../quantum_chess/board.h"
 #include "ascii_chess.h"
-#include "chessman/king.h"
 
 
 int main() {

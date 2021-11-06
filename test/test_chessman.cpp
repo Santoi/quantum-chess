@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <vector>
-#include "../src/chessman/chessman.h"
-#include "../src/board.h"
-#include "../src/chessman/tower.h"
-#include "../src/chessman/bishop.h"
-#include "../src/chessman/king.h"
-#include "../src/chess_exception.h"
+#include "../src/quantum_chess/board.h"
+#include "../src/quantum_chess/chessman/tower.h"
+#include "../src/quantum_chess/chessman/tower.h"
+#include "../src/quantum_chess/chessman/bishop.h"
+#include "../src/quantum_chess/chessman/king.h"
+#include "../src/quantum_chess/chess_exception.h"
 
 TEST(Chessman, MoveFromANonExistingPosition) {
     Board board;

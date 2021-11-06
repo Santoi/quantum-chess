@@ -9,5 +9,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_subdirectory(extlib/googletest)
+add_subdirectory(extlib/libSDL2pp)
 add_subdirectory(src)
 add_subdirectory(test)

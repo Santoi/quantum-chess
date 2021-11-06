@@ -4,8 +4,6 @@
 #include "chessman.h"
 #include "../chess_exception.h"
 
-// TODO ver que excepciones cambiar a ChessError (revisar todas)
-
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
                    position(position_),
                    board(board_), white(white_) {}

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
+#include <vector>
 #include "../src/chessman/chessman.h"
 #include "../src/board.h"
 #include "../src/chessman/tower.h"
@@ -55,7 +56,6 @@ TEST(Tower, MoveWithChessmanInTheBoard) {
     // Se crea pieza en (8, 3) y se agrega al tablero.
     ChessmanContainer tower_2_cont('T', Position(7, 3), true, board);
     Chessman * tower = tower_cont.get();
-    Chessman * tower_2 = tower_2_cont.get();
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(tower_2_cont));
 
@@ -74,12 +74,12 @@ TEST(Tower, BadMoveToChessmanSameColorPosition) {
     // Se crea pieza en (8, 3) y se agrega al tablero.
     ChessmanContainer tower2_cont('T', Position(7, 1), true, board);
     Chessman * tower = tower_cont.get();
-    Chessman * tower_2 = tower2_cont.get();
 
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(tower2_cont));
 
-    EXPECT_THROW(tower->move(Position(5, 1), Position(7, 1)), std::invalid_argument);
+    EXPECT_THROW(tower->move(Position(5, 1), Position(7, 1)),
+                 std::invalid_argument);
 }
 
 TEST(Tower, MoveToChessmanDiffColorPosition) {
@@ -89,7 +89,6 @@ TEST(Tower, MoveToChessmanDiffColorPosition) {
     // Se crea pieza en (8, 3) y se agrega al tablero.
     ChessmanContainer tower2_cont('T', Position(7, 1), false, board);
     Chessman * tower = tower_cont.get();
-    Chessman * tower_2 = tower2_cont.get();
 
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(tower2_cont));
@@ -106,12 +105,12 @@ TEST(Tower, BadMoveWithChessmanInTheMiddle) {
     // Se crea pieza en (7, 3) y se agrega al tablero.
     ChessmanContainer tower2_cont('T', Position(7, 3), true, board);
     Chessman * tower = tower_cont.get();
-    Chessman * tower_2 = tower2_cont.get();
 
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(tower2_cont));
 
-    EXPECT_THROW(tower->move(Position(7,1), Position(7,5)), std::invalid_argument);
+    EXPECT_THROW(tower->move(Position(7,1), Position(7,5)),
+                 std::invalid_argument);
 }
 
 TEST(Tower, BadMoveWithEmptyBoard) {
@@ -120,7 +119,8 @@ TEST(Tower, BadMoveWithEmptyBoard) {
     Chessman * tower = cont.get();
     board.addChessman(std::move(cont));
 
-    EXPECT_THROW(tower->move(Position(5, 1), Position(2, 3)), std::invalid_argument);
+    EXPECT_THROW(tower->move(Position(5, 1), Position(2, 3)),
+                 std::invalid_argument);
 }
 
 // Se testea el alfil para probar el movimiento diagonal
@@ -161,7 +161,6 @@ TEST(Bishop, MoveWithChessmanInTheBoard) {
     ChessmanContainer tower_cont('T', Position(7, 3), true, board);
     // Se crea pieza en (7, 3) y se agrega al tablero.
     ChessmanContainer bishop_cont('B', Position(5, 1), true, board);
-    Chessman * tower = tower_cont.get();
     Chessman * bishop = bishop_cont.get();
 
     board.addChessman(std::move(tower_cont));
@@ -180,13 +179,13 @@ TEST(Bishop, BadMoveToChessmanSameColorPosition) {
     ChessmanContainer tower_cont('T', Position(7, 7), true, board);
     // Se crea pieza en (7, 3) y se agrega al tablero.
     ChessmanContainer bishop_cont('B', Position(5, 5), true, board);
-    Chessman * tower = tower_cont.get();
     Chessman * bishop = bishop_cont.get();
 
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(bishop_cont));
 
-    EXPECT_THROW(bishop->move(Position(5, 5), Position(7, 7)), std::invalid_argument);
+    EXPECT_THROW(bishop->move(Position(5, 5), Position(7, 7)),
+                 std::invalid_argument);
 }
 
 TEST(Bishop, MoveToChessmanDiffColorPosition) {
@@ -195,7 +194,6 @@ TEST(Bishop, MoveToChessmanDiffColorPosition) {
     ChessmanContainer tower_cont('T', Position(0, 1), false, board);
     // Se crea pieza en (7, 3) y se agrega al tablero.
     ChessmanContainer bishop_cont('B', Position(1, 0), true, board);
-    Chessman * tower = tower_cont.get();
     Chessman * bishop = bishop_cont.get();
 
     board.addChessman(std::move(tower_cont));
@@ -211,21 +209,22 @@ TEST(Bishop, BadMoveWithChessmanInTheMiddle) {
     ChessmanContainer tower_cont('T', Position(6, 3), true, board);
     // Se crea pieza en (7, 3) y se agrega al tablero.
     ChessmanContainer bishop_cont('B', Position(7, 2), true, board);
-    Chessman * tower = tower_cont.get();
     Chessman * bishop = bishop_cont.get();
 
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(bishop_cont));
 
-    EXPECT_THROW(bishop->move(Position(7, 2), Position(5, 4)), std::invalid_argument);
+    EXPECT_THROW(bishop->move(Position(7, 2), Position(5, 4)),
+                 std::invalid_argument);
 }
 
 TEST(Bishop, BadMoveWithEmptyBoard) {
     Board board;
-    ChessmanContainer container ('B', Position(5, 1), true, board);
+    ChessmanContainer container('B', Position(5, 1), true, board);
     Chessman * bishop = container.get();
 
-    EXPECT_THROW(bishop->move(Position(5, 1), Position(5, 2)), std::invalid_argument);
+    EXPECT_THROW(bishop->move(Position(5, 1), Position(5, 2)),
+                 std::invalid_argument);
 }
 
 // Se testea movimientos del rey.
@@ -250,7 +249,6 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
 // Del caballo se testean sus movimientos rodeado por piezas.
 TEST(Knight, CalculatePosibleMovesSurrounded) {
 	Board board;
-	std::vector<ChessmanContainer> container;
 	std::vector<Position> sorround = {
 		Position(5, 4), Position(5, 5),
 		Position(4, 5), Position(3, 5),
@@ -265,7 +263,9 @@ TEST(Knight, CalculatePosibleMovesSurrounded) {
 	};
 	
 	for (size_t i = 0; i < sorround.size(); i++){
-		board.addChessman(std::move(ChessmanContainer('T', sorround[i], true, board)));
+		board.addChessman(std::move(ChessmanContainer('T',
+                                                      sorround[i],
+                                                      true, board)));
 	}
 	
 	ChessmanContainer horse('H', Position(4, 4), true, board);
@@ -313,8 +313,12 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCaptureButSameColor) {
 	Chessman * chessman = pawn.get();
 	board.addChessman(std::move(pawn));
 	
-	board.addChessman(std::move(ChessmanContainer('P', Position(2, 2), true, board)));
-	board.addChessman(std::move(ChessmanContainer('P', Position(0, 2), true, board)));
+	board.addChessman(std::move(ChessmanContainer('P',
+                                                  Position(2, 2),
+                                                  true, board)));
+	board.addChessman(std::move(ChessmanContainer('P',
+                                                  Position(0, 2),
+                                                  true, board)));
 	
 	std::vector<Position> posible_moves_gt = {
 		Position(1, 2), Position(1, 3)
@@ -333,8 +337,12 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
 	Chessman * chessman = pawn.get();
 	board.addChessman(std::move(pawn));
 	
-	board.addChessman(std::move(ChessmanContainer('P', Position(2, 2), false, board)));
-	board.addChessman(std::move(ChessmanContainer('P', Position(0, 2), false, board)));
+	board.addChessman(std::move(ChessmanContainer('P',
+                                                  Position(2, 2),
+                                                  false, board)));
+	board.addChessman(std::move(ChessmanContainer('P',
+                                                  Position(0, 2),
+                                                  false, board)));
 	
 	std::vector<Position> posible_moves_gt = {
 		Position(1, 2), Position(2, 2),

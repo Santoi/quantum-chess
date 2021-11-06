@@ -1,9 +1,12 @@
-#include <iostream>
+#include <vector>
+#include <string>
 #include "pawn.h"
 
-Pawn::Pawn(const Position &position, bool white_, Board &board_) : Chessman(position, white_, board_), first_move(true) {}
+Pawn::Pawn(const Position &position, bool white_, Board &board_):
+           Chessman(position, white_, board_), first_move(true) {}
 
-void Pawn::calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const {
+void Pawn::calculatePosibleMoves(const Position &initial,
+                                 std::vector<Position> &posible_moves) const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(4);
     std::vector<Position> path;

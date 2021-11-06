@@ -17,7 +17,8 @@ public:
 	 * Ademas se le indica con un char que pieza debe ser:
 	 * B (bishop, alfil), K (king, rey), H (knight, caballo),
 	 * P (pawn, peon), Q(queen, reina), T (tower, torre). */
-    ChessmanContainer(char chessman_, Position position, bool white, Board &board);
+    ChessmanContainer(char chessman_, Position position,
+                      bool white, Board &board);
     
     // Constructor por movimiento.
     ChessmanContainer(ChessmanContainer && orig);
@@ -33,8 +34,6 @@ public:
     ChessmanContainer & operator=(const ChessmanContainer &) = delete;
 
     ~ChessmanContainer();
-
-    
 };
 
 

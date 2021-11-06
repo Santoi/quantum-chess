@@ -1,9 +1,13 @@
-#include <iostream>
+#include <vector>
+#include <string>
 #include "knight.h"
 
-Knight::Knight(const Position &position, bool white_, Board &board_) : Chessman(position, white_, board_) {}
+Knight::Knight(const Position &position, bool white_, Board &board_):
+               Chessman(position, white_, board_) {}
 
-void Knight::calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const {
+void Knight::calculatePosibleMoves(const Position &initial,
+                                   std::vector<Position> &posible_moves)
+                                   const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(8);
     std::vector<Position> path;
@@ -60,7 +64,8 @@ void Knight::calculatePosibleMoves(const Position &initial, std::vector<Position
     }
 }
 
-void Knight::calculatePath(const Position &initial, const Position &final, std::vector<Position> &path) const {
+void Knight::calculatePath(const Position &initial, const Position &final,
+                           std::vector<Position> &path) const {
     path = std::vector<Position>();
     path.reserve(1);
     path.push_back(final);

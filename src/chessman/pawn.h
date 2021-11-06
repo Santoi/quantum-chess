@@ -1,7 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_PAWN_H
 #define QUANTUM_CHESS_PROJ_PAWN_H
 
-#include <iostream>
+#include <vector>
+#include <string>
 #include "chessman.h"
 #include "../position.h"
 
@@ -16,7 +17,9 @@ public:
 
     void move(const Position & initial, const Position & final) override;
 
-    void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const override;
+    void calculatePosibleMoves(const Position &initial,
+                               std::vector<Position> &posible_moves)
+                               const override;
 
     ~Pawn() override = default;
 };

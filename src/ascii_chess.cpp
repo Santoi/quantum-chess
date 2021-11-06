@@ -1,4 +1,5 @@
 #include <sstream>
+#include <string>
 #include "ascii_chess.h"
 
 AsciiChess::AsciiChess(): board() {}
@@ -40,12 +41,11 @@ void AsciiChess::draw() {
 }
 
 bool AsciiChess::readCommand() {
-    std::string line;
-    std::string op;
-
     std::string color = (board.isNextWhite()) ? "blancas" : "negras";
     std::cout << "Juegan las " << color << " >>  ";
 
+    std::string line;
+    std::string op;
     std::getline(std::cin, line);
     std::istringstream iss(line);
 
@@ -53,14 +53,15 @@ bool AsciiChess::readCommand() {
     if (op == "q" || op == "Q")
         return true;
 
-    if (op == "m" || op == "M") {
+    if (op == "m" || op =="M") {
         int y1 = 0, y2 = 0;
         char x1 = 0, x2 = 0;
         iss >> x1 >> y1 >> x2 >> y2;
         if (x1 < 'A' || x1 > 'H' || x2 < 'A' || x2 > 'H')
             throw std::invalid_argument("posicion invalida");
 
-        board.move(Position((uint8_t) x1 - 'A', (uint8_t) y1), Position((uint8_t) x2 - 'A', (uint8_t) y2));
+        board.move(Position((uint8_t) x1 - 'A', (uint8_t) y1),
+                   Position((uint8_t) x2 - 'A', (uint8_t) y2));
     }
     return false;
 }

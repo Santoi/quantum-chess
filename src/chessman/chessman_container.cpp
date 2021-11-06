@@ -7,7 +7,9 @@
 #include "knight.h"
 #include "pawn.h"
 
-ChessmanContainer::ChessmanContainer(char chessman_, Position position, bool white, Board &board): pointer(nullptr) {
+ChessmanContainer::ChessmanContainer(char chessman_,
+                                     Position position, bool white,
+                                     Board &board): pointer(nullptr) {
     switch (chessman_){
         case 'K':
             pointer = new King(position, white, board);
@@ -28,7 +30,8 @@ ChessmanContainer::ChessmanContainer(char chessman_, Position position, bool whi
             pointer = new Pawn(position, white, board);
             break;
         default:
-            throw std::invalid_argument("esa letra no representa ninguna pieza");
+            throw std::invalid_argument("esa letra no "
+                                        "representa ninguna pieza");
     }
     // Se valida si se pudo pedir memoria correctamente.
     if (!pointer)
@@ -45,7 +48,8 @@ ChessmanContainer::~ChessmanContainer() {
     delete pointer;
 }
 
-ChessmanContainer::ChessmanContainer(ChessmanContainer &&orig): pointer(orig.pointer){
+ChessmanContainer::ChessmanContainer(ChessmanContainer &&orig):
+                                     pointer(orig.pointer){
     orig.pointer = nullptr;
 }
 

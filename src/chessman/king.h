@@ -1,7 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_KING_H
 #define QUANTUM_CHESS_PROJ_KING_H
 
-#include <iostream>
+#include <vector>
+#include <string>
 #include "chessman.h"
 #include "../position.h"
 
@@ -12,7 +13,9 @@ private:
 public:
     King(const Position & position, bool white_, Board & board_);
     
-    void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const override;
+    void calculatePosibleMoves(const Position &initial, 
+                               std::vector<Position> &posible_moves)
+                               const override;
 
     ~King() override = default;
 };

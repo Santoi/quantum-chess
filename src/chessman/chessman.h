@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
 #include <vector>
+#include <string>
 #include "../position.h"
 #include "../quantum_position_tree.h"
 #include "../board.h"
@@ -28,27 +29,37 @@ protected:
 	/* Calcula los casilleros por los que se debe pasar para llegar desde
 	 * una posicion a otra. No asegura orden, solo que la posicion
 	 * final se encuentra al final del vector. */
-    virtual void calculatePath(const Position &initial, const Position &final, std::vector<Position> &path) const;
+    virtual void calculatePath(const Position &initial,
+                               const Position &final,
+                               std::vector<Position> &path) const;
 
 	// Calcula camino por una fila.
-    void calculateFilePath(const Position &initial, const Position &final, std::vector<Position> &path) const;
+    void calculateFilePath(const Position &initial,
+                           const Position &final,
+                           std::vector<Position> &path) const;
 
 	// Calcula camino por una columna.
-    void calculateRowPath(const Position &initial, const Position &final, std::vector<Position> &path) const;
+    void calculateRowPath(const Position &initial,
+                          const Position &final,
+                          std::vector<Position> &path) const;
 
 	// Calcula camino por una diagonal.
-    void calculateDiagonalPath(const Position &initial, const Position final, std::vector<Position> &path) const;
+    void calculateDiagonalPath(const Position &initial,
+                               const Position final,
+                               std::vector<Position> &path) const;
 
 	/* Devuelve si el camino es transitable y carga en un vector todas las
 	 * piezas que se encuentran en el (usado para ajedrez cuantico). */
-    bool getPathMiddleChessmen(const std::vector<Position> &path, std::vector<Chessman *> *chessmen) const;
+    bool getPathMiddleChessmen(const std::vector<Position> &path,
+                               std::vector<Chessman *> *chessmen) const;
 
 	// Chequea que el camino sea transitable.
     bool checkFreePath(const std::vector<Position> & path) const;
 
 	/* Chequea si el movimiento se puede realizar y carga un vector con las
 	 * piezas que hay en el trayecto de haberlos. */
-    void checkCanMove(Position initial, Position final, std::vector<Chessman *> &chessmen_in_path) const;
+    void checkCanMove(Position initial, Position final,
+                      std::vector<Chessman *> &chessmen_in_path) const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;
@@ -70,9 +81,12 @@ public:
     Position getPosition();
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
-    virtual void calculatePosibleMoves(const Position &initial, std::vector<Position> &posible_moves) const = 0;
+    virtual void calculatePosibleMoves(const Position &initial,
+                                       std::vector<Position> &posible_moves)
+                                       const = 0;
 	
-    friend std::ostream & operator<<(std::ostream & os, const Chessman & chessman);
+    friend std::ostream & operator<<(std::ostream & os,
+                                     const Chessman & chessman);
 
     virtual ~Chessman() = default;
 };

@@ -16,25 +16,28 @@ void Chessman::move(const Position & initial, const Position & final) {
     checkCanMove(initial, final, chessmen_in_path);
     
     if (Chessman * final_chessman = board.getChessmanAt(final)) {
-        if(final_chessman->isQuantum())
-            int hola = 5; // measure.
-        else if (final_chessman->white != white)
+        // check if quantum
+        if (final_chessman->white != white)
             board.removeChessmanOf(final);
         else
-            throw std::invalid_argument("la pieza no se puede mover alli, hay una pieza no cuantica del mismo color");
+            throw std::invalid_argument("la pieza no se puede mover alli, hay"
+                                        " una pieza no cuantica"
+                                        " del mismo color");
     }
     position = final;
     board.addChessmanOfIn(initial, final);
 }
 
-void Chessman::checkCanMove(Position initial, Position final, std::vector<Chessman *> & chessmen_in_path) const{
+void Chessman::checkCanMove(Position initial, Position final,
+                            std::vector<Chessman *> & chessmen_in_path) const{
     std::vector<Position> path;
     std::vector<Position> posible_moves;
     if (initial != position)
         throw std::invalid_argument("la ficha no está en esa posicion");
         
     calculatePosibleMoves(initial, posible_moves);
-    if (std::find(posible_moves.begin(), posible_moves.end(), final) == posible_moves.end())
+    if (std::find(posible_moves.begin(),
+                  posible_moves.end(), final) == posible_moves.end())
         throw std::invalid_argument("la pieza no se puede mover alli");
         
     calculatePath(initial, final, path);
@@ -45,7 +48,9 @@ bool Chessman::checkFreePath(const std::vector<Position> & path) const {
     return getPathMiddleChessmen(path, nullptr);
 }
 
-bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path, std::vector<Chessman *> * chessmen) const {
+bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path,
+                                     std::vector<Chessman *> * chessmen)
+                                     const {
     // Si se pasa puntero es que se quiere guardar los elementos del medio.
     if (chessmen) {
         *chessmen = std::vector<Chessman *>();
@@ -56,7 +61,8 @@ bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path, std::ve
      * sea de distinto color, se devuelve false. */
     for (size_t i = 0; i < path.size(); i++) {
         if (Chessman *chessman = board.getChessmanAt(path[i])) {
-            if (!(chessman->isQuantum() || ((i == path.size() - 1) && chessman->white != white))) {
+            if (!(chessman->isQuantum() || ((i == path.size() - 1)
+                && chessman->white != white))) {
                 if (chessmen)
                     *chessmen = std::vector<Chessman *>();
                 return false;
@@ -80,9 +86,12 @@ Position Chessman::getPosition() {
     return position;
 }
 
-void Chessman::calculatePath(const Position & initial, const Position & final, std::vector<Position> & path) const {
+void Chessman::calculatePath(const Position & initial,
+                             const Position & final,
+                             std::vector<Position> & path) const {
     if (initial == final)
-        std::invalid_argument("no se puede calcular el camino entre posiciones iguales");
+        std::invalid_argument("no se puede calcular el "
+                              "camino entre posiciones iguales");
     if (initial.y() == final.y())
         calculateFilePath(initial, final, path);
     else if (initial.x() == final.x())
@@ -93,7 +102,9 @@ void Chessman::calculatePath(const Position & initial, const Position & final, s
         throw std::invalid_argument("ese movimiento es imposible");
 }
 
-void Chessman::calculateFilePath(const Position & initial, const Position & final, std::vector<Position> & path) const {
+void Chessman::calculateFilePath(const Position & initial,
+                                 const Position & final,
+                                 std::vector<Position> & path) const {
     const Position & bottom = (initial.x() < final.x()) ? initial : final;
     const Position & top = (initial.x() < final.x()) ? final : initial;
     path = std::vector<Position> ();
@@ -104,7 +115,9 @@ void Chessman::calculateFilePath(const Position & initial, const Position & fina
     path.push_back(final);
 }
 
-void Chessman::calculateRowPath(const Position & initial, const Position & final, std::vector<Position> & path) const {
+void Chessman::calculateRowPath(const Position & initial,
+                                const Position & final,
+                                std::vector<Position> & path) const {
     const Position & bottom = (initial.y() < final.y()) ? initial : final;
     const Position & top = (initial.y() < final.y()) ? final : initial;
     path = std::vector<Position> ();
@@ -115,14 +128,17 @@ void Chessman::calculateRowPath(const Position & initial, const Position & final
     path.push_back(final);
 }
 
-void Chessman::calculateDiagonalPath(const Position & initial, const Position final, std::vector<Position> & path) const {
+void Chessman::calculateDiagonalPath(const Position & initial,
+                                     const Position final,
+                                     std::vector<Position> & path) const {
     int8_t sum_x = (initial.x() < final.x()) ? 1 : -1;
     int8_t sum_y = (initial.y() < final.y()) ? 1 : -1;
     path = std::vector<Position> ();
     path.reserve(6);
 
     for (int8_t i = initial.x() + sum_x, j = initial.y() + sum_y;
-         i * sum_x < final.x() * sum_x && j * sum_y < final.y() * sum_y; i += sum_x, j += sum_y)
+         i * sum_x < final.x() * sum_x && j * sum_y < final.y() * sum_y;
+         i += sum_x, j += sum_y)
         path.push_back(Position(i, j));
     path.push_back(final);
 }

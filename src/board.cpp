@@ -1,5 +1,6 @@
 #include "board.h"
 #include "chessman/chessman_container.h"
+#include "chess_exception.h"
 #include <utility>
 
 Board::Board(): chessmen(), board(), next_white(true) {}
@@ -8,7 +9,7 @@ void Board::addChessman(ChessmanContainer && chessman_cont){
     Chessman * chessman = chessman_cont.get();
     chessmen.push_back(std::move(chessman_cont));
     if (board.count(chessman->getPosition()))
-		throw std::invalid_argument("ya hay una pieza alli");
+		throw ChessException("ya hay una pieza alli");
     board.insert(std::pair<Position, Chessman *>(chessman->getPosition(),
                                                     chessman));
 }
@@ -16,9 +17,9 @@ void Board::addChessman(ChessmanContainer && chessman_cont){
 void Board::move(const Position & initial, const Position & final) {
     Chessman * chessman = getChessmanAt(initial);
     if (!chessman)
-        throw std::invalid_argument("no hay ninguna pieza ahi");
+        throw ChessException("no hay ninguna pieza ahi");
     if (chessman->isWhite() != next_white)
-        throw std::invalid_argument("no es tu turno");
+        throw ChessException("no es tu turno");
     chessman->move(initial, final);
     next_white = !next_white;
 }
@@ -31,9 +32,9 @@ void Board::removeChessmanOf(const Position & position) {
 void Board::addChessmanOfIn(const Position & initial, const Position & final) {
     Chessman * chessman = getChessmanAt(initial);
     if (!chessman)
-        throw std::invalid_argument("no hay ninguna pieza ahi");
+        throw ChessException("no hay ninguna pieza ahi");
     if (board.count(final))
-		throw std::invalid_argument("ya hay una pieza alli");
+		throw ChessException("ya hay una pieza alli");
 	board.erase(initial);
     board.insert(std::pair<Position, Chessman *>(final, chessman));
 }

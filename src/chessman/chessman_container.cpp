@@ -6,6 +6,7 @@
 #include "bishop.h"
 #include "knight.h"
 #include "pawn.h"
+#include "../chess_exception.h"
 
 ChessmanContainer::ChessmanContainer(char chessman_,
                                      Position position, bool white,
@@ -30,7 +31,7 @@ ChessmanContainer::ChessmanContainer(char chessman_,
             pointer = new Pawn(position, white, board);
             break;
         default:
-            throw std::invalid_argument("esa letra no "
+            throw ChessException("esa letra no "
                                         "representa ninguna pieza");
     }
     // Se valida si se pudo pedir memoria correctamente.

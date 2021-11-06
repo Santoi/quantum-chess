@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "chessman.h"
+#include "../chess_exception.h"
 
 // TODO ver que excepciones cambiar a ChessError (revisar todas)
 
@@ -20,7 +21,7 @@ void Chessman::move(const Position & initial, const Position & final) {
         if (final_chessman->white != white)
             board.removeChessmanOf(final);
         else
-            throw std::invalid_argument("la pieza no se puede mover alli, hay"
+            throw ChessException("la pieza no se puede mover alli, hay"
                                         " una pieza no cuantica"
                                         " del mismo color");
     }
@@ -33,12 +34,12 @@ void Chessman::checkCanMove(Position initial, Position final,
     std::vector<Position> path;
     std::vector<Position> posible_moves;
     if (initial != position)
-        throw std::invalid_argument("la ficha no está en esa posicion");
+        throw ChessException("la ficha no está en esa posicion");
         
     calculatePosibleMoves(initial, posible_moves);
     if (std::find(posible_moves.begin(),
                   posible_moves.end(), final) == posible_moves.end())
-        throw std::invalid_argument("la pieza no se puede mover alli");
+        throw ChessException("la pieza no se puede mover alli");
         
     calculatePath(initial, final, path);
     getPathMiddleChessmen(path, &chessmen_in_path);
@@ -90,7 +91,7 @@ void Chessman::calculatePath(const Position & initial,
                              const Position & final,
                              std::vector<Position> & path) const {
     if (initial == final)
-        std::invalid_argument("no se puede calcular el "
+        ChessException("no se puede calcular el "
                               "camino entre posiciones iguales");
     if (initial.y() == final.y())
         calculateFilePath(initial, final, path);
@@ -99,7 +100,7 @@ void Chessman::calculatePath(const Position & initial,
     else if (abs((initial.x() - final.x()) / (initial.y() - final.y())) == 1)
         calculateDiagonalPath(initial, final, path);
     else
-        throw std::invalid_argument("ese movimiento es imposible");
+        throw ChessException("ese movimiento es imposible");
 }
 
 void Chessman::calculateFilePath(const Position & initial,

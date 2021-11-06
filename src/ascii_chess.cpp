@@ -1,6 +1,7 @@
 #include <sstream>
 #include <string>
 #include "ascii_chess.h"
+#include "chess_exception.h"
 
 AsciiChess::AsciiChess(): board() {}
 
@@ -14,7 +15,7 @@ void AsciiChess::execute() {
 			draw();
 		}
 		// TODO cambiar por ChessException
-		catch(const std::exception & e){
+		catch(const ChessException & e){
 			std::cerr << "Error: " << e.what() << std::endl;
 		}
 	}
@@ -58,7 +59,7 @@ bool AsciiChess::readCommand() {
         char x1 = 0, x2 = 0;
         iss >> x1 >> y1 >> x2 >> y2;
         if (x1 < 'A' || x1 > 'H' || x2 < 'A' || x2 > 'H')
-            throw std::invalid_argument("posicion invalida");
+            throw ChessException("posicion invalida");
 
         board.move(Position((uint8_t) x1 - 'A', (uint8_t) y1),
                    Position((uint8_t) x2 - 'A', (uint8_t) y2));

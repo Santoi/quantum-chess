@@ -6,6 +6,7 @@
 #include "../src/chessman/tower.h"
 #include "../src/chessman/bishop.h"
 #include "../src/chessman/king.h"
+#include "../src/chess_exception.h"
 
 TEST(Chessman, MoveFromANonExistingPosition) {
     Board board;
@@ -14,7 +15,7 @@ TEST(Chessman, MoveFromANonExistingPosition) {
     board.addChessman(std::move(tower));
 
     EXPECT_THROW(chessman->move(Position(0, 2),
-                           Position(0, 3)), std::invalid_argument);
+                           Position(0, 3)), ChessException);
 }
 
 TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
@@ -79,7 +80,7 @@ TEST(Tower, BadMoveToChessmanSameColorPosition) {
     board.addChessman(std::move(tower2_cont));
 
     EXPECT_THROW(tower->move(Position(5, 1), Position(7, 1)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 TEST(Tower, MoveToChessmanDiffColorPosition) {
@@ -110,7 +111,7 @@ TEST(Tower, BadMoveWithChessmanInTheMiddle) {
     board.addChessman(std::move(tower2_cont));
 
     EXPECT_THROW(tower->move(Position(7,1), Position(7,5)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 TEST(Tower, BadMoveWithEmptyBoard) {
@@ -120,7 +121,7 @@ TEST(Tower, BadMoveWithEmptyBoard) {
     board.addChessman(std::move(cont));
 
     EXPECT_THROW(tower->move(Position(5, 1), Position(2, 3)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 // Se testea el alfil para probar el movimiento diagonal
@@ -185,7 +186,7 @@ TEST(Bishop, BadMoveToChessmanSameColorPosition) {
     board.addChessman(std::move(bishop_cont));
 
     EXPECT_THROW(bishop->move(Position(5, 5), Position(7, 7)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 TEST(Bishop, MoveToChessmanDiffColorPosition) {
@@ -215,7 +216,7 @@ TEST(Bishop, BadMoveWithChessmanInTheMiddle) {
     board.addChessman(std::move(bishop_cont));
 
     EXPECT_THROW(bishop->move(Position(7, 2), Position(5, 4)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 TEST(Bishop, BadMoveWithEmptyBoard) {
@@ -224,7 +225,7 @@ TEST(Bishop, BadMoveWithEmptyBoard) {
     Chessman * bishop = container.get();
 
     EXPECT_THROW(bishop->move(Position(5, 1), Position(5, 2)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 // Se testea movimientos del rey.

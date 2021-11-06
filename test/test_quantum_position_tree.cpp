@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <vector>
 #include "../src/quantum_position_tree.h"
+#include "../src/chess_exception.h"
 
 TEST(QuantumPositionTree, CreateAndAddANode) {
     QuantumPositionTree binary_tree(Position(5, 2));
@@ -29,7 +30,7 @@ TEST(QuantumPositionTree, SplitANonLeaveNode){
     QuantumPositionTree tree(Position(0, 0));
     tree.split(Position(0, 0), Position(1, 1), Position(2, 2));
     EXPECT_THROW(tree.split(Position(0, 1), Position(2, 2), Position(3, 5)),
-                 std::invalid_argument);
+                 ChessException);
 }
 
 TEST(QuantumPositionTree, Move){

@@ -1,4 +1,5 @@
 #include "quantum_position_tree.h"
+#include "chess_exception.h"
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
@@ -45,7 +46,7 @@ void QuantumPositionTree::split(const Position & in_position,
                                 const Position & position_2) {
     auto it = findLeaveWithPosition(in_position);
     if (it == leaves.end())
-        throw std::invalid_argument("no hay ninguna hoja con esa posicion");
+        throw ChessException("no hay ninguna hoja con esa posicion");
     QuantumPosition * node = (*it);
     node->left = new QuantumPosition(position_1, (*it)->probability/2, *it);
     node->right = new QuantumPosition(position_2, (*it)->probability/2, *it);

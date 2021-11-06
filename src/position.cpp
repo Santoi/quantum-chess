@@ -1,12 +1,13 @@
 #include <stdexcept>
 #include <iostream>
 #include "position.h"
+#include "chess_exception.h"
 
 Position::Position(): x_(0), y_(0) {}
 
 Position::Position(uint8_t x, uint8_t y): x_(0), y_(0) {
     if (x > 7 || y > 7)
-        throw std::invalid_argument("posicion invalida");
+        throw ChessException("posicion invalida");
     x_ = x;
     y_ = y;
 }

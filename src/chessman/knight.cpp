@@ -13,54 +13,18 @@ void Knight::calculatePosibleMoves(const Position &initial,
     std::vector<Position> path;
     Position position;
 
-    int i = 0, j = 0;
-    if ((i = initial.x() + 2) < 8 && (j = initial.y() + 1) < 8) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() + 1) < 8 && (j = initial.y() + 2) < 8) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() - 1) >= 0 && (j = initial.y() + 2) < 8) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() - 2) >= 0 && (j = initial.y() + 1) < 8) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() - 2) >= 0 && (j = initial.y() - 1) >= 0) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() - 1) >= 0 && (j = initial.y() - 2) >= 0) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() + 1) < 8 && (j = initial.y() - 2) >= 0) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
-    }
-    if ((i = initial.x() + 2) < 8 && (j = initial.y() - 1) >= 0) {
-        position = Position(i, j);
-        calculatePath(initial, position, path);
-        if (checkFreePath(path))
-            posible_moves.push_back(position);
+    std::vector<int> x_sum = {2, 1, -1, -2, -2, -1, 1, 2};
+    std::vector<int> y_sum = {1, 2, 2, 1, -1, -2, -2, -1};
+
+    for (size_t i = 0, j = 0; i < x_sum.size() && j < y_sum.size(); i++, j++) {
+        int x = 0, y = 0;
+        if ((x = initial.x() + x_sum[i]) < 8 && x >= 0 &&
+            (y = initial.y() + y_sum[i]) < 8 && y >= 0) {
+            position = Position(x, y);
+            calculatePath(initial, position, path);
+            if (checkFreePath(path))
+                posible_moves.push_back(position);
+        }
     }
 }
 

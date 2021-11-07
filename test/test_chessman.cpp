@@ -558,8 +558,8 @@ TEST(Chessman, OneBadMergeToInvalidPosition){
     chessman->split(Position(1, 1), Position(1, 2),
                     Position(2, 2));
 
-    EXPECT_THROW(chessman->merge(Position(1, 2), Position(2, 2), Position(3, 3)),
-                 ChessException);
+    EXPECT_THROW(chessman->merge(Position(1, 2), Position(2, 2),
+                                 Position(3, 3)), ChessException);
 }
 
 TEST(Chessman, MergeFromSamePosition){
@@ -572,8 +572,8 @@ TEST(Chessman, MergeFromSamePosition){
     chessman->split(Position(1, 1), Position(1, 2),
                     Position(2, 2));
 
-    EXPECT_THROW(chessman->merge(Position(1, 2), Position(1, 2), Position(3, 3)),
-                 ChessException);
+    EXPECT_THROW(chessman->merge(Position(1, 2), Position(1, 2),
+                                 Position(3, 3)), ChessException);
 }
 
 

@@ -73,7 +73,8 @@ void Chessman::split(const Position &initial, const Position &position1,
     board.addChessmanOfIn(initial, position1, position2);
 }
 
-void Chessman::merge(const Position &initial1, const Position &initial2, const Position &final) {
+void Chessman::merge(const Position &initial1, const Position &initial2,
+                     const Position &final) {
     if (initial1 == initial2)
         throw ChessException("no se puede hacer merge desde la misma"
                              "posicion");
@@ -108,8 +109,7 @@ void Chessman::merge(const Position &initial1, const Position &initial2, const P
         positions.erase(it1); // Se borra primero el 1 para no modificar el 2.
         positions.erase(it2);
         positions.insert(positions.begin(), QuantumPosition(final, prob));
-    }
-    else {
+    } else {
         // Se chequea el orden para saber cual borrar primero.
         auto it_first = (it1 < it2) ? it1 : it2;
         auto it_last = !(it1 < it2) ? it1 : it2;

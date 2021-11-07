@@ -5,6 +5,7 @@
 #include "position.h"
 #include "chessman/chessman.h"
 #include "chessman/chessman_container.h"
+#include "pseudo_random_coin.h"
 #include <vector>
 
 class Chessman;
@@ -18,13 +19,19 @@ class Board {
     std::vector<ChessmanContainer> chessmen;
     std::map<const Position, Chessman *> board;
     bool next_white;
+    PseudoRandomCoin coin;
 
 public:
     Board();
 
+    explicit Board(int seed);
+
 	/* Mueve la pieza en la posicion inicial a la final, validando
 	 * el movimiento. */
     void move(const Position & initial, const Position & final);
+
+    void split(const Position &initial, const Position &pos1,
+               const Position &pos2);
 
 	// Devuelve un puntero a la pieza en la posicion dada.
     Chessman * getChessmanAt(const Position & position);
@@ -45,6 +52,11 @@ public:
 
 	// Devuelve true si el siguiente turno es de las blancas.
     bool isNextWhite() const;
+
+    bool flipACoin();
+
+    void addChessmanOfIn(const Position &initial, const Position &pos1,
+                         const Position &pos2);
 };
 
 

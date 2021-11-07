@@ -3,15 +3,25 @@
 #include "chess_exception.h"
 #include <utility>
 
-Board::Board(): chessmen(), board(), next_white(true) {}
+Board::Board(): chessmen(), board(), next_white(true), coin() {}
+
+Board::Board(int seed): chessmen(), board(), next_white(true), coin(seed) {}
 
 void Board::addChessman(ChessmanContainer && chessman_cont){
     Chessman * chessman = chessman_cont.get();
     chessmen.push_back(std::move(chessman_cont));
-    if (board.count(chessman->getPosition()))
-		throw ChessException("ya hay una pieza alli");
-    board.insert(std::pair<Position, Chessman *>(chessman->getPosition(),
-                                                    chessman));
+    const QuantumPosition & position = chessman->getPosition();
+    if (board.count(Position(position)))
+        throw ChessException("ya hay una pieza alli");
+    board.insert(std::pair<Position, Chessman *>(Position(position),
+                                                 chessman));
+    auto positions = chessman->getFakePositions();
+    for (QuantumPosition & qpos: positions) {
+        if (board.count(Position(qpos)))
+            throw ChessException("ya hay una pieza alli");
+        board.insert(std::pair<Position, Chessman *>(Position(qpos),
+                                                     chessman));
+    }
 }
 
 void Board::move(const Position & initial, const Position & final) {
@@ -21,6 +31,17 @@ void Board::move(const Position & initial, const Position & final) {
     if (chessman->isWhite() != next_white)
         throw ChessException("no es tu turno");
     chessman->move(initial, final);
+    next_white = !next_white;
+}
+
+void Board::split(const Position & initial, const Position & pos1,
+                  const Position & pos2){
+    Chessman * chessman = getChessmanAt(initial);
+    if (!chessman)
+        throw ChessException("no hay ninguna pieza alli");
+    if (chessman->isWhite() != next_white)
+        throw ChessException("no es tu turno");
+    chessman->split(initial, pos1, pos2);
     next_white = !next_white;
 }
 
@@ -37,6 +58,18 @@ void Board::addChessmanOfIn(const Position & initial, const Position & final) {
 		throw ChessException("ya hay una pieza alli");
 	board.erase(initial);
     board.insert(std::pair<Position, Chessman *>(final, chessman));
+}
+
+void Board::addChessmanOfIn(const Position & initial, const Position & pos1,
+                            const Position & pos2) {
+    Chessman * chessman = getChessmanAt(initial);
+    if (!chessman)
+        throw ChessException("no hay ninguna pieza ahi");
+    if (board.count(pos1) || board.count(pos2))
+        throw ChessException("ya hay una pieza alli");
+    board.erase(initial);
+    board.insert(std::pair<Position, Chessman *>(pos1, chessman));
+    board.insert(std::pair<Position, Chessman *>(pos2, chessman));
 }
 
 Chessman *Board::getChessmanAt(const Position &position) {
@@ -90,4 +123,8 @@ void Board::load() {
     for (uint8_t i = 0; i < 8; i++)
         addChessman(std::move(ChessmanContainer('P', Position(i, 6),
                                                 false, *this)));
+}
+
+bool Board::flipACoin() {
+    return coin.flip();
 }

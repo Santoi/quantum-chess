@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 #include "../position.h"
-#include "../quantum_position_tree.h"
 #include "../board.h"
+#include "../quantum_position.h"
 
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
@@ -22,7 +22,8 @@ class ChessmanContainer;
  * que indica color. */
 class Chessman {
 protected:
-    Position position;
+    QuantumPosition position;
+    std::vector<QuantumPosition> fake_positions;
     Board & board;
     bool white;
 
@@ -45,7 +46,7 @@ protected:
 
 	// Calcula camino por una diagonal.
     void calculateDiagonalPath(const Position &initial,
-                               const Position final,
+                               const Position &final,
                                std::vector<Position> &path) const;
 
 	/* Devuelve si el camino es transitable y carga en un vector todas las
@@ -58,8 +59,8 @@ protected:
 
 	/* Chequea si el movimiento se puede realizar y carga un vector con las
 	 * piezas que hay en el trayecto de haberlos. */
-    void checkCanMove(Position initial, Position final,
-                      std::vector<Chessman *> &chessmen_in_path) const;
+    void checkCanMoveOrFail(const Position & initial, const Position & final,
+                            std::vector<Chessman *> &chessmen_in_path) const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;
@@ -77,8 +78,11 @@ public:
 	// Devuelve true si la pieza es blanca.
 	bool isWhite() const;
 
-	// Devuelve la posicion en que se encuentra la pieza (clasica).
-    Position getPosition();
+    // Devuelve la posicion real de una pieza.
+    const QuantumPosition & getPosition() const;
+
+    // Devuelve las posiciones falsas de la pieza
+    const std::vector<QuantumPosition> & getFakePositions() const;
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
     virtual void calculatePosibleMoves(const Position &initial,
@@ -89,6 +93,11 @@ public:
                                      const Chessman & chessman);
 
     virtual ~Chessman() = default;
+
+    void split(const Position &initial, const Position &position1,
+               const Position &position2);
+
+    double getProbability(Position position);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

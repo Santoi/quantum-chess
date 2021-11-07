@@ -15,7 +15,7 @@ TEST(Chessman, MoveFromANonExistingPosition) {
     board.addChessman(std::move(tower));
 
     EXPECT_THROW(chessman->move(Position(0, 2),
-                           Position(0, 3)), ChessException);
+                                Position(0, 3)), ChessException);
 }
 
 TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
@@ -64,7 +64,7 @@ TEST(Tower, MoveWithChessmanInTheBoard) {
 
     EXPECT_EQ(Position(7, 1), tower->getPosition());
 
-    tower->move(Position(7, 1), Position(7,2));
+    tower->move(Position(7, 1), Position(7, 2));
     EXPECT_EQ(Position(7, 2), tower->getPosition());
 }
 
@@ -96,7 +96,7 @@ TEST(Tower, MoveToChessmanDiffColorPosition) {
 
     tower->move(Position(5, 1), Position(7, 1));
 
-    EXPECT_EQ(Position(7,1), tower->getPosition());
+    EXPECT_EQ(Position(7, 1), tower->getPosition());
 }
 
 TEST(Tower, BadMoveWithChessmanInTheMiddle) {
@@ -110,7 +110,7 @@ TEST(Tower, BadMoveWithChessmanInTheMiddle) {
     board.addChessman(std::move(tower_cont));
     board.addChessman(std::move(tower2_cont));
 
-    EXPECT_THROW(tower->move(Position(7,1), Position(7,5)),
+    EXPECT_THROW(tower->move(Position(7, 1), Position(7, 5)),
                  ChessException);
 }
 
@@ -251,16 +251,16 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
 TEST(Knight, CalculatePosibleMovesSurrounded) {
 	Board board;
 	std::vector<Position> sorround = {
-		Position(5, 4), Position(5, 5),
-		Position(4, 5), Position(3, 5),
-		Position(3, 4), Position(3, 3),
-		Position(4, 3), Position(5, 3)
+            Position(5, 4), Position(5, 5),
+            Position(4, 5), Position(3, 5),
+            Position(3, 4), Position(3, 3),
+            Position(4, 3), Position(5, 3)
 	};
 	std::vector<Position> posible_moves_gt = {
-		Position(6, 5), Position(5, 6),
-		Position(3, 6), Position(2, 5),
-		Position(2, 3), Position(3, 2),
-		Position(5, 2), Position(6, 3),
+            Position(6, 5), Position(5, 6),
+            Position(3, 6), Position(2, 5),
+            Position(2, 3), Position(3, 2),
+            Position(5, 2), Position(6, 3),
 	};
 	
 	for (size_t i = 0; i < sorround.size(); i++){
@@ -288,7 +288,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
 	board.addChessman(std::move(pawn));
 	
 	std::vector<Position> posible_moves_gt = {
-		Position(1, 2), Position(1, 3),
+            Position(1, 2), Position(1, 3),
 	};
 	
 	std::vector<Position> posible_moves;
@@ -299,7 +299,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
 	chessman->move(Position(1, 1), Position(1, 3));
 	
 	posible_moves_gt = {
-		Position(1, 4)
+            Position(1, 4)
 	};
 	
 	chessman->calculatePosibleMoves(Position(1, 3), posible_moves);
@@ -322,7 +322,7 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCaptureButSameColor) {
                                                   true, board)));
 	
 	std::vector<Position> posible_moves_gt = {
-		Position(1, 2), Position(1, 3)
+            Position(1, 2), Position(1, 3)
 	};
 	
 	std::vector<Position> posible_moves;
@@ -346,8 +346,8 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
                                                   false, board)));
 	
 	std::vector<Position> posible_moves_gt = {
-		Position(1, 2), Position(2, 2),
-		Position(0, 2), Position(1, 3)
+            Position(1, 2), Position(2, 2),
+            Position(0, 2), Position(1, 3)
 	};
 	
 	std::vector<Position> posible_moves;
@@ -355,3 +355,71 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
 	
 	EXPECT_EQ(posible_moves, posible_moves_gt);
 }
+
+TEST(Chessman, OneSplit){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1), true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5));
+    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getFakePositions()[0]);
+}
+
+TEST(Chessman, TwoSplits){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1), true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.25));
+    EXPECT_TRUE(QuantumPosition(2, 1, 0.25) == chessman->getFakePositions()[1]);
+    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getFakePositions()[0]);
+}
+
+TEST(Chessman, SplitThenMoveSplitted){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1), true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    chessman->split(Position(1, 1), Position(1, 2),
+                    Position(2, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5));
+    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getFakePositions()[0]);
+
+    chessman->move(Position(1, 2), Position(1, 3));
+    chessman->move(Position(2, 2), Position(2, 3));
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.5));
+    EXPECT_TRUE(QuantumPosition(2, 3, 0.5) == chessman->getFakePositions()[0]);
+}
+
+TEST(Chessman, OneBadSplitToSamePosition){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1),
+                           true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    EXPECT_THROW(chessman->split(Position(1, 1), Position(1, 1),
+                                 Position(2, 2)), ChessException);
+}
+
+TEST(Chessman, OneBadSplitToInvalidPosition){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1),
+                           true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    EXPECT_THROW(chessman->split(Position(1, 1), Position(1, 1),
+                                 Position(3, 2)), ChessException);
+}
+
+

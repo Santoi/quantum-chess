@@ -71,6 +71,9 @@ public:
 	// Mueve la pieza desde una posicion a otra, valida el movimiento.
     virtual void move(const Position & initial, const Position & final);
 
+    void merge(const Position &initial1, const Position &initial2,
+               const Position &final);
+
 	// Devuelve true si la pieza esta en estado cuantico.
     bool isQuantum() const;
 

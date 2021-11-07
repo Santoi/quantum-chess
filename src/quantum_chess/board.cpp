@@ -41,6 +41,13 @@ void Board::split(const Position & initial, const Position & pos1,
     next_white = !next_white;
 }
 
+void Board::addChessmanIn(const Position &position, Chessman * chessman) {
+    if(board.count(position))
+        throw ChessException("ya hay una pieza alli");
+    board.insert(std::pair<Position, Chessman *>(Position(position),
+                                                 chessman));
+}
+
 void Board::removeChessmanOf(const Position & position) {
 	if (board.count(position))
 		board.erase(position);

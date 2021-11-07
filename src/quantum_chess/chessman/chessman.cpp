@@ -5,6 +5,10 @@
 #include "chessman.h"
 #include "../chess_exception.h"
 
+// TODO ver que pasa si queres traspasar una pieza cuantica que es la misma,
+// deberia romper!!.
+
+
 // TODO, ver excepciones, algunas nunca se llega, ver si convendria
 // en ver de llamar a todo lo mismo que chequear.
 
@@ -26,8 +30,9 @@ void Chessman::move(const Position & initial, const Position & final) {
     }
     auto it = std::find(positions.begin(), positions.end(),
                         initial);
+    double prob = it->getProb();
     it = positions.erase(it);
-    positions.insert(it, QuantumPosition(final, it->getProb()));
+    positions.insert(it, QuantumPosition(final, prob));
 
     board.addChessmanOfIn(initial, final);
     // TODO LOGICA ENTRELAZADO.
@@ -52,20 +57,72 @@ void Chessman::split(const Position &initial, const Position &position1,
     // Se sortea aunque no sea el real.
     Position new_real, new_fake;
     bool coin = board.flipACoin();
-    std::cout << coin << std::endl;
     new_real = coin ? position1 : position2;
-    new_fake = !coin ? position1: position2;
+    new_fake = !coin ? position1 : position2;
 
     /* Se obtiene la posicion inicial y se borra, luego se inserta en su
      * lugar primero la real y luego la fake (podrian no serlo), de esta manera
      * si la inicial era la real, la nueva real se ubica primera. */
     auto it = std::find(positions.begin(), positions.end(), initial);
+    double prob = it->getProb();
     it = positions.erase(it);
-    it = positions.insert(it, QuantumPosition(new_real, it->getProb() / 2));
-    positions.insert(it + 1, QuantumPosition(new_fake, it->getProb()));
+    it = positions.insert(it, QuantumPosition(new_real, prob / 2));
+    positions.insert(it + 1, QuantumPosition(new_fake, prob/2));
 
     // TODO LOGICA ENTRELAZADO.
     board.addChessmanOfIn(initial, position1, position2);
+}
+
+void Chessman::merge(const Position &initial1, const Position &initial2, const Position &final) {
+    if (initial1 == initial2)
+        throw ChessException("no se puede hacer merge desde la misma"
+                             "posicion");
+
+    std::vector<Chessman *> chessmen_in_path_1, chessmen_in_path_2;
+    /* Se chequea, si la pieza que esta en la posicion final es la misma, se quita.
+     * Lo mismo para los iniciales, esto se hace ya que no se molestan, es decir,
+     * si tienen que pasar por encima de la otra, no pasa nada. */
+    if (board.getChessmanAt(final) == this)
+        board.removeChessmanOf(final);
+    else if (board.getChessmanAt(initial1) == this)
+        board.removeChessmanOf(initial1);
+    else if (board.getChessmanAt(initial2) == this)
+        board.removeChessmanOf(initial2);
+    // En este caso, si se puede mover al mismo lugar donde esta.
+    if (initial1 != final)
+        checkCanMoveOrFail(initial1, final, chessmen_in_path_1);
+    if (initial2 != final)
+        checkCanMoveOrFail(initial2, final, chessmen_in_path_2);
+
+    /* Se chequea si el iterador 1 es el real, es decir el primero del vector
+     * posicion, si no lo es, se guarda en el 2, sea o no el inicial, se
+     * colocara en la posicion correcta. */
+    auto it1 = std::find(positions.begin(), positions.end(), initial1);
+    auto it2 = std::find(positions.begin(), positions.end(), initial2);
+    double prob = it1->getProb() + it2->getProb();
+    if (it1 == positions.begin()) {
+        positions.erase(it2); // Se borra primero el 2 para no modificar el 1.
+        positions.erase(it1);
+        positions.insert(positions.begin(), QuantumPosition(final, prob));
+    } else if (it2 == positions.begin()) {
+        positions.erase(it1); // Se borra primero el 1 para no modificar el 2.
+        positions.erase(it2);
+        positions.insert(positions.begin(), QuantumPosition(final, prob));
+    }
+    else {
+        // Se chequea el orden para saber cual borrar primero.
+        auto it_first = (it1 < it2) ? it1 : it2;
+        auto it_last = !(it1 < it2) ? it1 : it2;
+        positions.erase(it_last);
+        auto it = positions.erase(it_first);
+        positions.insert(it, QuantumPosition(final, prob));
+    }
+    // Se borran todas (si estan) y luego se guarda  en la final
+    board.removeChessmanOf(initial1);
+    board.removeChessmanOf(initial2);
+    board.removeChessmanOf(final);
+    board.addChessmanIn(final, this);
+    // TODO LOGICA ENTRELAZADO.
 }
 
 void Chessman::checkCanMoveOrFail(const Position & initial,

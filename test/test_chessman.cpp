@@ -358,9 +358,9 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
 
 TEST(Chessman, OneSplit){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1), true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
 
@@ -370,9 +370,9 @@ TEST(Chessman, OneSplit){
 
 TEST(Chessman, TwoSplitsSplittingReal){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1), true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
     chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
@@ -384,9 +384,9 @@ TEST(Chessman, TwoSplitsSplittingReal){
 
 TEST(Chessman, TwoSplitsSplittingFake){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1), true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
     chessman->split(Position(2, 2), Position(2, 3), Position(2, 1));
@@ -398,9 +398,9 @@ TEST(Chessman, TwoSplitsSplittingFake){
 
 TEST(Chessman, SplitThenMoveSplitted){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1), true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     chessman->split(Position(1, 1), Position(1, 2),
                     Position(2, 2));
@@ -416,10 +416,10 @@ TEST(Chessman, SplitThenMoveSplitted){
 
 TEST(Chessman, OneBadSplitToSamePosition){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1),
+    ChessmanContainer queen('Q', Position(1, 1),
                            true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     EXPECT_THROW(chessman->split(Position(1, 1), Position(1, 1),
                                  Position(2, 2)), ChessException);
@@ -427,10 +427,10 @@ TEST(Chessman, OneBadSplitToSamePosition){
 
 TEST(Chessman, OneBadSplitToInvalidPosition){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1),
+    ChessmanContainer queen('Q', Position(1, 1),
                            true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     EXPECT_THROW(chessman->split(Position(1, 1), Position(1, 1),
                                  Position(3, 2)), ChessException);
@@ -438,13 +438,142 @@ TEST(Chessman, OneBadSplitToInvalidPosition){
 
 TEST(Chessman, SplitToSamePosition){
     Board board(0);
-    ChessmanContainer pawn('Q', Position(1, 1),
+    ChessmanContainer queen('Q', Position(1, 1),
                            true, board);
-    Chessman * chessman = pawn.get();
-    board.addChessman(std::move(pawn));
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
 
     EXPECT_THROW(chessman->split(Position(1, 1), Position(2, 2),
                                  Position(2, 2)), ChessException);
+}
+
+TEST(Chessman, MergeOneSplit){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+
+    chessman->merge(Position(1,2), Position(2, 2), Position(1, 3));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 1));
+}
+
+TEST(Chessman, MergeTwoSplitsSplittingRealMergingTheTwoFakes){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
+
+    chessman->merge(Position(2, 2), Position(2, 1), Position(1, 1));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.25));
+    EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(1, 1, 0.75));
+}
+
+TEST(Chessman, MergeTwoSplitsSplittingRealMergingRealWithFake){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
+
+    chessman->merge(Position(1, 3), Position(2,  2), Position(1, 1));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 1, 0.75));
+    EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(2, 1, 0.25));
+}
+
+TEST(Chessman, TwoSplitsSplittingFakeMergingFakes){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(2, 2), Position(2, 3), Position(2, 1));
+
+    chessman->merge(Position(2, 3), Position(2, 1), Position(2, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5));
+    EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(2, 2, 0.5));
+}
+
+TEST(Chessman, SplitThenMoveSplittedThenMerge){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2),
+                    Position(2, 2));
+
+    chessman->move(Position(1, 2), Position(1, 3));
+    chessman->move(Position(2, 2), Position(2, 3));
+
+    chessman->merge(Position(1, 3), Position(2, 3), Position(2, 4));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(2, 4, 1));
+}
+
+TEST(Chessman, MergeOneSplitToPositionOfOneOfThem) {
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+
+    chessman->merge(Position(1,2), Position(2, 2), Position(2, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(2, 2, 1));
+}
+
+TEST(Chessman, MergeOneSplitToPositionInTheSameLine) {
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(1, 3));
+
+    chessman->merge(Position(1,2), Position(1, 3), Position(1, 1));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 1, 1));
+}
+
+TEST(Chessman, OneBadMergeToInvalidPosition){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1),
+                            true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2),
+                    Position(2, 2));
+
+    EXPECT_THROW(chessman->merge(Position(1, 2), Position(2, 2), Position(3, 3)),
+                 ChessException);
+}
+
+TEST(Chessman, MergeFromSamePosition){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1),
+                            true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2),
+                    Position(2, 2));
+
+    EXPECT_THROW(chessman->merge(Position(1, 2), Position(1, 2), Position(3, 3)),
+                 ChessException);
 }
 
 

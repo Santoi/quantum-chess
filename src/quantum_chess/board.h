@@ -57,6 +57,8 @@ public:
 
     void addChessmanOfIn(const Position &initial, const Position &pos1,
                          const Position &pos2);
+
+    void addChessmanIn(const Position &position, Chessman *chessman);
 };
 
 

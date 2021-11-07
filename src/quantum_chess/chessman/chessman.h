@@ -22,8 +22,7 @@ class ChessmanContainer;
  * que indica color. */
 class Chessman {
 protected:
-    QuantumPosition position;
-    std::vector<QuantumPosition> fake_positions;
+    std::vector<QuantumPosition> positions;
     Board & board;
     bool white;
 
@@ -82,7 +81,7 @@ public:
     const QuantumPosition & getPosition() const;
 
     // Devuelve las posiciones falsas de la pieza
-    const std::vector<QuantumPosition> & getFakePositions() const;
+    const std::vector<QuantumPosition> & getAllPositions() const;
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
     virtual void calculatePosibleMoves(const Position &initial,

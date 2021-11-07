@@ -9,8 +9,8 @@
 // en ver de llamar a todo lo mismo que chequear.
 
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
-                   position(position_, 1),
-                   board(board_), white(white_) {}
+        positions(1, QuantumPosition(position_, 1)),
+        board(board_), white(white_) {}
 
 
 void Chessman::move(const Position & initial, const Position & final) {
@@ -24,20 +24,21 @@ void Chessman::move(const Position & initial, const Position & final) {
         if (final_chessman->white != white)
             board.removeChessmanOf(final);
     }
-    auto it = std::find(fake_positions.begin(), fake_positions.end(),
+    auto it = std::find(positions.begin(), positions.end(),
                         initial);
-    if (it != fake_positions.end()){
-        it = fake_positions.erase(it);
-        fake_positions.insert(it, QuantumPosition(final,
-                                                  position.getProbability()));
-    } else if (position == initial) {
-        position = QuantumPosition(final, position.getProbability());
-    }
+    it = positions.erase(it);
+    positions.insert(it, QuantumPosition(final, it->getProb()));
+
     board.addChessmanOfIn(initial, final);
+    // TODO LOGICA ENTRELAZADO.
 }
 
 void Chessman::split(const Position &initial, const Position &position1,
                      const Position &position2) {
+    if (position1 == position2)
+        throw ChessException("no se puede hacer un split a la misma"
+                             "posicion");
+
     std::vector<Chessman *> chessmen_in_path_1, chessmen_in_path_2;
 
     // TODO reunir todo en una sola? Creo que no por chessmen in path
@@ -48,28 +49,22 @@ void Chessman::split(const Position &initial, const Position &position1,
         throw ChessException("no se puede hacer split a un casillero"
                              "lleno");
 
-    QuantumPosition new_pos1, new_pos2;
-    if (initial == position) {
-        bool coin = board.flipACoin();
-        new_pos1 = QuantumPosition(position1, position.getProbability() / 2);
-        new_pos2 = QuantumPosition(position2, position.getProbability() / 2);
-        if (coin) {
-            position = new_pos1;
-            fake_positions.push_back(new_pos2);
-        } else {
-            position = new_pos2;
-            fake_positions.push_back(new_pos1);
-        }
-    } else {
-        auto it = std::find(fake_positions.begin(),
-                            fake_positions.end(), initial);
-        new_pos1 = QuantumPosition(position1, it->getProbability() / 2);
-        new_pos2 = QuantumPosition(position2, it->getProbability() / 2);
-        it = fake_positions.erase(it);
-        it = fake_positions.insert(it, new_pos1);
-        fake_positions.insert(it, new_pos2);
-    }
+    // Se sortea aunque no sea el real.
+    Position new_real, new_fake;
+    bool coin = board.flipACoin();
+    std::cout << coin << std::endl;
+    new_real = coin ? position1 : position2;
+    new_fake = !coin ? position1: position2;
 
+    /* Se obtiene la posicion inicial y se borra, luego se inserta en su
+     * lugar primero la real y luego la fake (podrian no serlo), de esta manera
+     * si la inicial era la real, la nueva real se ubica primera. */
+    auto it = std::find(positions.begin(), positions.end(), initial);
+    it = positions.erase(it);
+    it = positions.insert(it, QuantumPosition(new_real, it->getProb() / 2));
+    positions.insert(it + 1, QuantumPosition(new_fake, it->getProb()));
+
+    // TODO LOGICA ENTRELAZADO.
     board.addChessmanOfIn(initial, position1, position2);
 }
 
@@ -79,9 +74,8 @@ void Chessman::checkCanMoveOrFail(const Position & initial,
                                   const {
     std::vector<Position> path;
     std::vector<Position> posible_moves;
-    if (initial != position &&
-        std::find(fake_positions.begin(), fake_positions.end(),
-                  initial) == fake_positions.end())
+    if (std::find(positions.begin(), positions.end(),
+                  initial) == positions.end())
         throw ChessException("la ficha no está en esa posicion");
         
     calculatePosibleMoves(initial, posible_moves);
@@ -132,12 +126,12 @@ bool Chessman::isWhite() const {
 }
 
 const QuantumPosition & Chessman::getPosition() const {
-    return position;
+    return positions[0];
 }
 
-const std::vector<QuantumPosition> & Chessman::getFakePositions() const {
+const std::vector<QuantumPosition> & Chessman::getAllPositions() const {
 	// TODO modificar cuando se haga cuantica.
-    return fake_positions;
+    return positions;
 }
 
 void Chessman::calculatePath(const Position & initial,
@@ -206,12 +200,10 @@ std::ostream &operator<<(std::ostream &os, const Chessman &chessman) {
 }
 
 double Chessman::getProbability(Position position_) {
-    auto it = std::find(fake_positions.begin(),
-                        fake_positions.end(), position_);
-    if (it != fake_positions.end())
-        return it->getProbability();
-    else if (position == position_)
-        return position.getProbability();
+    auto it = std::find(positions.begin(),
+                        positions.end(), position_);
+    if (it != positions.end())
+        return it->getProb();
     throw std::invalid_argument("la pieza no esta alli");
 }
 

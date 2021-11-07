@@ -10,12 +10,8 @@ Board::Board(int seed): chessmen(), board(), next_white(true), coin(seed) {}
 void Board::addChessman(ChessmanContainer && chessman_cont){
     Chessman * chessman = chessman_cont.get();
     chessmen.push_back(std::move(chessman_cont));
-    const QuantumPosition & position = chessman->getPosition();
-    if (board.count(Position(position)))
-        throw ChessException("ya hay una pieza alli");
-    board.insert(std::pair<Position, Chessman *>(Position(position),
-                                                 chessman));
-    auto positions = chessman->getFakePositions();
+
+    auto positions = chessman->getAllPositions();
     for (QuantumPosition & qpos: positions) {
         if (board.count(Position(qpos)))
             throw ChessException("ya hay una pieza alli");

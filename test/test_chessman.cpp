@@ -365,10 +365,10 @@ TEST(Chessman, OneSplit){
     chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5));
-    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getFakePositions()[0]);
+    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getAllPositions()[1]);
 }
 
-TEST(Chessman, TwoSplits){
+TEST(Chessman, TwoSplitsSplittingReal){
     Board board(0);
     ChessmanContainer pawn('Q', Position(1, 1), true, board);
     Chessman * chessman = pawn.get();
@@ -378,8 +378,22 @@ TEST(Chessman, TwoSplits){
     chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.25));
-    EXPECT_TRUE(QuantumPosition(2, 1, 0.25) == chessman->getFakePositions()[1]);
-    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getFakePositions()[0]);
+    EXPECT_TRUE(QuantumPosition(2, 1, 0.25) == chessman->getAllPositions()[1]);
+    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getAllPositions()[2]);
+}
+
+TEST(Chessman, TwoSplitsSplittingFake){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1), true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(2, 2), Position(2, 3), Position(2, 1));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5));
+    EXPECT_TRUE(QuantumPosition(2, 1, 0.25) == chessman->getAllPositions()[2]);
+    EXPECT_TRUE(QuantumPosition(2, 3, 0.25) == chessman->getAllPositions()[1]);
 }
 
 TEST(Chessman, SplitThenMoveSplitted){
@@ -392,12 +406,12 @@ TEST(Chessman, SplitThenMoveSplitted){
                     Position(2, 2));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5));
-    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getFakePositions()[0]);
+    EXPECT_TRUE(QuantumPosition(2, 2, 0.5) == chessman->getAllPositions()[1]);
 
     chessman->move(Position(1, 2), Position(1, 3));
     chessman->move(Position(2, 2), Position(2, 3));
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.5));
-    EXPECT_TRUE(QuantumPosition(2, 3, 0.5) == chessman->getFakePositions()[0]);
+    EXPECT_TRUE(QuantumPosition(2, 3, 0.5) == chessman->getAllPositions()[1]);
 }
 
 TEST(Chessman, OneBadSplitToSamePosition){
@@ -420,6 +434,17 @@ TEST(Chessman, OneBadSplitToInvalidPosition){
 
     EXPECT_THROW(chessman->split(Position(1, 1), Position(1, 1),
                                  Position(3, 2)), ChessException);
+}
+
+TEST(Chessman, SplitToSamePosition){
+    Board board(0);
+    ChessmanContainer pawn('Q', Position(1, 1),
+                           true, board);
+    Chessman * chessman = pawn.get();
+    board.addChessman(std::move(pawn));
+
+    EXPECT_THROW(chessman->split(Position(1, 1), Position(2, 2),
+                                 Position(2, 2)), ChessException);
 }
 
 

@@ -1,2 +1,1 @@
-cd build/src/ascii_chess
-./ascii-chess
+./build/src/ascii_chess/ascii-chess

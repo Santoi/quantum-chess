@@ -32,7 +32,7 @@ public:
 
     uint8_t y() const;
 
-    double getProbability() const;
+    double getProb() const;
 };
 
 

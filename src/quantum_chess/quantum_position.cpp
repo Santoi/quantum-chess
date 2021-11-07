@@ -26,7 +26,7 @@ uint8_t QuantumPosition::y() const {
     return position.y();
 }
 
-double QuantumPosition::getProbability() const{
+double QuantumPosition::getProb() const{
     return prob;
 }
 

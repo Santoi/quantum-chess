@@ -52,3 +52,7 @@ void QuantumPosition::setProb(double prob_){
     prob = prob_;
 }
 
+void QuantumPosition::entangle(QuantumPosition * other) {
+    entangled.push_back(other);
+}
+

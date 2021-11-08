@@ -128,9 +128,10 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
 }
 
 void Chessman::measure(const Position & position) {
+    if (!isQuantum())
+        throw ChessException("no se puede medir una pieza no cuantica");
     auto it = std::find(positions.begin(), positions.end(), position);
     // TODO falta logica entrelazado.
-    // TODO tests
     /* Si es el primero, se borra entero el vector y se deja solo la posicion
      * con probabilidad 1. */
     if (it == positions.begin()) {
@@ -178,30 +179,58 @@ bool Chessman::checkFreePath(const std::vector<Position> & path) const {
 bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path,
                                      std::vector<Chessman *> * chessmen)
                                      const {
+    /* Se define un map donde se guardaran las probabilidades, para
+     * chequear que efectivamente no hay una pieza cuantica pero con prob
+     * 1 en el camino. */
+    std::map<Chessman *, double> probabilities;
     // Si se pasa puntero es que se quiere guardar los elementos del medio.
     if (chessmen) {
         *chessmen = std::vector<Chessman *>();
         chessmen->reserve(7);
     }
-    /* Se itera por el camino y se guardan los elementos cuanticos,
-     * si se encuentra uno no cuantico que no este al final, y no
-     * sea de distinto color, se devuelve false. */
-    for (size_t i = 0; i < path.size(); i++) {
-        if (Chessman *chessman = board.getChessmanAt(path[i])) {
-            if (!(chessman->isQuantum() || ((i == path.size() - 1)
-                && chessman->white != white))) {
-                if (chessmen)
-                    *chessmen = std::vector<Chessman *>();
-                return false;
-            }
+
+    /* Se recorre el camino hasta el anteultimo elemento (esta asegurado
+     * que el ultimo es la posicion final. */
+    for (size_t i = 0; i < path.size() - 1; i++) {
+        // Si hay una pieza, se guarda.
+        if (Chessman * chessman = board.getChessmanAt(path[i])) {
+            auto it = probabilities.find(chessman);
+            if (it != probabilities.end())
+                probabilities[chessman] = probabilities.at(chessman) + chessman->getProbability(path[i]);
+            else
+                probabilities.insert(it, std::make_pair(chessman, chessman->getProbability(path[i])));
         }
     }
+
+    /* Si se tiene que suman 1 (sin contar el ultimo), se dice que es seguro
+     * que este en le medio del camino y no se puede hacer el movimiento. */
+    for (auto it = probabilities.begin(); it != probabilities.end(); ++it) {
+        if (it->second == 1) {
+            if (chessmen)
+                *chessmen = std::vector<Chessman *>();
+            return false;
+        }
+        if (chessmen)
+            chessmen->push_back(it->first);
+    }
+
+    // Se chequea el ultimo. El ultimo podria ir duplicado. // TODO ver por las dudas
+    if (Chessman * last_one = board.getChessmanAt(path.back())) {
+        if (last_one->isQuantum() || last_one->isWhite() != white) {
+            if (chessmen)
+                chessmen->push_back(last_one);
+        } else {
+            if (chessmen)
+                *chessmen = std::vector<Chessman *>();
+            return false;
+        }
+    }
+
     return true;
 }
 
 bool Chessman::isQuantum() const {
-	// TODO desharcodear cuando se codee la parte cuantica.
-    return false;
+	return positions.size() > 1;
 }
 
 bool Chessman::isWhite() const {

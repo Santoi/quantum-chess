@@ -1,6 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_QUANTUM_POSITION_H
 #define QUANTUM_CHESS_PROJ_QUANTUM_POSITION_H
 
+#include <list>
 #include "position.h"
 
 class Position;
@@ -10,6 +11,7 @@ class Position;
 class QuantumPosition {
     Position position;
     double prob;
+    std::list<QuantumPosition *> entangled;
 
 public:
     QuantumPosition();
@@ -35,6 +37,8 @@ public:
     double getProb() const;
 
     void setProb(double prob_);
+
+    void entangle(QuantumPosition *other);
 };
 
 

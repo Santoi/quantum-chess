@@ -682,4 +682,42 @@ TEST(Chessman, MeasureOtherPosition){
     EXPECT_THROW(chessman->measure(Position(4, 4)), ChessException);
 }
 
+TEST(Chessman, MeasureNonQuantum){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    EXPECT_THROW(chessman->measure(Position(1, 1)), ChessException);
+}
+
+// TODO modificar esto porque le falta entrelazamiento.
+TEST(Chessman, MoveWithQuantumInTheMiddle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(2, 2), Position(1, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
+}
+
+TEST(Chessman, MoveWithQuantumSumming1InTheMiddle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(2, 2), Position(3, 3));
+    EXPECT_THROW(bishop->move(Position(0, 0), Position(4, 4)), ChessException);
+}
+
 

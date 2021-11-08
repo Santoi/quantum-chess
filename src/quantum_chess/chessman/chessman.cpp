@@ -138,7 +138,7 @@ void Chessman::measure(const Position & position) {
         for (++it; it != positions.end(); ++it) {
             board.removeChessmanOf(Position(*it));
         }
-        it = positions.erase(positions.begin() + 1, positions.end());
+        positions.erase(positions.begin() + 1, positions.end());
     } else if (it != positions.end()) {
         double prob = it->getProb();
         positions.erase(it);

@@ -588,7 +588,7 @@ TEST(Chessman, MergeFromSamePosition){
     chessman->measure(Position(1, 2));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 1));
-    EXPECT_TRUE(chessman->getAllPositions().size() == 1);
+    EXPECT_EQ(chessman->getAllPositions().size(), 1);
 }
 
 TEST(Chessman, OneSplitMeasureFake){
@@ -602,7 +602,7 @@ TEST(Chessman, OneSplitMeasureFake){
     chessman->measure(Position(2, 2));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 1));
-    EXPECT_TRUE(chessman->getAllPositions().size() == 1);
+    EXPECT_EQ(chessman->getAllPositions().size(), 1);
 }
 
 TEST(Chessman, TwoSplitsSplittingRealMeasureReal){
@@ -617,7 +617,7 @@ TEST(Chessman, TwoSplitsSplittingRealMeasureReal){
     chessman->measure(Position(1, 3));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 1));
-    EXPECT_TRUE(chessman->getAllPositions().size() == 1);
+    EXPECT_EQ(chessman->getAllPositions().size(), 1);
 }
 
 TEST(Chessman, TwoSplitsSplittingRealMeasureFakeFirstSplit){
@@ -633,7 +633,7 @@ TEST(Chessman, TwoSplitsSplittingRealMeasureFakeFirstSplit){
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.5));
     EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(2, 1, 0.5));
-    EXPECT_TRUE(chessman->getAllPositions().size() == 2);
+    EXPECT_EQ(chessman->getAllPositions().size(), 2);
 }
 
 TEST(Chessman, TwoSplitsSplittingRealMeasureFakeSecondSplit){
@@ -648,8 +648,9 @@ TEST(Chessman, TwoSplitsSplittingRealMeasureFakeSecondSplit){
     chessman->measure(Position(2, 1));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.25/0.75));
-    EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(2, 2, 0.5/0.75));
-    EXPECT_TRUE(chessman->getAllPositions().size() == 2);
+    EXPECT_TRUE(chessman->getAllPositions()[1] ==
+                QuantumPosition(2, 2, 0.5/0.75));
+    EXPECT_EQ(chessman->getAllPositions().size(), 2);
 }
 
 TEST(Chessman, TwoSplitsSplittingFakeMeasuringOneOfThem){
@@ -664,8 +665,9 @@ TEST(Chessman, TwoSplitsSplittingFakeMeasuringOneOfThem){
     chessman->measure(Position(2, 3));
 
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5/0.75));
-    EXPECT_TRUE(QuantumPosition(2, 1, 0.25/0.75) == chessman->getAllPositions()[1]);
-    EXPECT_TRUE(chessman->getAllPositions().size() == 2);
+    EXPECT_TRUE(QuantumPosition(2, 1, 0.25/0.75) ==
+                chessman->getAllPositions()[1]);
+    EXPECT_EQ(chessman->getAllPositions().size(), 2);
 }
 
 TEST(Chessman, MeasureOtherPosition){

@@ -46,3 +46,9 @@ bool QuantumPosition::operator!=(const Position &other) const {
     return !(*this == other);
 }
 
+void QuantumPosition::setProb(double prob_){
+    if (prob < 0 || prob > 1)
+        throw ChessException("probabilidad invalida");
+    prob = prob_;
+}
+

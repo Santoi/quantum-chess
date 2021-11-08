@@ -41,6 +41,18 @@ void Board::split(const Position & initial, const Position & pos1,
     next_white = !next_white;
 }
 
+void Board::merge(const Position & initial1, const Position & initial2,
+                  const Position & final){
+    Chessman * chessman = getChessmanAt(initial1);
+    if (!chessman)
+        throw ChessException("no hay ninguna pieza alli");
+    // TODO chequear el otro? chessman ya chequea.
+    if (chessman->isWhite() != next_white)
+        throw ChessException("no es tu turno");
+    chessman->split(initial1, initial2, final);
+    next_white = !next_white;
+}
+
 void Board::addChessmanIn(const Position &position, Chessman * chessman) {
     if (board.count(position))
         throw ChessException("ya hay una pieza alli");

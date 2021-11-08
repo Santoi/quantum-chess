@@ -33,6 +33,8 @@ public:
     uint8_t y() const;
 
     double getProb() const;
+
+    void setProb(double prob_);
 };
 
 

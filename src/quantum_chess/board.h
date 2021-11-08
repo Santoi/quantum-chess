@@ -59,6 +59,9 @@ public:
                          const Position &pos2);
 
     void addChessmanIn(const Position &position, Chessman *chessman);
+
+    void merge(const Position &initial1, const Position &initial2,
+               const Position &final);
 };
 
 

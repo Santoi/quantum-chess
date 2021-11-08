@@ -100,6 +100,8 @@ public:
                const Position &position2);
 
     double getProbability(Position position);
+
+    void measure(const Position &position);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

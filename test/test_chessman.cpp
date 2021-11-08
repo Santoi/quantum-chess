@@ -577,3 +577,107 @@ TEST(Chessman, MergeFromSamePosition){
 }
 
 
+ TEST(Chessman, OneSplitMeasureReal){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+
+    chessman->measure(Position(1, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(chessman->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, OneSplitMeasureFake){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+
+    chessman->measure(Position(2, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(chessman->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, TwoSplitsSplittingRealMeasureReal){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
+
+    chessman->measure(Position(1, 3));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 1));
+    EXPECT_TRUE(chessman->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, TwoSplitsSplittingRealMeasureFakeFirstSplit){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
+
+    chessman->measure(Position(2, 2));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.5));
+    EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(2, 1, 0.5));
+    EXPECT_TRUE(chessman->getAllPositions().size() == 2);
+}
+
+TEST(Chessman, TwoSplitsSplittingRealMeasureFakeSecondSplit){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(1, 2), Position(1, 3), Position(2, 1));
+
+    chessman->measure(Position(2, 1));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.25/0.75));
+    EXPECT_TRUE(chessman->getAllPositions()[1] == QuantumPosition(2, 2, 0.5/0.75));
+    EXPECT_TRUE(chessman->getAllPositions().size() == 2);
+}
+
+TEST(Chessman, TwoSplitsSplittingFakeMeasuringOneOfThem){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(2, 2), Position(2, 3), Position(2, 1));
+
+    chessman->measure(Position(2, 3));
+
+    EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 2, 0.5/0.75));
+    EXPECT_TRUE(QuantumPosition(2, 1, 0.25/0.75) == chessman->getAllPositions()[1]);
+    EXPECT_TRUE(chessman->getAllPositions().size() == 2);
+}
+
+TEST(Chessman, MeasureOtherPosition){
+    Board board(0);
+    ChessmanContainer queen('Q', Position(1, 1), true, board);
+    Chessman * chessman = queen.get();
+    board.addChessman(std::move(queen));
+
+    chessman->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    chessman->split(Position(2, 2), Position(2, 3), Position(2, 1));
+
+    EXPECT_THROW(chessman->measure(Position(4, 4)), ChessException);
+}
+
+

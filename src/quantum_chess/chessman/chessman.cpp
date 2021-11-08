@@ -8,6 +8,8 @@
 // TODO ver que pasa si queres traspasar una pieza cuantica que es la misma,
 // deberia romper!!.
 
+// TODO ver entrelazamiento cuando hay un 100 de que este en el medio
+
 
 // TODO, ver excepciones, algunas nunca se llega, ver si convendria
 // en ver de llamar a todo lo mismo que chequear.
@@ -123,6 +125,30 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
     board.removeChessmanOf(final);
     board.addChessmanIn(final, this);
     // TODO LOGICA ENTRELAZADO.
+}
+
+void Chessman::measure(const Position & position) {
+    auto it = std::find(positions.begin(), positions.end(), position);
+    // TODO falta logica entrelazado.
+    // TODO tests
+    /* Si es el primero, se borra entero el vector y se deja solo la posicion
+     * con probabilidad 1. */
+    if (it == positions.begin()) {
+        it->setProb(1);
+        for (++it; it != positions.end(); ++it) {
+            board.removeChessmanOf(Position(*it));
+        }
+        it = positions.erase(positions.begin() + 1, positions.end());
+    } else if (it != positions.end()) {
+        double prob = it->getProb();
+        positions.erase(it);
+        board.removeChessmanOf(position);
+        for (it = positions.begin(); it != positions.end(); ++it) {
+            it->setProb(it->getProb() / (1 - prob));
+        }
+    } else {
+        throw ChessException("la pieza no esta alli");
+    }
 }
 
 void Chessman::checkCanMoveOrFail(const Position & initial,

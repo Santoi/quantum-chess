@@ -10,6 +10,7 @@ public:
     int receiveNumberOfRunningGames(Socket& socket);
     void sendChosenGame(Socket& socket, const int& game_number);
     void sendMessage(Socket& socket, const std::string& message);
+    void receiveInstruction(Socket& socket, std::string& message);
     ~ClientProtocol() = default;
 };
 

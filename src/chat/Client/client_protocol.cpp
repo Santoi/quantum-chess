@@ -4,7 +4,7 @@
 
 #include "client_protocol.h"
 
-
+#define ONE_BYTE 1
 #define TWO_BYTES 2
 
 int ClientProtocol::receiveNumberOfRunningGames(Socket& socket) {
@@ -25,8 +25,22 @@ void ClientProtocol::sendChosenGame(Socket& socket, const int& game_number) {
 
 void ClientProtocol::sendMessage(Socket& socket, const std::string& message) {
     Packet packet;
+    packet.addByte('c');
+    uint16_t host_length = message.size();
+    uint16_t lengthBE = htons(host_length);
+    packet.addBytes(lengthBE);
     packet.addBytes(message);
     socket.send(packet);
 }
 
+void ClientProtocol::receiveInstruction(Socket& socket, std::string& message) {
+    Packet packet;
+    socket.receive(packet, ONE_BYTE);
+    socket.receive(packet, TWO_BYTES);
+    uint16_t size_of_wordBE;
+    packet.getBytes(size_of_wordBE);
+    uint16_t size_of_word = ntohs(size_of_wordBE);
+    socket.receive(packet, size_of_word);
+    packet.getBytes(message, size_of_word);
+}
 

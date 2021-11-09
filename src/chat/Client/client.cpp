@@ -8,7 +8,7 @@ Client::Client(const char* host, const char* servidor)
 }
 
 void Client::readFromStandardInput(std::string& message) {
-    std::getline(std::cin, message);
+    std::cin >> message;
 }
 
 void Client::makeAction(const std::string& message) {
@@ -21,6 +21,7 @@ void Client::makeAction(const std::string& message) {
 }
 
 void Client::readFromStandardInputAndMakeAction() {
+    std::cout << "Escriba un mensaje para el chat" << std::endl;
     std::string message;
     readFromStandardInput(message);
     makeAction(message);
@@ -29,12 +30,15 @@ void Client::readFromStandardInputAndMakeAction() {
 void Client::receiveMessage() {
     if (!this->is_active)
         return;
+    std::string message;
+    this->protocol.receiveInstruction(this->client_socket, message);
+    std::cout << message << std::endl;
 }
 
 int Client::getAndPrintNumberOfAvailableGames() {
-    std::cout << "Bienvenido a Quantum Chess. Selecciona de las partidas disponibles a cuál de estas"
-                 "quieres entrar." << std::endl;
     int max_games = this->protocol.receiveNumberOfRunningGames(this->client_socket);
+    std::cout << "Bienvenido a Quantum Chess. Selecciona de las partidas disponibles a cuál de estas"
+                 " quieres entrar." << std::endl;
     std::cout << "Los números de partida disponibles son los siguientes: " << std::endl;
     for (int i = 0; i < max_games; i++)
         std::cout << i << ", " << std::endl;
@@ -58,8 +62,8 @@ void Client::associateClientWithARunningMatch() {
 
 void Client::execute() {
     this->associateClientWithARunningMatch();
-    //while (this->is_active) {
-      //  this->readFromStandardInputAndMakeAction();
-       // this->receiveMessage();
-    //}
+    while (this->is_active) {
+        this->readFromStandardInputAndMakeAction();
+        this->receiveMessage();
+    }
 }

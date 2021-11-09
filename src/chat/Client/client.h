@@ -32,6 +32,10 @@ public:
 private:
     void readFromStandardInputAndMakeAction();
 
+    void readFromStandardInput(std::string& message);
+
+    void makeAction(const std::string& message);
+
     void receiveMessage();
 };
 

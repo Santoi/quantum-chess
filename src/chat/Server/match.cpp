@@ -12,6 +12,7 @@ Match::Match(Match&& other_match)
 
 void Match::addClientToQueues(ClientHandler& client) {
     ThreadSafeQueue new_listening_queue;
+    //maybe we can notify already existing queues that a new player is in
     this->listening_queues.push_front(std::move(new_listening_queue));
     std::list<ThreadSafeQueue>::iterator aux_pointer = this->listening_queues.begin();
     client.notifications_queue = &(*aux_pointer);

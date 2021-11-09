@@ -15,8 +15,8 @@ private:
 public:
     Match();
     Match(Match&& other_match);
-
     void addClientToQueues(ClientHandler& client);
+    void checkAndNotifyUpdates();
     ~Match();
 };
 

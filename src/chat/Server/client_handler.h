@@ -24,7 +24,16 @@ public:
     ClientHandler(ClientHandler&& other_client);
     friend void Match::addClientToQueues(ClientHandler& client);
     int chooseGame(const int& max_games);
+    void start();
+    void startSingleThreadedClient(Match& match);
+
     ~ClientHandler() = default;
+
+private:
+    void executeReceiverCatchingExceptions();
+    void executeReceiver();
+    void executeSenderCatchingExceptions();
+    void executeSender();
 };
 
 

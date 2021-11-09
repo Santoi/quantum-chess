@@ -1,8 +1,10 @@
 #include "server_protocol.h"
 #include "common_packet.h"
+#include "instructions.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 
+#define ONE_BYTE 1
 #define TWO_BYTES 2
 
 void ServerProtocol::sendNumberOfGamesRunning(Socket& socket, const int& max_games) {
@@ -19,5 +21,26 @@ int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
     uint16_t game_numberBE;
     packet.getBytes(game_numberBE);
     return (int)(ntohs(game_numberBE));
+}
+
+void ServerProtocol::fillPacketWithChatInstructions(Socket& socket, std::shared_ptr<Instruction>&
+                                                                    instruct_ptr) {
+
+}
+
+void ServerProtocol::fillPacketWithMovementInstructions(Socket& socket, std::shared_ptr<Instruction>&
+                                                                    instruct_ptr) {
+
+}
+
+void ServerProtocol::fillPacketWithInstructions(Socket& socket, std::shared_ptr<Instruction>&
+                                                                    instruct_ptr) {
+    Packet packet;
+    socket.receive(packet, ONE_BYTE);
+    char action = packet.getByte();
+    if (action == 'c')
+        fillPacketWithChatInstructions(socket, instruct_ptr);
+    else
+        fillPacketWithMovementInstructions(socket, instruct_ptr);
 }
 

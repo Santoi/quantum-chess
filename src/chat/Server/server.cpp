@@ -37,7 +37,7 @@ void Server::executeAcceptorThread() {
             active_matches++;
         }
         match[match_number].addClientToQueues(*it);
-      //  it->start();
+        it->start();
     }
 }
 
@@ -45,7 +45,7 @@ void Server::executeAcceptorThread() {
 void Server::executeSingleThreadedServer() {
     std::list<ClientHandler> clients;
     std::list<ClientHandler>::iterator it = clients.begin();
-    std::vector<Match> match;
+    std::vector<Match> matches;
     int active_matches = 0;
     for (int i = 0; i < MAX_CLIENTS; i++) {
         this->createClientAndAddToList(clients);
@@ -55,13 +55,13 @@ void Server::executeSingleThreadedServer() {
             //create new game
             Match new_match;
             //add to vector of match
-            match.push_back(std::move(new_match));
+            matches.push_back(std::move(new_match));
             //create new thread for new game
             //match[active_matches].start()
             active_matches++;
         }
-        match[match_number].addClientToQueues(*it);
-        //  it->start();
+        matches[match_number].addClientToQueues(*it);
+        it->startSingleThreadedClient(matches[match_number]);
     }
 }
 

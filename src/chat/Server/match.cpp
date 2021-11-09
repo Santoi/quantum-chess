@@ -19,6 +19,10 @@ void Match::addClientToQueues(ClientHandler& client) {
     client.updates_queue = &this->match_updates_queue;
 }
 
+void Match::checkAndNotifyUpdates() {
+
+}
+
 
 Match::~Match() {
 

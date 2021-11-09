@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_SERVER_PROTOCOL_H
 
 #include "common_socket.h"
+#include "common_packet.h"
 
 class ServerProtocol {
 
@@ -9,7 +10,14 @@ public:
     ServerProtocol() = default;
     void sendNumberOfGamesRunning(Socket& socket, const int& max_games);
     int receiveNumberOfChosenGame(Socket& socket);
+    void fillPacketWithInstructions(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr);
+
     ~ServerProtocol() = default;
+
+private:
+    void fillPacketWithChatInstructions(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr);
+
+    void fillPacketWithMovementInstructions(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr);
 };
 
 

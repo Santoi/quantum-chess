@@ -8,6 +8,8 @@
 #include "../src/quantum_chess/chessman/king.h"
 #include "../src/quantum_chess/chess_exception.h"
 
+
+// TODO test capture.
 TEST(Chessman, MoveFromANonExistingPosition) {
     Board board;
     ChessmanContainer tower('T', Position(0, 1), true, board);
@@ -16,6 +18,21 @@ TEST(Chessman, MoveFromANonExistingPosition) {
 
     EXPECT_THROW(chessman->move(Position(0, 2),
                                 Position(0, 3)), ChessException);
+}
+
+TEST(Chessman, ClassicToClassicCapture) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    bishop->move(Position(0, 0), Position(1, 1));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(1, 1, 1));
+    EXPECT_FALSE(board.isThere(queen));
 }
 
 TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
@@ -682,17 +699,8 @@ TEST(Chessman, MeasureOtherPosition){
     EXPECT_THROW(chessman->measure(Position(4, 4)), ChessException);
 }
 
-TEST(Chessman, MeasureNonQuantum){
-    Board board(0);
-    ChessmanContainer queen('Q', Position(1, 1), true, board);
-    Chessman * chessman = queen.get();
-    board.addChessman(std::move(queen));
-
-    EXPECT_THROW(chessman->measure(Position(1, 1)), ChessException);
-}
-
 // TODO modificar esto porque le falta entrelazamiento.
-TEST(Chessman, MoveWithQuantumInTheMiddle){
+TEST(Chessman, MoveWithOneQuantumInTheMiddle){
     Board board(0);
     ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
     ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
@@ -707,7 +715,7 @@ TEST(Chessman, MoveWithQuantumInTheMiddle){
     EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
 }
 
-TEST(Chessman, MoveWithQuantumSumming1InTheMiddle){
+TEST(Chessman, MoveWithTwoQuantumInTheMiddle){
     Board board(0);
     ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
     ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
@@ -716,8 +724,210 @@ TEST(Chessman, MoveWithQuantumSumming1InTheMiddle){
     board.addChessman(std::move(queen_cont));
     board.addChessman(std::move(bishop_cont));
 
-    queen->split(Position(1, 1), Position(2, 2), Position(3, 3));
-    EXPECT_THROW(bishop->move(Position(0, 0), Position(4, 4)), ChessException);
+    queen->split(Position(1, 1), Position(2, 2), Position(4, 4));
+    queen->split(Position(2, 2), Position(3, 3), Position(2, 3));
+    EXPECT_THROW(bishop->move(Position(0, 0), Position(5, 5)), ChessException);
 }
+
+TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfSameColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    bishop->move(Position(0, 0), Position(3, 3));
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, MoveClassicWithMeasureToRealQuantumPieceOfSameColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
+    bishop->move(Position(0, 0), Position(3, 3));
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, MoveClassicWithMeasureToRealQuantumPieceOfDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
+    bishop->move(Position(0, 0), Position(3, 3));
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_FALSE(board.isThere(queen));
+}
+
+TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    bishop->move(Position(0, 0), Position(3, 3));
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+
+// TODO que pasa si son del mismo palo.
+TEST(Chessman, MoveRealQuantumPieceWithMeasureToClassicAndCaptureDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
+    queen->move(Position(3, 3), Position(0, 0));
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+    EXPECT_FALSE(board.isThere(bishop));
+}
+
+TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    queen->move(Position(3, 3), Position(0, 0));
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+    EXPECT_TRUE(board.isThere(bishop));
+}
+
+TEST(Chessman, MoveRealQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
+    EXPECT_THROW(queen->move(Position(3, 3), Position(0, 0)), ChessException);
+}
+
+TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceSameColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    EXPECT_THROW(queen->move(Position(3, 3), Position(0, 0)), ChessException);
+}
+
+TEST(Chessman, MoveMeasureFromRealQuantumToRealQuantumOfDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
+    queen_2->split(Position(0, 0), Position(1, 1), Position(0, 1));
+    queen_2->move(Position(1, 1), Position(3, 3));
+    EXPECT_TRUE(queen_2->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(queen_2->getAllPositions().size() == 1);
+    EXPECT_FALSE(board.isThere(queen));
+}
+
+TEST(Chessman, MoveMeasureFromRealQuantumToFakeQuantumOfDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    queen_2->split(Position(0, 0), Position(1, 1), Position(0, 1));
+    queen_2->move(Position(1, 1), Position(3, 3));
+    EXPECT_TRUE(queen_2->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(queen_2->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, MoveMeasureFromFakeQuantumToRealQuantumOfDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
+    queen_2->split(Position(0, 0), Position(0, 1), Position(1, 1));
+    queen_2->move(Position(1, 1), Position(3, 3));
+    EXPECT_TRUE(queen_2->getPosition() == QuantumPosition(0, 1, 1));
+    EXPECT_TRUE(queen_2->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(3, 3, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, MoveMeasureFromFakeQuantumToFakeQuantumOfDifferentColor) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    queen_2->split(Position(0, 0), Position(0, 1), Position(1, 1));
+    queen_2->move(Position(1, 1), Position(3, 3));
+    EXPECT_TRUE(queen_2->getPosition() == QuantumPosition(0, 1, 1));
+    EXPECT_TRUE(queen_2->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
 
 

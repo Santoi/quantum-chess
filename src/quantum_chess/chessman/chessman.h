@@ -21,6 +21,8 @@ class ChessmanContainer;
  * referencia al tablero al que pertenece y un booleano
  * que indica color. */
 class Chessman {
+    Chessman();
+
 protected:
     std::vector<QuantumPosition> positions;
     Board & board;
@@ -48,18 +50,18 @@ protected:
                                const Position &final,
                                std::vector<Position> &path) const;
 
-	/* Devuelve si el camino es transitable y carga en un vector todas las
-	 * piezas que se encuentran en el (usado para ajedrez cuantico). */
-    bool getPathMiddleChessmen(const std::vector<Position> &path,
-                               std::vector<Chessman *> *chessmen) const;
+    /* Devuelve si el camino es transitable (hay como mucho una pieza cuantica
+     * en el trayecto. Guarda en el puntero la pieza. No chequea ni la primer
+     * ni ultima posicion. */
+    bool getMiddlePathChessman(const std::vector<Position> &path,
+                               const Chessman * & chessman) const;
 
 	// Chequea que el camino sea transitable.
     bool checkFreePath(const std::vector<Position> & path) const;
 
 	/* Chequea si el movimiento se puede realizar y carga un vector con las
 	 * piezas que hay en el trayecto de haberlos. */
-    void checkCanMoveOrFail(const Position & initial, const Position & final,
-                            std::vector<Chessman *> &chessmen_in_path) const;
+    void checkCanMoveOrFail(const Position & initial, const Position & final) const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;

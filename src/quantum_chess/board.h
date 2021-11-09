@@ -62,6 +62,8 @@ public:
 
     void merge(const Position &initial1, const Position &initial2,
                const Position &final);
+
+    bool isThere(Chessman *chessman);
 };
 
 

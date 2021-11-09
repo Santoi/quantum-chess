@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include "chessman.h"
 #include "../chess_exception.h"
 
@@ -22,13 +23,37 @@ Chessman::Chessman(const Position & position_, bool white_, Board & board_):
 void Chessman::move(const Position & initial, const Position & final) {
     // TODO ver como mejorar lo de checkCanMoveOrFail y eso. (estoy repitiendo
     //  lo de buscar).
+    const Chessman * chessman_in_path = nullptr;
+    std::vector<Position> path;
     std::vector<Chessman *> chessmen_in_path;
-    checkCanMoveOrFail(initial, final, chessmen_in_path);
+    checkCanMoveOrFail(initial, final);
+
+    calculatePath(initial, final, path);
+    getMiddlePathChessman(path, chessman_in_path);
     
     if (Chessman * final_chessman = board.getChessmanAt(final)) {
-        // check if quantum
-        if (final_chessman->white != white)
-            board.removeChessmanOf(final);
+        if (final_chessman->isQuantum()) {
+            measure(initial);
+            final_chessman->measure(final);
+            if (getPosition() != initial)
+                return;
+            /* Si la posicion real del final era esa, se mide termina aqui.
+             * si, no, se completa el movimiento. */
+            if (final_chessman->getPosition() == final && final_chessman->white == white)
+                return;
+            else if (final_chessman->getPosition() == final && final_chessman->white != white)
+                board.removeChessmanOf(final);
+        }
+        else if (final_chessman->white != white) {
+            measure(initial);
+            final_chessman->measure(final);
+            if (getPosition() != initial)
+                return;
+        }
+        else
+            throw ChessException("La pieza final no es cuantica ni se"
+                                 "puede comer.");
+        board.removeChessmanOf(final);
     }
     auto it = std::find(positions.begin(), positions.end(),
                         initial);
@@ -45,12 +70,20 @@ void Chessman::split(const Position &initial, const Position &position1,
     if (position1 == position2)
         throw ChessException("no se puede hacer un split a la misma"
                              "posicion");
+    // TODO no se puede hacer split a casillero lleno ni entrelazar.
 
-    std::vector<Chessman *> chessmen_in_path_1, chessmen_in_path_2;
+    std::vector<Position> path;
+    const Chessman * chessman_in_path_1 = nullptr, * chessman_in_path_2;
 
     // TODO reunir todo en una sola? Creo que no por chessmen in path
-    checkCanMoveOrFail(initial, position1, chessmen_in_path_1);
-    checkCanMoveOrFail(initial, position2, chessmen_in_path_2);
+    checkCanMoveOrFail(initial, position1);
+    checkCanMoveOrFail(initial, position2);
+
+    calculatePath(initial, position1, path);
+    getMiddlePathChessman(path, chessman_in_path_1);
+
+    calculatePath(initial, position2, path);
+    getMiddlePathChessman(path, chessman_in_path_1);
 
     if (board.getChessmanAt(position1) || board.getChessmanAt(position2))
         throw ChessException("no se puede hacer split a un casillero"
@@ -77,11 +110,14 @@ void Chessman::split(const Position &initial, const Position &position1,
 
 void Chessman::merge(const Position &initial1, const Position &initial2,
                      const Position &final) {
+    // TODO no se puede hacer split a casillero lleno ni entrelazar.
     if (initial1 == initial2)
         throw ChessException("no se puede hacer merge desde la misma"
                              "posicion");
 
     std::vector<Chessman *> chessmen_in_path_1, chessmen_in_path_2;
+
+    const Chessman * chessman_in_path_1 = nullptr, * chessman_in_path_2;
     /* Se chequea, si la pieza que esta en la posicion final es la misma, se quita.
      * Lo mismo para los iniciales, esto se hace ya que no se molestan, es decir,
      * si tienen que pasar por encima de la otra, no pasa nada. */
@@ -92,10 +128,21 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
     else if (board.getChessmanAt(initial2) == this)
         board.removeChessmanOf(initial2);
     // En este caso, si se puede mover al mismo lugar donde esta.
-    if (initial1 != final)
-        checkCanMoveOrFail(initial1, final, chessmen_in_path_1);
-    if (initial2 != final)
-        checkCanMoveOrFail(initial2, final, chessmen_in_path_2);
+    std::vector<Position> path;
+    if (initial1 != final) {
+        checkCanMoveOrFail(initial1, final);
+        calculatePath(initial1, final, path);
+        getMiddlePathChessman(path, chessman_in_path_1);
+    }
+    if (initial2 != final) {
+        checkCanMoveOrFail(initial2, final);
+        calculatePath(initial2, final, path);
+        getMiddlePathChessman(path, chessman_in_path_1);
+    }
+
+
+
+
 
     /* Se chequea si el iterador 1 es el real, es decir el primero del vector
      * posicion, si no lo es, se guarda en el 2, sea o no el inicial, se
@@ -129,7 +176,7 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
 
 void Chessman::measure(const Position & position) {
     if (!isQuantum())
-        throw ChessException("no se puede medir una pieza no cuantica");
+        return;
     auto it = std::find(positions.begin(), positions.end(), position);
     // TODO falta logica entrelazado.
     /* Si es el primero, se borra entero el vector y se deja solo la posicion
@@ -153,8 +200,7 @@ void Chessman::measure(const Position & position) {
 }
 
 void Chessman::checkCanMoveOrFail(const Position & initial,
-                                  const Position & final,
-                                  std::vector<Chessman *> & chessmen_in_path)
+                                  const Position & final)
                                   const {
     std::vector<Position> path;
     std::vector<Position> posible_moves;
@@ -166,66 +212,32 @@ void Chessman::checkCanMoveOrFail(const Position & initial,
     if (std::find(posible_moves.begin(),
                   posible_moves.end(), final) == posible_moves.end())
         throw ChessException("la pieza no se puede mover alli");
-
-
-    calculatePath(initial, final, path);
-    getPathMiddleChessmen(path, &chessmen_in_path);
 }
 
 bool Chessman::checkFreePath(const std::vector<Position> & path) const {
-    return getPathMiddleChessmen(path, nullptr);
+    const Chessman * chessman = nullptr;
+    bool middle_path_free = getMiddlePathChessman(path, chessman);
+    bool final_free = true;
+    if (auto chessman = board.getChessmanAt(path.back())) {
+        if (chessman->white == white && !chessman->isQuantum() && !isQuantum())
+            final_free = false;
+    }
+    return middle_path_free && final_free;
 }
 
-bool Chessman::getPathMiddleChessmen(const std::vector<Position> & path,
-                                     std::vector<Chessman *> * chessmen)
+bool Chessman::getMiddlePathChessman(const std::vector<Position> & path,
+                                     const Chessman * & chessman)
                                      const {
-    /* Se define un map donde se guardaran las probabilidades, para
-     * chequear que efectivamente no hay una pieza cuantica pero con prob
-     * 1 en el camino. */
-    std::map<Chessman *, double> probabilities;
-    // Si se pasa puntero es que se quiere guardar los elementos del medio.
-    if (chessmen) {
-        *chessmen = std::vector<Chessman *>();
-        chessmen->reserve(7);
-    }
-
-    /* Se recorre el camino hasta el anteultimo elemento (esta asegurado
-     * que el ultimo es la posicion final. */
+    bool can_move = true;
+    // Se revisa el camino.
     for (size_t i = 0; i < path.size() - 1; i++) {
-        // Si hay una pieza, se guarda.
-        if (Chessman * chessman = board.getChessmanAt(path[i])) {
-            auto it = probabilities.find(chessman);
-            if (it != probabilities.end())
-                probabilities[chessman] = probabilities.at(chessman) + chessman->getProbability(path[i]);
-            else
-                probabilities.insert(it, std::make_pair(chessman, chessman->getProbability(path[i])));
+        if (auto chessman_ = board.getChessmanAt(path[i])) {
+            if (!can_move || !chessman_->isQuantum())
+                return false;
+            chessman = chessman_;
+            can_move = false;
         }
     }
-
-    /* Si se tiene que suman 1 (sin contar el ultimo), se dice que es seguro
-     * que este en le medio del camino y no se puede hacer el movimiento. */
-    for (auto it = probabilities.begin(); it != probabilities.end(); ++it) {
-        if (it->second == 1) {
-            if (chessmen)
-                *chessmen = std::vector<Chessman *>();
-            return false;
-        }
-        if (chessmen)
-            chessmen->push_back(it->first);
-    }
-
-    // Se chequea el ultimo. El ultimo podria ir duplicado. // TODO ver por las dudas
-    if (Chessman * last_one = board.getChessmanAt(path.back())) {
-        if (last_one->isQuantum() || last_one->isWhite() != white) {
-            if (chessmen)
-                chessmen->push_back(last_one);
-        } else {
-            if (chessmen)
-                *chessmen = std::vector<Chessman *>();
-            return false;
-        }
-    }
-
     return true;
 }
 

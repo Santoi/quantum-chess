@@ -97,6 +97,14 @@ bool Board::isNextWhite() const{
     return next_white;
 }
 
+bool Board::isThere(Chessman * chessman) {
+    for (auto & it : board) {
+        if (it.second == chessman)
+            return true;
+    }
+    return false;
+}
+
 void Board::load() {
     addChessman(std::move(ChessmanContainer('T', Position(0, 0),
                                             true, *this)));

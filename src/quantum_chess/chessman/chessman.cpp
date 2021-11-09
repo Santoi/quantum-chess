@@ -73,7 +73,7 @@ void Chessman::split(const Position &initial, const Position &position1,
     // TODO no se puede hacer split a casillero lleno ni entrelazar.
 
     std::vector<Position> path;
-    const Chessman * chessman_in_path_1 = nullptr, * chessman_in_path_2;
+    const Chessman * chessman_in_path_1 = nullptr, * chessman_in_path_2 = nullptr;
 
     // TODO reunir todo en una sola? Creo que no por chessmen in path
     checkCanMoveOrFail(initial, position1);
@@ -83,11 +83,14 @@ void Chessman::split(const Position &initial, const Position &position1,
     getMiddlePathChessman(path, chessman_in_path_1);
 
     calculatePath(initial, position2, path);
-    getMiddlePathChessman(path, chessman_in_path_1);
+    getMiddlePathChessman(path, chessman_in_path_2);
 
     if (board.getChessmanAt(position1) || board.getChessmanAt(position2))
         throw ChessException("no se puede hacer split a un casillero"
                              "lleno");
+
+    if (chessman_in_path_1 || chessman_in_path_2)
+        throw ChessException("no se puede hacer split y enlazar");
 
     // Se sortea aunque no sea el real.
     Position new_real, new_fake;
@@ -117,7 +120,7 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
 
     std::vector<Chessman *> chessmen_in_path_1, chessmen_in_path_2;
 
-    const Chessman * chessman_in_path_1 = nullptr, * chessman_in_path_2;
+    const Chessman * chessman_in_path_1 = nullptr, * chessman_in_path_2 = nullptr;
     /* Se chequea, si la pieza que esta en la posicion final es la misma, se quita.
      * Lo mismo para los iniciales, esto se hace ya que no se molestan, es decir,
      * si tienen que pasar por encima de la otra, no pasa nada. */
@@ -127,6 +130,8 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
         board.removeChessmanOf(initial1);
     else if (board.getChessmanAt(initial2) == this)
         board.removeChessmanOf(initial2);
+
+
     // En este caso, si se puede mover al mismo lugar donde esta.
     std::vector<Position> path;
     if (initial1 != final) {
@@ -140,9 +145,8 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
         getMiddlePathChessman(path, chessman_in_path_1);
     }
 
-
-
-
+    if (chessman_in_path_1 || chessman_in_path_2)
+        throw ChessException("no se puede hacer merge y enlazar");
 
     /* Se chequea si el iterador 1 es el real, es decir el primero del vector
      * posicion, si no lo es, se guarda en el 2, sea o no el inicial, se

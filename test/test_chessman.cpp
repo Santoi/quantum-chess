@@ -929,5 +929,32 @@ TEST(Chessman, MoveMeasureFromFakeQuantumToFakeQuantumOfDifferentColor) {
     EXPECT_TRUE(queen->getAllPositions().size() == 1);
 }
 
+TEST(Chessman, CantSplitAndEntangle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    EXPECT_THROW(queen_2->split(Position(0, 0), Position(0, 1), Position(3, 3)), ChessException);
+}
+
+TEST(Chessman, CantMergeAndEntangle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(0, 0), false, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
+    queen_2->split(Position(0, 0), Position(0, 1), Position(2, 2));
+    EXPECT_THROW(queen->merge(Position(3, 3), Position(1, 2), Position(1, 1)), ChessException);
+}
+
 
 

@@ -8,7 +8,8 @@ Client::Client(const char* host, const char* servidor)
 }
 
 void Client::readFromStandardInput(std::string& message) {
-    std::cin >> message;
+    std::getline(std::cin, message);
+    //std::cin >> message;
 }
 
 void Client::makeAction(const std::string& message) {
@@ -53,6 +54,8 @@ void Client::askForMatchNumber(const int& max_games) {
         std::cin >> game_number;
     } while ((game_number < 0) || game_number > max_games);
     this->protocol.sendChosenGame(this->client_socket, game_number);
+    std::string aux;
+    std::getline(std::cin, aux); //empty cin buffer
 }
 
 void Client::associateClientWithARunningMatch() {

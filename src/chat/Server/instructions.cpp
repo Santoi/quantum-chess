@@ -1,5 +1,6 @@
 #include "instructions.h"
 #include "blocking_queue.h"
+#include <arpa/inet.h>
 
 void Instruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues) {
 
@@ -25,6 +26,9 @@ void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQu
 
 void ChatInstruction::fillPacketWithInstructionsToSend(Packet& packet) {
     packet.addByte('c');
+    uint16_t host_length = this->message.size();
+    uint16_t lengthBE = htons(host_length);
+    packet.addBytes(lengthBE);
     packet.addBytes(this->message);
 }
 

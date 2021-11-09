@@ -11,8 +11,8 @@ class Instruction {
 
 public:
     Instruction() = default;
-    void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues);
-    void fillPacketWithInstructionsToSend(Packet& packet);
+    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues);
+    virtual void fillPacketWithInstructionsToSend(Packet& packet);
     ~Instruction() = default;
 };
 

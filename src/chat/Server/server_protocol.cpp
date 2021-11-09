@@ -52,3 +52,9 @@ void ServerProtocol::fillPacketWithInstructions(Socket& socket, std::shared_ptr<
         fillPacketWithMovementInstructions(socket, instruct_ptr);
 }
 
+void ServerProtocol::sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr) {
+    Packet packet;
+    instruct_ptr->fillPacketWithInstructionsToSend(packet);
+    socket.send(packet);
+}
+

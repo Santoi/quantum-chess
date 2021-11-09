@@ -34,7 +34,9 @@ void ClientHandler::executeReceiverCatchingExceptions() {
 }
 
 void ClientHandler::executeSender() {
-
+    std::shared_ptr<Instruction> instruc_ptr;
+    this->notifications_queue->pop(instruc_ptr);
+    this->protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr);
 }
 
 void ClientHandler::executeSenderCatchingExceptions() {

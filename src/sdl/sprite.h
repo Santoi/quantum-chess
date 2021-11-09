@@ -16,7 +16,7 @@ public:
 
   void render();
 
-  // Render the current sprite from (x, y) to (width, height)
+  // Render the current sprite from (x, y) to (x + width, y + height)
   void render(int x, int y, int width, int height);
 
   void loadImage(const std::string &file_name);

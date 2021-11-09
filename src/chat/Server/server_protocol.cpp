@@ -25,7 +25,15 @@ int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
 
 void ServerProtocol::fillPacketWithChatInstructions(Socket& socket, std::shared_ptr<Instruction>&
                                                                     instruct_ptr) {
-
+    Packet packet;
+    socket.receive(packet, TWO_BYTES);
+    uint16_t size_of_wordBE;
+    packet.getBytes(size_of_wordBE);
+    uint16_t size_of_word = ntohs(size_of_wordBE);
+    socket.receive(packet, size_of_word);
+    std::string message;
+    packet.getBytes(message, size_of_word);
+    instruct_ptr = std::make_shared<ChatInstruction>(std::move(message));
 }
 
 void ServerProtocol::fillPacketWithMovementInstructions(Socket& socket, std::shared_ptr<Instruction>&

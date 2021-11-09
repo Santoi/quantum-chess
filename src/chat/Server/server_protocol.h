@@ -3,6 +3,8 @@
 
 #include "common_socket.h"
 #include "common_packet.h"
+#include "instructions.h"
+#include <memory>
 
 class ServerProtocol {
 

@@ -6,12 +6,18 @@
 class Instruction {
 
 public:
-    Instruction();
-    ~Instruction();
+    Instruction() = default;
+    ~Instruction() = default;
 };
 
 class ChatInstruction: public Instruction {
+private:
     std::string message;
+
+public:
+    ChatInstruction() = delete;
+    ChatInstruction(std::string&& message);
+    ~ChatInstruction() = default;
 };
 
 class MovementInstruction: public Instruction {

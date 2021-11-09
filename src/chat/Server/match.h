@@ -4,12 +4,13 @@
 
 #include <list>
 #include "thread_safe_queue.h"
+#include "blocking_queue.h"
 
 class ClientHandler;
 
 class Match {
 private:
-    std::list<ThreadSafeQueue> listening_queues;
+    std::list<BlockingQueue> listening_queues;
     ThreadSafeQueue match_updates_queue;
 
 public:

@@ -7,13 +7,15 @@
 #include "common_socket.h"
 #include "match.h"
 #include "server_protocol.h"
+#include "blocking_queue.h"
+#include <memory>
 class Match;
 
 class ClientHandler {
 private:
     Socket client_socket;
     ServerProtocol protocol;
-    ThreadSafeQueue* notifications_queue;
+    BlockingQueue* notifications_queue;
     ThreadSafeQueue* updates_queue;
     std::thread receiver_thread;
     std::thread sender_thread;

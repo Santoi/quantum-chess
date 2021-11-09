@@ -26,6 +26,7 @@ int ClientHandler::chooseGame(const int& max_games) {
 void ClientHandler::executeReceiver() {
     std::shared_ptr<Instruction> ptr_instruction;
     this->protocol.fillPacketWithInstructions(this->client_socket, ptr_instruction);
+    this->updates_queue->push(ptr_instruction);
 }
 
 void ClientHandler::executeReceiverCatchingExceptions() {

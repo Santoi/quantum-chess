@@ -2,11 +2,15 @@
 #define QUANTUM_CHESS_PROJ_INSTRUCTION_H
 
 #include <string>
+#include <list>
+
+class BlockingQueue;
 
 class Instruction {
 
 public:
     Instruction() = default;
+    void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues);
     ~Instruction() = default;
 };
 
@@ -17,10 +21,13 @@ private:
 public:
     ChatInstruction() = delete;
     ChatInstruction(std::string&& message);
+    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues);
     ~ChatInstruction() = default;
 };
 
 class MovementInstruction: public Instruction {
+public:
+    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues);
 
 };
 #endif //QUANTUM_CHESS_PROJ_INSTRUCTION_H

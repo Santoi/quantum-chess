@@ -19,11 +19,17 @@ Chessman::Chessman(SDL2pp::Renderer &renderer, char chessman) :
 }
 
 void Chessman::drawAt(int x_pos, int y_pos) {
+  updateDimensions();
   x_pos -= 4;
   y_pos -= 3;
   x_pos *= width;
   y_pos *= -height;
   sprite.render(x + x_pos, y + y_pos, width, height);
+}
+
+void Chessman::updateDimensions() {
+  x = y = renderer.GetOutputHeight() / 2;
+  width = height = renderer.GetOutputHeight() / 10;
 }
 
 Chessman::~Chessman() = default;

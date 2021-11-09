@@ -12,6 +12,7 @@ private:
   // (0, 0) is center board
   int width;
   int height;
+  void updateDimensions();
 
 public:
   Chessman(SDL2pp::Renderer &renderer, char chessman);

@@ -1,4 +1,5 @@
 #include "common_socket.h"
+#include "common_socket_closed.h"
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
@@ -13,13 +14,13 @@
 #define ERROR -1
 #define MAX_QUEUE 8
 #define SOCKET_NO_DISPONIBLE 0
-#define SIN_FD -1
+#define INVALID_FILE_DESCRIPTOR -1
 #define MAX_MENSAJE 50
 #define MAX_MENSAJE_DE_ERROR 250
 
 
 Socket::Socket()
-        :fd(SIN_FD) {
+        :fd(INVALID_FILE_DESCRIPTOR) {
 }
 
 Socket::Socket(int fd_valido)
@@ -28,10 +29,10 @@ Socket::Socket(int fd_valido)
 
 Socket::Socket(Socket&& otro_socket) {
     this->fd = otro_socket.fd;
-    otro_socket.fd = SIN_FD;
+    otro_socket.fd = INVALID_FILE_DESCRIPTOR;
 }
 
-Socket Socket::crearSocketClienteYConectarlo(const char* host, const char* servicio) {
+Socket Socket::createAConnectedSocket(const char* host, const char* servicio) {
     Socket socket_cliente;
     socket_cliente.inicializarYConectarCliente(host, servicio);
     return socket_cliente;
@@ -142,14 +143,13 @@ void Socket::inicializarServidorConBindYListen(const char* host, const char* ser
 }
 
 Socket Socket::acceptSocket() {
-    fd = SIN_FD;
-    //int fd = accept(this->fd, nullptr, nullptr);
-    //if (fd == ERROR)
-      //  throw NoSePuedeAceptarSocketError();
-    Socket socket_cliente(SIN_FD);
+    int fd = accept(this->fd, nullptr, nullptr);
+    if (fd == ERROR)
+        throw NoSePuedeAceptarSocketError();
+    Socket socket_cliente(fd);
     return socket_cliente;
 }
-/*
+
 size_t Socket::send(Packet & packet) const {
     if (fd == INVALID_FILE_DESCRIPTOR)
         throw std::runtime_error("el socket tiene un fd invalido");
@@ -198,8 +198,8 @@ size_t Socket::receive(Packet & packet, size_t size) const {
     }
     // Se devuelven los bytes recibidos.
     return packet.size();
-}*/
-
+}
+/*
 ssize_t Socket::enviarMensaje(const char* buffer, size_t length) {
     size_t escritos = 0;
     if (this->fd == SIN_FD)
@@ -232,7 +232,7 @@ ssize_t Socket::recibirMensaje(char* buffer, size_t length) {
     }
     return leidos;
 }
-
+*/
 void Socket::shutdownYCerrar() {
     shutdown(this->fd, SHUT_RDWR);
     int aux = close(this->fd);
@@ -241,13 +241,13 @@ void Socket::shutdownYCerrar() {
 }
 
 void Socket::stopAccepting() {
-    if (this->fd != SIN_FD)
+    if (this->fd != INVALID_FILE_DESCRIPTOR)
         this->shutdownYCerrar();
-    this->fd = SIN_FD;
+    this->fd = INVALID_FILE_DESCRIPTOR;
 }
 
 Socket::~Socket() {
-    if (this->fd != SIN_FD)
+    if (this->fd != INVALID_FILE_DESCRIPTOR)
         this->shutdownYCerrar();
 }
 

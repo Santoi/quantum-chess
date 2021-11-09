@@ -5,10 +5,10 @@
 
 int main(int argc, char* argv[]) {
     bool one_thread_only = false;
-    if (argc == 2)
+    if (argc == 3)
         one_thread_only = true;
     try {
-        Server server(nullptr, argv[2]);
+        Server server(nullptr, argv[1]);
         server.execute(one_thread_only);
     }
     catch(const std::exception & e){

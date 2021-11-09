@@ -6,12 +6,13 @@
 #include "thread_safe_queue.h"
 #include "common_socket.h"
 #include "match.h"
-
+#include "server_protocol.h"
 class Match;
 
 class ClientHandler {
 private:
     Socket client_socket;
+    ServerProtocol protocol;
     ThreadSafeQueue* notifications_queue;
     ThreadSafeQueue* updates_queue;
     std::thread receiver_thread;
@@ -22,7 +23,7 @@ public:
     ClientHandler(Socket&& socket);
     ClientHandler(ClientHandler&& other_client);
     friend void Match::addClientToQueues(ClientHandler& client);
-    int chooseGame();
+    int chooseGame(const int& max_games);
     ~ClientHandler() = default;
 };
 

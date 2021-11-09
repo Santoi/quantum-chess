@@ -14,7 +14,8 @@ ClientHandler::ClientHandler(ClientHandler&& other_client)
 }
 
 
-int ClientHandler::chooseGame() {
-    return 0;
+int ClientHandler::chooseGame(const int& max_games) {
+    this->protocol.sendNumberOfGamesRunning(this->client_socket, max_games);
+    return (this->protocol.receiveNumberOfChosenGame(this->client_socket));
 }
 

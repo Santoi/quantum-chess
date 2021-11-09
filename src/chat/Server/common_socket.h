@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <exception>
 
+#include "common_packet.h"
+
 class Socket {
 private:
     int fd;
@@ -17,7 +19,7 @@ public:
 
     //Se crea y retorna un socket cliente usando el host y el servicio pedido, conectándolo
     //correspondientemente.
-    static Socket crearSocketClienteYConectarlo(const char* host, const char* servicio);
+    static Socket createAConnectedSocket(const char* host, const char* servicio);
 
     //Crea un socket servidor usando el host y el servicio pedido. Se le hace un bind y un listen,
     //dejandolo el socket en un estado válido para poder aceptar sockets clientes. Se retorna el
@@ -33,15 +35,18 @@ public:
     //Se hace un shutdown y close sobre el socket servidor.
     void stopAccepting();
 
+    size_t send(Packet & packet) const;
+
+    size_t receive(Packet & packet, size_t size) const;
     //Se envían hasta length bytes del contenido de buffer. Se retorna la cantidad de bytes
     //escritos. Si el socket no está inicializado se lanza una excepción SocketNoInicializadoError
     //con un mensaje descriptivo.
-    ssize_t enviarMensaje(const char* buffer, size_t length);
+    //ssize_t enviarMensaje(const char* buffer, size_t length);
 
     //Se reciben y almacenan en el buffer hasta length bytes. Se retornan la cantidad de bytes
     //leídos. Si el socket no está inicializado se lanza una excepción SocketNoInicializadoError
     //con un mensaje descriptivo.
-    ssize_t recibirMensaje(char* buffer, size_t length);
+    //ssize_t recibirMensaje(char* buffer, size_t length);
 
     //Se liberan los recursos del socket. Si se tiene un fd válido, se hace un shutdown y un close
     //sobre dicho fd. Si es un fd inválido, se retorna y no se libera nada.

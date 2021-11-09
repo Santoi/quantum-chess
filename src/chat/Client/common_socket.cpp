@@ -143,11 +143,10 @@ void Socket::inicializarServidorConBindYListen(const char* host, const char* ser
 }
 
 Socket Socket::acceptSocket() {
-    fd = INVALID_FILE_DESCRIPTOR;
-    //int fd = accept(this->fd, nullptr, nullptr);
-    //if (fd == ERROR)
-      //  throw NoSePuedeAceptarSocketError();
-    Socket socket_cliente(INVALID_FILE_DESCRIPTOR);
+    int fd = accept(this->fd, nullptr, nullptr);
+    if (fd == ERROR)
+        throw NoSePuedeAceptarSocketError();
+    Socket socket_cliente(fd);
     return socket_cliente;
 }
 

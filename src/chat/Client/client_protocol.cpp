@@ -1,7 +1,9 @@
-#include "client_protocol.h"
 #include "common_packet.h"
 #include <unistd.h>
 #include <arpa/inet.h>
+
+#include "client_protocol.h"
+
 
 #define TWO_BYTES 2
 

@@ -1,8 +1,9 @@
 #ifndef QUANTUM_CHESS_PROJ_SERVER_H
 #define QUANTUM_CHESS_PROJ_SERVER_H
 
+#include <list>
 #include "common_socket.h"
-
+#include "client_handler.h"
 class Server {
 private:
     Socket acceptor_socket;
@@ -21,6 +22,11 @@ private:
     void executeSingleThreadedServer();
 
     void executeServerWithThreads();
+
+    void executeAcceptorThread();
+
+    void createClientAndAddToList(std::list<ClientHandler>& clients);
+
   //  void ejecutarSoloHiloMain();
 
     //void ejecutarConHilos();

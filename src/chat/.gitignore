@@ -1,0 +1,9 @@
+*.zip
+cin
+*.txt
+*.o
+*.o-tsan
+tp
+tp-tsan
+.idea/
+cmake-build-debug/

@@ -1,35 +1,42 @@
 #include "server.h"
+#include <iostream>
+
 
 Server::Server(const char* host, const char* service)
         :acceptor_socket(std::move(Socket::createAListeningSocket(host, service))) {
 }
 
-void Server::agregarClienteALista(std::list<ManejaCliente>& hilos_clientes) {
-    Socket socket_cliente = this->socket_aceptador.aceptarSocket();
-    ManejaCliente cliente(std::move(socket_cliente), this->protocolo, this->mapa_colas);
-    hilos_clientes.push_back(std::move(cliente));
+void Server::createClientAndAddToList(std::list<ClientHandler>& clients) {
+    Socket client_socket = this->acceptor_socket.acceptSocket();
+    ClientHandler client(std::move(client_socket));
+    clients.push_back(std::move(client));
 }
 
 void Server::executeAcceptorThread() {
-    std::list<ManejaCliente> clients_threads;
-    std::list<ManejaCliente>::iterator it = clients_threads.begin();
-    std::vector<Game> games;
-    int games_counter = 0;
+    std::list<ClientHandler> clients;
+    std::list<ClientHandler>::iterator it = clients.begin();
+    std::vector<Match> match;
+    int active_matches = 0;
     while (true) {
         try {
-            this->agregarClienteALista(hilos_clientes);
-        } catch (const NoSePuedeAceptarSocketError& error) {
-            joinearHilosClientes(hilos_clientes);
+            this->createClientAndAddToList(clients);
+        } catch (...) {
+            //joinearHilosClientes(hilos_clientes);
             return;
         }
         ++it;
-        int game_number = it->chooseGame();
-        if (game_number <= game_counter) {
+        int match_number = it->chooseGame();
+        if (match_number <= active_matches) {
             //create new game
+            Match new_match;
+            //add to vector of match
+            match.push_back(std::move(new_match));
             //create new thread for new game
-            //add to vector of games
+            //match[active_matches].start()
+            active_matches++;
         }
-        it->start();
+        match[match_number].addClientToQueues(*it);
+      //  it->start();
     }
 }
 
@@ -43,7 +50,7 @@ void Server::executeServerWithThreads() {
     while (std::cin.get() != 'q') {
     }
     this->acceptor_socket.stopAccepting();
-    hilo_aceptador.join();
+    acceptor_thread.join();
 }
 
 void Server::execute(bool one_thread_only) {

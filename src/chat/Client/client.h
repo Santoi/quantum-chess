@@ -30,6 +30,12 @@ public:
     ~Client() = default;
 
 private:
+    void associateClientWithARunningMatch();
+
+    int getAndPrintNumberOfAvailableGames();
+
+    void askForMatchNumber(const int& max_games);
+
     void readFromStandardInputAndMakeAction();
 
     void readFromStandardInput(std::string& message);

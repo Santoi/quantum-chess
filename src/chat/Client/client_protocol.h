@@ -7,6 +7,8 @@
 class ClientProtocol {
 public:
     ClientProtocol() = default;
+    int receiveNumberOfRunningGames(Socket& socket);
+    void sendChosenGame(Socket& socket, const int& game_number);
     void sendMessage(Socket& socket, const std::string& message);
     ~ClientProtocol() = default;
 };

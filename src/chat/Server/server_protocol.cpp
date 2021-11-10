@@ -23,6 +23,17 @@ int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
     return (int)(ntohs(game_numberBE));
 }
 
+void ServerProtocol::getNickName(Socket& socket, std::string& nick_name) {
+    Packet packet;
+    socket.receive(packet, TWO_BYTES);
+    uint16_t size_of_wordBE;
+    packet.getBytes(size_of_wordBE);
+    uint16_t size_of_word = ntohs(size_of_wordBE);
+    socket.receive(packet, size_of_word);
+    packet.getBytes(nick_name, size_of_word);
+}
+
+
 void ServerProtocol::fillPacketWithChatInstructions(Socket& socket, std::shared_ptr<Instruction>&
                                                                     instruct_ptr) {
     Packet packet;

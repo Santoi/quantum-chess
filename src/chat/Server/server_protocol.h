@@ -12,6 +12,7 @@ public:
     ServerProtocol() = default;
     void sendNumberOfGamesRunning(Socket& socket, const int& max_games);
     int receiveNumberOfChosenGame(Socket& socket);
+    void getNickName(Socket& socket, std::string& nick_name);
     void fillPacketWithInstructions(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr);
     void sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr);
     ~ServerProtocol() = default;

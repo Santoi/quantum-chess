@@ -29,7 +29,7 @@ int ClientHandler::chooseGame(const int& max_games) {
 
 
 void ClientHandler::getClientsNickName(std::string& nick_name) {
-
+    this->protocol.getNickName(client_socket, nick_name);
 }
 
 void ClientHandler::executeReceiver() {

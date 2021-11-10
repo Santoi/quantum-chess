@@ -7,11 +7,12 @@
 #include "blocking_queue.h"
 #include "common_socket.h"
 #include "client_handler.h"
+
 class ClientHandler;
 
 class Match {
 private:
-    int number_of_clients;
+    int accepted_clients;
     std::vector<ClientHandler> clients;
     std::list<BlockingQueue> listening_queues;
     ThreadSafeQueue match_updates_queue;

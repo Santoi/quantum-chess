@@ -3,23 +3,24 @@
 #include "instructions.h"
 
 Match::Match()
-        :number_of_clients(0) {
+        :accepted_clients(0) {
 }
 
 Match::Match(Match&& other_match)
-        :listening_queues(std::move(other_match.listening_queues)),
-         match_updates_queue(std::move(other_match.match_updates_queue)) {
+       :accepted_clients(other_match.accepted_clients), clients(std::move(other_match.clients)),
+        listening_queues(std::move(other_match.listening_queues)),
+        match_updates_queue(std::move(other_match.match_updates_queue)) {
 }
 
 
 void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
     BlockingQueue new_listening_queue;
     this->listening_queues.push_front(std::move(new_listening_queue));
-    ClientHandler client(std::move(client_socket), new_listening_queue, this->match_updates_queue);
+    ClientHandler client(std::move(client_socket), this->listening_queues.front(), this->match_updates_queue);
     this->clients.push_back(std::move(client));
-    this->clients[number_of_clients].saveIdAndAskForName(number_of_clients);
-    this->clients[number_of_clients].startSingleThreadedClient(*this);
-    this->number_of_clients++;
+    this->clients[this->accepted_clients].saveIdAndAskForName(this->accepted_clients);
+    this->clients[this->accepted_clients].startSingleThreadedClient(*this);
+    this->accepted_clients++;
 }
 
 /*

@@ -30,6 +30,10 @@ public:
     ~Client() = default;
 
 private:
+    void setUpClientsDataInServer();
+
+    void welcomeClientAndAskForNickName(std::string& nick_name);
+    
     void associateClientWithARunningMatch();
 
     int getAndPrintNumberOfAvailableGames();

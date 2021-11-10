@@ -23,6 +23,17 @@ void ClientProtocol::sendChosenGame(Socket& socket, const int& game_number) {
     socket.send(packet);
 }
 
+void ClientProtocol::sendClientsNickName(Socket& socket, std::string& nick_name) {
+    Packet packet;
+    uint16_t host_length = nick_name.size();
+    uint16_t lengthBE = htons(host_length);
+    packet.addBytes(lengthBE);
+    packet.addBytes(nick_name);
+    socket.send(packet);
+}
+
+
+
 void ClientProtocol::sendMessage(Socket& socket, const std::string& message) {
     Packet packet;
     packet.addByte('c');
@@ -43,4 +54,5 @@ void ClientProtocol::receiveInstruction(Socket& socket, std::string& message) {
     socket.receive(packet, size_of_word);
     packet.getBytes(message, size_of_word);
 }
+
 

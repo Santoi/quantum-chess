@@ -38,7 +38,7 @@ void Client::receiveMessage() {
 
 int Client::getAndPrintNumberOfAvailableGames() {
     int max_games = this->protocol.receiveNumberOfRunningGames(this->client_socket);
-    std::cout << "Bienvenido a Quantum Chess. Selecciona de las partidas disponibles a cuál de estas"
+    std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                  " quieres entrar." << std::endl;
     std::cout << "Los números de partida disponibles son los siguientes: " << std::endl;
     for (int i = 0; i < max_games; i++)
@@ -63,8 +63,22 @@ void Client::associateClientWithARunningMatch() {
     askForMatchNumber(max_games);
 }
 
-void Client::execute() {
+void Client::welcomeClientAndAskForNickName(std::string& nick_name) {
+    std::cout << "Bienvenido a Quantum Chess. Por favor, ingresá tu nombre para "
+                 "comenzar a jugar." << std::endl;
+    this->readFromStandardInput(nick_name);
+    std::cout << "¡Qué tal, " << nick_name << "! ¿Listo para jugar?" << std::endl;
+}
+
+void Client::setUpClientsDataInServer() {
+    std::string nick_name;
+    this->welcomeClientAndAskForNickName(nick_name);
     this->associateClientWithARunningMatch();
+    this->protocol.sendClientsNickName(this->client_socket, nick_name);
+}
+
+void Client::execute() {
+    this->setUpClientsDataInServer();
     while (this->is_active) {
         this->readFromStandardInputAndMakeAction();
         this->receiveMessage();

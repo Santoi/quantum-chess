@@ -4,9 +4,13 @@
 
 #define MAX_MESSAGES 10
 
-ClientHandler::ClientHandler(Socket&& socket)
-                :client_socket(std::move(socket)) {
+ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue&
+                                                                                updates_queue)
+              :client_socket(std::move(socket)), notifications_queue(notifications_queue),
+               updates_queue(updates_queue) {
+
 }
+
 
 ClientHandler::ClientHandler(ClientHandler&& other_client)
                 :client_socket(std::move(other_client.client_socket)),
@@ -23,10 +27,15 @@ int ClientHandler::chooseGame(const int& max_games) {
     return (this->protocol.receiveNumberOfChosenGame(this->client_socket));
 }
 
+
+void ClientHandler::saveIdAndAskForName(int id) {
+
+}
+
 void ClientHandler::executeReceiver() {
     std::shared_ptr<Instruction> ptr_instruction;
     this->protocol.fillPacketWithInstructions(this->client_socket, ptr_instruction);
-    this->updates_queue->push(ptr_instruction);
+    this->updates_queue.push(ptr_instruction);
 }
 
 void ClientHandler::executeReceiverCatchingExceptions() {
@@ -35,7 +44,7 @@ void ClientHandler::executeReceiverCatchingExceptions() {
 
 void ClientHandler::executeSender() {
     std::shared_ptr<Instruction> instruc_ptr;
-    this->notifications_queue->pop(instruc_ptr);
+    this->notifications_queue.pop(instruc_ptr);
     this->protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr);
 }
 
@@ -48,6 +57,7 @@ void ClientHandler::start() {
     this->receiver_thread = std::thread(&ClientHandler::executeReceiverCatchingExceptions, this);
     this->sender_thread = std::thread(&ClientHandler::executeSenderCatchingExceptions, this);
 }
+
 
 void ClientHandler::startSingleThreadedClient(Match& match) {
     for (int i = 0; i < MAX_MESSAGES; i++) {

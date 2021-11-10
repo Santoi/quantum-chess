@@ -5,18 +5,23 @@
 #include <list>
 #include "thread_safe_queue.h"
 #include "blocking_queue.h"
-
+#include "common_socket.h"
+#include "client_handler.h"
 class ClientHandler;
 
 class Match {
 private:
+    int number_of_clients;
+    std::vector<ClientHandler> clients;
     std::list<BlockingQueue> listening_queues;
     ThreadSafeQueue match_updates_queue;
 
 public:
     Match();
     Match(Match&& other_match);
-    void addClientToQueues(ClientHandler& client);
+    void addSingleThreadedClientToMatchAndStart(Socket&& client_socket);
+    //void addClientToMatchAndBeginExcecution(Socket&& client_socket);
+    //void addClientToQueues(ClientHandler& client);
     void checkAndNotifyUpdates();
     ~Match();
 };

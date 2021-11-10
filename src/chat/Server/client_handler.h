@@ -15,16 +15,17 @@ class ClientHandler {
 private:
     Socket client_socket;
     ServerProtocol protocol;
-    BlockingQueue* notifications_queue;
-    ThreadSafeQueue* updates_queue;
+    BlockingQueue& notifications_queue;
+    ThreadSafeQueue& updates_queue;
     std::thread receiver_thread;
     std::thread sender_thread;
 
 public:
     ClientHandler() = delete;
-    ClientHandler(Socket&& socket);
+    ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue);
     ClientHandler(ClientHandler&& other_client);
-    friend void Match::addClientToQueues(ClientHandler& client);
+
+    void saveIdAndAskForName(int id);
     int chooseGame(const int& max_games);
     void start();
     void startSingleThreadedClient(Match& match);

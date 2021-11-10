@@ -15,6 +15,7 @@
 
 class Board;
 class ChessmanContainer;
+class QuantumPosition;
 
 /* Clase abstracta que representa una pieza del tablero.
  * Posee como atributos una COMPLETAR de posiciones, una
@@ -22,6 +23,7 @@ class ChessmanContainer;
  * que indica color. */
 class Chessman {
     Chessman();
+    bool measured;
 
 protected:
     std::vector<QuantumPosition> positions;
@@ -54,7 +56,7 @@ protected:
      * en el trayecto. Guarda en el puntero la pieza. No chequea ni la primer
      * ni ultima posicion. */
     bool getMiddlePathChessman(const std::vector<Position> &path,
-                               const Chessman * & chessman) const;
+                               std::pair<Position, Chessman *>  & chessman) const;
 
 	// Chequea que el camino sea transitable.
     bool checkFreePath(const std::vector<Position> & path) const;
@@ -104,6 +106,15 @@ public:
     double getProbability(Position position);
 
     void measure(const Position &position);
+
+    void
+    entangle(const Position &position, Chessman &other, const Position &other_position);
+
+    void measureOthers(QuantumPosition & quantum_position);
+
+    bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
+
+    void resetMeasured();
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

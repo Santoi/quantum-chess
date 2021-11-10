@@ -3,24 +3,37 @@
 
 #include <list>
 #include "position.h"
+#include "chessman/chessman.h"
+
+#define PRECISION_PROB 1.5258e-5
 
 class Position;
+class Chessman;
 
 // TODO pdria ser hija de Position?? (no se si vale mucho la pena)
 
 class QuantumPosition {
+    QuantumPosition();
+
+
+
+
     Position position;
     double prob;
     std::list<QuantumPosition *> entangled;
+    Chessman * chessman;
 
 public:
-    QuantumPosition();
+    explicit QuantumPosition(Chessman * chessman_ = nullptr);
 
-    explicit QuantumPosition(const Position &position_);
+    explicit QuantumPosition(const Position &position_, Chessman * chessman_ = nullptr);
 
-    QuantumPosition(uint8_t x, uint8_t y, double prob_);
+    QuantumPosition(const Position & position_, double prob_, Chessman * chessman_ = nullptr);
 
-    QuantumPosition(const Position &position_, double prob_);
+    QuantumPosition(uint8_t x, uint8_t y, double prob_, Chessman *chessman_ = nullptr);
+
+    QuantumPosition(const Position &position_, double prob_,
+                    std::list<QuantumPosition *> &list, Chessman *chessman_);
 
     bool operator==(const QuantumPosition &other) const;
 
@@ -38,7 +51,15 @@ public:
 
     void setProb(double prob_);
 
-    void entangle(QuantumPosition *other);
+    void unentangle();
+
+    std::list<QuantumPosition *> &getEntangled();
+
+    void entangle(QuantumPosition & other);
+
+    void measure();
+
+    bool compareDoubleWithPrecision(double a, double b, double e) const;
 };
 
 

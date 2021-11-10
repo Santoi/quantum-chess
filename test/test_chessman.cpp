@@ -35,6 +35,20 @@ TEST(Chessman, ClassicToClassicCapture) {
     EXPECT_FALSE(board.isThere(queen));
 }
 
+TEST(Chessman, MoveThenMove) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    Chessman * queen = queen_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+
+    queen->move(Position(1, 1), Position(2, 2));
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(2, 2, 1));
+
+    queen->move(Position(2, 2), Position(3, 3));
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(3, 3, 1));
+}
+
 TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
     Board board;
     Tower tower(Position(5, 1), true, board);
@@ -699,22 +713,6 @@ TEST(Chessman, MeasureOtherPosition){
     EXPECT_THROW(chessman->measure(Position(4, 4)), ChessException);
 }
 
-// TODO modificar esto porque le falta entrelazamiento.
-TEST(Chessman, MoveWithOneQuantumInTheMiddle){
-    Board board(0);
-    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
-    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
-    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
-
-    board.addChessman(std::move(queen_cont));
-    board.addChessman(std::move(bishop_cont));
-
-    queen->split(Position(1, 1), Position(2, 2), Position(1, 2));
-    bishop->move(Position(0, 0), Position(4, 4));
-
-    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
-}
-
 TEST(Chessman, MoveWithTwoQuantumInTheMiddle){
     Board board(0);
     ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
@@ -840,12 +838,12 @@ TEST(Chessman, MoveRealQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
 
     board.addChessman(std::move(queen_cont));
     board.addChessman(std::move(bishop_cont));
-
+    // TODO VER SI ESTO ESTA BIEN.
     queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
     EXPECT_THROW(queen->move(Position(3, 3), Position(0, 0)), ChessException);
 }
 
-TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceSameColor) {
+TEST(Chessman, MoveFakeQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
     Board board(0);
     ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
     ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
@@ -955,6 +953,318 @@ TEST(Chessman, CantMergeAndEntangle){
     queen_2->split(Position(0, 0), Position(0, 1), Position(2, 2));
     EXPECT_THROW(queen->merge(Position(3, 3), Position(1, 2), Position(1, 1)), ChessException);
 }
+
+// TODO modificar esto porque le falta entrelazamiento.
+TEST(Chessman, MoveWithOneQuantumFakeInTheMiddle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions()[1] == QuantumPosition(0, 0, 0.5));
+}
+
+// medir entre ellos.
+TEST(Chessman, EntangleWithRealThenMeasureTheOneInTheMiddleThatWasEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(2, 2), Position(1, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    queen->measure(Position(2, 2));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(2, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, EntangleWithRealThenMeasureTheOneInTheMiddleThatWasNotEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(2, 2), Position(1, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    queen->measure(Position(1, 2));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(2, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, EntangleWithFakeThenMeasureTheOneInTheMiddleThatWasEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    queen->measure(Position(2, 2));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, EntangleThenMoveBothPiecesThenMeasure){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    bishop->move(Position(4, 4), Position(5, 5));
+    queen->move(Position(1, 2), Position(1, 1));
+
+    queen->measure(Position(1, 1));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(5, 5, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 1, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+
+
+TEST(Chessman, EntangleWithFakeThenMeasureTheOneInTheMiddleThatWasNotEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    queen->measure(Position(1, 2));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(1, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, EntangleWithRealThenSplitTheNonEntangledAndMeasureBothOfThem){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(2, 2), Position(1, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    queen->split(Position(1, 2), Position(0, 2), Position(1, 3));
+
+    queen->measure(Position(1, 3));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions()[1] == QuantumPosition(4, 4, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 2);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(2, 2, 0.5/0.75));
+    EXPECT_TRUE(queen->getAllPositions()[1] == QuantumPosition(0, 2, 0.25/0.75));
+    EXPECT_TRUE(queen->getAllPositions().size() == 2);
+
+    queen->resetMeasured();
+    bishop->resetMeasured();
+    queen->measure(Position(0, 2));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(2, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, EntangleWithFakethenSplitNotEntangledAndMeasureEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(1, 1), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
+    bishop->move(Position(0, 0), Position(4, 4));
+
+    queen->split(Position(1, 2), Position(0, 2), Position(1, 3));
+
+    queen->measure(Position(2, 2));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(0, 2, 0.5));
+    EXPECT_TRUE(queen->getAllPositions()[1] == QuantumPosition(1, 3, 0.5));
+    EXPECT_TRUE(queen->getAllPositions().size() == 2);
+}
+
+TEST(Chessman, DoubleEntangleWithRealThenMeasureMiddle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    ChessmanContainer tower_cont('B', Position(2, 6), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get(), * tower = tower_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+    board.addChessman(std::move(tower_cont));
+
+    queen->split(Position(4, 3), Position(4, 4), Position(4, 2));
+    bishop->move(Position(0, 0), Position(7, 7));
+    tower->move(Position(2, 6), Position(5, 3));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions()[1] == QuantumPosition(7, 7, 0.5));
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(2, 6, 0.5));
+    EXPECT_TRUE(tower->getAllPositions()[1] == QuantumPosition(5, 3, 0.5));
+
+    queen->measure(Position(4, 4));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(2, 6, 1));
+    EXPECT_TRUE(tower->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(4, 4, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, DoubleEntangleWithFakeThenMeasureMiddle){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    ChessmanContainer tower_cont('B', Position(2, 6), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get(), * tower = tower_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+    board.addChessman(std::move(tower_cont));
+
+    queen->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    bishop->move(Position(0, 0), Position(7, 7));
+    tower->move(Position(2, 6), Position(5, 3));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(7, 7, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions()[1] == QuantumPosition(0, 0, 0.5));
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(5, 3, 0.5));
+    EXPECT_TRUE(tower->getAllPositions()[1] == QuantumPosition(2, 6, 0.5));
+
+    queen->measure(Position(4, 4));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(7, 7, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(5, 3, 1));
+    EXPECT_TRUE(tower->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(4, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, DoubleEntangleWithRealThenMeasureOneOfOthers){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    ChessmanContainer tower_cont('B', Position(2, 6), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get(), * tower = tower_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+    board.addChessman(std::move(tower_cont));
+
+    queen->split(Position(4, 3), Position(4, 4), Position(4, 2));
+    bishop->move(Position(0, 0), Position(7, 7));
+    tower->move(Position(2, 6), Position(5, 3));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions()[1] == QuantumPosition(7, 7, 0.5));
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(2, 6, 0.5));
+    EXPECT_TRUE(tower->getAllPositions()[1] == QuantumPosition(5, 3, 0.5));
+
+    tower->measure(Position(2, 6));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(2, 6, 1));
+    EXPECT_TRUE(tower->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(4, 4, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+TEST(Chessman, DoubleEntangleWithFakeThenMeasureOneOfOthers){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    ChessmanContainer tower_cont('B', Position(2, 6), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get(), * tower = tower_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+    board.addChessman(std::move(tower_cont));
+
+    queen->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    bishop->move(Position(0, 0), Position(7, 7));
+    tower->move(Position(2, 6), Position(5, 3));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(7, 7, 0.5));
+    EXPECT_TRUE(bishop->getAllPositions()[1] == QuantumPosition(0, 0, 0.5));
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(5, 3, 0.5));
+    EXPECT_TRUE(tower->getAllPositions()[1] == QuantumPosition(2, 6, 0.5));
+
+    bishop->measure(Position(0, 0));
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(7, 7, 1));
+    EXPECT_TRUE(bishop->getAllPositions().size() == 1);
+    EXPECT_TRUE(tower->getPosition() == QuantumPosition(5, 3, 1));
+    EXPECT_TRUE(tower->getAllPositions().size() == 1);
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(4, 2, 1));
+    EXPECT_TRUE(queen->getAllPositions().size() == 1);
+}
+
+
+
+
+// medir el posta.
+// splitear el otro y medir uno de ellos. -> AHI se va a romper. EXCEPTO VER SI PROPAGAR SOLO EN EL REAL.
+
+// hacer el caso donde abro el otro en dos, y despues mido el que quedo en el medio.
+
+// TODO CHEQUEAR ENTANGLE AND MEASURE.
+
+
+// TODO ver que hacer cuando mergeas algo que tenia algo enlazado.
 
 
 

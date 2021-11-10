@@ -12,14 +12,21 @@ Match::Match(Match&& other_match)
         match_updates_queue(std::move(other_match.match_updates_queue)) {
 }
 
+void Match::addClientsNickNameToRepository(const int& client_id) {
+    std::string nick_name;
+    this->clients[client_id].getClientsNickName(nick_name);
+    //add nick_name
+}
 
 void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
     BlockingQueue new_listening_queue;
     this->listening_queues.push_front(std::move(new_listening_queue));
-    ClientHandler client(std::move(client_socket), this->listening_queues.front(), this->match_updates_queue);
+    int client_id = this->accepted_clients;
+    ClientHandler client(std::move(client_socket), this->listening_queues.front(),
+                                            this->match_updates_queue, client_id);
     this->clients.push_back(std::move(client));
-    this->clients[this->accepted_clients].saveIdAndAskForName(this->accepted_clients);
-    this->clients[this->accepted_clients].startSingleThreadedClient(*this);
+    this->addClientsNickNameToRepository(client_id);
+    this->clients[client_id].startSingleThreadedClient(*this);
     this->accepted_clients++;
 }
 

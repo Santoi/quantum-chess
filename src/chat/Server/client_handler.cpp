@@ -5,15 +5,15 @@
 #define MAX_MESSAGES 10
 
 ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue&
-                                                                                updates_queue)
-              :client_socket(std::move(socket)), notifications_queue(notifications_queue),
+                                                                                updates_queue, const int& client_id)
+              :client_socket(std::move(socket)), client_id(client_id), notifications_queue(notifications_queue),
                updates_queue(updates_queue) {
 
 }
 
 
 ClientHandler::ClientHandler(ClientHandler&& other_client)
-                :client_socket(std::move(other_client.client_socket)),
+                :client_socket(std::move(other_client.client_socket)), client_id(other_client.client_id),
                  notifications_queue(other_client.notifications_queue),
                  updates_queue(other_client.updates_queue),
                  receiver_thread(std::move(other_client.receiver_thread)),
@@ -28,7 +28,7 @@ int ClientHandler::chooseGame(const int& max_games) {
 }
 
 
-void ClientHandler::saveIdAndAskForName(int id) {
+void ClientHandler::getClientsNickName(std::string& nick_name) {
 
 }
 

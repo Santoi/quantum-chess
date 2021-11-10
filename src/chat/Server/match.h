@@ -25,6 +25,9 @@ public:
     //void addClientToQueues(ClientHandler& client);
     void checkAndNotifyUpdates();
     ~Match();
+
+private:
+    void addClientsNickNameToRepository(const int& client);
 };
 
 

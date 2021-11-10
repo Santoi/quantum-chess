@@ -14,6 +14,7 @@ class Match;
 class ClientHandler {
 private:
     Socket client_socket;
+    int client_id;
     ServerProtocol protocol;
     BlockingQueue& notifications_queue;
     ThreadSafeQueue& updates_queue;
@@ -22,11 +23,13 @@ private:
 
 public:
     ClientHandler() = delete;
-    ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue);
+    ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue,
+                    const int& client_id);
     ClientHandler(ClientHandler&& other_client);
 
     void saveIdAndAskForName(int id);
     int chooseGame(const int& max_games);
+    void getClientsNickName(std::string& nick_name);
     void start();
     void startSingleThreadedClient(Match& match);
 

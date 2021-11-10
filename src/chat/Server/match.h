@@ -7,6 +7,7 @@
 #include "blocking_queue.h"
 #include "common_socket.h"
 #include "client_handler.h"
+#include "nick_names_repository.h"
 
 class ClientHandler;
 
@@ -14,6 +15,7 @@ class Match {
 private:
     int accepted_clients;
     std::vector<ClientHandler> clients;
+    NickNamesRepository nick_names;
     std::list<BlockingQueue> listening_queues;
     ThreadSafeQueue match_updates_queue;
 

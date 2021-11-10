@@ -15,6 +15,9 @@ Match::Match(Match&& other_match)
 void Match::addClientsNickNameToRepository(const int& client_id) {
     std::string nick_name;
     this->clients[client_id].getClientsNickName(nick_name);
+    this->nick_names.saveNickNameRelatedToId(std::move(nick_name), client_id);
+    std::string name;
+    this->nick_names.getNickNameRelatedToId(name, client_id);
     //add nick_name
 }
 

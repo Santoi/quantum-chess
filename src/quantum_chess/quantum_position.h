@@ -67,6 +67,8 @@ public:
     void deleteMeFromChessman();
 
     void deleteMeFromEntangled(QuantumPosition *quantum);
+
+    const Chessman *getChessman();
 };
 
 

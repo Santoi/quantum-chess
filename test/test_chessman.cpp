@@ -503,7 +503,6 @@ TEST(Chessman, MergeTwoSplitsSplittingRealMergingTheTwoFakes){
 
     chessman->merge(Position(2, 2), Position(2, 1), Position(1, 1));
 
-    std::cout << chessman->getPosition(1).getProb() << std::endl;
     EXPECT_TRUE(chessman->getPosition() == QuantumPosition(1, 3, 0.25));
     EXPECT_TRUE(chessman->getPosition(1) == QuantumPosition(1, 1, 0.75));
 }
@@ -969,8 +968,6 @@ TEST(Chessman, MoveWithOneQuantumFakeInTheMiddle){
     queen->split(Position(1, 1), Position(1, 2), Position(2, 2));
     bishop->move(Position(0, 0), Position(4, 4));
 
-    std::cout << Position(bishop->getPosition(1)) << std::endl;
-    std::cout << bishop->getPosition(1).getProb() << std::endl;
     EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 0.5));
     EXPECT_TRUE(bishop->getPosition(1) == QuantumPosition(0, 0, 0.5));
 }
@@ -989,11 +986,6 @@ TEST(Chessman, EntangleWithRealThenMeasureTheOneInTheMiddleThatWasEntangled){
     bishop->move(Position(0, 0), Position(4, 4));
 
     queen->measure(Position(2, 2));
-
-    std::cout << Position(bishop->getPosition()) << std::endl;
-    std::cout << bishop->getPosition().getProb() << std::endl;
-    std::cout << Position(queen->getPosition()) << std::endl;
-    std::cout << queen->getPosition().getProb() << std::endl;
 
     EXPECT_TRUE(bishop->getPosition() == QuantumPosition(0, 0, 1));
     EXPECT_TRUE(bishop->getAllPositions().size() == 1);
@@ -1134,10 +1126,6 @@ TEST(Chessman, EntangleWithFakeThenSplitEntangledThenMeasureNonMiddle){
     queen->split(Position(2, 2), Position(3, 3), Position(2, 3));
 
     bishop->measure(Position(0, 0));
-
-    std::cout << Position(queen->getPosition()) << std::endl;
-    std::cout << queen->getPosition().getProb() << std::endl;
-    std::cout << queen->positionsSize() << std::endl;
 
     EXPECT_TRUE(bishop->getPosition() == QuantumPosition(4, 4, 1));
     EXPECT_TRUE(bishop->positionsSize() == 1);
@@ -1312,11 +1300,174 @@ TEST(Chessman, DoubleEntangleWithFakeThenMeasureOneOfOthers){
     EXPECT_TRUE(queen->getAllPositions().size() == 1);
 }
 
+TEST(Chessman, DoubleEntangleSamePiecesEntangleWithFakeMeasurenInitialFake){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    ChessmanContainer tower_cont('B', Position(2, 6), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get(), * tower = tower_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+    board.addChessman(std::move(tower_cont));
+
+    queen->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    bishop->move(Position(0, 0), Position(7, 7));
+
+    EXPECT_THROW(bishop->move(Position(7, 7), Position(3, 3)), ChessException);
+}
+
+TEST(Chessman, SplitUntilReachLimit) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get();
+    board.addChessman(std::move(queen_cont));
+
+    queen->split(Position(0, 0), Position(0, 1), Position(0, 2));
+    queen->split(Position(0, 2), Position(0, 3), Position(0, 4));
+    queen->split(Position(0, 4), Position(0, 5), Position(0, 6));
+    queen->split(Position(0, 6), Position(0, 7), Position(1, 7));
+    queen->split(Position(1, 7), Position(1, 6), Position(1, 5));
+    queen->split(Position(1, 5), Position(1, 4), Position(1, 3));
+    queen->split(Position(1, 3), Position(1, 2), Position(1, 1));
+    queen->split(Position(1, 1), Position(1, 0), Position(2, 0));
+    queen->split(Position(2, 0), Position(2, 1), Position(2, 2));
+    queen->split(Position(2, 2), Position(2, 3), Position(2, 4));
+    queen->split(Position(2, 4), Position(2, 5), Position(2, 6));
+    queen->split(Position(2, 6), Position(2, 7), Position(3, 7));
+    queen->split(Position(3, 7), Position(3, 6), Position(3, 5));
+    queen->split(Position(3, 5), Position(3, 4), Position(3, 3));
+    queen->split(Position(3, 3), Position(3, 2), Position(3, 1));
+    queen->split(Position(3, 1), Position(3, 0), Position(4, 0));
+
+    EXPECT_THROW(queen->split(Position(4, 0), Position(4, 1), Position(4, 2)), ChessException);
+
+    queen->measure(Position(0, 1));
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(0, 1, 1));
+    EXPECT_TRUE(queen->positionsSize() == 1);
+}
+
+TEST(Chessman, EntangleThenSplitThenMergeThenMeasure){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    bishop->move(Position(0, 0), Position(7, 7));
+
+    bishop->split(Position(7, 7), Position(6, 6), Position(5, 5));
+    bishop->merge(Position(6, 6), Position(5, 5), Position(6, 6));
+
+    bishop->measure(Position(6, 6));
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(4, 2, 1));
+    EXPECT_TRUE(queen->positionsSize() == 1);
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(6, 6, 1));
+    EXPECT_TRUE(bishop->positionsSize() == 1);
+}
+
+TEST(Chessman, EntangleThenSplitTHenMergeThenMeasure){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(4, 3), true, board);
+    ChessmanContainer bishop_cont('B', Position(0, 0), true, board);
+    Chessman * queen = queen_cont.get(), * bishop = bishop_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(bishop_cont));
+
+    queen->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    bishop->move(Position(0, 0), Position(7, 7));
+
+    bishop->split(Position(7, 7), Position(6, 6), Position(5, 5));
+    bishop->merge(Position(6, 6), Position(5, 5), Position(6, 6));
+
+    bishop->measure(Position(6, 6));
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(4, 2, 1));
+    EXPECT_TRUE(queen->positionsSize() == 1);
+
+    EXPECT_TRUE(bishop->getPosition() == QuantumPosition(6, 6, 1));
+    EXPECT_TRUE(bishop->positionsSize() == 1);
+}
+
+
+TEST(Chessman, EntangleThenMergeOneEntangledOtherNonEntangledThenMeasureEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(0, 0), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(4, 3), true, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen_2->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    queen->move(Position(0, 0), Position(7, 7));
+    queen_2->move(Position(4, 4), Position(4, 5));
+
+
+    queen->merge(Position(0, 0), Position(7, 7), Position(5, 5));
+
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(5, 5, 1));
+
+    queen->measure(Position(5, 5));
+
+    std::cout << Position(queen->getPosition()) << std::endl;
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(5, 5, 1));
+    EXPECT_TRUE(queen->positionsSize() ==  1);
+    EXPECT_TRUE(queen_2->getPosition() == QuantumPosition(4, 2, 0.5));
+    EXPECT_TRUE(queen_2->getPosition(1) == QuantumPosition(4, 5, 0.5));
+    EXPECT_TRUE(queen_2->positionsSize() ==  2);
+}
+
+TEST(Chessman, EntangleThenSplitThenMergeOneEntangledOtherNonEntangledThenMeasureEntangled){
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(0, 0), true, board);
+    ChessmanContainer queen_2_cont('Q', Position(4, 3), true, board);
+    Chessman * queen = queen_cont.get(), * queen_2 = queen_2_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+    board.addChessman(std::move(queen_2_cont));
+
+    queen_2->split(Position(4, 3), Position(4, 2), Position(4, 4));
+    queen->move(Position(0, 0), Position(7, 7));
+    queen_2->move(Position(4, 4), Position(4, 5));
+
+
+    queen->split(Position(7, 7), Position(6, 6), Position(5, 5));
+    queen->merge(Position(0, 0), Position(5, 5), Position(5, 5));
+
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(6, 6, 0.25));
+    EXPECT_TRUE(queen->getPosition(1) == QuantumPosition(5, 5, 0.75));
+
+    queen->measure(Position(5, 5));
+
+    EXPECT_TRUE(queen->getPosition() == QuantumPosition(6, 6, 1));
+    EXPECT_TRUE(queen->positionsSize() ==  1);
+    EXPECT_TRUE(queen_2->getPosition() == QuantumPosition(4, 2, 1));
+    EXPECT_TRUE(queen_2->positionsSize() ==  1);
+}
+
+TEST(Chessman, EntangleWithItselfFails) {
+    Board board(0);
+    ChessmanContainer queen_cont('Q', Position(0, 0), true, board);
+    Chessman *queen = queen_cont.get();
+
+    board.addChessman(std::move(queen_cont));
+
+    queen->split(Position(0, 0), Position(1, 1), Position(4, 4));
+
+    EXPECT_THROW(queen->move(Position(1, 1), Position(5, 5)), ChessException);
+}
 
 // TODO ver que hacer cuando mergeas algo que tenia algo enlazado.
-
-// TODO ENLAZAR DOS VECES LA MISMA PIEZA.
-
- // TODO splitear muchas veces. Hacer y validar.
 
 

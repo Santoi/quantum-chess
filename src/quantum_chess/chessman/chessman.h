@@ -122,6 +122,18 @@ public:
 
     std::list<QuantumPosition *>
     searchAppearsInAllLessIn(QuantumPosition &quantumPosition);
+
+    std::list<QuantumPosition *>
+    searchIfAllOfOursAppearsIn(QuantumPosition *filter,
+                               std::list<QuantumPosition *> &in);
+
+    bool isAlreadyEntangled();
+
+    bool isAlreadyEntangled(Chessman *chessman);
+
+    void
+    ifEntangledPositionsNotAppearsInBothUnentangle(QuantumPosition *position1,
+                                                   QuantumPosition *position2);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

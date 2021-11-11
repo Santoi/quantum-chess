@@ -132,3 +132,7 @@ void QuantumPosition::deleteMeFromChessman() {
         }
     }
 }
+// TODO temporal
+const Chessman * QuantumPosition::getChessman() {
+    return chessman;
+}

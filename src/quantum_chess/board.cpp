@@ -7,15 +7,25 @@ Board::Board(): chessmen(), board(), next_white(true), coin() {}
 
 Board::Board(int seed): chessmen(), board(), next_white(true), coin(seed) {}
 
+// TODO interfaz qcuantica.
+
 void Board::addChessman(ChessmanContainer && chessman_cont){
     Chessman * chessman = chessman_cont.get();
     chessmen.push_back(std::move(chessman_cont));
-
+    /*
     auto positions = chessman->getAllPositions();
     for (QuantumPosition & qpos: positions) {
         if (board.count(Position(qpos)))
             throw ChessException("ya hay una pieza alli");
         board.insert(std::pair<Position, Chessman *>(Position(qpos),
+                                                     chessman));
+    }*/
+    // TODO Mejorar
+    for (size_t i = 0; i < chessman->positionsSize(); i++){
+        Position position = Position(chessman->getPosition(i));
+        if (board.count(Position(position)))
+            throw ChessException("ya hay una pieza alli");
+        board.insert(std::pair<Position, Chessman *>(Position(position),
                                                      chessman));
     }
 }

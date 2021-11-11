@@ -84,3 +84,51 @@ bool QuantumPosition::compareDoubleWithPrecision(double a, double b, double e) c
     return std::abs(a - b) < e;
 }
 
+void QuantumPosition::setPosition(const Position & position_) {
+    position = position_;
+}
+
+void QuantumPosition::addToEntangled(QuantumPosition & new_qp) {
+    if (entangled.empty())
+        return;
+    for (auto it = entangled.begin(); it != entangled.end(); ++it)
+        (*it)->entangled.push_back(&new_qp);
+}
+
+void QuantumPosition::deleteMeFromEntangled() {
+    for (auto it = entangled.begin(); it != entangled.end(); ++it){
+        auto & hola = (*it)->getEntangled();
+        for (auto it_2 = hola.begin(); it_2 != hola.end(); ){
+            if (*it_2 == this)
+                it_2 = hola.erase(it_2);
+            else
+                ++it_2;
+        }
+    }
+}
+
+void QuantumPosition::deleteMeFromEntangled(QuantumPosition * quantum) {
+    for (auto it = entangled.begin(); it != entangled.end(); ++it){
+        if (*it != quantum)
+            continue;
+        auto & hola = (*it)->getEntangled();
+        for (auto it_2 = hola.begin(); it_2 != hola.end(); ){
+            if (*it_2 == this)
+                it_2 = hola.erase(it_2);
+            else
+                ++it_2;
+        }
+    }
+}
+
+void QuantumPosition::deleteMeFromChessman() {
+    for (auto it = chessman->getAllPositions().begin(); it != chessman->getAllPositions().end(); ){
+        auto hola = it->getEntangled();
+        for (auto it_2 = hola.begin(); it_2 != hola.end(); ){
+            if (*it_2 == this)
+                it_2 = hola.erase(it_2);
+            else
+                ++it_2;
+        }
+    }
+}

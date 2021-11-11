@@ -26,7 +26,7 @@ class Chessman {
     bool measured;
 
 protected:
-    std::vector<QuantumPosition> positions;
+    std::list<QuantumPosition> positions;
     Board & board;
     bool white;
 
@@ -88,7 +88,7 @@ public:
     const QuantumPosition & getPosition() const;
 
     // Devuelve las posiciones falsas de la pieza
-    const std::vector<QuantumPosition> & getAllPositions() const;
+    std::list<QuantumPosition> & getAllPositions();
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
     virtual void calculatePosibleMoves(const Position &initial,
@@ -115,6 +115,13 @@ public:
     bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
 
     void resetMeasured();
+
+    const QuantumPosition &getPosition(size_t index) const;
+
+    size_t positionsSize() const;
+
+    std::list<QuantumPosition *>
+    searchAppearsInAllLessIn(QuantumPosition &quantumPosition);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

@@ -15,9 +15,6 @@ class Chessman;
 class QuantumPosition {
     QuantumPosition();
 
-
-
-
     Position position;
     double prob;
     std::list<QuantumPosition *> entangled;
@@ -60,6 +57,16 @@ public:
     void measure();
 
     bool compareDoubleWithPrecision(double a, double b, double e) const;
+
+    void setPosition(const Position &position_);
+
+    void addToEntangled(QuantumPosition & new_qp);
+
+    void deleteMeFromEntangled();
+
+    void deleteMeFromChessman();
+
+    void deleteMeFromEntangled(QuantumPosition *quantum);
 };
 
 

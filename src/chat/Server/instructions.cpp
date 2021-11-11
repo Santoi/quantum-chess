@@ -3,12 +3,11 @@
 #include <arpa/inet.h>
 
 
-
 void Instruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues) {
 
 }
 
-void Instruction::fillPacketWithInstructionsToSend(Packet& packet, const NickNamesRepository& nick_names) {
+void Instruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet, const NickNamesRepository& nick_names) {
 
 }
 
@@ -26,19 +25,11 @@ void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQu
         (*it).push(this_instruc_ptr);
 }
 
-void ChatInstruction::fillPacketWithInstructionsToSend(Packet& packet, const NickNamesRepository& nick_names) {
-    packet.addByte('c');
+void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
+                                                       const NickNamesRepository& nick_names) {
     std::string nick_name;
     nick_names.getNickNameRelatedToId(nick_name, this->instructor_id);
-    uint16_t host_length = nick_name.size();
-    uint16_t lengthBE = htons(host_length);
-    packet.addBytes(lengthBE);
-    packet.addBytes(nick_name);
-
-    host_length = this->message.size();
-    lengthBE = htons(host_length);
-    packet.addBytes(lengthBE);
-    packet.addBytes(this->message);
+    protocol.fillPacketWithChatInfo(packet, std::move(nick_name), std::move(this->message));
 }
 /*
 void MovementInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues) {

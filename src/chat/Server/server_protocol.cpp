@@ -7,13 +7,19 @@
 #define ONE_BYTE 1
 #define TWO_BYTES 2
 
+
+void ServerProtocol::changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint16_t& number) {
+    uint16_t numberBE = htons(number);
+    packet.addBytes(numberBE);
+}
+
+
 void ServerProtocol::sendNumberOfGamesRunning(Socket& socket, const int& max_games) {
     Packet packet;
-    uint16_t host_max_games = max_games;
-    uint16_t max_gamesBE = htons(host_max_games);
-    packet.addBytes(max_gamesBE);
+    changeNumberToBigEndianAndAddToPacket(packet, (uint16_t)max_games);
     socket.send(packet);
 }
+
 
 int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
     Packet packet;
@@ -63,10 +69,25 @@ void ServerProtocol::fillInstructionsWithPacket(Socket& socket, const int& clien
         fillMovementInstructionsWithPacket(socket, client_id, instruct_ptr);
 }
 
+void ServerProtocol::addStringAndItsLengthToPacket(Packet& packet, std::string&& string) {
+    uint16_t host_length = string.size();
+    this->changeNumberToBigEndianAndAddToPacket(packet, host_length);
+    packet.addBytes(string);
+}
+
+
+void ServerProtocol::fillPacketWithChatInfo(Packet& packet, std::string&& nick_name, std::string&& message) {
+    packet.addByte('c');
+    this->addStringAndItsLengthToPacket(packet, std::move(nick_name));
+    this->addStringAndItsLengthToPacket(packet, std::move(message));
+}
+
+
+
 void ServerProtocol::sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr,
                                            const NickNamesRepository& nick_names) {
     Packet packet;
-    instruct_ptr->fillPacketWithInstructionsToSend(packet, nick_names);
+    instruct_ptr->fillPacketWithInstructionsToSend(*this, packet, nick_names);
     socket.send(packet);
 }
 

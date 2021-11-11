@@ -5,12 +5,14 @@
 #include "common_packet.h"
 #include "instructions.h"
 #include "nick_names_repository.h"
-#include "server_protocol.h"
+#include "protocol.h"
 #include <memory>
+#include "protocol.h"
 
 class Instruction;
 
-class ServerProtocol {
+
+class ServerProtocol: public Protocol {
 
 public:
     ServerProtocol() = default;
@@ -26,14 +28,6 @@ private:
     void fillChatInstructionsWithPacket(Socket& socket, const int& client_id, std::shared_ptr<Instruction>& instruct_ptr);
 
     void fillMovementInstructionsWithPacket(Socket& socket, const int& client_id, std::shared_ptr<Instruction>& instruct_ptr);
-
-    void changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint16_t& number);
-
-    uint16_t getLittleEndianNumberFromSocket(Socket& socket);
-
-    void getMessageOfSizeFomSocket(Socket& socket, std::string& message, const int& size_of_word);
-
-    void addStringAndItsLengthToPacket(Packet& packet, std::string&& string);
 };
 
 

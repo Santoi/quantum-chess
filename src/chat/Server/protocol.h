@@ -8,7 +8,7 @@
 class Protocol {
 
 protected:
-    void addStringAndItsLengthToPacket(Packet& packet, std::string&& string);
+    void addStringAndItsLengthToPacket(Packet& packet, const std::string& string);
     void changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint16_t& number);
     uint16_t getLittleEndianNumberFromSocket(Socket& socket);
     void getMessageFromSocket(Socket& socket, std::string& message);

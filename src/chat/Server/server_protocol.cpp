@@ -45,10 +45,10 @@ void ServerProtocol::fillInstructionsWithPacket(Socket& socket, const int& clien
         fillMovementInstructionsWithPacket(socket, client_id, instruct_ptr);
 }
 
-void ServerProtocol::fillPacketWithChatInfo(Packet& packet, std::string&& nick_name, std::string&& message) {
+void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& nick_name, const std::string& message) {
     packet.addByte('c');
-    this->addStringAndItsLengthToPacket(packet, std::move(nick_name));
-    this->addStringAndItsLengthToPacket(packet, std::move(message));
+    this->addStringAndItsLengthToPacket(packet, nick_name);
+    this->addStringAndItsLengthToPacket(packet, message);
 }
 
 void ServerProtocol::sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr,

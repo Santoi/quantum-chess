@@ -21,7 +21,7 @@ public:
     void getNickName(Socket& socket, std::string& nick_name);
     void fillInstructionsWithPacket(Socket& socket, const int& client_id, std::shared_ptr<Instruction>& instruct_ptr);
     void sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr, const NickNamesRepository& nick_names);
-    void fillPacketWithChatInfo(Packet& packet, std::string&& nick_name, std::string&& message);
+    void fillPacketWithChatInfo(Packet& packet, const std::string& nick_name, const std::string& message);
     ~ServerProtocol() = default;
 
 private:

@@ -3,7 +3,7 @@
 #define ONE_BYTE 1
 #define TWO_BYTES 2
 
-void Protocol::addStringAndItsLengthToPacket(Packet& packet, std::string&& string) {
+void Protocol::addStringAndItsLengthToPacket(Packet& packet, const std::string& string) {
     uint16_t host_length = string.size();
     this->changeNumberToBigEndianAndAddToPacket(packet, host_length);
     packet.addBytes(string);

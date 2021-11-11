@@ -29,7 +29,7 @@ void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol,
                                                        const NickNamesRepository& nick_names) {
     std::string nick_name;
     nick_names.getNickNameRelatedToId(nick_name, this->instructor_id);
-    protocol.fillPacketWithChatInfo(packet, std::move(nick_name), std::move(this->message));
+    protocol.fillPacketWithChatInfo(packet, nick_name, this->message);
 }
 /*
 void MovementInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues) {

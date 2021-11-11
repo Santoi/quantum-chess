@@ -15,7 +15,7 @@ void ServerProtocol::sendNumberOfGamesRunning(Socket& socket, const int& max_gam
 }
 
 int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
-    return (int)(this->getLittleEndianNumberFromSocket(socket));
+    return (int)(this->getNumberFromSocket(socket));
 }
 
 void ServerProtocol::getNickName(Socket& socket, std::string& nick_name) {

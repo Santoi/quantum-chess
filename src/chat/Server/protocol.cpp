@@ -14,7 +14,7 @@ void Protocol::changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint1
     packet.addBytes(numberBE);
 }
 
-uint16_t Protocol::getLittleEndianNumberFromSocket(Socket& socket) {
+uint16_t Protocol::getNumberFromSocket(Socket& socket) {
     Packet packet;
     socket.receive(packet, TWO_BYTES);
     uint16_t size_of_wordBE;
@@ -29,7 +29,7 @@ void Protocol::getMessageOfSizeFomSocket(Socket& socket, std::string& message, c
 }
 
 void Protocol::getMessageFromSocket(Socket& socket, std::string& message) {
-    uint16_t size_of_nick_name = this->getLittleEndianNumberFromSocket(socket);
+    uint16_t size_of_nick_name = this->getNumberFromSocket(socket);
     ((Protocol)(*this)).getMessageOfSizeFomSocket(socket, message, size_of_nick_name);
 }
 

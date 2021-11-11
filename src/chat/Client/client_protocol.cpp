@@ -8,7 +8,7 @@
 #define TWO_BYTES 2
 
 int ClientProtocol::receiveNumberOfRunningGames(Socket& socket) {
-    return (int)(this->getLittleEndianNumberFromSocket(socket));
+    return (int)(this->getNumberFromSocket(socket));
 }
 
 void ClientProtocol::sendChosenGame(Socket& socket, const int& game_number) {

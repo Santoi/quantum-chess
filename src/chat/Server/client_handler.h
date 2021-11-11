@@ -8,13 +8,16 @@
 #include "match.h"
 #include "server_protocol.h"
 #include "blocking_queue.h"
+#include "nick_names_repository.h"
 #include <memory>
+
 class Match;
 
 class ClientHandler {
 private:
     Socket client_socket;
     int client_id;
+    const NickNamesRepository& nick_names;
     ServerProtocol protocol;
     BlockingQueue& notifications_queue;
     ThreadSafeQueue& updates_queue;
@@ -24,7 +27,7 @@ private:
 public:
     ClientHandler() = delete;
     ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue,
-                    const int& client_id);
+                    const int& client_id, const NickNamesRepository& nick_names);
     ClientHandler(ClientHandler&& other_client);
 
     void saveIdAndAskForName(int id);

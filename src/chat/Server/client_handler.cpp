@@ -5,16 +5,16 @@
 #define MAX_MESSAGES 10
 
 ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue&
-                                                                                updates_queue, const int& client_id)
-              :client_socket(std::move(socket)), client_id(client_id), notifications_queue(notifications_queue),
-               updates_queue(updates_queue) {
+                              updates_queue, const int& client_id, const NickNamesRepository& nick_names)
+              :client_socket(std::move(socket)), client_id(client_id), nick_names(nick_names),
+              notifications_queue(notifications_queue), updates_queue(updates_queue) {
 
 }
 
 
 ClientHandler::ClientHandler(ClientHandler&& other_client)
                 :client_socket(std::move(other_client.client_socket)), client_id(other_client.client_id),
-                 notifications_queue(other_client.notifications_queue),
+                 nick_names(other_client.nick_names), notifications_queue(other_client.notifications_queue),
                  updates_queue(other_client.updates_queue),
                  receiver_thread(std::move(other_client.receiver_thread)),
                  sender_thread(std::move(other_client.sender_thread)) {
@@ -34,7 +34,7 @@ void ClientHandler::getClientsNickName(std::string& nick_name) {
 
 void ClientHandler::executeReceiver() {
     std::shared_ptr<Instruction> ptr_instruction;
-    this->protocol.fillPacketWithInstructions(this->client_socket, ptr_instruction);
+    this->protocol.fillInstructionsWithPacket(this->client_socket, this->client_id, ptr_instruction);
     this->updates_queue.push(ptr_instruction);
 }
 
@@ -45,7 +45,7 @@ void ClientHandler::executeReceiverCatchingExceptions() {
 void ClientHandler::executeSender() {
     std::shared_ptr<Instruction> instruc_ptr;
     this->notifications_queue.pop(instruc_ptr);
-    this->protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr);
+    this->protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr, this->nick_names);
 }
 
 void ClientHandler::executeSenderCatchingExceptions() {

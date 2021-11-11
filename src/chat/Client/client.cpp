@@ -17,7 +17,7 @@ void Client::makeAction(const std::string& message) {
         std::cout<< "exiting" <<std::endl;
         this->is_active = false;
     } else {
-        this->protocol.sendMessage(this->client_socket, message);
+        this->protocol.sendChatMessage(this->client_socket, message);
     }
 }
 

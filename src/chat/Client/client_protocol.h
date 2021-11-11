@@ -3,14 +3,15 @@
 
 #include <string>
 #include "common_socket.h"
+#include "protocol.h"
 
-class ClientProtocol {
+class ClientProtocol: public Protocol {
 public:
     ClientProtocol() = default;
     int receiveNumberOfRunningGames(Socket& socket);
     void sendChosenGame(Socket& socket, const int& game_number);
     void sendClientsNickName(Socket& socket, std::string& nick_name);
-    void sendMessage(Socket& socket, const std::string& message);
+    void sendChatMessage(Socket& socket, const std::string& message);
     void receiveInstruction(Socket& socket, std::string& nick_name, std::string& message);
     ~ClientProtocol() = default;
 };

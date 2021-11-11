@@ -44,7 +44,7 @@ void ClientProtocol::sendMessage(Socket& socket, const std::string& message) {
     socket.send(packet);
 }
 
-void ClientProtocol::receiveInstruction(Socket& socket, std::string& message) {
+void ClientProtocol::receiveInstruction(Socket& socket, std::string& nick_name, std::string& message) {
     Packet packet;
     socket.receive(packet, ONE_BYTE);
     socket.receive(packet, TWO_BYTES);
@@ -52,7 +52,14 @@ void ClientProtocol::receiveInstruction(Socket& socket, std::string& message) {
     packet.getBytes(size_of_wordBE);
     uint16_t size_of_word = ntohs(size_of_wordBE);
     socket.receive(packet, size_of_word);
+    packet.getBytes(nick_name, size_of_word);
+
+    socket.receive(packet, TWO_BYTES);
+    packet.getBytes(size_of_wordBE);
+    size_of_word = ntohs(size_of_wordBE);
+    socket.receive(packet, size_of_word);
     packet.getBytes(message, size_of_word);
+
 }
 
 

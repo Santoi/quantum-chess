@@ -31,9 +31,10 @@ void Client::readFromStandardInputAndMakeAction() {
 void Client::receiveMessage() {
     if (!this->is_active)
         return;
+    std::string nick_name;
     std::string message;
-    this->protocol.receiveInstruction(this->client_socket, message);
-    std::cout << message << std::endl;
+    this->protocol.receiveInstruction(this->client_socket, nick_name, message);
+    std::cout << nick_name << " envia: " << message << std::endl;
 }
 
 int Client::getAndPrintNumberOfAvailableGames() {

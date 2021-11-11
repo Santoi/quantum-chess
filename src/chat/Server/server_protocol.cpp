@@ -20,36 +20,35 @@ void ServerProtocol::sendNumberOfGamesRunning(Socket& socket, const int& max_gam
     socket.send(packet);
 }
 
-
-int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
-    Packet packet;
-    socket.receive(packet, TWO_BYTES);
-    uint16_t game_numberBE;
-    packet.getBytes(game_numberBE);
-    return (int)(ntohs(game_numberBE));
-}
-
-void ServerProtocol::getNickName(Socket& socket, std::string& nick_name) {
+uint16_t ServerProtocol::getLittleEndianNumberFromSocket(Socket& socket) {
     Packet packet;
     socket.receive(packet, TWO_BYTES);
     uint16_t size_of_wordBE;
     packet.getBytes(size_of_wordBE);
-    uint16_t size_of_word = ntohs(size_of_wordBE);
+    return ntohs(size_of_wordBE);
+}
+
+void ServerProtocol::getMessageOfSizeFomSocket(Socket& socket, std::string& message, const int& size_of_word) {
+    Packet packet;
     socket.receive(packet, size_of_word);
-    packet.getBytes(nick_name, size_of_word);
+    packet.getBytes(message, size_of_word);
+}
+
+int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
+    return (int)(this->getLittleEndianNumberFromSocket(socket));
+}
+
+void ServerProtocol::getNickName(Socket& socket, std::string& nick_name) {
+    uint16_t size_of_nick_name = this->getLittleEndianNumberFromSocket(socket);
+    this->getMessageOfSizeFomSocket(socket, nick_name, (int)size_of_nick_name);
 }
 
 
 void ServerProtocol::fillChatInstructionsWithPacket(Socket& socket, const int& client_id,
                                                 std::shared_ptr<Instruction>& instruct_ptr) {
-    Packet packet;
-    socket.receive(packet, TWO_BYTES);
-    uint16_t size_of_wordBE;
-    packet.getBytes(size_of_wordBE);
-    uint16_t size_of_word = ntohs(size_of_wordBE);
-    socket.receive(packet, size_of_word);
+    uint16_t size_of_word = this->getLittleEndianNumberFromSocket(socket);
     std::string message;
-    packet.getBytes(message, size_of_word);
+    this->getMessageOfSizeFomSocket(socket, message, (int)size_of_word);
     instruct_ptr = std::make_shared<ChatInstruction>(client_id, std::move(message));
 }
 

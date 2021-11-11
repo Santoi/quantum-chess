@@ -29,6 +29,10 @@ private:
 
     void changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint16_t& number);
 
+    uint16_t getLittleEndianNumberFromSocket(Socket& socket);
+
+    void getMessageOfSizeFomSocket(Socket& socket, std::string& message, const int& size_of_word);
+
     void addStringAndItsLengthToPacket(Packet& packet, std::string&& string);
 };
 

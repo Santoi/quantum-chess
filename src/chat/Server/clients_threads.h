@@ -16,7 +16,6 @@ public:
     ClientHandlersReceiver() = delete;
     ClientHandlersReceiver(ClientHandlersReceiver&& otherReceiver, Socket& socket);
     ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue& updates_queue);
-    void runCatchingExceptions() override;
     void receiveInstructionAndPushToQueue();
     ~ClientHandlersReceiver() = default;
 

@@ -14,7 +14,7 @@ public:
     Thread(Thread&& otherThread);
     void start();
     void join();
-    virtual void runCatchingExceptions();
+    void runCatchingExceptions();
     virtual ~Thread();
 
 protected:

@@ -14,10 +14,6 @@ ClientHandlersReceiver::ClientHandlersReceiver(ClientHandlersReceiver&& otherRec
                          updates_queue(otherReceiver.updates_queue) {
 }
 
-void ClientHandlersReceiver::runCatchingExceptions() {
-    Thread::runCatchingExceptions();
-}
-
 void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
     std::shared_ptr <Instruction> ptr_instruction;
     ServerProtocol protocol;
@@ -50,7 +46,6 @@ void ClientHandlersSender::popFromQueueAndSendInstruction() {
 }
 
 void ClientHandlersSender::run() {
-    while (true) {
+    while (true)
         this->popFromQueueAndSendInstruction();
-    }
 }

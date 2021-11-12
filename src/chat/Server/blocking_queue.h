@@ -4,10 +4,13 @@
 #include <queue>
 #include "instructions.h"
 #include <memory>
+#include <condition_variable>
 
 class BlockingQueue {
 private:
     std::queue<std::shared_ptr<Instruction>> queue;
+    std::condition_variable condition_variable;
+    std::mutex mutex;
 
 public:
     BlockingQueue() = default;

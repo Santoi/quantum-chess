@@ -18,13 +18,7 @@ class ClientHandler {
 private:
     Socket client_socket;
     ClientHandlersReceiver client_receiver;
-    int client_id;
-    const NickNamesRepository& nick_names;
-    ServerProtocol protocol;
-    BlockingQueue& notifications_queue;
-    //ThreadSafeQueue& updates_queue;
-    //std::thread receiver_thread;
-    //std::thread sender_thread;
+    ClientHandlersSender client_sender;
 
 public:
     ClientHandler() = delete;
@@ -39,12 +33,6 @@ public:
     void startSingleThreadedClient(Match& match);
 
     ~ClientHandler() = default;
-
-private:
-    void executeReceiverCatchingExceptions();
-    void executeReceiver();
-    void executeSenderCatchingExceptions();
-    void executeSender();
 };
 
 

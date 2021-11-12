@@ -4,6 +4,7 @@
 #include "thread.h"
 #include "common_socket.h"
 #include "thread_safe_queue.h"
+#include "blocking_queue.h"
 
 class ClientHandlersReceiver: public Thread {
 private:
@@ -21,7 +22,21 @@ protected:
     void run();
 };
 
+class ClientHandlersSender: public Thread {
+private:
+    Socket& client_socket;
+    BlockingQueue& notifications_queue;
+    const NickNamesRepository& nick_names;
 
+public:
+    ClientHandlersSender() = delete;
+    ClientHandlersSender(ClientHandlersSender&& otherSender, Socket& socket);
+    ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue, const NickNamesRepository& nick_names);
+    ~ClientHandlersSender() = default;
+
+protected:
+    void run();
+};
 
 
 

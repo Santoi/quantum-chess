@@ -23,12 +23,14 @@ public:
     Match();
     Match(Match&& other_match);
     void addSingleThreadedClientToMatchAndStart(Socket&& client_socket);
+    void addClientToMatchAndStart(Socket&& client_socket);
     //void addClientToMatchAndBeginExcecution(Socket&& client_socket);
     //void addClientToQueues(ClientHandler& client);
     void checkAndNotifyUpdates();
     ~Match();
 
 private:
+    void addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id);
     void addClientsNickNameToRepository(const int& client);
 };
 

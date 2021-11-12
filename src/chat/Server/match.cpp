@@ -18,17 +18,29 @@ void Match::addClientsNickNameToRepository(const int& client_id) {
     this->nick_names.saveNickNameRelatedToId(std::move(nick_name), client_id);
 }
 
-void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
+void Match::addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id) {
     BlockingQueue new_listening_queue;
     this->listening_queues.push_front(std::move(new_listening_queue));
-    int client_id = this->accepted_clients;
     ClientHandler client(std::move(client_socket), this->listening_queues.front(),
-                                            this->match_updates_queue, client_id, this->nick_names);
+                         this->match_updates_queue, client_id, this->nick_names);
     this->clients.push_back(std::move(client));
-    this->addClientsNickNameToRepository(client_id);
-    this->clients[client_id].startSingleThreadedClient(*this);
     this->accepted_clients++;
 }
+
+void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
+    int client_id = this->accepted_clients;
+    this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
+    this->addClientsNickNameToRepository(client_id);
+    this->clients[client_id].startSingleThreadedClient(*this);
+}
+
+void Match::addClientToMatchAndStart(Socket&& client_socket) {
+    int client_id = this->accepted_clients;
+    this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
+    this->addClientsNickNameToRepository(client_id);
+    this->clients[client_id].startThreadedClientWithoutMatchThread(*this);
+}
+
 
 /*
 void Match::addClientToQueues(ClientHandler& client) {

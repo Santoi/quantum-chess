@@ -14,9 +14,11 @@ public:
     MatchesRepository();
     //void createAndAcceptClientAndAddToAMatch(Socket& acceptor_socket);
     void acceptSingleThreadedClientAndAddToAMatch(Socket& acceptor_socket);
+    void acceptClientAndAddToAMatch(Socket& acceptor_socket);
     ~MatchesRepository() = default;
 
 private:
+    Socket acceptClientAndGetClientChosenMatch(Socket& acceptor_socket, int& match_number);
     int getClientChosenMatch(Socket& client_socket);
     void createNewMatch();
 

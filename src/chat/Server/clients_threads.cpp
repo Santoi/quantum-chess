@@ -15,10 +15,12 @@ ClientHandlersReceiver::ClientHandlersReceiver(ClientHandlersReceiver&& otherRec
 
 
 void ClientHandlersReceiver::run() {
-    std::shared_ptr<Instruction> ptr_instruction;
-    ServerProtocol protocol;
-    protocol.fillInstructionsWithPacket(this->client_socket, this->client_id, ptr_instruction);
-    this->updates_queue.push(ptr_instruction);
+    for (int i = 0; i < 10; i++) {
+        std::shared_ptr <Instruction> ptr_instruction;
+        ServerProtocol protocol;
+        protocol.fillInstructionsWithPacket(this->client_socket, this->client_id, ptr_instruction);
+        this->updates_queue.push(ptr_instruction);
+    }
 }
 
 ClientHandlersSender::ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue,
@@ -34,8 +36,10 @@ ClientHandlersSender::ClientHandlersSender(ClientHandlersSender&& otherSender, S
 }
 
 void ClientHandlersSender::run() {
-    std::shared_ptr<Instruction> instruc_ptr;
-    this->notifications_queue.pop(instruc_ptr);
-    ServerProtocol protocol;
-    protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr, this->nick_names);
+    for (int i = 0; i < 10; i++){
+        std::shared_ptr<Instruction> instruc_ptr;
+        this->notifications_queue.pop(instruc_ptr);
+        ServerProtocol protocol;
+        protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr, this->nick_names);
+    }
 }

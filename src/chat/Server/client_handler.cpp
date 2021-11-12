@@ -45,3 +45,8 @@ void ClientHandler::startSingleThreadedClient(Match& match) {
     }
 }
 
+void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
+    this->start();
+    for (int i = 0; i < MAX_MESSAGES; i++)
+        match.checkAndNotifyUpdates();
+}

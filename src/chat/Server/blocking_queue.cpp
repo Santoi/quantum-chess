@@ -10,6 +10,8 @@ void BlockingQueue::push(std::shared_ptr<Instruction> instruc_ptr) {
 }
 
 void BlockingQueue::pop(std::shared_ptr<Instruction>& instruc_ptr) {
+    while (this->queue.empty()){
+    }
     instruc_ptr = this->queue.front();
     this->queue.pop();
 }

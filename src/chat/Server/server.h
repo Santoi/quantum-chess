@@ -13,13 +13,13 @@ public:
 
     Server(const char* host, const char* service);
 
-    void execute(bool one_thread_only);
+    void execute(bool one_thread_only, int type_of_single_thread);
 
     ~Server() = default;
 
 private:
 
-    void executeSingleThreadedServer();
+    void executeSingleThreadedServer(int type_of_single_thread);
 
     void executeServerWithThreads();
 

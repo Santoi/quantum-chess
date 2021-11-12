@@ -24,11 +24,27 @@ int MatchesRepository::getClientChosenMatch(Socket& client_socket) {
     return match_number;
 }
 
-void MatchesRepository::acceptSingleThreadedClientAndAddToAMatch(Socket& acceptor_socket) {
+Socket MatchesRepository::acceptClientAndGetClientChosenMatch(Socket& acceptor_socket, int& match_number) {
     Socket client_socket = acceptor_socket.acceptSocket();
-    int match_number = getClientChosenMatch(client_socket);
+    match_number = getClientChosenMatch(client_socket);
+    return client_socket;
+}
+
+
+void MatchesRepository::acceptSingleThreadedClientAndAddToAMatch(Socket& acceptor_socket) {
+    int match_number;
+    Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number);
     matches[match_number].addSingleThreadedClientToMatchAndStart(std::move(client_socket));
 }
+
+void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket) {
+    int match_number;
+    Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number);
+    matches[match_number].addClientToMatchAndStart(std::move(client_socket));
+}
+
+
+
 /*
 void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket) {
     Socket client_socket;

@@ -22,11 +22,16 @@ void Server::executeAcceptorThread() {
     }
 }
 
-
-void Server::executeSingleThreadedServer() {
+void Server::executeSingleThreadedServer(int type_of_single_thread) {
     MatchesRepository matches;
-    for (int i = 0; i < MAX_CLIENTS; i++)
-        matches.acceptSingleThreadedClientAndAddToAMatch(this->acceptor_socket);
+    if (type_of_single_thread == 1){
+        for (int i = 0; i < MAX_CLIENTS; i++)
+            matches.acceptSingleThreadedClientAndAddToAMatch(this->acceptor_socket);
+    }
+    if (type_of_single_thread == 2) {
+        for (int i = 0; i < MAX_CLIENTS; i++)
+            matches.acceptClientAndAddToAMatch(this->acceptor_socket);
+    }
 }
 
 void Server::executeServerWithThreads() {
@@ -37,9 +42,9 @@ void Server::executeServerWithThreads() {
     acceptor_thread.join();
 }
 
-void Server::execute(bool one_thread_only) {
+void Server::execute(bool one_thread_only, int type_of_single_thread) {
     if (one_thread_only)
-        this->executeSingleThreadedServer();
+        this->executeSingleThreadedServer(type_of_single_thread);
     else
         this->executeServerWithThreads();
 }

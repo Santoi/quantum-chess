@@ -14,7 +14,11 @@ void Thread::join() {
 }
 
 void Thread::runCatchingExceptions() {
-    this->run();
+    try {
+        this->run();
+    } catch (...) {
+        
+    }
 }
 
 Thread::~Thread() {

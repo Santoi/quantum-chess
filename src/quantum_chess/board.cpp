@@ -21,7 +21,7 @@ void Board::addChessman(ChessmanContainer && chessman_cont){
                                                      chessman));
     }*/
     // TODO Mejorar
-    for (size_t i = 0; i < chessman->positionsSize(); i++){
+    for (size_t i = 0; i < chessman->countPositions(); i++){
         Position position = Position(chessman->getPosition(i));
         if (board.count(Position(position)))
             throw ChessException("ya hay una pieza alli");
@@ -53,13 +53,17 @@ void Board::split(const Position & initial, const Position & pos1,
 
 void Board::merge(const Position & initial1, const Position & initial2,
                   const Position & final){
-    Chessman * chessman = getChessmanAt(initial1);
-    if (!chessman)
+    Chessman * chessman_1 = getChessmanAt(initial1), * chessman_2 = getChessmanAt(initial2);
+    if (!chessman_1)
         throw ChessException("no hay ninguna pieza alli");
+    if (!chessman_2)
+        throw ChessException("no hay ninguna pieza alli");
+    if (chessman_1 != chessman_2)
+        throw ChessException("se esta tratando de unir dos piezas distintas");
     // TODO chequear el otro? chessman ya chequea.
-    if (chessman->isWhite() != next_white)
+    if (chessman_1->isWhite() != next_white)
         throw ChessException("no es tu turno");
-    chessman->split(initial1, initial2, final);
+    chessman_1->merge(initial1, initial2, final);
     next_white = !next_white;
 }
 

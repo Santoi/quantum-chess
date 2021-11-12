@@ -19,96 +19,99 @@
 
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
         positions(1, QuantumPosition(position_, 1, this)),
-        board(board_), white(white_), measured(false) {}
+        board(board_), white(white_) {}
 
 
 void Chessman::move(const Position & initial, const Position & final) {
-    // TODO ver como mejorar lo de checkCanMoveOrFail y eso. (estoy repitiendo
-    //  lo de buscar).
-    std::pair<Position, Chessman *> chessman_in_path;
-
+    checkIsInBoardOrFail(initial);
+    // Check if can be moved.
     std::vector<Position> path;
     checkCanMoveOrFail(initial, final);
 
+    // Search path and get middle path chessman.
+    std::pair<Position, Chessman *> chessman_in_path;
     calculatePath(initial, final, path);
     getMiddlePathChessman(path, chessman_in_path);
 
     if (this == board.getChessmanAt(final))
         throw ChessException("la pieza no se puede mover al lugar donde hay un fragmento de ella.");
 
-    // TODO verlo si lo puedo hacer.
     Chessman * final_chessman = board.getChessmanAt(final);
 
     if (final_chessman && chessman_in_path.second)
         throw ChessException("no se puede hacer measure y entrelazado+"
                              " a la vez");
-    if (isAlreadyEntangled(chessman_in_path.second))
+    if (chessmanIsAlreadyEntangled(chessman_in_path.second))
         throw ChessException("no se puede entrelazar dos veces la misma pieza");
 
-    // Si el inicial es cuantico y hay pieza al final, o hay pieza al final y es cuantica.
+    /* If initial is quantic and there is a chessman at the end, or there is a
+     * chessman at the end and this is quantic, then measure both chessmen. */
     if ((this->isQuantum() && final_chessman) || (final_chessman && final_chessman->isQuantum())) {
         this->measure(initial);
         final_chessman->measure(final);
-        if (positions.front() != initial || (final_chessman && final_chessman->getPosition() == final && final_chessman->white == white))
+        if (positions.front() != initial ||
+            (final_chessman->getPosition() == final
+             && final_chessman->white == white))
             return;
     }
-    // A partir de aqui, measure ya esta resuelto.
+    // Measure solved from here.
+    // If there is final chessman, then is removed of the board.
     if (final_chessman)
         board.removeChessmanOf(final);
 
+    // Iterator pointing to initial quantum position.
+    auto initial_qp_it = std::find(positions.begin(), positions.end(),
+                                          initial);
+
+    // If there is a chessman in path then entangle.
     if (chessman_in_path.second) {
-        if (getProbability(initial) / 2 < PRECISION_PROB)
-            throw ChessException("no se puede volver a dividir la pieza.");
+        // TODO esto revisar,no es prob/ 2.
+
+        // New probabilities calculation.
         double entangled_prob = chessman_in_path.second->getProbability(chessman_in_path.first);
-        double initial_prob = getProbability(initial);
+        double initial_prob = initial_qp_it->getProb();
         double new_initial_prob = entangled_prob * initial_prob;
         double new_final_prob = initial_prob * (1 - entangled_prob);
-        auto qpos_initial = std::find(positions.begin(), positions.end(), initial);
-        auto insert = qpos_initial;
-        insert++;
+        auto insert_it = initial_qp_it; insert_it++;
 
-        // Solo lo meto al principio si es la real, es decir, la inicial era la real,
-        // y si la que estaba en el camino no lo era.
-        if(qpos_initial == positions.begin() && chessman_in_path.second->getPosition() != chessman_in_path.first)
-            insert = positions.begin();
+        if (new_initial_prob < PRECISION_PROB || new_final_prob < PRECISION_PROB)
+            throw ChessException("no se puede volver a dividir la pieza.");
 
-        std::list<QuantumPosition *> list = qpos_initial->getEntangled();
-        qpos_initial->setProb(new_initial_prob);
-        insert = positions.insert(insert, QuantumPosition(final, new_final_prob, list, this));
-        qpos_initial->addToEntangled(*insert);
+        /* If new quantum position created is real, then is placed at the
+         * beggining of the entangled_list. */
+        if(initial_qp_it == positions.begin() && chessman_in_path.second->getPosition() != chessman_in_path.first)
+            insert_it = positions.begin();
+
+        std::list<QuantumPosition *> entangled_list = initial_qp_it->getEntangled();
+        initial_qp_it->setProb(new_initial_prob);
+        insert_it = positions.insert(insert_it, QuantumPosition(final, new_final_prob, std::move(entangled_list), this));
+        insert_it->addMeToEntangled();
 
         board.addChessmanIn(final, this);
 
         entangle(final, *(chessman_in_path.second), chessman_in_path.first);
     }
     else {
-        auto it = std::find(positions.begin(), positions.end(),
-                            initial);
-        // TODO puedo pasar lista por movimiento y copiarla si hace falta.
-        it->setPosition(final);
+        initial_qp_it->setPosition(final);
 
         board.addChessmanOfIn(initial, final);
     }
-
-    // TODO LOGICA ENTRELAZADO.
-    measured = false;
-
 }
 
 void Chessman::split(const Position &initial, const Position &position1,
                      const Position &position2) {
+    checkIsInBoardOrFail(initial);
     if (position1 == position2)
         throw ChessException("no se puede hacer un split a la misma"
                              "posicion");
-    // TODO no se puede hacer split a casillero lleno ni entrelazar.
-
     if (getProbability(initial) / 2 < PRECISION_PROB)
         throw ChessException("no se puede volver a dividir la pieza.");
 
     std::vector<Position> path;
     std::pair<Position, Chessman *> chessman_in_path_1, chessman_in_path_2;
 
-    // TODO reunir todo en una sola? Creo que no por chessmen in path
+    // TODO CHECKCANSPLITOR FAIL.
+
     checkCanMoveOrFail(initial, position1);
     checkCanMoveOrFail(initial, position2);
 
@@ -125,48 +128,39 @@ void Chessman::split(const Position &initial, const Position &position1,
     if (chessman_in_path_1.second || chessman_in_path_2.second)
         throw ChessException("no se puede hacer split y enlazar");
 
-    // Se sortea aunque no sea el real.
+    // Even if not real, the coin is flipped.
     Position new_real, new_fake;
     bool coin = board.flipACoin();
     new_real = coin ? position1 : position2;
     new_fake = !coin ? position1 : position2;
 
-    /* Se obtiene la posicion inicial y se borra, luego se inserta en su
-     * lugar primero la real y luego la fake (podrian no serlo), de esta manera
-     * si la inicial era la real, la nueva real se ubica primera. */
-    auto it = std::find(positions.begin(), positions.end(), initial);
-    double prob = it->getProb();
-    std::list<QuantumPosition *> list = it->getEntangled();
-    it->setProb(prob / 2);
-    it->setPosition(Position(new_real));
-    auto it2 = positions.insert(++it, QuantumPosition(new_fake, prob/2, list, this));
-    it = std::find(positions.begin(), positions.end(), new_real);
-    (it)->addToEntangled(*it2);
+    // TODO esto podria meterse en un metodo y mandarse igual que en move.
+    auto initial_qp_it = std::find(positions.begin(), positions.end(), initial);
+    double old_prob = initial_qp_it->getProb();
+    // Entangled list is copied and then moved.
+    std::list<QuantumPosition *> entangled_list = initial_qp_it->getEntangled();
+    initial_qp_it->setProb(old_prob / 2);
+    initial_qp_it->setPosition(Position(new_real));
+    auto new_qp_it = positions.insert(++initial_qp_it, QuantumPosition(new_fake, old_prob / 2, std::move(entangled_list), this));
+    new_qp_it->addMeToEntangled();
 
-    // TODO LOGICA ENTRELAZADO.
     board.addChessmanOfIn(initial, position1, position2);
-    measured = false;
 }
 
 void Chessman::merge(const Position &initial1, const Position &initial2,
                      const Position &final) {
-    // TODO no se puede hacer split a casillero lleno ni entrelazar.
+    checkIsInBoardOrFail(initial1);
+    checkIsInBoardOrFail(initial2);
     if (initial1 == initial2)
         throw ChessException("no se puede hacer merge desde la misma"
                              "posicion");
 
     std::pair<Position, Chessman *> chessman_in_path_1, chessman_in_path_2;
-    /* Se chequea, si la pieza que esta en la posicion final es la misma, se quita.
-     * Lo mismo para los iniciales, esto se hace ya que no se molestan, es decir,
-     * si tienen que pasar por encima de la otra, no pasa nada. */
+    // Remove chessman of places to not bother movement.
     if (board.getChessmanAt(final) == this)
         board.removeChessmanOf(final);
-    else if (board.getChessmanAt(initial1) == this)
-        board.removeChessmanOf(initial1);
-    else if (board.getChessmanAt(initial2) == this)
-        board.removeChessmanOf(initial2);
-
-
+    board.removeChessmanOf(initial1);
+    board.removeChessmanOf(initial2);
 
     // En este caso, si se puede mover al mismo lugar donde esta.
     std::vector<Position> path;
@@ -175,7 +169,7 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
         calculatePath(initial1, final, path);
         getMiddlePathChessman(path, chessman_in_path_1);
     }
-    if (initial2 != final) {
+    else if (initial2 != final) {
         checkCanMoveOrFail(initial2, final);
         calculatePath(initial2, final, path);
         getMiddlePathChessman(path, chessman_in_path_1);
@@ -184,111 +178,112 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
     if (chessman_in_path_1.second || chessman_in_path_2.second)
         throw ChessException("no se puede hacer merge y enlazar");
 
-    /* Se chequea si el iterador 1 es el real, es decir el primero del vector
-     * posicion, si no lo es, se guarda en el 2, sea o no el inicial, se
-     * colocara en la posicion correcta. */
+    /* If iterator 1 is real, then merge is saved in first position, if no
+     * is saved in position of iterator 2 no matter what (if it 2 is real,
+     * then is correct. */
     auto it1 = std::find(positions.begin(), positions.end(), initial1);
     auto it2 = std::find(positions.begin(), positions.end(), initial2);
     double prob = it1->getProb() + it2->getProb();
-    ifEntangledPositionsNotAppearsInBothUnentangle(&(*it1), &(*it2));
+
+    it1->ifEntangledNotEntangledWithOtherThenUnEntangle(*it2);
+    it2->ifEntangledNotEntangledWithOtherThenUnEntangle(*it1);
+
     if (it1 == positions.begin()) {
         it2->deleteMeFromEntangled();
-        positions.erase(it2); // Se borra primero el 2 para no modificar el 1.
+        positions.erase(it2);
         it1->setProb(prob);
         it1->setPosition(final);
     } else {
         it1->deleteMeFromEntangled();
-        positions.erase(it1); // Se borra primero el 1 para no modificar el 2.
+        positions.erase(it1);
         it2->setProb(prob);
         it2->setPosition(final);
     }
-    // TODO VER QUE HACER CON MERGE CON ENTANGLEMENT
-    // Se borran todas (si estan) y luego se guarda  en la final
-    board.removeChessmanOf(initial1);
-    board.removeChessmanOf(initial2);
-    board.removeChessmanOf(final);
+
+
     board.addChessmanIn(final, this);
-    // TODO LOGICA ENTRELAZADO.
-    measured = false;
 }
 
-void Chessman::measure(const Position & position) {
+void Chessman::measure(const Position &position) {
+    // If is not Quantum, then go back.
     if (!isQuantum())
         return;
-    measured=true;
-    auto it = std::find(positions.begin(), positions.end(), position);
-    // TODO falta logica entrelazado.
-    /* Si es el primero, se borra entero el vector y se deja solo la posicion
-     * con probabilidad 1. */
-    if (it == positions.end())
+    auto position_qp_it = std::find(positions.begin(), positions.end(), position);
+
+    if (position_qp_it == positions.end())
         throw ChessException("la pieza no esta alli");
-    if (it == positions.begin()) {
-        it->setProb(1);
-        for (; it != positions.end(); ++it) {
-            it->deleteMeFromEntangled();
-            measureOthers(*it);
-            if(it != positions.begin())
-                board.removeChessmanOf(Position(*it));
-            it->unentangle();
+
+
+    // If position is the first one, then leave as only real.
+    if (position_qp_it == positions.begin()) {
+        position_qp_it->setProb(1);
+        // Measure the others, entangled with this and the other and remove.
+        for (; position_qp_it != positions.end(); ++position_qp_it) {
+            position_qp_it->deleteMeFromEntangled();
+            measureOthers(*position_qp_it);
+            if(position_qp_it != positions.begin())
+                board.removeChessmanOf(Position(*position_qp_it));
+            position_qp_it->unentangle();
         }
         positions.erase(++positions.begin(), positions.end());
-        positions.begin()->unentangle();
-    } else if (it != positions.end()) {
-        it->deleteMeFromEntangled();
-        measureOthers(*it);
-        it->unentangle();
-        double prob = it->getProb();
-        positions.erase(it);
+
+    } else if (position_qp_it != positions.end()) {
+        /* If is not real, then delete only it, un entangling
+         * and measuring other. */
+        position_qp_it->deleteMeFromEntangled();
+        measureOthers(*position_qp_it);
+        position_qp_it->unentangle();
+        double prob = position_qp_it->getProb();
+        positions.erase(position_qp_it);
         board.removeChessmanOf(position);
-        for (it = positions.begin(); it != positions.end(); ++it) {
-            it->setProb(it->getProb() / (1 - prob));
+        // Probability is propagated in the other positions.
+        for (position_qp_it = positions.begin(); position_qp_it != positions.end(); ++position_qp_it) {
+            position_qp_it->setProb(position_qp_it->getProb() / (1 - prob));
         }
     }
-
 }
 
 void Chessman::measureOthers(QuantumPosition & quantum_position) {
-    for (auto & other: quantum_position.getEntangled()) {
-        if (!entangledPositionAppearsMoreThanOnce(other)) {
-            quantum_position.deleteMeFromEntangled(other);
-            other->measure();
+    // If entangled appears only in this position, then measure.
+    for (auto & qp_to_measure: quantum_position.getEntangled()) {
+        if (!entangledPositionAppearsMoreThanOnce(qp_to_measure)) {
+            quantum_position.deleteMeFromEntangled(*qp_to_measure);
+            qp_to_measure->measure();
         }
     }
-    auto list = searchAppearsInAllLessIn(quantum_position);
-    for (auto & qpos: list) {
-        // TODO VER ACA
+    /* If other entangled appears in all positions but not in this one, then it
+     * means that this is the position that was holding the other from
+     * measuring.*/
+    auto to_measure = searchEntangledWithAllPositionsExceptWith(
+            quantum_position);
+    for (auto & qp_to_measure: to_measure) {
         for (auto iterator = positions.begin(); iterator != positions.end(); ++iterator) {
-            iterator->deleteMeFromEntangled(qpos);
+            iterator->deleteMeFromEntangled(*qp_to_measure);
         }
-        qpos->measure();
+        qp_to_measure->measure();
     }
 }
 
-// solo se llama si la que llama no es la primera.
-std::list<QuantumPosition *> Chessman::searchAppearsInAllLessIn(QuantumPosition & quantumPosition) {
+std::list<QuantumPosition *> Chessman::searchEntangledWithAllPositionsExceptWith(QuantumPosition & filtered_qp) {
     std::list<QuantumPosition*> candidates;
-    auto it_1 = positions.begin();
-    if (&(*it_1) == &quantumPosition)
-        it_1++;
-    if (it_1 == positions.end())
+    auto positions_it = positions.begin();
+    // If first position is the filtered one, then it advance 1.
+    if (*positions_it == filtered_qp)
+        positions_it++;
+    // If is the end, then return empty list.
+    if (positions_it == positions.end())
         return candidates;
-    candidates = it_1->getEntangled();
-    for (; it_1 != positions.end(); ++it_1) {
-        if (&(*it_1) == &quantumPosition)
+    // Candidates initialize as the entangled of the first one.
+    candidates = positions_it->getEntangled();
+    for (; positions_it != positions.end(); ++positions_it) {
+        if (*positions_it == filtered_qp)
             continue;
-        for (auto it_2 = candidates.begin(); it_2 != candidates.end(); ){
-            bool founded = false;
-            for (auto it_3 = it_1->getEntangled().begin(); it_3 != it_1->getEntangled().end(); ++it_3) {
-                if (*it_3 == *it_2) {
-                    founded = true;
-                    break;
-                }
-            }
-            if (!founded) {
-                it_2 = candidates.erase(it_2);
-            }
+        for (auto candidates_it = candidates.begin(); candidates_it != candidates.end(); ){
+            // If not entangled, then delete from candidates.
+            if (!positions_it->isEntangled(**candidates_it))
+                candidates_it = candidates.erase(candidates_it);
             else
-                ++it_2;
+                ++candidates_it;
         }
     }
     return candidates;
@@ -298,7 +293,6 @@ bool Chessman::entangledPositionAppearsMoreThanOnce(QuantumPosition * position) 
     size_t counter = 0;
     for (auto & position_: positions) {
         for (auto & entangled_position: position_.getEntangled())
-            // TODO revisar
             if (entangled_position == position) {
                 if (++counter > 1)
                     return true;
@@ -306,36 +300,6 @@ bool Chessman::entangledPositionAppearsMoreThanOnce(QuantumPosition * position) 
     }
     return false;
 }
-
-// Si cuando se hace el merge, se tiene que ambos tienen enlazado algo, esto no se desenlaza, sino
-// si.
-void Chessman::ifEntangledPositionsNotAppearsInBothUnentangle(QuantumPosition * position1, QuantumPosition * position2) {
-    auto & entangled1 = position1->getEntangled(), & entangled2 = position2->getEntangled();
-    for (auto it1= entangled1.begin(); it1 != entangled1.end(); ) {
-        auto search_it = std::find(entangled2.begin(), entangled1.begin(),
-                                   *it1);
-        if (search_it == entangled2.end()) {
-            position1->deleteMeFromEntangled(*it1);
-            it1 = entangled1.erase(it1);
-        }
-        else {
-            ++it1;
-        }
-    }
-    for (auto it2= entangled2.begin(); it2 != entangled2.end(); ) {
-        auto search_it = std::find(entangled1.begin(), entangled1.begin(),
-                                   *it2);
-        if (search_it == entangled2.end()) {
-            position2->deleteMeFromEntangled(*it2);
-            it2 = entangled1.erase(it2);
-        }
-        else {
-            ++it2;
-        }
-    }
-}
-
-// TODO  void measure others.
 
 void Chessman::checkCanMoveOrFail(const Position & initial,
                                   const Position & final)
@@ -402,11 +366,10 @@ const QuantumPosition & Chessman::getPosition(size_t index) const {
             return position;
         i++;
     }
-    // TODO ver aca
     return positions.front();
 }
 
-size_t Chessman::positionsSize() const {
+size_t Chessman::countPositions() const {
     return positions.size();
 }
 
@@ -492,25 +455,27 @@ void Chessman::entangle(const Position &position, Chessman & other, const Positi
     it_other->entangle(*it_this);
 }
 
-// solo para debug, en el medio se va a tener que mover la pieza.
-void Chessman::resetMeasured() {
-    measured = false;
-}
-
-
 std::list<QuantumPosition> & Chessman::getAllPositions() {
     return positions;
 };
 
-bool Chessman::isAlreadyEntangled(Chessman * chessman) {
-    for (auto it = positions.begin(); it != positions.end(); ++it) {
-        auto entangled = it->getEntangled();
-        for (auto & qp: entangled) {
-            if (chessman == qp->getChessman())
+bool Chessman::chessmanIsAlreadyEntangled(Chessman * chessman) {
+    for (auto positions_it = positions.begin(); positions_it != positions.end(); ++positions_it) {
+        auto entangled_list = positions_it->getEntangled();
+        for (auto & entangled_it: entangled_list) {
+            if (entangled_it->isThisChessman(*chessman))
                 return true;
         }
     }
     return false;
 }
+
+void Chessman::checkIsInBoardOrFail(const Position & position) {
+    Chessman * chessman = board.getChessmanAt(position);
+    if (!chessman)
+        throw ChessException("la pieza no esta en esa posicion en el tablero");
+}
+
+
 
 

@@ -23,8 +23,8 @@ class QuantumPosition;
  * que indica color. */
 class Chessman {
     Chessman();
-    bool measured;
 
+    friend class QuantumPosition;
 protected:
     std::list<QuantumPosition> positions;
     Board & board;
@@ -68,12 +68,32 @@ protected:
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;
 
+    std::list<QuantumPosition *>
+    searchEntangledWithAllPositionsExceptWith(QuantumPosition &filtered_qp);
+
+    bool chessmanIsAlreadyEntangled(Chessman *chessman);
+
+    void checkIsInBoardOrFail(const Position &position);
+
+    void
+    entangle(const Position &position, Chessman &other, const Position &other_position);
+
+    void measureOthers(QuantumPosition & quantum_position);
+
+    bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
+
+    // Devuelve todas las posiciones de la pieza.
+    std::list<QuantumPosition> & getAllPositions();
+
 public:
 	// Constructor, se le pasa posicion, color y referencia al tablero.
     Chessman(const Position & position_, bool white_, Board & board_);
 
 	// Mueve la pieza desde una posicion a otra, valida el movimiento.
     virtual void move(const Position & initial, const Position & final);
+
+    void split(const Position &initial, const Position &position1,
+               const Position &position2);
 
     void merge(const Position &initial1, const Position &initial2,
                const Position &final);
@@ -83,12 +103,6 @@ public:
 
 	// Devuelve true si la pieza es blanca.
 	bool isWhite() const;
-
-    // Devuelve la posicion real de una pieza.
-    const QuantumPosition & getPosition() const;
-
-    // Devuelve las posiciones falsas de la pieza
-    std::list<QuantumPosition> & getAllPositions();
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
     virtual void calculatePosibleMoves(const Position &initial,
@@ -100,40 +114,17 @@ public:
 
     virtual ~Chessman() = default;
 
-    void split(const Position &initial, const Position &position1,
-               const Position &position2);
-
     double getProbability(Position position);
 
+    // Devuelve la posicion real de una pieza.
+    const QuantumPosition & getPosition() const;
+
+    const QuantumPosition & getPosition(size_t index) const;
+
+    size_t countPositions() const;
+
+    // TODO despues hacer privada.
     void measure(const Position &position);
-
-    void
-    entangle(const Position &position, Chessman &other, const Position &other_position);
-
-    void measureOthers(QuantumPosition & quantum_position);
-
-    bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
-
-    void resetMeasured();
-
-    const QuantumPosition &getPosition(size_t index) const;
-
-    size_t positionsSize() const;
-
-    std::list<QuantumPosition *>
-    searchAppearsInAllLessIn(QuantumPosition &quantumPosition);
-
-    std::list<QuantumPosition *>
-    searchIfAllOfOursAppearsIn(QuantumPosition *filter,
-                               std::list<QuantumPosition *> &in);
-
-    bool isAlreadyEntangled();
-
-    bool isAlreadyEntangled(Chessman *chessman);
-
-    void
-    ifEntangledPositionsNotAppearsInBothUnentangle(QuantumPosition *position1,
-                                                   QuantumPosition *position2);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

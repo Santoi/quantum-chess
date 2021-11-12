@@ -13,24 +13,18 @@ class Chessman;
 // TODO pdria ser hija de Position?? (no se si vale mucho la pena)
 
 class QuantumPosition {
-    QuantumPosition();
-
     Position position;
     double prob;
     std::list<QuantumPosition *> entangled;
     Chessman * chessman;
 
 public:
-    explicit QuantumPosition(Chessman * chessman_ = nullptr);
-
-    explicit QuantumPosition(const Position &position_, Chessman * chessman_ = nullptr);
-
     QuantumPosition(const Position & position_, double prob_, Chessman * chessman_ = nullptr);
 
     QuantumPosition(uint8_t x, uint8_t y, double prob_, Chessman *chessman_ = nullptr);
 
     QuantumPosition(const Position &position_, double prob_,
-                    std::list<QuantumPosition *> &list, Chessman *chessman_);
+                    std::list<QuantumPosition *> && list, Chessman *chessman_);
 
     bool operator==(const QuantumPosition &other) const;
 
@@ -54,21 +48,28 @@ public:
 
     void entangle(QuantumPosition & other);
 
-    void measure();
-
     bool compareDoubleWithPrecision(double a, double b, double e) const;
 
     void setPosition(const Position &position_);
 
-    void addToEntangled(QuantumPosition & new_qp);
+    void addMeToEntangled();
 
     void deleteMeFromEntangled();
 
     void deleteMeFromChessman();
 
-    void deleteMeFromEntangled(QuantumPosition *quantum);
+    void deleteMeFromEntangled(QuantumPosition & other);
 
     const Chessman *getChessman();
+
+    void
+    ifEntangledNotEntangledWithOtherThenUnEntangle(const QuantumPosition & other);
+
+    bool isEntangled(const QuantumPosition &other);
+
+    void measure();
+
+    bool isThisChessman(const Chessman & chessman__);
 };
 
 

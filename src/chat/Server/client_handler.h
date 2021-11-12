@@ -10,12 +10,14 @@
 #include "blocking_queue.h"
 #include "nick_names_repository.h"
 #include <memory>
+#include "clients_threads.h"
 
 class Match;
 
 class ClientHandler {
 private:
     Socket client_socket;
+    ClientHandlersReceiver client_receiver;
     int client_id;
     const NickNamesRepository& nick_names;
     ServerProtocol protocol;

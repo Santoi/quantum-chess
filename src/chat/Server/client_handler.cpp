@@ -6,14 +6,17 @@
 
 ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue&
                               updates_queue, const int& client_id, const NickNamesRepository& nick_names)
-              :client_socket(std::move(socket)), client_id(client_id), nick_names(nick_names),
+              :client_socket(std::move(socket)),
+              client_receiver(client_socket, client_id, updates_queue),
+              client_id(client_id), nick_names(nick_names),
               notifications_queue(notifications_queue), updates_queue(updates_queue) {
-
 }
 
 
 ClientHandler::ClientHandler(ClientHandler&& other_client)
-                :client_socket(std::move(other_client.client_socket)), client_id(other_client.client_id),
+                :client_socket(std::move(other_client.client_socket)),
+                 client_receiver(std::move(other_client.client_receiver), client_socket),
+                 client_id(other_client.client_id),
                  nick_names(other_client.nick_names), notifications_queue(other_client.notifications_queue),
                  updates_queue(other_client.updates_queue),
                  receiver_thread(std::move(other_client.receiver_thread)),
@@ -52,7 +55,6 @@ void ClientHandler::executeSenderCatchingExceptions() {
     this->executeSender();
 }
 
-
 void ClientHandler::start() {
     this->receiver_thread = std::thread(&ClientHandler::executeReceiverCatchingExceptions, this);
     this->sender_thread = std::thread(&ClientHandler::executeSenderCatchingExceptions, this);
@@ -61,8 +63,9 @@ void ClientHandler::start() {
 
 void ClientHandler::startSingleThreadedClient(Match& match) {
     for (int i = 0; i < MAX_MESSAGES; i++) {
-        this->executeReceiverCatchingExceptions();
-        match.checkAndNotifyUpdates();
+       // this->client_receiver.runCatchingExceptions();
+       this->executeReceiverCatchingExceptions();
+       match.checkAndNotifyUpdates();
         this->executeSenderCatchingExceptions();
     }
 }

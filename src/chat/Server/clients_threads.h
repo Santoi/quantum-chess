@@ -16,10 +16,12 @@ public:
     ClientHandlersReceiver() = delete;
     ClientHandlersReceiver(ClientHandlersReceiver&& otherReceiver, Socket& socket);
     ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue& updates_queue);
+    void runCatchingExceptions() override;
+    void receiveInstructionAndPushToQueue();
     ~ClientHandlersReceiver() = default;
 
 protected:
-    void run();
+    void run() override;
 };
 
 class ClientHandlersSender: public Thread {
@@ -32,6 +34,7 @@ public:
     ClientHandlersSender() = delete;
     ClientHandlersSender(ClientHandlersSender&& otherSender, Socket& socket);
     ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue, const NickNamesRepository& nick_names);
+    void popFromQueueAndSendInstruction();
     ~ClientHandlersSender() = default;
 
 protected:

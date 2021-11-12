@@ -12,9 +12,9 @@ private:
 public:
     Thread() = default;
     Thread(Thread&& otherThread);
-    virtual void start();
+    void start();
     void join();
-    void runCatchingExceptions();
+    virtual void runCatchingExceptions();
     virtual ~Thread();
 
 protected:

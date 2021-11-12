@@ -39,9 +39,9 @@ void ClientHandler::start() {
 
 void ClientHandler::startSingleThreadedClient(Match& match) {
     for (int i = 0; i < MAX_MESSAGES; i++) {
-       this->client_receiver.runCatchingExceptions();
+       this->client_receiver.receiveInstructionAndPushToQueue();
        match.checkAndNotifyUpdates();
-       this->client_sender.runCatchingExceptions();
+       this->client_sender.popFromQueueAndSendInstruction();
     }
 }
 

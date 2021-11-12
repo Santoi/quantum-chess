@@ -1,7 +1,8 @@
 #include "clients_threads.h"
 #include "server_protocol.h"
 #include "instructions.h"
-
+#include "common_socket_closed.h"
+#include "iostream"
 
 ClientHandlersReceiver::ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue&
                                                 updates_queue)
@@ -13,14 +14,20 @@ ClientHandlersReceiver::ClientHandlersReceiver(ClientHandlersReceiver&& otherRec
                          updates_queue(otherReceiver.updates_queue) {
 }
 
+void ClientHandlersReceiver::runCatchingExceptions() {
+    Thread::runCatchingExceptions();
+}
+
+void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
+    std::shared_ptr <Instruction> ptr_instruction;
+    ServerProtocol protocol;
+    protocol.fillInstructionsWithPacket(this->client_socket, this->client_id, ptr_instruction);
+    this->updates_queue.push(ptr_instruction);
+}
 
 void ClientHandlersReceiver::run() {
-    for (int i = 0; i < 10; i++) {
-        std::shared_ptr <Instruction> ptr_instruction;
-        ServerProtocol protocol;
-        protocol.fillInstructionsWithPacket(this->client_socket, this->client_id, ptr_instruction);
-        this->updates_queue.push(ptr_instruction);
-    }
+    while (true)
+        this->receiveInstructionAndPushToQueue();
 }
 
 ClientHandlersSender::ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue,
@@ -35,11 +42,15 @@ ClientHandlersSender::ClientHandlersSender(ClientHandlersSender&& otherSender, S
                       nick_names(otherSender.nick_names) {
 }
 
+void ClientHandlersSender::popFromQueueAndSendInstruction() {
+    std::shared_ptr<Instruction> instruc_ptr;
+    this->notifications_queue.pop(instruc_ptr);
+    ServerProtocol protocol;
+    protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr, this->nick_names);
+}
+
 void ClientHandlersSender::run() {
-    for (int i = 0; i < 10; i++){
-        std::shared_ptr<Instruction> instruc_ptr;
-        this->notifications_queue.pop(instruc_ptr);
-        ServerProtocol protocol;
-        protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr, this->nick_names);
+    while (true) {
+        this->popFromQueueAndSendInstruction();
     }
 }

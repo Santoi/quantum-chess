@@ -1,4 +1,5 @@
 #include "chessman.h"
+#include <utility>
 
 Chessman::Chessman(SDL2pp::Renderer &renderer, char chessman) :
                                     renderer(renderer),
@@ -18,7 +19,7 @@ Chessman::Chessman(SDL2pp::Renderer &renderer, char chessman) :
   }
 }
 
-void Chessman::drawAt(int x_pos, int y_pos) {
+void Chessman::move(int x_pos, int y_pos) {
   updateDimensions();
   x_pos -= 4;
   y_pos -= 3;
@@ -28,8 +29,9 @@ void Chessman::drawAt(int x_pos, int y_pos) {
 }
 
 void Chessman::updateDimensions() {
-  x = y = renderer.GetOutputHeight() / 2;
-  width = height = renderer.GetOutputHeight() / 10;
+  x = y = std::min(renderer.GetOutputHeight(), renderer.GetOutputWidth()) / 2;
+  width = height = std::min(renderer.GetOutputHeight(),
+                            renderer.GetOutputWidth()) / 10;
 }
 
 Chessman::~Chessman() = default;

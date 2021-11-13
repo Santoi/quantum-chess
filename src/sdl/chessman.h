@@ -16,7 +16,8 @@ private:
 
 public:
   Chessman(SDL2pp::Renderer &renderer, char chessman);
-  void drawAt(int x, int y);
+  // Move to the
+  void move(int x, int y);
   ~Chessman();
 };
 

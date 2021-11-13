@@ -6,7 +6,7 @@
 
 class Utility {
 public:
-  static void getTilePosition(const SDL2pp::Renderer &renderer,
+  static bool getTilePosition(const SDL2pp::Renderer &renderer,
                               Position &position, int x, int y);
 };
 

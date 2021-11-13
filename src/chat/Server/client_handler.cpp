@@ -8,14 +8,16 @@ ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue
                               updates_queue, const int& client_id, const NickNamesRepository& nick_names)
               :client_socket(std::move(socket)),
                client_receiver(client_socket, client_id, updates_queue),
-               client_sender(client_socket, notifications_queue, client_id, nick_names) {
+               client_sender(client_socket, notifications_queue, client_id, nick_names),
+               client_is_active(true) {
 }
 
 
 ClientHandler::ClientHandler(ClientHandler&& other_client)
                 :client_socket(std::move(other_client.client_socket)),
                  client_receiver(std::move(other_client.client_receiver), client_socket),
-                 client_sender(std::move(other_client.client_sender), client_socket) {
+                 client_sender(std::move(other_client.client_sender), client_socket),
+                 client_is_active(true) {
 }
 
 
@@ -38,7 +40,7 @@ void ClientHandler::start() {
 
 
 void ClientHandler::startSingleThreadedClient(Match& match) {
-    for (int i = 0; i < MAX_MESSAGES; i++) {
+    while(client_is_active) {
        this->client_receiver.receiveInstructionAndPushToQueue();
        match.checkAndNotifyUpdates();
        this->client_sender.popFromQueueAndSendInstruction();
@@ -47,7 +49,7 @@ void ClientHandler::startSingleThreadedClient(Match& match) {
 
 void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
     this->start();
-    for (int i = 0; i < MAX_MESSAGES; i++)
+    while (client_is_active)
         match.checkAndNotifyUpdates();
 }
 
@@ -55,4 +57,5 @@ void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
 void ClientHandler::join() {
     this->client_receiver.join();
     this->client_sender.join();
+    client_is_active = false;
 }

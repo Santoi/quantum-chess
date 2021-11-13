@@ -19,6 +19,7 @@ private:
     Socket client_socket;
     ClientHandlersReceiver client_receiver;
     ClientHandlersSender client_sender;
+    bool client_is_active;
 
 public:
     ClientHandler() = delete;

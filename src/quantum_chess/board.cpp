@@ -8,7 +8,9 @@ Board::Board(): chessmen(), board(), next_white(true), coin() {}
 
 Board::Board(int seed): chessmen(), board(), next_white(true), coin(seed) {}
 
-// TODO interfaz qcuantica.
+// TODO interfaz cuantica, dejarla a punto.
+
+// TODO testear BOARD.
 
 void Board::addChessman(ChessmanContainer && chessman_cont){
     Chessman * chessman = chessman_cont.get();

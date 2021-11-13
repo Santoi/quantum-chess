@@ -13,6 +13,13 @@
 
  //TODO smart pointers.
 
+ // TODO Hacer measure privada, cambiando los test o ver que puedo hacer con test
+ // para que la vean
+
+ // TODO testear posiblemerge y splits (con un caso al menos).
+
+ // TODO HACER POSIBLE MOVES LIST!!!
+
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
         positions(1, QuantumPosition(position_, 1, this)),
         board(board_), white(white_) {}
@@ -22,7 +29,7 @@ void Chessman::move(const Position & initial, const Position & final) {
     // Check if can be moved.
     std::vector<Position> path;
     std::vector<Position> posible_moves;
-    calculatePosibleMoves(initial, posible_moves);
+    calculateMoves(initial, posible_moves);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                               final);
     if (final_it == posible_moves.end())
@@ -69,7 +76,7 @@ void Chessman::move(const Position & initial, const Position & final) {
 void Chessman::split(const Position &initial, const Position &final1,
                      const Position &final2) {
     std::vector<Position> posible_moves;
-    calculatePosibleSplits(initial, posible_moves);
+    calculateMoves(initial, posible_moves);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                               final1);
     if (final_it == posible_moves.end())
@@ -110,12 +117,12 @@ void Chessman::split(const Position &initial, const Position &final1,
 void Chessman::merge(const Position &initial1, const Position &initial2,
                      const Position &final) {
     std::vector<Position> posible_moves;
-    calculatePosibleMerges(initial1, posible_moves);
+    calculateMoves(initial1, posible_moves);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                               final);
     if (final_it == posible_moves.end())
         throw ChessException("that chessman cant do that merge");
-    moveValidationExceptionThrower(checkIsAValidMerge(initial2, final));
+    moveValidationExceptionThrower(checkIsAValidMerge(initial1, final));
 
     final_it = std::find(posible_moves.begin(), posible_moves.end(),
                          final);
@@ -360,7 +367,7 @@ void Chessman::calculatePosibleMoves(const Position &initial,
         ++it;
     }
 }
-// TODO test
+
 void Chessman::calculatePosibleSplits(const Position & initial,
                                       std::vector<Position> &posible_moves) {
     calculateMoves(initial, posible_moves);
@@ -374,7 +381,6 @@ void Chessman::calculatePosibleSplits(const Position & initial,
     }
 }
 
-// TODO test
 void Chessman::calculatePosibleMerges(const Position & initial,
                                       std::vector<Position> &posible_moves) {
     calculateMoves(initial, posible_moves);
@@ -600,6 +606,12 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
         case MERGING_AND_ENTANGLING:
             throw ChessException("cannot merge and entangle in"
                                  " the same move");
+        case PAWN_CANT_ENTANGLE:
+            throw ChessException("pawn cannot entangle");
+        case PAWN_CANT_SPLIT:
+            throw ChessException("pawn cannot split");
+        case PAWN_CANT_MERGE:
+            throw ChessException("pawn cannot merge");
     }
 }
 

@@ -1478,6 +1478,23 @@ TEST(Chessman, MoveChessmanNotInBoard) {
     EXPECT_THROW(queen->move(Position(4, 3), Position(5, 3)), ChessException);
 }
 
+TEST(Pawn, PawnCannotSplitMergeNorEntangle) {
+    Board board(0);
+    ChessmanContainer pawn_cont('P', Position(5, 0), true, board);
+    ChessmanContainer queen_cont('Q', Position(4, 0), true, board);
+    Chessman * pawn = pawn_cont.get(), * queen = queen_cont.get();
+
+    board.addChessman(std::move(pawn_cont));
+    board.addChessman(std::move(queen_cont));
+
+    EXPECT_THROW(pawn->split(Position(5, 0), Position(5, 1), Position(5, 2)), ChessException);
+    EXPECT_THROW(pawn->merge(Position(5, 0), Position(5, 1), Position(5, 2)), ChessException);
+
+    queen->split(Position(4, 0), Position(4, 1), Position(5, 1));
+
+    EXPECT_THROW(pawn->move(Position(5, 0), Position(5, 2)), ChessException);
+}
+
 // TODO ver que hacer cuando mergeas algo que tenia algo enlazado.
 
 

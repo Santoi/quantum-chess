@@ -38,7 +38,7 @@ void Pawn::move(const Position &initial, const Position &final) {
 std::string Pawn::print() const {
     return "P";
 }
-
+// TODO validate.
 void Pawn::calculatePosibleMerges(const Position &initial,
                                   std::vector<Position> &posible_moves) {
     posible_moves = std::vector<Position> ();
@@ -47,6 +47,31 @@ void Pawn::calculatePosibleMerges(const Position &initial,
 void Pawn::calculatePosibleSplits(const Position &initial,
                                   std::vector<Position> &posible_moves) {
     posible_moves = std::vector<Position> ();
+}
+
+Chessman::MoveValidationStatus
+Pawn::checkIsAValidMove(const Position & initial, const Position & final) {
+    Chessman::MoveValidationStatus status =
+                                    Chessman::checkIsAValidMove(initial, final);
+    if (status)
+        return status;
+    std::vector<Position> path;
+    std::pair<Position, Chessman *> chessman_in_path;
+    calculatePath(initial, final, path);
+    getMiddlePathChessman(path, chessman_in_path);
+    if (chessman_in_path.second)
+        return PAWN_CANT_ENTANGLE;
+    return OK;
+}
+
+Chessman::MoveValidationStatus
+Pawn::checkIsAValidMerge(const Position &initial1, const Position &final) {
+    return PAWN_CANT_MERGE;
+}
+
+Chessman::MoveValidationStatus
+Pawn::checkIsAValidSplit(const Position &initial, const Position &final) {
+    return PAWN_CANT_SPLIT;
 }
 
 

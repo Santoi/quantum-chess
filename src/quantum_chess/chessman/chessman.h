@@ -35,8 +35,10 @@ protected:
         SPLIT_TO_OCCUPIED_SQUARE,
         SPLITTING_AND_ENTANGLING,
         SPLIT_LIMIT_REACHED,
-        MERGING_AND_ENTANGLING
-
+        MERGING_AND_ENTANGLING,
+        PAWN_CANT_SPLIT,
+        PAWN_CANT_MERGE,
+        PAWN_CANT_ENTANGLE
     } MoveValidationStatus;
 
     std::list<QuantumPosition> positions;
@@ -94,6 +96,15 @@ protected:
 
     bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
 
+    virtual
+    MoveValidationStatus checkIsAValidMove(const Position &initial, const Position &final);
+
+    virtual Chessman::MoveValidationStatus
+    checkIsAValidSplit(const Position &initial, const Position &final);
+
+    virtual Chessman::MoveValidationStatus
+    checkIsAValidMerge(const Position &initial1, const Position &final);
+
 public:
 	// Constructor, se le pasa posicion, color y referencia al tablero.
     Chessman(const Position & position_, bool white_, Board & board_);
@@ -134,14 +145,6 @@ public:
 
     // TODO despues hacer privada.
     void measure(const Position &position);
-
-    MoveValidationStatus checkIsAValidMove(const Position &initial, const Position &final);
-
-    Chessman::MoveValidationStatus
-    checkIsAValidSplit(const Position &initial, const Position &final);
-
-    Chessman::MoveValidationStatus
-    checkIsAValidMerge(const Position &initial1, const Position &final);
 
     void moveValidationExceptionThrower(MoveValidationStatus status);
 

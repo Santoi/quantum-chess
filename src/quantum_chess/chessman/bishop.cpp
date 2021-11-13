@@ -17,19 +17,13 @@ void Bishop::calculateMoves(const Position &initial,
     int8_t min = std::min(initial.x(), initial.y());
     for (int8_t i = initial.x() - min, j = initial.y() - min;
          i < 8 && j < 8; i++, j++) {
-        Position position = Position(i, j);
-        if (initial != position) {
-            posible_moves.push_back(position);
-        }
+        posible_moves.push_back(Position(i, j));
     }
     // Se recorre para el otro lado
     min = std::min(7 - initial.x(), (int) initial.y());
     for (int8_t i = initial.x() + min, j = initial.y() - min;
          i >= 0 && j < 8; i--, j++) {
-        Position position = Position(i, j);
-        if (initial != position) {
-            posible_moves.push_back(position);
-        }
+        posible_moves.push_back(Position(i, j));
     }
 }
 

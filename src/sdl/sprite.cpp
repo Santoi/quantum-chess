@@ -5,15 +5,9 @@
 #include <SDL2pp/Texture.hh>
 #include <string>
 
-Sprite::Sprite(SDL2pp::Renderer &renderer, const std::string
-               &file_name) : renderer(renderer), sprite(renderer, file_name) {}
-
-Sprite::Sprite(SDL2pp::Renderer &renderer, const std::string
-           &file_name, int width, int height) : renderer(renderer),
-                                                sprite(renderer, file_name) {
-  renderer.Copy(sprite, SDL2pp::NullOpt,
-                                 SDL2pp::Rect(0, 0, width, height));
-}
+Sprite::Sprite(SDL2pp::Renderer &renderer, const std::string &file_name):
+                                        renderer(renderer),
+                                        sprite(renderer, file_name) {}
 
 void Sprite::render() {
   renderer.Copy(sprite);
@@ -26,6 +20,12 @@ void Sprite::render(int x, int y, int width, int height) {
 void Sprite::loadImage(const std::string &file_name) {
   SDL2pp::Texture new_sprite(renderer, file_name);
   sprite = std::move(new_sprite);
+}
+
+Sprite& Sprite::operator=(Sprite &other) {
+  renderer = std::move(other.renderer);
+  sprite = std::move(other.sprite);
+  return *this;
 }
 
 Sprite::~Sprite() = default;

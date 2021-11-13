@@ -4,15 +4,18 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <string>
 
+#define DEFAULT_SPRITE "img/default.png"
+
 class Sprite {
 private:
   SDL2pp::Renderer &renderer;
   SDL2pp::Texture sprite;
 
 public:
-  Sprite(SDL2pp::Renderer &renderer, const std::string &file_name);
-  Sprite(SDL2pp::Renderer &renderer, const std::string &file_name,
-                                                         int width, int height);
+  explicit Sprite(SDL2pp::Renderer &renderer,
+                                const std::string &file_name = DEFAULT_SPRITE);
+  Sprite(Sprite &&other) = default;
+  Sprite& operator=(Sprite &other);
 
   void render();
 

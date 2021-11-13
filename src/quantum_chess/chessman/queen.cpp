@@ -11,7 +11,6 @@ void Queen::calculateMoves(const Position &initial,
                                   const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(28);
-    std::vector<Position> path;
 
     // Se cheuqea la columna
     for (uint8_t i = 0; i < 8; i++)

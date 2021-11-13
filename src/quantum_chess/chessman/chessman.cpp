@@ -13,8 +13,8 @@
 
  //TODO smart pointers.
 
- // TODO Hacer measure privada, cambiando los test o ver que puedo hacer con test
- // para que la vean
+ // TODO Hacer measure privada, cambiando los test o ver que puedo hacer
+ //  con test para que la vean
 
  // TODO testear posiblemerge y splits (con un caso al menos).
 
@@ -63,7 +63,8 @@ void Chessman::move(const Position & initial, const Position & final) {
     // TODO hacer lo de mezclar con una funcion split.
     // If there is a chessman in path then entangle.
     if (chessman_in_path.second) {
-        entangle(initial, final, *chessman_in_path.second, chessman_in_path.first);
+        entangle(initial, final, *chessman_in_path.second,
+                 chessman_in_path.first);
         board.addChessmanIn(final, this);
     } else {
         auto initial_qp_it = std::find(positions.begin(),
@@ -396,7 +397,8 @@ void Chessman::calculatePosibleMerges(const Position & initial,
 }
 
 bool Chessman::checkFreePath(const std::vector<Position> & path,
-                             std::pair<Position, Chessman *> & chessman_in_path) const {
+                             std::pair<Position,
+                             Chessman *> & chessman_in_path) const {
     bool middle_path_free = getMiddlePathChessman(path, chessman_in_path);
     bool final_free = true;
     if (auto chessman = board.getChessmanAt(path.back())) {
@@ -524,8 +526,8 @@ double Chessman::getProbability(Position position_) {
     throw std::invalid_argument("la pieza no esta alli");
 }
 
-void Chessman::entangle(const Position & initial, const Position & final, Chessman & other,
-                        const Position &other_position) {
+void Chessman::entangle(const Position & initial, const Position & final,
+                        Chessman & other, const Position &other_position) {
     auto initial_qp_it = std::find(positions.begin(),
                                               positions.end(), initial);
     QuantumPosition & other_qp = *std::find(other.positions.begin(),
@@ -580,7 +582,7 @@ void Chessman::checkIsInBoardOrFail(const Position & position) {
 }
 
 void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
-    switch(status){
+    switch (status){
         case CHESSMAN_NOT_IN_POSITION:
             throw ChessException("chessman is not in that position");
         case MOVING_TO_SQUARE_WITH_SAME_PIECE:

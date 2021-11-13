@@ -10,9 +10,6 @@ void King::calculateMoves(const Position &initial,
                                  const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(8);
-    std::vector<Position> path;
-
-    Position position;
 
     std::vector<int> x_sum = {1, 1, 0, -1, -1, -1, 0, 1};
     std::vector<int> y_sum = {0, 1, 1, 1, 0, -1, -1, -1};

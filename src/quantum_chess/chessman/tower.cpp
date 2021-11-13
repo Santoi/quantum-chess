@@ -11,7 +11,6 @@ void Tower::calculateMoves(const Position & initial,
                                   const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(14);
-    std::vector<Position> path;
     // Se chequea la columna.
     for (uint8_t i = 0; i < 8; i++)
         posible_moves.push_back(Position(initial.x(), i));

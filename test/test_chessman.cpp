@@ -579,7 +579,8 @@ TEST(Chessman, MergeOneSplitToPositionInTheSameLine) {
 
     chessman->split(Position(1, 1), Position(1, 2), Position(1, 3));
 
-    EXPECT_THROW(chessman->merge(Position(1,2), Position(1, 3), Position(1, 1)), ChessException);
+    EXPECT_THROW(chessman->merge(Position(1,2), Position(1, 3), Position(1, 1)),
+                 ChessException);
 }
 
 TEST(Chessman, OneBadMergeToInvalidPosition){
@@ -1487,8 +1488,10 @@ TEST(Pawn, PawnCannotSplitMergeNorEntangle) {
     board.addChessman(std::move(pawn_cont));
     board.addChessman(std::move(queen_cont));
 
-    EXPECT_THROW(pawn->split(Position(5, 0), Position(5, 1), Position(5, 2)), ChessException);
-    EXPECT_THROW(pawn->merge(Position(5, 0), Position(5, 1), Position(5, 2)), ChessException);
+    EXPECT_THROW(pawn->split(Position(5, 0), Position(5, 1), Position(5, 2)),
+                 ChessException);
+    EXPECT_THROW(pawn->merge(Position(5, 0), Position(5, 1), Position(5, 2)),
+                 ChessException);
 
     queen->split(Position(4, 0), Position(4, 1), Position(5, 1));
 

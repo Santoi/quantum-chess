@@ -11,7 +11,6 @@ void Bishop::calculateMoves(const Position &initial,
                                    const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(14);
-    std::vector<Position> path;
 
     // Primero se recorre la diagonal hacia la derecha.
     int8_t min = std::min(initial.x(), initial.y());

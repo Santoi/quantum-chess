@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <utility>
 #include "pawn.h"
 
 Pawn::Pawn(const Position &position, bool white_, Board &board_):
@@ -9,8 +10,6 @@ void Pawn::calculateMoves(const Position &initial,
                           std::vector<Position> &posible_moves) const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(4);
-    std::vector<Position> path;
-    Position position;
     int sum = (white) ? 1 : -1;
 
 

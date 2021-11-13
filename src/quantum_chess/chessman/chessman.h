@@ -76,7 +76,8 @@ protected:
 
 	// Chequea que el camino sea transitable.
     bool checkFreePath(const std::vector<Position> & path,
-                       std::pair<Position, Chessman *> & chessman_in_path) const;
+                       std::pair<Position, Chessman *> & chessman_in_path)
+                       const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;
@@ -97,7 +98,8 @@ protected:
     bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
 
     virtual
-    MoveValidationStatus checkIsAValidMove(const Position &initial, const Position &final);
+    MoveValidationStatus checkIsAValidMove(const Position &initial,
+                                           const Position &final);
 
     virtual Chessman::MoveValidationStatus
     checkIsAValidSplit(const Position &initial, const Position &final);

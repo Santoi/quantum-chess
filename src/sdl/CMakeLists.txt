@@ -4,8 +4,8 @@ set(This sdl-lib)
 
 project(${This} C CXX)
 
-set(Headers sprite.h chessman.cpp chessman.h)
-set(Sources sprite.cpp chessman.cpp chessman.h)
+set(Headers sprite.h chessman.cpp chessman.h event_handler.cpp event_handler.h board.cpp board.h tile.cpp tile.h position.cpp position.h utility.cpp utility.h chess_exception.cpp chess_exception.h)
+set(Sources sprite.cpp chessman.cpp chessman.h event_handler.cpp event_handler.h board.cpp board.h tile.cpp tile.h position.cpp position.h utility.cpp utility.h chess_exception.cpp chess_exception.h)
 
 include(FindPkgConfig)
 

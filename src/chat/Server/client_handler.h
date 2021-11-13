@@ -33,6 +33,7 @@ public:
     void startSingleThreadedClient(Match& match);
     void startThreadedClientWithoutMatchThread(Match& match);
     void join();
+    bool isActive();
     ~ClientHandler() = default;
 
 };

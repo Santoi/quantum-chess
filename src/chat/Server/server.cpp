@@ -30,8 +30,14 @@ void Server::executeSingleThreadedServer(int type_of_single_thread) {
     }
     if (type_of_single_thread == 2) {
         for (int i = 0; i < MAX_CLIENTS; i++)
-            matches.acceptClientAndAddToAMatch(this->acceptor_socket);
+            matches.acceptClientAndAddToAMatch(this->acceptor_socket, false);
     }
+    if (type_of_single_thread == 3) {
+        for (int i = 0; i < MAX_CLIENTS; i++)
+            matches.acceptClientAndAddToAMatch(this->acceptor_socket, true);
+    }
+    while (matches.thereAreActiveMatches())
+        matches.joinInactiveMatches();
 }
 
 void Server::executeServerWithThreads() {

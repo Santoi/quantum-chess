@@ -8,10 +8,11 @@
 #include "common_socket.h"
 #include "client_handler.h"
 #include "nick_names_repository.h"
+#include "thread.h"
 
 class ClientHandler;
 
-class Match {
+class Match: public Thread {
 private:
     int accepted_clients;
     std::vector<ClientHandler> clients;
@@ -27,7 +28,11 @@ public:
     //void addClientToMatchAndBeginExcecution(Socket&& client_socket);
     //void addClientToQueues(ClientHandler& client);
     void checkAndNotifyUpdates();
+    bool isActive();
     ~Match();
+
+protected:
+    void run() override;
 
 private:
     void addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id);

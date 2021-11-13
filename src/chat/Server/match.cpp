@@ -58,6 +58,19 @@ void Match::checkAndNotifyUpdates() {
     //maybe game and a chat as parameters?
 }
 
+void Match::run() {
+    for (int i = 0; i < 10; i++)
+        checkAndNotifyUpdates();
+}
+
+bool Match::isActive() {
+    std::vector<ClientHandler>::iterator it;
+    for (it = this->clients.begin(); it != this->clients.end(); it++) {
+        if (it->isActive())
+            return true;
+    }
+    return false;
+}
 
 Match::~Match() {
 

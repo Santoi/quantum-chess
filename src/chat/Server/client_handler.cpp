@@ -40,10 +40,14 @@ void ClientHandler::start() {
 
 
 void ClientHandler::startSingleThreadedClient(Match& match) {
-    while(client_is_active) {
-       this->client_receiver.receiveInstructionAndPushToQueue();
-       match.checkAndNotifyUpdates();
-       this->client_sender.popFromQueueAndSendInstruction();
+    try {
+        while (true) {
+            this->client_receiver.receiveInstructionAndPushToQueue();
+            match.checkAndNotifyUpdates();
+            this->client_sender.popFromQueueAndSendInstruction();
+        }
+    } catch (...) {
+        
     }
 }
 
@@ -53,6 +57,9 @@ void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
         match.checkAndNotifyUpdates();
 }
 
+bool ClientHandler::isActive() {
+    return client_is_active;
+}
 
 void ClientHandler::join() {
     this->client_receiver.join();

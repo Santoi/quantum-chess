@@ -20,7 +20,8 @@ public:
     int receiveNumberOfChosenGame(Socket& socket);
     void getNickName(Socket& socket, std::string& nick_name);
     void fillInstructionsWithPacket(Socket& socket, const int& client_id, std::shared_ptr<Instruction>& instruct_ptr);
-    void sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr, const NickNamesRepository& nick_names);
+    void sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr,
+                               const NickNamesRepository& nick_names, const int& client_id);
     void fillPacketWithChatInfo(Packet& packet, const std::string& nick_name, const std::string& message);
     ~ServerProtocol() = default;
 

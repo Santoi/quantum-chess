@@ -26,18 +26,19 @@ protected:
 class ClientHandlersSender: public Thread {
 private:
     Socket& client_socket;
+    const int client_id;
     BlockingQueue& notifications_queue;
     const NickNamesRepository& nick_names;
 
 public:
     ClientHandlersSender() = delete;
     ClientHandlersSender(ClientHandlersSender&& otherSender, Socket& socket);
-    ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue, const NickNamesRepository& nick_names);
+    ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue, const int& client_id, const NickNamesRepository& nick_names);
     void popFromQueueAndSendInstruction();
     ~ClientHandlersSender() = default;
 
 protected:
-    void run();
+    void run() override;
 };
 
 

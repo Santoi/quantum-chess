@@ -41,7 +41,6 @@ void Match::addClientToMatchAndStart(Socket&& client_socket) {
     this->clients[client_id].startThreadedClientWithoutMatchThread(*this);
 }
 
-
 /*
 void Match::addClientToQueues(ClientHandler& client) {
     BlockingQueue new_listening_queue;
@@ -55,8 +54,8 @@ void Match::addClientToQueues(ClientHandler& client) {
 void Match::checkAndNotifyUpdates() {
     std::shared_ptr<Instruction> instruc_ptr;
     this->match_updates_queue.pop(instruc_ptr);
-    instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues); //maybe game
-    //and a chat as parameters?
+    instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues, this->clients);
+    //maybe game and a chat as parameters?
 }
 
 

@@ -8,7 +8,7 @@ ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue
                               updates_queue, const int& client_id, const NickNamesRepository& nick_names)
               :client_socket(std::move(socket)),
                client_receiver(client_socket, client_id, updates_queue),
-               client_sender(client_socket, notifications_queue, nick_names) {
+               client_sender(client_socket, notifications_queue, client_id, nick_names) {
 }
 
 
@@ -49,4 +49,10 @@ void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
     this->start();
     for (int i = 0; i < MAX_MESSAGES; i++)
         match.checkAndNotifyUpdates();
+}
+
+
+void ClientHandler::join() {
+    this->client_receiver.join();
+    this->client_sender.join();
 }

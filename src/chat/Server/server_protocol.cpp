@@ -52,9 +52,9 @@ void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& n
 }
 
 void ServerProtocol::sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr,
-                                           const NickNamesRepository& nick_names) {
+                                           const NickNamesRepository& nick_names, const int& client_id) {
     Packet packet;
-    instruct_ptr->fillPacketWithInstructionsToSend(*this, packet, nick_names);
+    instruct_ptr->fillPacketWithInstructionsToSend(*this, packet, nick_names, client_id);
     socket.send(packet);
 }
 

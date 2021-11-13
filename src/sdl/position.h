@@ -1,8 +1,13 @@
 #ifndef QUANTUM_CHESS_PROJ_POSITION_H
 #define QUANTUM_CHESS_PROJ_POSITION_H
 
+#include <SDL2pp/SDL2pp.hh>
 #include <cstdint>
 
+#define BOUND 7
+
+// Represents a tile position inside the board
+// Bottom right is (0, 0) and top left is (BOUND, BOUND)
 class Position {
 private:
   uint8_t x_ = 0;
@@ -28,6 +33,10 @@ public:
 
   // Return y coordinate.
   uint8_t y() const;
+
+  // Convert the given (x, y) coordinate into a position
+  // Return false if out of bounds
+  bool setCoordinate(SDL2pp::Renderer &renderer, int x, int y);
 
   bool isEven() const;
 };

@@ -17,11 +17,17 @@ public:
 
     void move(const Position & initial, const Position & final) override;
 
-    void calculatePosibleMoves(const Position &initial,
-                               std::vector<Position> &posible_moves)
+    void calculateMoves(const Position &initial,
+                        std::vector<Position> &posible_moves)
                                const override;
 
     ~Pawn() override = default;
+
+    virtual void calculatePosibleSplits(const Position &initial,
+                                        std::vector<Position> &posible_moves);
+
+    virtual void calculatePosibleMerges(const Position &initial,
+                                        std::vector<Position> &posible_moves);
 };
 
 

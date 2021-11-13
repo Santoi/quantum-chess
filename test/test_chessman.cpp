@@ -51,10 +51,12 @@ TEST(Chessman, MoveThenMove) {
 
 TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
     Board board;
-    Tower tower(Position(5, 1), true, board);
+    ChessmanContainer tower('T', Position(5, 1), true, board);
+    Chessman * chessman = tower.get();
+    board.addChessman(std::move(tower));
     std::vector<Position> posible_moves;
 
-    tower.calculatePosibleMoves(Position(5, 1), posible_moves);
+    chessman->calculatePosibleMoves(Position(5, 1), posible_moves);
 
     std::vector<Position> posible_moves_gt = {
             Position(5, 0), Position(5, 2),
@@ -264,6 +266,9 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
     Board board;
     ChessmanContainer container('K', Position(2, 1), true, board);
     Chessman * king = container.get();
+
+    board.addChessman(std::move(container));
+
     std::vector<Position> posible_moves;
 
     king->calculatePosibleMoves(Position(2, 1), posible_moves);
@@ -306,7 +311,7 @@ TEST(Knight, CalculatePosibleMovesSurrounded) {
 	board.addChessman(std::move(horse));
 	
 	std::vector<Position> posible_moves;
-	chessman->calculatePosibleMoves(Position(4, 4), posible_moves);
+    chessman->calculatePosibleMoves(Position(4, 4), posible_moves);
 	
 	EXPECT_EQ(posible_moves, posible_moves_gt);
 }
@@ -323,7 +328,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
 	};
 	
 	std::vector<Position> posible_moves;
-	chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+    chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
 	
 	EXPECT_EQ(posible_moves, posible_moves_gt);
 	
@@ -332,8 +337,8 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
 	posible_moves_gt = {
             Position(1, 4)
 	};
-	
-	chessman->calculatePosibleMoves(Position(1, 3), posible_moves);
+
+    chessman->calculatePosibleMoves(Position(1, 3), posible_moves);
 	
 	EXPECT_EQ(posible_moves, posible_moves_gt);
 }
@@ -357,7 +362,7 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCaptureButSameColor) {
 	};
 	
 	std::vector<Position> posible_moves;
-	chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+    chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
 	
 	EXPECT_EQ(posible_moves, posible_moves_gt);
 }		
@@ -382,7 +387,7 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
 	};
 	
 	std::vector<Position> posible_moves;
-	chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+    chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
 	
 	EXPECT_EQ(posible_moves, posible_moves_gt);
 }
@@ -574,9 +579,7 @@ TEST(Chessman, MergeOneSplitToPositionInTheSameLine) {
 
     chessman->split(Position(1, 1), Position(1, 2), Position(1, 3));
 
-    chessman->merge(Position(1,2), Position(1, 3), Position(1, 1));
-
-    EXPECT_EQ(chessman->getPosition(), QuantumPosition(1, 1, 1));
+    EXPECT_THROW(chessman->merge(Position(1,2), Position(1, 3), Position(1, 1)), ChessException);
 }
 
 TEST(Chessman, OneBadMergeToInvalidPosition){
@@ -955,7 +958,6 @@ TEST(Chessman, CantMergeAndEntangle){
                  ChessException);
 }
 
-// TODO modificar esto porque le falta entrelazamiento.
 TEST(Chessman, MoveWithOneQuantumFakeInTheMiddle){
     Board board(0);
     ChessmanContainer queen_cont('Q', Position(1, 1), true, board);

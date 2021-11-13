@@ -6,8 +6,8 @@
 Bishop::Bishop(const Position &position, bool white_, Board &board_):
                Chessman(position, white_, board_) {}
 
-void Bishop::calculatePosibleMoves(const Position &initial,
-                                   std::vector<Position> &posible_moves)
+void Bishop::calculateMoves(const Position &initial,
+                            std::vector<Position> &posible_moves)
                                    const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(14);
@@ -19,9 +19,7 @@ void Bishop::calculatePosibleMoves(const Position &initial,
          i < 8 && j < 8; i++, j++) {
         Position position = Position(i, j);
         if (initial != position) {
-            calculatePath(initial, position, path);
-            if (checkFreePath(path))
-                posible_moves.push_back(position);
+            posible_moves.push_back(position);
         }
     }
     // Se recorre para el otro lado
@@ -30,9 +28,7 @@ void Bishop::calculatePosibleMoves(const Position &initial,
          i >= 0 && j < 8; i--, j++) {
         Position position = Position(i, j);
         if (initial != position) {
-            calculatePath(initial, position, path);
-            if (checkFreePath(path))
-                posible_moves.push_back(position);
+            posible_moves.push_back(position);
         }
     }
 }

@@ -22,10 +22,23 @@ class QuantumPosition;
  * referencia al tablero al que pertenece y un booleano
  * que indica color. */
 class Chessman {
-    Chessman();
-
     friend class QuantumPosition;
 protected:
+    typedef enum {
+        OK,
+        CHESSMAN_NOT_IN_POSITION,
+        MOVING_TO_SQUARE_WITH_SAME_PIECE,
+        MEASURING_AND_ENTANGLING,
+        ENTANGLING_SAME_PIECE_TWO_TIMES,
+        MOVING_TO_SAME_SQUARE,
+        NON_FREE_PATH,
+        SPLIT_TO_OCCUPIED_SQUARE,
+        SPLITTING_AND_ENTANGLING,
+        SPLIT_LIMIT_REACHED,
+        MERGING_AND_ENTANGLING
+
+    } MoveValidationStatus;
+
     std::list<QuantumPosition> positions;
     Board & board;
     bool white;
@@ -60,12 +73,8 @@ protected:
                                Chessman *>  & chessman) const;
 
 	// Chequea que el camino sea transitable.
-    bool checkFreePath(const std::vector<Position> & path) const;
-
-	/* Chequea si el movimiento se puede realizar y carga un vector con las
-	 * piezas que hay en el trayecto de haberlos. */
-    void checkCanMoveOrFail(const Position & initial,
-                            const Position & final) const;
+    bool checkFreePath(const std::vector<Position> & path,
+                       std::pair<Position, Chessman *> & chessman_in_path) const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;
@@ -78,8 +87,8 @@ protected:
 
     void checkIsInBoardOrFail(const Position &position);
 
-    void entangle(const Position &position, Chessman &other,
-             const Position &other_position);
+    void entangle(const Position & initial, const Position & final,
+                  Chessman & other, const Position &other_position);
 
     void measureOthers(QuantumPosition & quantum_position);
 
@@ -92,8 +101,8 @@ public:
 	// Mueve la pieza desde una posicion a otra, valida el movimiento.
     virtual void move(const Position & initial, const Position & final);
 
-    void split(const Position &initial, const Position &position1,
-               const Position &position2);
+    void split(const Position &initial, const Position &final1,
+               const Position &final2);
 
     void merge(const Position &initial1, const Position &initial2,
                const Position &final);
@@ -105,8 +114,8 @@ public:
 	bool isWhite() const;
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
-    virtual void calculatePosibleMoves(const Position &initial,
-                                       std::vector<Position> &posible_moves)
+    virtual void calculateMoves(const Position &initial,
+                                std::vector<Position> &posible_moves)
                                        const = 0;
 	
     friend std::ostream & operator<<(std::ostream & os,
@@ -125,6 +134,25 @@ public:
 
     // TODO despues hacer privada.
     void measure(const Position &position);
+
+    MoveValidationStatus checkIsAValidMove(const Position &initial, const Position &final);
+
+    Chessman::MoveValidationStatus
+    checkIsAValidSplit(const Position &initial, const Position &final);
+
+    Chessman::MoveValidationStatus
+    checkIsAValidMerge(const Position &initial1, const Position &final);
+
+    void moveValidationExceptionThrower(MoveValidationStatus status);
+
+    virtual void calculatePosibleMoves(const Position &initial,
+                               std::vector<Position> &posible_moves);
+
+    virtual void calculatePosibleSplits(const Position &initial,
+                                std::vector<Position> &posible_moves);
+
+    virtual void calculatePosibleMerges(const Position &initial,
+                                std::vector<Position> &posible_moves);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

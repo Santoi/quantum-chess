@@ -22,6 +22,8 @@ public:
   void render();
 
   void moveTile(int x, int y);
+
+  void setDefault();
 };
 
 

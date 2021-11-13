@@ -20,5 +20,11 @@ void Board::render() {
 
 void Board::moveTile(int x, int y) {
   const Position pos(x, y);
-  board.at(pos).renderMove();
+  board.at(pos).loadMove();
+}
+
+void Board::setDefault() {
+  for (auto & it : board) {
+    it.second.loadDefault();
+  }
 }

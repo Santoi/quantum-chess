@@ -36,14 +36,18 @@ void Tile::render(int x_pos, int y_pos) {
   sprite.render(middle_board + x_pos, middle_board + y_pos, width, height);
 }
 
-void Tile::renderMove() {
+void Tile::loadDefault() {
+  sprite.loadImage(images[DEFAULT]);
+}
+
+void Tile::loadMove() {
   sprite.loadImage(images[MOVE]);
 }
 
-void Tile::renderEntangle() {
+void Tile::loadEntagle() {
   sprite.loadImage(images[ENTANGLE]);
 }
 
-void Tile::renderSplit() {
+void Tile::loadSplit() {
   sprite.loadImage(images[SPLIT]);
 }

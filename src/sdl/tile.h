@@ -21,9 +21,10 @@ public:
   Tile(Tile &&other) noexcept;
 //  Tile& operator=(Tile &other);
   void render(int x, int y);
-  void renderMove();
-  void renderEntangle();
-  void renderSplit();
+  void loadDefault();
+  void loadMove();
+  void loadEntagle();
+  void loadSplit();
 };
 
 

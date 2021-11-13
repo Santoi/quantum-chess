@@ -1,12 +1,17 @@
 #include "thread.h"
 
-Thread::Thread(Thread&& otherThread)
-        :thread(std::move(otherThread.thread)){
+Thread::Thread()
+        :has_active_thread(false) {
+}
+
+Thread::Thread(Thread&& other_thread)
+        :thread(std::move(other_thread.thread)), has_active_thread(other_thread.has_active_thread){
 }
 
 
 void Thread::start() {
     this->thread = std::thread(&Thread::runCatchingExceptions, this);
+    this->has_active_thread = true;
 }
 
 void Thread::join() {

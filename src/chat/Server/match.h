@@ -19,16 +19,20 @@ private:
     NickNamesRepository nick_names;
     std::list<BlockingQueue> listening_queues;
     ThreadSafeQueue match_updates_queue;
+    bool has_active_thread;
 
 public:
     Match();
     Match(Match&& other_match);
+    //Match& operator=(Match&& other_match);
+    //Match& operator=(const Match& other_match);
     void addSingleThreadedClientToMatchAndStart(Socket&& client_socket);
     void addClientToMatchAndStart(Socket&& client_socket);
     //void addClientToMatchAndBeginExcecution(Socket&& client_socket);
     //void addClientToQueues(ClientHandler& client);
     void checkAndNotifyUpdates();
-    bool isActive();
+    bool isJoinable();
+    bool isActive() const;
     ~Match();
 
 protected:

@@ -1,5 +1,6 @@
 #include "matches_repository.h"
 #include "server_protocol.h"
+#include <algorithm>
 
 MatchesRepository::MatchesRepository()
                     :active_matches(0) {
@@ -20,7 +21,7 @@ int MatchesRepository::getClientChosenMatch(Socket& client_socket, bool threaded
     ServerProtocol protocol;
     protocol.sendNumberOfGamesRunning(client_socket, this->active_matches);
     int match_number = protocol.receiveNumberOfChosenGame(client_socket);
-    if (match_number <= this->active_matches)
+    if (match_number == this->active_matches)
         this->createNewMatch(threaded_match);
     return match_number;
 }
@@ -47,16 +48,19 @@ bool MatchesRepository::thereAreActiveMatches() {
     return false;
 }
 
+bool isInactive(const Match& match) {
+    return (!match.isActive());
+}
 
 void MatchesRepository::deleteInactiveMatchesFromList() {
-
+    //this->matches.erase(std::remove_if(matches.begin(), matches.end(), isInactive), matches.end());
 }
 
 
 void MatchesRepository::joinInactiveMatches() {
     std::vector<Match>::iterator it;
     for (it = this->matches.begin(); it != this->matches.end(); it++){
-        if (!(it->isActive()))
+        if (it->isJoinable())
             it->join();
     }
     this->deleteInactiveMatchesFromList();
@@ -67,15 +71,5 @@ void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool
     Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number, threaded_match);
     matches[match_number].addClientToMatchAndStart(std::move(client_socket));
 }
-
-
-/*
-void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket) {
-    Socket client_socket;
-    this->addClientToAMatch(acceptor_socket, client_socket);
-    matches[match_number].addClientToMatchAndStartItsThread(std::move(client_socket));
-
-    //it->startSingleThreadedClient(matches[match_number]);
-}*/
 
 

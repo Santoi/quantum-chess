@@ -26,6 +26,7 @@ public:
     ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue,
                     const int& client_id, const NickNamesRepository& nick_names);
     ClientHandler(ClientHandler&& other_client);
+    //ClientHandler& operator=(ClientHandler&& other_client);
     void saveIdAndAskForName(int id);
     int chooseGame(const int& max_games);
     void getClientsNickName(std::string& nick_name);
@@ -33,7 +34,7 @@ public:
     void startSingleThreadedClient(Match& match);
     void startThreadedClientWithoutMatchThread(Match& match);
     void join();
-    bool isActive();
+    bool isActive() const;
     ~ClientHandler() = default;
 
 };

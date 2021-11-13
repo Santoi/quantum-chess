@@ -2,7 +2,7 @@
 #include "matches_repository.h"
 #include <iostream>
 
-#define MAX_CLIENTS 5
+#define MAX_CLIENTS 3
 
 Server::Server(const char* host, const char* service)
         :acceptor_socket(std::move(Socket::createAListeningSocket(host, service))) {

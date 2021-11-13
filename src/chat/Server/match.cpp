@@ -5,6 +5,20 @@
 Match::Match()
         :accepted_clients(0) {
 }
+//Match& Match::operator=(Match&& other_match) {
+    /*this->accepted_clients = other_match.accepted_clients;
+    this->clients = std::move(other_match.clients);
+    this->listening_queues = std::move(other_match.listening_queues);
+    this->match_updates_queue = std::move(other_match.match_updates_queue);
+    return *this;*/
+  //  this
+//}
+
+
+/*
+Match& Match::operator=(const Match& other_match) {
+
+}*/
 
 Match::Match(Match&& other_match)
        :accepted_clients(other_match.accepted_clients), clients(std::move(other_match.clients)),
@@ -63,8 +77,15 @@ void Match::run() {
         checkAndNotifyUpdates();
 }
 
-bool Match::isActive() {
-    std::vector<ClientHandler>::iterator it;
+bool Match::isJoinable() {
+    if (!this->has_active_thread) //Match is not an alive object
+        return false;
+    return !(this->isActive()); //If it is active then match is not joinable. If its not, then match
+                                //is joinable
+}
+
+bool Match::isActive() const {
+    std::vector<ClientHandler>::const_iterator it;
     for (it = this->clients.begin(); it != this->clients.end(); it++) {
         if (it->isActive())
             return true;

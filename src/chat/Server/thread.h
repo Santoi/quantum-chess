@@ -8,10 +8,11 @@
 class Thread {
 private:
     std::thread thread;
+    bool has_active_thread;
 
 public:
-    Thread() = default;
-    Thread(Thread&& otherThread);
+    Thread();
+    Thread(Thread&& other_thread);
     void start();
     void join();
     void runCatchingExceptions();

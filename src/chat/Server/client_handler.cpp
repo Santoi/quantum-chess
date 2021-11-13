@@ -19,6 +19,12 @@ ClientHandler::ClientHandler(ClientHandler&& other_client)
                  client_sender(std::move(other_client.client_sender), client_socket),
                  client_is_active(true) {
 }
+/*
+ClientHandler& ClientHandler::operator=(ClientHandler&& other_client) {
+    this->client_socket = std::move(other_client.socket);
+
+}*/
+
 
 
 int ClientHandler::chooseGame(const int& max_games) {
@@ -47,7 +53,7 @@ void ClientHandler::startSingleThreadedClient(Match& match) {
             this->client_sender.popFromQueueAndSendInstruction();
         }
     } catch (...) {
-        
+
     }
 }
 
@@ -57,7 +63,7 @@ void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
         match.checkAndNotifyUpdates();
 }
 
-bool ClientHandler::isActive() {
+bool ClientHandler::isActive() const {
     return client_is_active;
 }
 

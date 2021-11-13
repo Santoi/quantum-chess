@@ -22,8 +22,12 @@ void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
 }
 
 void ClientHandlersReceiver::run() {
-    while (true)
-        this->receiveInstructionAndPushToQueue();
+    try{
+        while (true)
+            this->receiveInstructionAndPushToQueue();
+    } catch (const SocketClosed& error) {
+        std::cerr << error.what() << std::endl;
+    }
 }
 
 ClientHandlersSender::ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue,

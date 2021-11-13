@@ -19,9 +19,11 @@ class QuantumPosition {
     Chessman * chessman;
 
 public:
-    QuantumPosition(const Position & position_, double prob_, Chessman * chessman_ = nullptr);
+    QuantumPosition(const Position & position_, double prob_,
+                    Chessman * chessman_ = nullptr);
 
-    QuantumPosition(uint8_t x, uint8_t y, double prob_, Chessman *chessman_ = nullptr);
+    QuantumPosition(uint8_t x, uint8_t y, double prob_,
+                    Chessman *chessman_ = nullptr);
 
     QuantumPosition(const Position &position_, double prob_,
                     std::list<QuantumPosition *> && list, Chessman *chessman_);
@@ -56,20 +58,15 @@ public:
 
     void deleteMeFromEntangled();
 
-    void deleteMeFromChessman();
-
     void deleteMeFromEntangled(QuantumPosition & other);
 
-    const Chessman *getChessman();
-
-    void
-    ifEntangledNotEntangledWithOtherThenUnEntangle(const QuantumPosition & other);
+    void ifNotInOtherUnentangle(const QuantumPosition & other);
 
     bool isEntangled(const QuantumPosition &other);
 
     void measure();
 
-    bool isThisChessman(const Chessman & chessman__);
+    bool isMyChessman(const Chessman * chessman_);
 };
 
 

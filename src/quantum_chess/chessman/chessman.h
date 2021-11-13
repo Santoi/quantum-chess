@@ -2,6 +2,8 @@
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
 #include <vector>
+#include <list>
+#include <utility>
 #include <string>
 #include "../position.h"
 #include "../board.h"
@@ -10,8 +12,6 @@
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
 #define GREEN   "\033[32m"
-
-// TODO CHEQUEAR SI TODOS LOS QUE ESTAN EN EL MEDIO SUMAN 100 % PROBA.
 
 class Board;
 class ChessmanContainer;
@@ -56,34 +56,34 @@ protected:
      * en el trayecto. Guarda en el puntero la pieza. No chequea ni la primer
      * ni ultima posicion. */
     bool getMiddlePathChessman(const std::vector<Position> &path,
-                               std::pair<Position, Chessman *>  & chessman) const;
+                               std::pair<Position,
+                               Chessman *>  & chessman) const;
 
 	// Chequea que el camino sea transitable.
     bool checkFreePath(const std::vector<Position> & path) const;
 
 	/* Chequea si el movimiento se puede realizar y carga un vector con las
 	 * piezas que hay en el trayecto de haberlos. */
-    void checkCanMoveOrFail(const Position & initial, const Position & final) const;
+    void checkCanMoveOrFail(const Position & initial,
+                            const Position & final) const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;
 
     std::list<QuantumPosition *>
-    searchEntangledWithAllPositionsExceptWith(QuantumPosition &filtered_qp);
+    searchEntangledWithAllPositionsExceptWith(const QuantumPosition &
+                                              filtered_qp);
 
-    bool chessmanIsAlreadyEntangled(Chessman *chessman);
+    bool chessmanIsAlreadyEntangled(Chessman * chessman);
 
     void checkIsInBoardOrFail(const Position &position);
 
-    void
-    entangle(const Position &position, Chessman &other, const Position &other_position);
+    void entangle(const Position &position, Chessman &other,
+             const Position &other_position);
 
     void measureOthers(QuantumPosition & quantum_position);
 
     bool entangledPositionAppearsMoreThanOnce(QuantumPosition * position);
-
-    // Devuelve todas las posiciones de la pieza.
-    std::list<QuantumPosition> & getAllPositions();
 
 public:
 	// Constructor, se le pasa posicion, color y referencia al tablero.

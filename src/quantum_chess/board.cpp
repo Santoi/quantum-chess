@@ -2,6 +2,7 @@
 #include "chessman/chessman_container.h"
 #include "chess_exception.h"
 #include <utility>
+#include <algorithm>
 
 Board::Board(): chessmen(), board(), next_white(true), coin() {}
 
@@ -53,7 +54,8 @@ void Board::split(const Position & initial, const Position & pos1,
 
 void Board::merge(const Position & initial1, const Position & initial2,
                   const Position & final){
-    Chessman * chessman_1 = getChessmanAt(initial1), * chessman_2 = getChessmanAt(initial2);
+    Chessman * chessman_1 = getChessmanAt(initial1),
+             * chessman_2 = getChessmanAt(initial2);
     if (!chessman_1)
         throw ChessException("no hay ninguna pieza alli");
     if (!chessman_2)
@@ -112,11 +114,9 @@ bool Board::isNextWhite() const{
 }
 
 bool Board::isThere(Chessman * chessman) {
-    for (auto & it : board) {
-        if (it.second == chessman)
-            return true;
-    }
-    return false;
+    return std::any_of(board.begin(), board.end(),
+                       [&] (std::pair<const Position, Chessman *> pair) {
+                                    return pair.second == chessman; });
 }
 
 void Board::load() {

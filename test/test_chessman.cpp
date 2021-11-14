@@ -1498,6 +1498,111 @@ TEST(Pawn, PawnCannotSplitMergeNorEntangle) {
     EXPECT_THROW(pawn->move(Position(5, 0), Position(5, 2)), ChessException);
 }
 
-// TODO ver que hacer cuando mergeas algo que tenia algo enlazado.
+TEST(Chessman, calculatePosibleSplitsWithEmptyBoardAndEnemy){
+    Board board;
+    ChessmanContainer tower_cont('T', Position(5, 1), true, board);
+    ChessmanContainer queen_cont('Q', Position(5, 7), false, board);
+    Chessman * tower = tower_cont.get(), * queen = queen_cont.get();
+    board.addChessman(std::move(tower_cont));
+    std::vector<Position> posible_splits;
 
+    tower->calculatePosibleSplits(Position(5, 1), posible_splits);
+
+    std::vector<Position> posible_splits_gt = {
+            Position(5, 0), Position(5, 2),
+            Position(5, 3), Position(5, 4),
+            Position(5, 5), Position(5, 6),
+            Position(5, 7), Position(0, 1),
+            Position(1, 1), Position(2, 1),
+            Position(3, 1), Position(4, 1),
+            Position(6, 1), Position(7, 1),
+    };
+
+    EXPECT_EQ(posible_splits, posible_splits_gt);
+
+    board.addChessman(std::move(queen_cont));
+    tower->calculatePosibleSplits(Position(5, 1), posible_splits);
+
+    posible_splits_gt = {
+            Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
+            Position(5, 5), Position(5, 6), Position(0, 1), Position(1, 1),
+            Position(2, 1), Position(3, 1), Position(4, 1), Position(6, 1),
+            Position(7, 1),
+    };
+
+    EXPECT_EQ(posible_splits, posible_splits_gt);
+}
+
+TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndEnemy){
+    Board board;
+    ChessmanContainer tower_cont('T', Position(5, 1), true, board);
+    ChessmanContainer queen_cont('Q', Position(5, 7), false, board);
+    Chessman * tower = tower_cont.get(), * queen = queen_cont.get();
+    board.addChessman(std::move(tower_cont));
+    std::vector<Position> posible_merges;
+
+    tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+
+    std::vector<Position> posible_merges_gt = {
+            Position(5, 0), Position(5, 2),
+            Position(5, 3), Position(5, 4),
+            Position(5, 5), Position(5, 6),
+            Position(5, 7), Position(0, 1),
+            Position(1, 1), Position(2, 1),
+            Position(3, 1), Position(4, 1),
+            Position(6, 1), Position(7, 1), Position(5, 1)
+    };
+
+    EXPECT_EQ(posible_merges, posible_merges_gt);
+
+    board.addChessman(std::move(queen_cont));
+    tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+
+    posible_merges_gt = {
+            Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
+            Position(5, 5), Position(5, 6), Position(0, 1), Position(1, 1),
+            Position(2, 1), Position(3, 1), Position(4, 1), Position(6, 1),
+            Position(7, 1), Position(5, 1)
+    };
+
+    EXPECT_EQ(posible_merges, posible_merges_gt);
+}
+
+TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndAlly) {
+    Board board;
+    ChessmanContainer tower_cont('T', Position(5, 1), true, board);
+    ChessmanContainer queen_cont('Q', Position(5, 7), true, board);
+    Chessman *tower = tower_cont.get(), *queen = queen_cont.get();
+    board.addChessman(std::move(tower_cont));
+    std::vector<Position> posible_merges;
+
+    tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+
+    std::vector<Position> posible_merges_gt = {
+            Position(5, 0), Position(5, 2),
+            Position(5, 3), Position(5, 4),
+            Position(5, 5), Position(5, 6),
+            Position(5, 7), Position(0, 1),
+            Position(1, 1), Position(2, 1),
+            Position(3, 1), Position(4, 1),
+            Position(6, 1), Position(7, 1), Position(5, 1)
+    };
+
+    EXPECT_EQ(posible_merges, posible_merges_gt);
+
+    board.addChessman(std::move(queen_cont));
+    tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+
+    posible_merges_gt = {
+            Position(5, 0), Position(5, 2),
+            Position(5, 3), Position(5, 4),
+            Position(5, 5), Position(5, 6),
+            Position(5, 7), Position(0, 1),
+            Position(1, 1), Position(2, 1),
+            Position(3, 1), Position(4, 1),
+            Position(6, 1), Position(7, 1), Position(5, 1)
+    };
+
+    EXPECT_EQ(posible_merges, posible_merges_gt);
+}
 

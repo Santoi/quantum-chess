@@ -75,9 +75,8 @@ protected:
                                Chessman *>  & chessman) const;
 
 	// Chequea que el camino sea transitable.
-    bool checkFreePath(const std::vector<Position> & path,
-                       std::pair<Position, Chessman *> & chessman_in_path)
-                       const;
+    bool checkFreePath(const std::vector<Position> &path, std::pair<Position,
+            Chessman *> &chessman_in_path, bool final_same_color_free) const;
 
 	// Metodo que devuelve la letra que representa a la pieza.
     virtual std::string print() const = 0;

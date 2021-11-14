@@ -11,13 +11,20 @@ void Tower::calculateMoves(const Position & initial,
                                   const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(14);
+    Position position;
     // Se chequea la columna.
-    for (uint8_t i = 0; i < 8; i++)
-        posible_moves.push_back(Position(initial.x(), i));
+    for (uint8_t i = 0; i < 8; i++) {
+        position = Position(initial.x(), i);
+        if (position != initial)
+            posible_moves.push_back(position);
+    }
 
     // Se chequea la fila.
-    for (uint8_t i = 0; i < 8; i++)
-        posible_moves.push_back(Position(i, initial.y()));
+    for (uint8_t i = 0; i < 8; i++) {
+        position = Position(i, initial.y());
+        if (position != initial)
+            posible_moves.push_back(position);
+    }
 }
 
 std::string Tower::print() const {

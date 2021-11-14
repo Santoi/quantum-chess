@@ -16,8 +16,6 @@
  // TODO Hacer measure privada, cambiando los test o ver que puedo hacer
  //  con test para que la vean
 
- // TODO testear posiblemerge y splits (con un caso al menos).
-
  // TODO HACER POSIBLE MOVES LIST!!!
 
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
@@ -84,7 +82,7 @@ void Chessman::split(const Position &initial, const Position &final1,
         throw ChessException("that chessman cant do that split");
     moveValidationExceptionThrower(checkIsAValidSplit(initial, final1));
     final_it = std::find(posible_moves.begin(), posible_moves.end(),
-                              final1);
+                              final2);
     if (final_it == posible_moves.end())
         throw ChessException("that chessman cant do that split");
     moveValidationExceptionThrower(checkIsAValidSplit(initial, final2));
@@ -119,14 +117,17 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
                      const Position &final) {
     std::vector<Position> posible_moves;
     calculateMoves(initial1, posible_moves);
+    posible_moves.push_back(initial1);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                               final);
     if (final_it == posible_moves.end())
         throw ChessException("that chessman cant do that merge");
     moveValidationExceptionThrower(checkIsAValidMerge(initial1, final));
 
+    calculateMoves(initial2, posible_moves);
+    posible_moves.push_back(initial2);
     final_it = std::find(posible_moves.begin(), posible_moves.end(),
-                         final);
+                              final);
     if (final_it == posible_moves.end())
         throw ChessException("that chessman cant do that merge");
     moveValidationExceptionThrower(checkIsAValidMerge(initial2, final));
@@ -277,9 +278,6 @@ Chessman::checkIsAValidMove(const Position & initial, const Position & final) {
                   initial) == positions.end())
         return CHESSMAN_NOT_IN_POSITION;
 
-    if (initial == final)
-        return MOVING_TO_SAME_SQUARE;
-
     if (this == board.getChessmanAt(final))
         return MOVING_TO_SQUARE_WITH_SAME_PIECE;
     Chessman * final_chessman = board.getChessmanAt(final);
@@ -288,7 +286,7 @@ Chessman::checkIsAValidMove(const Position & initial, const Position & final) {
     std::pair<Position, Chessman *> chessman_in_path;
     calculatePath(initial, final, path);
 
-    if (!checkFreePath(path, chessman_in_path))
+    if (!checkFreePath(path, chessman_in_path, false))
         return NON_FREE_PATH;
 
     getMiddlePathChessman(path, chessman_in_path);
@@ -310,15 +308,15 @@ Chessman::checkIsAValidSplit(const Position &initial, const Position &final) {
                   initial) == positions.end())
         return CHESSMAN_NOT_IN_POSITION;
 
-    if (initial == final)
-        return MOVING_TO_SAME_SQUARE;
-
     std::vector<Position> path;
     std::pair<Position, Chessman *> chessman_in_path;
 
     calculatePath(initial, final, path);
-    if (!checkFreePath(path, chessman_in_path))
+    if (!checkFreePath(path, chessman_in_path, false))
         return NON_FREE_PATH;
+
+    if (board.getChessmanAt(final) == this)
+        board.removeChessmanOf(final);
 
     if (board.getChessmanAt(final))
         return SPLIT_TO_OCCUPIED_SQUARE;
@@ -345,7 +343,7 @@ Chessman::checkIsAValidMerge(const Position &initial1, const Position &final) {
 
     if (initial1 != final) {
         calculatePath(initial1, final, path);
-        if (!checkFreePath(path, chessman_in_path))
+        if (!checkFreePath(path, chessman_in_path, true))
             return NON_FREE_PATH;
     }
 
@@ -396,13 +394,15 @@ void Chessman::calculatePosibleMerges(const Position & initial,
     }
 }
 
-bool Chessman::checkFreePath(const std::vector<Position> & path,
-                             std::pair<Position,
-                             Chessman *> & chessman_in_path) const {
+bool
+Chessman::checkFreePath(const std::vector<Position> &path,
+                        std::pair<Position, Chessman *> &chessman_in_path,
+                        bool final_same_color_free) const {
     bool middle_path_free = getMiddlePathChessman(path, chessman_in_path);
     bool final_free = true;
     if (auto chessman = board.getChessmanAt(path.back())) {
-        if (chessman->white == white && !chessman->isQuantum())
+        if (((chessman->white == white) ^ final_same_color_free)
+            && !chessman->isQuantum())
             final_free = false;
     }
     return middle_path_free && final_free;

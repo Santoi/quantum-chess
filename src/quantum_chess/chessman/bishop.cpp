@@ -11,18 +11,23 @@ void Bishop::calculateMoves(const Position &initial,
                                    const {
     posible_moves = std::vector<Position>();
     posible_moves.reserve(14);
+    Position position;
 
     // Primero se recorre la diagonal hacia la derecha.
     int8_t min = std::min(initial.x(), initial.y());
     for (int8_t i = initial.x() - min, j = initial.y() - min;
          i < 8 && j < 8; i++, j++) {
-        posible_moves.push_back(Position(i, j));
+        position = Position(i, j);
+        if (position != initial)
+            posible_moves.push_back(position);
     }
     // Se recorre para el otro lado
     min = std::min(7 - initial.x(), (int) initial.y());
     for (int8_t i = initial.x() + min, j = initial.y() - min;
          i >= 0 && j < 8; i--, j++) {
-        posible_moves.push_back(Position(i, j));
+        position = Position(i, j);
+        if (position != initial)
+            posible_moves.push_back(position);
     }
 }
 

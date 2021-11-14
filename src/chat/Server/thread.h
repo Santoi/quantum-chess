@@ -15,6 +15,7 @@ public:
     Thread(Thread&& other_thread);
     void start();
     void join();
+    bool isJoinable();
     void runCatchingExceptions();
     virtual ~Thread();
 

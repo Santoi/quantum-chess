@@ -18,6 +18,11 @@ void Thread::join() {
     this->thread.join();
 }
 
+bool Thread::isJoinable() {
+    return this->has_active_thread;
+}
+
+
 void Thread::runCatchingExceptions() {
     try {
         this->run();

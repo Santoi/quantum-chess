@@ -28,11 +28,11 @@ void Server::executeSingleThreadedServer(int type_of_single_thread) {
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptSingleThreadedClientAndAddToAMatch(this->acceptor_socket);
     }
-    if (type_of_single_thread == 2) {
+    else if (type_of_single_thread == 2) {
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptClientAndAddToAMatch(this->acceptor_socket, false);
     }
-    if (type_of_single_thread == 3) {
+    else if (type_of_single_thread == 3) {
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptClientAndAddToAMatch(this->acceptor_socket, true);
     }

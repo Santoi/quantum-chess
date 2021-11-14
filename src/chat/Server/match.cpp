@@ -5,20 +5,6 @@
 Match::Match()
         :accepted_clients(0) {
 }
-//Match& Match::operator=(Match&& other_match) {
-    /*this->accepted_clients = other_match.accepted_clients;
-    this->clients = std::move(other_match.clients);
-    this->listening_queues = std::move(other_match.listening_queues);
-    this->match_updates_queue = std::move(other_match.match_updates_queue);
-    return *this;*/
-  //  this
-//}
-
-
-/*
-Match& Match::operator=(const Match& other_match) {
-
-}*/
 
 Match::Match(Match&& other_match)
        :accepted_clients(other_match.accepted_clients), clients(std::move(other_match.clients)),

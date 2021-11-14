@@ -6,6 +6,7 @@
 #include "thread_safe_queue.h"
 #include "blocking_queue.h"
 
+
 class ClientHandlersReceiver: public Thread {
 private:
     Socket& client_socket;
@@ -17,10 +18,14 @@ public:
     ClientHandlersReceiver(ClientHandlersReceiver&& otherReceiver, Socket& socket);
     ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue& updates_queue);
     void receiveInstructionAndPushToQueue();
+    void pushToQueueExitInstruction();
     ~ClientHandlersReceiver() = default;
 
 protected:
     void run() override;
+
+private:
+    void popFromQueueAndSendInstruction();
 };
 
 class ClientHandlersSender: public Thread {

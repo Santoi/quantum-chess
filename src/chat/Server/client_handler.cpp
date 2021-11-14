@@ -1,8 +1,8 @@
 #include "client_handler.h"
 #include "common_packet.h"
 #include "instructions.h"
+#include "common_socket_closed.h"
 
-#define MAX_MESSAGES 10
 
 ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue&
                               updates_queue, const int& client_id, const NickNamesRepository& nick_names)
@@ -17,7 +17,7 @@ ClientHandler::ClientHandler(ClientHandler&& other_client)
                 :client_socket(std::move(other_client.client_socket)),
                  client_receiver(std::move(other_client.client_receiver), client_socket),
                  client_sender(std::move(other_client.client_sender), client_socket),
-                 client_is_active(true) {
+                 client_is_active(other_client.client_is_active) {
 }
 
 
@@ -46,8 +46,15 @@ void ClientHandler::startSingleThreadedClient(Match& match) {
             match.checkAndNotifyUpdates();
             this->client_sender.popFromQueueAndSendInstruction();
         }
+    } catch (const SocketClosed& error) {
+        this->client_receiver.pushToQueueExitInstruction();
+        match.checkAndNotifyUpdates();
+        try {
+            this->client_sender.popFromQueueAndSendInstruction();
+        } catch (...) {
+            this->client_is_active = false;
+        }
     } catch (...) {
-
     }
 }
 
@@ -62,7 +69,9 @@ bool ClientHandler::isActive() const {
 }
 
 void ClientHandler::join() {
-    this->client_receiver.join();
-    this->client_sender.join();
+    if (this->client_receiver.isJoinable())
+        this->client_receiver.join();
+    if (this->client_sender.isJoinable())
+        this->client_sender.join();
     client_is_active = false;
 }

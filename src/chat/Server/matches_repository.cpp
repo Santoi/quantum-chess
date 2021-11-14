@@ -8,9 +8,7 @@ MatchesRepository::MatchesRepository()
 }
 
 void MatchesRepository::createNewMatch(bool threaded_match) {
-    //create new game
     std::unique_ptr<Match> new_match_ptr = make_unique<Match>();
-    //add to vector of match
     this->ptr_matches.push_back(std::move(new_match_ptr));
     if (threaded_match)
         new_match_ptr->start();
@@ -40,29 +38,29 @@ void MatchesRepository::acceptSingleThreadedClientAndAddToAMatch(Socket& accepto
 }
 
 bool MatchesRepository::thereAreActiveMatches() {
-    //std::vector<Match>::iterator it;
-    //for (it = this->matches.begin(); it != this->matches.end(); it++){
-    //    if (it->isActive())
-    //        return true;
-    //}
+    std::vector<std::unique_ptr<Match>>::iterator it;
+    for (it = this->ptr_matches.begin(); it != this->ptr_matches.end(); it++){
+        if ((*it)->isActive())
+            return true;
+    }
     return false;
 }
 
-bool isInactive(const Match& match) {
-    return (!match.isActive());
+bool isInactive(const std::unique_ptr<Match>& match_ptr) {
+    return (!match_ptr->isActive());
 }
 
 void MatchesRepository::deleteInactiveMatchesFromList() {
-    //this->matches.erase(std::remove_if(matches.begin(), matches.end(), isInactive), matches.end());
+    this->ptr_matches.erase(std::remove_if(ptr_matches.begin(), ptr_matches.end(), isInactive), ptr_matches.end());
 }
 
 
 void MatchesRepository::joinInactiveMatches() {
-  //  std::vector<Match>::iterator it;
-    //for (it = this->matches.begin(); it != this->matches.end(); it++){
-    //    if (it->isJoinable())
-     //       it->join();
-    //}
+    std::vector<std::unique_ptr<Match>>::iterator it;
+    for (it = this->ptr_matches.begin(); it != this->ptr_matches.end(); it++){
+        if ((*it)->isJoinable())
+            (*it)->join();
+    }
     this->deleteInactiveMatchesFromList();
 }
 

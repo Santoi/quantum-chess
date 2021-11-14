@@ -21,14 +21,19 @@ void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
     this->updates_queue.push(ptr_instruction);
 }
 
+void ClientHandlersReceiver::pushToQueueExitInstruction() {
+    std::shared_ptr <Instruction> exit_instruction = std::make_shared<ExitInstruction>(this->client_id);
+    this->updates_queue.push(exit_instruction);
+}
+
 void ClientHandlersReceiver::run() {
     try{
         while (true)
             this->receiveInstructionAndPushToQueue();
     } catch (const SocketClosed& error) {
         std::cerr << error.what() << std::endl;
-        std::shared_ptr <Instruction> exit_instruction = std::make_shared<ExitInstruction>(this->client_id);
-        this->updates_queue.push(exit_instruction);
+        this->pushToQueueExitInstruction();
+    } catch (...) {
     }
 }
 

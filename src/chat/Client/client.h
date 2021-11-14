@@ -1,14 +1,14 @@
 #ifndef QUANTUM_CHESS_PROJ_CLIENT_H
 #define QUANTUM_CHESS_PROJ_CLIENT_H
 
-#include "client_protocol.h"
+#include "remote_clients_threads.h"
 #include "common_socket.h"
 #include <string>
 
 class Client {
 private:
     Socket client_socket;
-    ClientProtocol protocol;
+    RemoteClientSender remote_sender;
     std::string clients_nick_name;
 public:
     Client() = delete;
@@ -37,7 +37,7 @@ private:
 
     void setUpClientsDataInServer();
 
-    void welcomeClientAndAskForNickName(std::string& nick_name);
+    void welcomeClientAndAskForNickName();
 
     void associateClientWithARunningMatch();
 

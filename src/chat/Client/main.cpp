@@ -4,9 +4,8 @@
 
 int main(int argc, char* argv[]) {
    bool single_threaded_client = false;
-    if (argc == 4) {
+    if (argc == 4)
        single_threaded_client = true;
-   }
     try {
         Client client(argv[1], argv[2]);
         client.execute(single_threaded_client);

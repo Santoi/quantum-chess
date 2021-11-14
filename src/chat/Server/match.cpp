@@ -56,7 +56,7 @@ void Match::checkAndNotifyUpdates() {
 }
 
 void Match::run() {
-    for (int i = 0; i < 10; i++)
+    while (true)
         checkAndNotifyUpdates();
 }
 

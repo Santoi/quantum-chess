@@ -48,21 +48,24 @@ ExitInstruction::ExitInstruction(const int& client_id)
 
 void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
                                                             std::vector<ClientHandler>& clients) {
+    if (this->instructor_id == MATCH_ID)
+        throw std::runtime_error("");
     //Just notify existing queues that the player left the game
     std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ExitInstruction>(this->instructor_id);
     std::list<BlockingQueue>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)
         (*it).push(this_instruc_ptr);
-    if (this->instructor_id != MATCH_ID)
-       clients[this->instructor_id].join();
+    //if (this->instructor_id != MATCH_ID)
+    clients[this->instructor_id].join();
 }
 
 void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
                                                        const NickNamesRepository& nick_names,
                                                        const int& client_receiver_id) {
-    if (this->instructor_id == client_receiver_id || this->instructor_id == MATCH_ID)
+   // if (this->instructor_id == client_receiver_id || this->instructor_id == MATCH_ID)
+     //   throw std::runtime_error("");
+    if (this->instructor_id == client_receiver_id)
         throw std::runtime_error("");
-
 }
 /*
 void MovementInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues) {

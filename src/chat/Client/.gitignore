@@ -1,5 +1,5 @@
 *.zip
-cin
+cin*
 *.txt
 *.o
 *.o-tsan

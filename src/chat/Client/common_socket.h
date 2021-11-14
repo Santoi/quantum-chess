@@ -35,6 +35,8 @@ public:
     //Se hace un shutdown y close sobre el socket servidor.
     void stopAccepting();
 
+    void stopCommunication();
+
     size_t send(Packet & packet) const;
 
     size_t receive(Packet & packet, size_t size) const;

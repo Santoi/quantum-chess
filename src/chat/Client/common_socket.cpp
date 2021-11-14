@@ -246,6 +246,10 @@ void Socket::stopAccepting() {
     this->fd = INVALID_FILE_DESCRIPTOR;
 }
 
+void Socket::stopCommunication() {
+    this->stopAccepting();
+}
+
 Socket::~Socket() {
     if (this->fd != INVALID_FILE_DESCRIPTOR)
         this->shutdownYCerrar();

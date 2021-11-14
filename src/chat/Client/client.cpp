@@ -15,7 +15,7 @@ void Client::readFromStandardInput(std::string& message) {
 void Client::makeAction(const std::string& message) {
     if (message == "exit") {
         std::cout<< "exiting" <<std::endl;
-        this->is_active = false;
+        this->client_socket.stopCommunication();
     } else {
         this->protocol.sendChatMessage(this->client_socket, message);
     }
@@ -29,8 +29,8 @@ void Client::readFromStandardInputAndMakeAction() {
 }
 
 void Client::receiveMessage() {
-    if (!this->is_active)
-        return;
+    //if (!this->is_active)
+    //    return;
     std::string nick_name;
     std::string message;
     this->protocol.receiveInstruction(this->client_socket, nick_name, message);
@@ -80,7 +80,7 @@ void Client::setUpClientsDataInServer() {
 
 void Client::execute() {
     this->setUpClientsDataInServer();
-    while (this->is_active) {
+    while (true) {
         this->readFromStandardInputAndMakeAction();
         this->receiveMessage();
     }

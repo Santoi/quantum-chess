@@ -23,6 +23,19 @@ private:
     void makeAction(const std::string& message);
 };
 
+class RemoteClientReceiver: public Thread {
+private:
+    Socket& client_socket;
+
+public:
+    RemoteClientReceiver() = delete;
+    RemoteClientReceiver(Socket& client_socket);
+    void receiveMessage();
+
+protected:
+    void run();
+};
+
 
 
 

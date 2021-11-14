@@ -9,6 +9,7 @@ class Client {
 private:
     Socket client_socket;
     RemoteClientSender remote_sender;
+    RemoteClientReceiver remote_receiver;
     std::string clients_nick_name;
 public:
     Client() = delete;
@@ -45,13 +46,7 @@ private:
 
     void askForMatchNumber(const int& max_games);
 
-    void readFromStandardInputAndMakeAction();
-
     void readFromStandardInput(std::string& message);
-
-    void makeAction(const std::string& message);
-
-    void receiveMessage();
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_H

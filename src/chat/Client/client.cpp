@@ -4,15 +4,12 @@
 
 Client::Client(const char* host, const char* servidor)
         :client_socket(std::move(Socket::createAConnectedSocket(host, servidor))),
-         remote_sender(client_socket) {
+         remote_sender(client_socket), remote_receiver(client_socket) {
 }
 
-void Client::receiveMessage() {
-    std::string nick_name;
-    std::string message;
-    ClientProtocol protocol;
-    protocol.receiveInstruction(this->client_socket, nick_name, message);
-    std::cout << nick_name << " envia: " << message << std::endl;
+
+void Client::readFromStandardInput(std::string& message) {
+    std::getline(std::cin, message);
 }
 
 int Client::getAndPrintNumberOfAvailableGames() {
@@ -61,7 +58,7 @@ void Client::setUpClientsDataInServer() {
 void Client::executeSingleThreadedClient() {
     while (true) {
         this->remote_sender.readFromStandardInputAndMakeAction();
-        this->receiveMessage();
+        this->remote_receiver.receiveMessage();
     }
 }
 

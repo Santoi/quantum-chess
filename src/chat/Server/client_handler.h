@@ -31,7 +31,7 @@ public:
     void getClientsNickName(std::string& nick_name);
     void start();
     void startSingleThreadedClient(Match& match);
-    void startThreadedClientWithoutMatchThread(Match& match);
+    void startThreadedClient(Match& match, bool threaded_match);
     void join();
     bool isActive() const;
     ~ClientHandler() = default;

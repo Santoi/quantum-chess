@@ -1,6 +1,10 @@
 #include "server.h"
 #include "matches_repository.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
+
+
 
 #define MAX_CLIENTS 3
 
@@ -36,8 +40,11 @@ void Server::executeSingleThreadedServer(int type_of_single_thread) {
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptClientAndAddToAMatch(this->acceptor_socket, true);
     }
-    while (matches.thereAreActiveMatches())
+    while (matches.thereAreActiveMatches()){
         matches.joinInactiveMatches();
+        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    }
+    matches.joinInactiveMatches();
 }
 
 void Server::executeServerWithThreads() {

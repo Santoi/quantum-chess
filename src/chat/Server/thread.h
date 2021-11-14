@@ -8,6 +8,8 @@
 class Thread {
 private:
     std::thread thread;
+
+protected:
     bool has_active_thread;
 
 public:

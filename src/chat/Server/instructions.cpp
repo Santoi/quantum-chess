@@ -4,6 +4,8 @@
 #include <exception>
 #include "client_handler.h"
 
+#define MATCH_ID -1
+
 void Instruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
                                                         std::vector<ClientHandler>& clients) {
 
@@ -57,7 +59,7 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQu
 void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
                                                        const NickNamesRepository& nick_names,
                                                        const int& client_receiver_id) {
-    if (this->instructor_id == client_receiver_id)
+    if (this->instructor_id == client_receiver_id || this->instructor_id == MATCH_ID)
         throw std::runtime_error("");
 
 }

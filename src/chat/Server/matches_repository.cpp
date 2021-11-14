@@ -11,7 +11,7 @@ void MatchesRepository::createNewMatch(bool threaded_match) {
     std::unique_ptr<Match> new_match_ptr = make_unique<Match>();
     this->ptr_matches.push_back(std::move(new_match_ptr));
     if (threaded_match)
-        new_match_ptr->start();
+        this->ptr_matches[this->active_matches]->start();
     this->active_matches++;
 }
 
@@ -58,8 +58,10 @@ void MatchesRepository::deleteInactiveMatchesFromList() {
 void MatchesRepository::joinInactiveMatches() {
     std::vector<std::unique_ptr<Match>>::iterator it;
     for (it = this->ptr_matches.begin(); it != this->ptr_matches.end(); it++){
-        if ((*it)->isJoinable())
+        if ((*it)->isJoinable()){
+            (*it)->pushExitInstructionToUpdatesQueue();
             (*it)->join();
+        }
     }
     this->deleteInactiveMatchesFromList();
 }
@@ -67,7 +69,7 @@ void MatchesRepository::joinInactiveMatches() {
 void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool threaded_match) {
     int match_number;
     Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number, threaded_match);
-    ptr_matches[match_number]->addClientToMatchAndStart(std::move(client_socket));
+    ptr_matches[match_number]->addClientToMatchAndStart(std::move(client_socket), threaded_match);
 }
 
 

@@ -2,13 +2,16 @@
 #include "client_handler.h"
 #include "instructions.h"
 
+
+#define MATCH_ID -1
+
 Match::Match()
-        :accepted_clients(0) {
+        :Thread(), accepted_clients(0) {
 }
 
 Match::Match(Match&& other_match)
-       :accepted_clients(other_match.accepted_clients), clients(std::move(other_match.clients)),
-        listening_queues(std::move(other_match.listening_queues)),
+       :Thread(std::move(other_match)), accepted_clients(other_match.accepted_clients),
+        clients(std::move(other_match.clients)), listening_queues(std::move(other_match.listening_queues)),
         match_updates_queue(std::move(other_match.match_updates_queue)) {
 }
 
@@ -34,22 +37,13 @@ void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
     this->clients[client_id].startSingleThreadedClient(*this);
 }
 
-void Match::addClientToMatchAndStart(Socket&& client_socket) {
+void Match::addClientToMatchAndStart(Socket&& client_socket, bool threaded_match) {
     int client_id = this->accepted_clients;
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
     this->addClientsNickNameToRepository(client_id);
-    this->clients[client_id].startThreadedClientWithoutMatchThread(*this);
+    this->clients[client_id].startThreadedClient(*this, threaded_match);
 }
 
-/*
-void Match::addClientToQueues(ClientHandler& client) {
-    BlockingQueue new_listening_queue;
-    //maybe we can notify already existing queues that a new player is in
-    this->listening_queues.push_front(std::move(new_listening_queue));
-    std::list<BlockingQueue>::iterator aux_pointer = this->listening_queues.begin();
-    client.notifications_queue = &(*aux_pointer);
-    client.updates_queue = &this->match_updates_queue;
-}*/
 
 void Match::checkAndNotifyUpdates() {
     std::shared_ptr<Instruction> instruc_ptr;
@@ -78,6 +72,12 @@ bool Match::isActive() const {
     }
     return false;
 }
+
+void Match::pushExitInstructionToUpdatesQueue() {
+    std::shared_ptr<Instruction> exit_instruc =  std::make_shared<ExitInstruction>(MATCH_ID);
+    this->match_updates_queue.push(exit_instruc);
+}
+
 
 Match::~Match() {
 

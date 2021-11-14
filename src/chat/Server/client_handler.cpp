@@ -58,10 +58,12 @@ void ClientHandler::startSingleThreadedClient(Match& match) {
     }
 }
 
-void ClientHandler::startThreadedClientWithoutMatchThread(Match& match) {
+void ClientHandler::startThreadedClient(Match& match, bool threaded_match) {
     this->start();
-    while (client_is_active)
-        match.checkAndNotifyUpdates();
+    if (!threaded_match){
+        while (client_is_active)
+            match.checkAndNotifyUpdates();
+    }
 }
 
 bool ClientHandler::isActive() const {

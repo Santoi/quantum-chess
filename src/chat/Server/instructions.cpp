@@ -53,7 +53,8 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQu
     std::list<BlockingQueue>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)
         (*it).push(this_instruc_ptr);
-    clients[this->instructor_id].join();
+    if (this->instructor_id != MATCH_ID)
+       clients[this->instructor_id].join();
 }
 
 void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,

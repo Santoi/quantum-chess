@@ -9,7 +9,7 @@ class Client {
 private:
     Socket client_socket;
     ClientProtocol protocol;
-    bool is_active;
+    std::string clients_nick_name;
 public:
     Client() = delete;
 
@@ -24,12 +24,17 @@ public:
     //Si no hay ningún elemento en la cola llamada UnNombre, se espera a que otro cliente agregue
     //un elemento para poder sacarlo. Para salir del ciclo de operaciones escribir por entrada
     //estándar un exit.
-    void execute();
+    void execute(bool single_threaded_client);
 
     //Se destruye el socket cliente.
     ~Client() = default;
 
 private:
+
+    void executeSingleThreadedClient();
+
+    void executeThreadedClient();
+
     void setUpClientsDataInServer();
 
     void welcomeClientAndAskForNickName(std::string& nick_name);

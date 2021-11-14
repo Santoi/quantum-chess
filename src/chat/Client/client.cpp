@@ -29,8 +29,6 @@ void Client::readFromStandardInputAndMakeAction() {
 }
 
 void Client::receiveMessage() {
-    //if (!this->is_active)
-    //    return;
     std::string nick_name;
     std::string message;
     this->protocol.receiveInstruction(this->client_socket, nick_name, message);
@@ -67,7 +65,7 @@ void Client::associateClientWithARunningMatch() {
 void Client::welcomeClientAndAskForNickName(std::string& nick_name) {
     std::cout << "Bienvenido a Quantum Chess. Por favor, ingresá tu nombre para "
                  "comenzar a jugar." << std::endl;
-    this->readFromStandardInput(nick_name);
+    this->readFromStandardInput(this->clients_nick_name);
     std::cout << "¡Qué tal, " << nick_name << "! ¿Listo para jugar?" << std::endl;
 }
 
@@ -78,10 +76,21 @@ void Client::setUpClientsDataInServer() {
     this->protocol.sendClientsNickName(this->client_socket, nick_name);
 }
 
-void Client::execute() {
-    this->setUpClientsDataInServer();
+void Client::executeSingleThreadedClient() {
     while (true) {
         this->readFromStandardInputAndMakeAction();
         this->receiveMessage();
     }
+}
+
+void Client::executeThreadedClient() {
+
+}
+
+void Client::execute(bool single_threaded_client) {
+    this->setUpClientsDataInServer();
+    if (single_threaded_client)
+        this->executeSingleThreadedClient();
+    else
+        this->executeThreadedClient();
 }

@@ -2,11 +2,12 @@
 #include "client_handler.h"
 #include "instructions.h"
 
-
+#define BASE_CLIENTS 5
 #define MATCH_ID -1
 
 Match::Match()
         :Thread(), accepted_clients(0) {
+    this->clients.reserve(BASE_CLIENTS);
 }
 
 Match::Match(Match&& other_match)
@@ -26,6 +27,8 @@ void Match::addClientWithIdToListOfClients(Socket&& client_socket, const int& cl
     this->listening_queues.push_front(std::move(new_listening_queue));
     ClientHandler client(std::move(client_socket), this->listening_queues.front(),
                          this->match_updates_queue, client_id, this->nick_names);
+    if ((int)this->clients.capacity() <= this->accepted_clients)
+        this->clients.reserve(this->clients.capacity() + BASE_CLIENTS);
     this->clients.push_back(std::move(client));
     this->accepted_clients++;
 }

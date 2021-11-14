@@ -14,6 +14,7 @@ void RemoteClientSender::makeAction(const std::string& message) {
     if (message == "exit") {
         std::cout<< "exiting" <<std::endl;
         this->client_socket.stopCommunication();
+        this->sender_is_active = false;
     } else {
         ClientProtocol protocol;
         protocol.sendChatMessage(this->client_socket, message);
@@ -21,13 +22,13 @@ void RemoteClientSender::makeAction(const std::string& message) {
 }
 
 void RemoteClientSender::readFromStandardInputAndMakeAction() {
-    std::cout << "Escriba un mensaje para el chat" << std::endl;
     std::string message;
     this->readFromStandardInput(message);
     this->makeAction(message);
 }
 
 void RemoteClientSender::run() {
+    std::cout << "Escriba mensajes para el chat" << std::endl;
     while (this->sender_is_active)
         this->readFromStandardInputAndMakeAction();
 }

@@ -5,7 +5,7 @@
 #include <string>
 #include "common_socket.h"
 
-class RemoteClientSender {
+class RemoteClientSender: public Thread {
 private:
     Socket& client_socket;
     bool sender_is_active;
@@ -14,6 +14,7 @@ public:
     RemoteClientSender() = delete;
     RemoteClientSender(Socket& client_socket);
     void readFromStandardInputAndMakeAction();
+    ~RemoteClientSender() = default;
 
 protected:
     void run();
@@ -31,6 +32,7 @@ public:
     RemoteClientReceiver() = delete;
     RemoteClientReceiver(Socket& client_socket);
     void receiveMessage();
+    ~RemoteClientReceiver() = default;
 
 protected:
     void run();

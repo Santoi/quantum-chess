@@ -63,7 +63,10 @@ void Client::executeSingleThreadedClient() {
 }
 
 void Client::executeThreadedClient() {
-
+    this->remote_sender.start();
+    this->remote_receiver.start();
+    this->remote_sender.join();
+    this->remote_receiver.join();
 }
 
 void Client::execute(bool single_threaded_client) {

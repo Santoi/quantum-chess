@@ -1,6 +1,7 @@
 #include "matches_repository.h"
 #include "server_protocol.h"
 #include <algorithm>
+#include "unique_ptr.h"
 
 MatchesRepository::MatchesRepository()
                     :active_matches(0) {
@@ -8,12 +9,11 @@ MatchesRepository::MatchesRepository()
 
 void MatchesRepository::createNewMatch(bool threaded_match) {
     //create new game
-    Match new_match;
+    std::unique_ptr<Match> new_match_ptr = make_unique<Match>();
     //add to vector of match
-    this->matches.push_back(std::move(new_match));
+    this->ptr_matches.push_back(std::move(new_match_ptr));
     if (threaded_match)
-        new_match.start();
-    //create new thread for new game
+        new_match_ptr->start();
     this->active_matches++;
 }
 
@@ -36,15 +36,15 @@ Socket MatchesRepository::acceptClientAndGetClientChosenMatch(Socket& acceptor_s
 void MatchesRepository::acceptSingleThreadedClientAndAddToAMatch(Socket& acceptor_socket) {
     int match_number;
     Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number, false);
-    matches[match_number].addSingleThreadedClientToMatchAndStart(std::move(client_socket));
+    ptr_matches[match_number]->addSingleThreadedClientToMatchAndStart(std::move(client_socket));
 }
 
 bool MatchesRepository::thereAreActiveMatches() {
-    std::vector<Match>::iterator it;
-    for (it = this->matches.begin(); it != this->matches.end(); it++){
-        if (it->isActive())
-            return true;
-    }
+    //std::vector<Match>::iterator it;
+    //for (it = this->matches.begin(); it != this->matches.end(); it++){
+    //    if (it->isActive())
+    //        return true;
+    //}
     return false;
 }
 
@@ -58,18 +58,18 @@ void MatchesRepository::deleteInactiveMatchesFromList() {
 
 
 void MatchesRepository::joinInactiveMatches() {
-    std::vector<Match>::iterator it;
-    for (it = this->matches.begin(); it != this->matches.end(); it++){
-        if (it->isJoinable())
-            it->join();
-    }
+  //  std::vector<Match>::iterator it;
+    //for (it = this->matches.begin(); it != this->matches.end(); it++){
+    //    if (it->isJoinable())
+     //       it->join();
+    //}
     this->deleteInactiveMatchesFromList();
 }
 
 void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool threaded_match) {
     int match_number;
     Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number, threaded_match);
-    matches[match_number].addClientToMatchAndStart(std::move(client_socket));
+    ptr_matches[match_number]->addClientToMatchAndStart(std::move(client_socket));
 }
 
 

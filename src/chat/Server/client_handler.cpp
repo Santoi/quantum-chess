@@ -19,12 +19,6 @@ ClientHandler::ClientHandler(ClientHandler&& other_client)
                  client_sender(std::move(other_client.client_sender), client_socket),
                  client_is_active(true) {
 }
-/*
-ClientHandler& ClientHandler::operator=(ClientHandler&& other_client) {
-    this->client_socket = std::move(other_client.socket);
-
-}*/
-
 
 
 int ClientHandler::chooseGame(const int& max_games) {

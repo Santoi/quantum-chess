@@ -24,8 +24,6 @@ private:
 public:
     Match();
     Match(Match&& other_match);
-    //Match& operator=(Match&& other_match);
-    //Match& operator=(const Match& other_match);
     void addSingleThreadedClientToMatchAndStart(Socket&& client_socket);
     void addClientToMatchAndStart(Socket&& client_socket);
     //void addClientToMatchAndBeginExcecution(Socket&& client_socket);

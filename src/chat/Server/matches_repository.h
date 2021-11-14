@@ -4,11 +4,12 @@
 #include <vector>
 #include "match.h"
 #include "common_socket.h"
+#include <memory>
 
 class MatchesRepository {
 private:
     int active_matches;
-    std::vector<Match> matches;
+    std::vector<std::unique_ptr<Match>> ptr_matches;
 
 public:
     MatchesRepository();

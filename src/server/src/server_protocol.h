@@ -3,7 +3,7 @@
 
 #include "../../common/src/socket.h"
 #include "../../common/src/packet.h"
-#include "instructions.h"
+#include "instructions/instruction.h"
 #include "nick_names_repository.h"
 #include "../../common/src/protocol.h"
 #include <memory>

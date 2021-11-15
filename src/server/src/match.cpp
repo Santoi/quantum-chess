@@ -1,6 +1,7 @@
 #include "match.h"
 #include "client_handler.h"
-#include "instructions.h"
+#include "instructions/instruction.h"
+#include "instructions/exit_instruction.h"
 
 #define MATCH_ID -1
 

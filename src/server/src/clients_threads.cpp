@@ -1,8 +1,9 @@
 #include "clients_threads.h"
 #include "server_protocol.h"
-#include "instructions.h"
+#include "instructions/instruction.h"
 #include "../../common/src/socket_closed.h"
 #include "iostream"
+#include "instructions/exit_instruction.h"
 
 ClientHandlersReceiver::ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue&
                                                 updates_queue)

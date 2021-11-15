@@ -1,6 +1,7 @@
 #include "server_protocol.h"
 #include "../../common/src/packet.h"
-#include "instructions.h"
+#include "instructions/instruction.h"
+#include "instructions/chat_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 

@@ -5,7 +5,7 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include "instructions.h"
+#include "instructions/instruction.h"
 
 class ThreadSafeQueue {
     std::queue<std::shared_ptr<Instruction>> queue;

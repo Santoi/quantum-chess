@@ -1,6 +1,6 @@
 #include "client_handler.h"
 #include "../../common/src/packet.h"
-#include "instructions.h"
+#include "instructions/instruction.h"
 #include "../../common/src/socket_closed.h"
 
 

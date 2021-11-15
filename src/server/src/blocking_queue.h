@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_BLOCKING_QUEUE_H
 
 #include <queue>
-#include "instructions.h"
+#include "instructions/instruction.h"
 #include <memory>
 #include <condition_variable>
 

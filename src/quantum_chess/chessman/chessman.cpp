@@ -11,8 +11,6 @@
 
 // TODO revisar los find.
 
- //TODO smart pointers.
-
  // TODO Hacer measure privada, cambiando los test o ver que puedo hacer
  //  con test para que la vean
 

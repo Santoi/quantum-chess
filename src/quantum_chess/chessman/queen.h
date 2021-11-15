@@ -13,8 +13,8 @@ private:
 public:
     Queen(const Position & position, bool white_, Board & board_);
     
-    void calculatePosibleMoves(const Position &initial,
-                               std::vector<Position> &posible_moves)
+    void calculateMoves(const Position &initial,
+                        std::list<Position> &posible_moves)
                                const override;
 
     ~Queen() override = default;

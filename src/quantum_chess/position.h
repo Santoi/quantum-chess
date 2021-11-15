@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <iostream>
 
+class QuantumPosition;
+
 /* Clase que representa una posicion,
  * con coordenadas x e y. */
 class Position {
@@ -12,15 +14,21 @@ class Position {
 public:
     Position();
 
-    Position(uint8_t x_, uint8_t y_);
+    Position(uint8_t x, uint8_t y);
 
     Position(const Position & orig) = default;
+
+    explicit Position(const QuantumPosition &position);
     
-    Position & operator=(const Position & orig);
-    
+    Position & operator=(const Position & orig) = default;
+
     bool operator==(const Position & other) const;
     
     bool operator!=(const Position & other) const;
+
+    bool operator==(const QuantumPosition & other) const;
+
+    bool operator!=(const QuantumPosition & other) const;
 
 	// Devuelve la coordenada x.
     uint8_t x() const;

@@ -2,15 +2,16 @@
 #include <string>
 #include "knight.h"
 
+// TODO CAMBIAR POSIBLE MOVES A LIST.
+
 Knight::Knight(const Position &position, bool white_, Board &board_):
                Chessman(position, white_, board_) {}
 
-void Knight::calculatePosibleMoves(const Position &initial,
-                                   std::vector<Position> &posible_moves)
+void Knight::calculateMoves(const Position &initial,
+                            std::list<Position> &posible_moves)
                                    const {
-    posible_moves = std::vector<Position>();
-    posible_moves.reserve(8);
-    std::vector<Position> path;
+    posible_moves = std::list<Position>();
+
     Position position;
 
     std::vector<int> x_sum = {2, 1, -1, -2, -2, -1, 1, 2};
@@ -20,10 +21,7 @@ void Knight::calculatePosibleMoves(const Position &initial,
         int x = 0, y = 0;
         if ((x = initial.x() + x_sum[i]) < 8 && x >= 0 &&
             (y = initial.y() + y_sum[i]) < 8 && y >= 0) {
-            position = Position(x, y);
-            calculatePath(initial, position, path);
-            if (checkFreePath(path))
-                posible_moves.push_back(position);
+            posible_moves.push_back(Position(x, y));
         }
     }
 }

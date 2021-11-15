@@ -2,15 +2,17 @@
 #include <iostream>
 #include "position.h"
 #include "chess_exception.h"
+#include "quantum_position.h"
 
 Position::Position(): x_(0), y_(0) {}
 
-Position::Position(uint8_t x, uint8_t y): x_(0), y_(0) {
+Position::Position(uint8_t x, uint8_t y): x_(x), y_(y) {
     if (x > 7 || y > 7)
         throw ChessException("posicion invalida");
-    x_ = x;
-    y_ = y;
 }
+
+Position::Position(const QuantumPosition & position):
+                   x_(position.x()), y_(position.y()) {}
 
 uint8_t Position::x() const {
     return x_;
@@ -25,13 +27,7 @@ bool Position::operator==(const Position &other) const {
 }
 
 bool Position::operator!=(const Position &other) const {
-    return x_ != other.x_ || y_ != other.y_;
-}
-
-Position & Position::operator=(const Position & orig) {
-    x_ = orig.x_;
-    y_ = orig.y_;
-    return *this;
+    return !(*this == other);
 }
 
 bool operator<(const Position &a, const Position &b) {
@@ -43,6 +39,16 @@ std::ostream & operator<<(std::ostream & os, const Position & position){
     os << "(" << (uint) position.x_ << ", " << (uint) position.y_ << ")";
     return os;
 }
+
+bool Position::operator==(const QuantumPosition &other) const {
+    return *this == Position(other.x(), other.y());
+}
+
+bool Position::operator!=(const QuantumPosition &other) const {
+    return !(*this == other);
+}
+
+
 
 
 

@@ -1,23 +1,22 @@
 #ifndef QUANTUM_CHESS_PROJ_CHESSMAN_H
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
+#include "renderer.h"
 #include "sprite.h"
+
+class Renderer;
 
 class Chessman {
 private:
-  SDL2pp::Renderer &renderer;
-  Sprite sprite;
-  int x; // Board horizontal position [-4, 4]
-  int y; // Board vertical position [-4, 4]
-  // (0, 0) is center board
-  int width;
-  int height;
-  void updateDimensions();
+  Renderer &renderer;
+  Sprite sprite_;
 
 public:
-  Chessman(SDL2pp::Renderer &renderer, char chessman);
-  // Move to the
-  void move(int x, int y);
+  Chessman(Renderer &renderer, char chessman);
+  Chessman(Chessman &&other) noexcept;
+  Chessman(const Chessman &other) = delete;
+  Chessman& operator=(Chessman &&other) noexcept;
+  void render(int x, int y);
   ~Chessman();
 };
 

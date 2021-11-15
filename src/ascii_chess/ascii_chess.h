@@ -1,7 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_ASCII_CHESS_H
 #define QUANTUM_CHESS_PROJ_ASCII_CHESS_H
 
-#include "../quantum_chess/board.h"
+#include "../server/src/quantum_chess/board.h"
 
 // Clase que ejecuta el ajedrez en formato ASCII.
 class AsciiChess {

@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <vector>
-#include "../src/quantum_chess/board.h"
-#include "../src/quantum_chess/chessman/tower.h"
-#include "../src/quantum_chess/chessman/tower.h"
-#include "../src/quantum_chess/chessman/bishop.h"
-#include "../src/quantum_chess/chessman/king.h"
-#include "../src/quantum_chess/chess_exception.h"
+#include "../src/server/src/quantum_chess/board.h"
+#include "../src/server/src/quantum_chess/chessman/tower.h"
+#include "../src/server/src/quantum_chess/chessman/tower.h"
+#include "../src/server/src/quantum_chess/chessman/bishop.h"
+#include "../src/server/src/quantum_chess/chessman/king.h"
+#include "../src/server/src/quantum_chess/chess_exception.h"
 
 
 // TODO test capture.

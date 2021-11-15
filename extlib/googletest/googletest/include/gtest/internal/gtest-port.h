@@ -122,7 +122,7 @@
 //     GTEST_OS_LINUX_ANDROID - Google Android
 //   GTEST_OS_MAC      - Mac OS X
 //     GTEST_OS_IOS    - iOS
-//   GTEST_OS_NACL     - Google Native Client (NaCl)
+//   GTEST_OS_NACL     - Google Native client (NaCl)
 //   GTEST_OS_NETBSD   - NetBSD
 //   GTEST_OS_OPENBSD  - OpenBSD
 //   GTEST_OS_OS2      - OS/2

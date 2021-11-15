@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../src/quantum_chess/position.h"
-#include "../src/quantum_chess/quantum_position.h"
+#include "../src/server/src/quantum_chess/position.h"
+#include "../src/server/src/quantum_chess/quantum_position.h"
 
 TEST(Position, Equals){
     EXPECT_TRUE(Position(5, 2) == Position(5, 2));

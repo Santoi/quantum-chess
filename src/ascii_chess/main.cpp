@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../quantum_chess/board.h"
+#include "../server/src/quantum_chess/board.h"
 #include "ascii_chess.h"
 
 

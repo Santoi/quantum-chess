@@ -58,3 +58,9 @@ void ServerProtocol::sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instr
     socket.send(packet);
 }
 
+void ServerProtocol::fillPacketWithExitInfo(Packet& packet, const std::string& nick_name) {
+    packet.addByte('e');
+    this->addStringAndItsLengthToPacket(packet, nick_name);
+}
+
+

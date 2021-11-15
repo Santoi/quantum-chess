@@ -23,6 +23,7 @@ public:
     void sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr,
                                const NickNamesRepository& nick_names, const int& client_id);
     void fillPacketWithChatInfo(Packet& packet, const std::string& nick_name, const std::string& message);
+    void fillPacketWithExitInfo(Packet& packet, const std::string& nick_name);
     ~ServerProtocol() = default;
 
 private:

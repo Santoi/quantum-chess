@@ -40,8 +40,6 @@ void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol,
     protocol.fillPacketWithChatInfo(packet, nick_name, this->message);
 }
 
-
-
 ExitInstruction::ExitInstruction(const int& client_id)
                 :instructor_id(client_id) {
 }
@@ -55,18 +53,19 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQu
     std::list<BlockingQueue>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)
         (*it).push(this_instruc_ptr);
-    //if (this->instructor_id != MATCH_ID)
     clients[this->instructor_id].join();
 }
 
 void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
                                                        const NickNamesRepository& nick_names,
                                                        const int& client_receiver_id) {
-   // if (this->instructor_id == client_receiver_id || this->instructor_id == MATCH_ID)
-     //   throw std::runtime_error("");
     if (this->instructor_id == client_receiver_id)
         throw std::runtime_error("");
+    std::string leaving_client_nick_name;
+    nick_names.getNickNameRelatedToId(leaving_client_nick_name, this->instructor_id);
+    protocol.fillPacketWithExitInfo(packet, leaving_client_nick_name);
 }
+
 /*
 void MovementInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues) {
 

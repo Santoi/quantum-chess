@@ -11,13 +11,13 @@ void MatchesRepository::createNewMatch(bool threaded_match) {
     std::unique_ptr<Match> new_match_ptr = make_unique<Match>();
     this->ptr_matches.push_back(std::move(new_match_ptr));
     if (threaded_match)
-        this->ptr_matches[this->active_matches]->start();
+        this->ptr_matches[this->created_matches]->start();
     this->created_matches++;
 }
 
 int MatchesRepository::getClientChosenMatch(Socket& client_socket, bool threaded_match) {
     ServerProtocol protocol;
-    protocol.sendNumberOfGamesRunning(client_socket, this->active_matches);
+    protocol.sendNumberOfGamesRunning(client_socket, this->created_matches);
     int match_number = protocol.receiveNumberOfChosenGame(client_socket);
     if (match_number == this->created_matches)
         this->createNewMatch(threaded_match);

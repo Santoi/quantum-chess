@@ -42,8 +42,6 @@ cmake-build-debug/*
 *.exe
 *.out
 *.app
-server
-client
 
 # Extra
 *.pdf

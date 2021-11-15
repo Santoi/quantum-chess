@@ -6,4 +6,4 @@ project(${This} C CXX)
 
 add_subdirectory(quantum_chess)
 add_subdirectory(ascii_chess)
-add_subdirectory(sdl)
+add_subdirectory(chat)

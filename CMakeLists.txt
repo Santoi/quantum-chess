@@ -7,6 +7,11 @@ project(${This} C CXX)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+set(SDL2PP_WITH_IMAGE ON) # if you need SDL_image support
+set(SDL2PP_WITH_MIXER ON) # if you need SDL_mixer support
+set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
 
 add_subdirectory(extlib/googletest)
 add_subdirectory(extlib/libSDL2pp)

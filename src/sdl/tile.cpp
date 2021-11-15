@@ -1,7 +1,9 @@
 #include "tile.h"
 
-Tile::Tile(SDL2pp::Renderer &renderer, bool black) : renderer(renderer),
-                                                     sprite(renderer) {
+Tile::Tile(Renderer &renderer, bool black) : renderer(renderer),
+                                             sprite_(renderer, "img/falcon.png",
+                                                     renderer.getMinDimension() / 10,
+                                                     renderer.getMinDimension() / 10) {
   if (black) {
     images = {
         {DEFAULT, "img/black_square.png"},
@@ -17,37 +19,38 @@ Tile::Tile(SDL2pp::Renderer &renderer, bool black) : renderer(renderer),
         {SPLIT, "img/white_square_split.png"}
     };
   }
-  sprite.loadImage(images[DEFAULT]);
+  sprite_.loadImage(images[DEFAULT]);
 }
 
 Tile::Tile(Tile &&other) noexcept: renderer(other.renderer),
-                                   sprite(std::move(other.sprite)),
+                                   sprite_(std::move(other.sprite_)),
                                    images(std::move(other.images)) {}
 
-void Tile::render(int x_pos, int y_pos) {
-  int width, height;
-  width = height = renderer.GetOutputHeight() / 10;
-  int middle_board = std::min(renderer.GetOutputHeight(),
-                                                renderer.GetOutputWidth()) / 2;
-  x_pos -= 4;
-  y_pos -= 3;
-  x_pos *= width;
-  y_pos *= -height;
-  sprite.render(middle_board + x_pos, middle_board + y_pos, width, height);
+void Tile::render(int x, int y) {
+  int size = renderer.getMinDimension() / 10;
+  sprite_.render(x, y, size, size);
+}
+
+Tile& Tile::operator=(Tile &&other) noexcept {
+  renderer = std::move(other.renderer);
+  sprite_ = std::move(other.sprite_);
+  images = std::move(other.images);
+  return *this;
 }
 
 void Tile::loadDefault() {
-  sprite.loadImage(images[DEFAULT]);
+  sprite_.loadImage(images[DEFAULT]);
 }
 
 void Tile::loadMove() {
-  sprite.loadImage(images[MOVE]);
+  sprite_.loadImage(images[MOVE]);
 }
 
 void Tile::loadEntagle() {
-  sprite.loadImage(images[ENTANGLE]);
+  sprite_.loadImage(images[ENTANGLE]);
 }
 
 void Tile::loadSplit() {
-  sprite.loadImage(images[SPLIT]);
+  sprite_.loadImage(images[SPLIT]);
 }
+

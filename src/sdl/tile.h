@@ -2,14 +2,15 @@
 #define QUANTUM_CHESS_PROJ_TILE_H
 
 #include "sprite.h"
+#include "renderer.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <map>
 #include <string>
 
 class Tile {
 private:
-  SDL2pp::Renderer &renderer;
-  Sprite sprite;
+  Renderer &renderer;
+  Sprite sprite_;
   std::map<int, std::string> images;
 
   typedef enum {
@@ -17,9 +18,10 @@ private:
   } SquareType;
 
 public:
-  Tile(SDL2pp::Renderer &renderer, bool black);
+  Tile(Renderer &renderer, bool black);
   Tile(Tile &&other) noexcept;
-//  Tile& operator=(Tile &other);
+  Tile(const Tile &other) = delete;
+  Tile& operator=(Tile &&other) noexcept;
   void render(int x, int y);
   void loadDefault();
   void loadMove();

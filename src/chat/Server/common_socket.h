@@ -13,92 +13,86 @@ private:
     int fd;
 
 public:
-    //Crea un socket que pasa a tener el fd del otro_socket. Se invalida el otro_socket cambiándole
-    //su fd a un fd inválido.
-    Socket(Socket&& otro_socket);
+    //A new socket is created by assigning other_socket's fd to new socket's fd. Other socket's fd
+    //is set to be a invalid_fd.
+    Socket(Socket&& other_socket);
 
-    //Se crea y retorna un socket cliente usando el host y el servicio pedido, conectándolo
-    //correspondientemente.
-    static Socket createAConnectedSocket(const char* host, const char* servicio);
+    //Creates and returns a client socket using the host and service provided, connecting it
+    //accordingly
+    static Socket createAConnectedSocket(const char* host, const char* service);
 
-    //Crea un socket servidor usando el host y el servicio pedido. Se le hace un bind y un listen,
-    //dejandolo el socket en un estado válido para poder aceptar sockets clientes. Se retorna el
-    //socket.
-    static Socket createAListeningSocket(const char* host, const char* servicio);
+    //Creates a server socket using the host and service provided. A bind and a listen is applied to
+    //the new socket, leaving it on a valid state for accepting client sockets. The server socket is
+    //returned.
+    static Socket createAListeningSocket(const char* host, const char* service);
 
-    //Se crea y retorna un socket cliente a partir de un socket servidor (inicializado previamente
-    //con el método de clase crearSocketServidorConBindYListen). En caso de error en el accept, se
-    //lanza la excepción NoSePuedeAceptarSocketError, a la cual se puede consultar cuál fue el
-    //error.
+    //A client socket is created from a server socket (initialized previously with class
+    //method createAListeningSocket. If there is an error accepting the client socket, the exception
+    //CantAcceptClientSocketError is thrown, to which one can ask what the error was. The client
+    //socket is returned.
     Socket acceptSocket();
 
-    //Se hace un shutdown y close sobre el socket servidor.
+    //Server socket is shutdowned and closed. Socket's fd is set to an invalid fd.
     void stopAccepting();
 
+    //Client socket is shutdowned and closed. It is equivalent to stopAccepting().
     void stopCommunication();
 
+    //Sends the contents of the packet.
     size_t send(Packet & packet) const;
 
+    //Receives size bytes from socket, storing them in the given packet.
     size_t receive(Packet & packet, size_t size) const;
-    //Se envían hasta length bytes del contenido de buffer. Se retorna la cantidad de bytes
-    //escritos. Si el socket no está inicializado se lanza una excepción SocketNoInicializadoError
-    //con un mensaje descriptivo.
-    //ssize_t enviarMensaje(const char* buffer, size_t length);
 
-    //Se reciben y almacenan en el buffer hasta length bytes. Se retornan la cantidad de bytes
-    //leídos. Si el socket no está inicializado se lanza una excepción SocketNoInicializadoError
-    //con un mensaje descriptivo.
-    //ssize_t recibirMensaje(char* buffer, size_t length);
-
-    //Se liberan los recursos del socket. Si se tiene un fd válido, se hace un shutdown y un close
-    //sobre dicho fd. Si es un fd inválido, se retorna y no se libera nada.
+    //Sockets resources are freed. If socket has an valid fd, it is shutdowned and closed. If it is
+    //an invalid fd, nothing is done.
     ~Socket();
 
 private:
-    //Crea un socket con fd inicial no válido.
+    //A socket with an invalid fd is created.
     Socket();
 
-    //Inicializa el socket gracias a los parámetros host y servicio, y lo conecta al socket servidor
-    //correspondientemente.
-    void inicializarYConectarCliente(const char* host, const char* servicio);
+    //A socket is created with a valid file descriptor passed by parameter.
+    explicit Socket(int valid_fd);
 
-    //Inicializa el socket servidor, haciéndole un bind y un listen, dejándolo en estado válido para
-    //después poder ser usado para aceptar sockets clientes.
-    void inicializarServidorConBindYListen(const char* host, const char* servicio);
+    //Client socket is initialized using the host and service parameters and it is connected to the
+    //appropiate server socket.
+    void inicializarYConectarCliente(const char* host, const char* service);
 
-    //Se crea un socket con el fd pasado por parámetro.
-    explicit Socket(int fd_valido);
+    //Server socket is initialized, and a bind and listen is applied to it, leaving it on a valid
+    //state so it can be used to accept client sockets.
+    void inicializarServidorConBindYListen(const char* host, const char* service);
 
-    //Se hace un shutdown y un close sobre el fd del socket.
-    void shutdownYCerrar();
+    //The given socket is shutdowned and closed.
+    void shutdownAndClose();
 };
 
-class NoSePuedeAceptarSocketError: public std::exception {
+class CantAcceptClientSocketError: public std::exception {
 private:
-    char* mensaje_de_error;
+    char* error_message;
 
 public:
-    //Se crea un error, almacenando como mensaje_de_error lo que hay en errno.
-    NoSePuedeAceptarSocketError() noexcept;
+    //An error is created, saving in the error_message what is in errno.
+    CantAcceptClientSocketError() noexcept;
 
-    //Se devuelve un puntero a buffer que tiene el error guardado al ser lanzado el error.
-    virtual const char* what()  const noexcept;
+    //Returns a pointer to the buffer containing the saved error message.
+    const char* what()  const noexcept;
 
-    ~NoSePuedeAceptarSocketError() = default;
+    ~CantAcceptClientSocketError() = default;
 };
 
-class SocketNoInicializadoError: public std::exception {
+class InvalidSocketError: public std::exception {
 private:
-    const char* mensaje_de_error;
+    const char* error_message;
 
 public:
-    //Se crea dicho error recibiendo el mensaje de error por parámetro.
-    explicit SocketNoInicializadoError(const char* mensaje_de_error) noexcept;
+    //A new error is created, saving the error message passed to the function.
+    explicit InvalidSocketError(const char* error_message) noexcept;
 
-    //Se retorna un puntero a un buffer con el error.
-    virtual const char* what()  const noexcept;
+    //Returns a pointer to the buffer containing the error message.
+    const char* what()  const noexcept;
 
-    ~SocketNoInicializadoError() = default;
+    ~InvalidSocketError() = default;
 };
 
 

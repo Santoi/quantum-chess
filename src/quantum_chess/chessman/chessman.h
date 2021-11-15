@@ -127,7 +127,7 @@ public:
 
     // Carga un vector con todos las posiciones a donde se puede mover la pieza.
     virtual void calculateMoves(const Position &initial,
-                                std::vector<Position> &posible_moves)
+                                std::list<Position> &posible_moves)
                                        const = 0;
 	
     friend std::ostream & operator<<(std::ostream & os,
@@ -150,13 +150,13 @@ public:
     void moveValidationExceptionThrower(MoveValidationStatus status);
 
     virtual void calculatePosibleMoves(const Position &initial,
-                               std::vector<Position> &posible_moves);
+                               std::list<Position> &posible_moves);
 
     virtual void calculatePosibleSplits(const Position &initial,
-                                std::vector<Position> &posible_moves);
+                                std::list<Position> &posible_moves);
 
     virtual void calculatePosibleMerges(const Position &initial,
-                                std::vector<Position> &posible_moves);
+                                std::list<Position> &posible_moves);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

@@ -26,7 +26,7 @@ Chessman::Chessman(const Position & position_, bool white_, Board & board_):
 void Chessman::move(const Position & initial, const Position & final) {
     // Check if can be moved.
     std::vector<Position> path;
-    std::vector<Position> posible_moves;
+    std::list<Position> posible_moves;
     calculateMoves(initial, posible_moves);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                               final);
@@ -74,7 +74,7 @@ void Chessman::move(const Position & initial, const Position & final) {
 
 void Chessman::split(const Position &initial, const Position &final1,
                      const Position &final2) {
-    std::vector<Position> posible_moves;
+    std::list<Position> posible_moves;
     calculateMoves(initial, posible_moves);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                               final1);
@@ -115,7 +115,7 @@ void Chessman::split(const Position &initial, const Position &final1,
 
 void Chessman::merge(const Position &initial1, const Position &initial2,
                      const Position &final) {
-    std::vector<Position> posible_moves;
+    std::list<Position> posible_moves;
     calculateMoves(initial1, posible_moves);
     posible_moves.push_back(initial1);
     auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
@@ -355,7 +355,7 @@ Chessman::checkIsAValidMerge(const Position &initial1, const Position &final) {
 
 // TODO posible moves to list
 void Chessman::calculatePosibleMoves(const Position &initial,
-                                     std::vector<Position> &posible_moves) {
+                                     std::list<Position> &posible_moves) {
     calculateMoves(initial, posible_moves);
 
     for (auto it = posible_moves.begin(); it != posible_moves.end(); ){
@@ -368,7 +368,7 @@ void Chessman::calculatePosibleMoves(const Position &initial,
 }
 
 void Chessman::calculatePosibleSplits(const Position & initial,
-                                      std::vector<Position> &posible_moves) {
+                                      std::list<Position> &posible_moves) {
     calculateMoves(initial, posible_moves);
 
     for (auto it = posible_moves.begin(); it != posible_moves.end(); ){
@@ -381,7 +381,7 @@ void Chessman::calculatePosibleSplits(const Position & initial,
 }
 
 void Chessman::calculatePosibleMerges(const Position & initial,
-                                      std::vector<Position> &posible_moves) {
+                                      std::list<Position> &posible_moves) {
     calculateMoves(initial, posible_moves);
     posible_moves.push_back(initial);
 

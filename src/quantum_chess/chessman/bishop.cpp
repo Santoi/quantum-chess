@@ -7,10 +7,9 @@ Bishop::Bishop(const Position &position, bool white_, Board &board_):
                Chessman(position, white_, board_) {}
 
 void Bishop::calculateMoves(const Position &initial,
-                            std::vector<Position> &posible_moves)
+                            std::list<Position> &posible_moves)
                                    const {
-    posible_moves = std::vector<Position>();
-    posible_moves.reserve(14);
+    posible_moves = std::list<Position>();
     Position position;
 
     // Primero se recorre la diagonal hacia la derecha.

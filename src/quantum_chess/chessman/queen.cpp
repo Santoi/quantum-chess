@@ -7,10 +7,9 @@ Queen::Queen(const Position &position, bool white_, Board &board_):
              Chessman(position, white_, board_) {}
 
 void Queen::calculateMoves(const Position &initial,
-                           std::vector<Position> &posible_moves)
+                           std::list<Position> &posible_moves)
                                   const {
-    posible_moves = std::vector<Position>();
-    posible_moves.reserve(28);
+    posible_moves = std::list<Position>();
     Position position;
 
     // Se cheuqea la columna

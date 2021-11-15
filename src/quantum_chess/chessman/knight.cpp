@@ -8,10 +8,9 @@ Knight::Knight(const Position &position, bool white_, Board &board_):
                Chessman(position, white_, board_) {}
 
 void Knight::calculateMoves(const Position &initial,
-                            std::vector<Position> &posible_moves)
+                            std::list<Position> &posible_moves)
                                    const {
-    posible_moves = std::vector<Position>();
-    posible_moves.reserve(8);
+    posible_moves = std::list<Position>();
 
     Position position;
 

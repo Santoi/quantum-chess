@@ -7,9 +7,8 @@ Pawn::Pawn(const Position &position, bool white_, Board &board_):
            Chessman(position, white_, board_), first_move(true) {}
 
 void Pawn::calculateMoves(const Position &initial,
-                          std::vector<Position> &posible_moves) const {
-    posible_moves = std::vector<Position>();
-    posible_moves.reserve(4);
+                          std::list<Position> &posible_moves) const {
+    posible_moves = std::list<Position>();
     int sum = (white) ? 1 : -1;
 
 
@@ -39,13 +38,13 @@ std::string Pawn::print() const {
 }
 // TODO validate.
 void Pawn::calculatePosibleMerges(const Position &initial,
-                                  std::vector<Position> &posible_moves) {
-    posible_moves = std::vector<Position> ();
+                                  std::list<Position> &posible_moves) {
+    posible_moves = std::list<Position> ();
 }
 
 void Pawn::calculatePosibleSplits(const Position &initial,
-                                  std::vector<Position> &posible_moves) {
-    posible_moves = std::vector<Position> ();
+                                  std::list<Position> &posible_moves) {
+    posible_moves = std::list<Position> ();
 }
 
 Chessman::MoveValidationStatus

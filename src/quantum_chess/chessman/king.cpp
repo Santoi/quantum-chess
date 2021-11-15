@@ -6,10 +6,9 @@ King::King(const Position &position, bool white_, Board &board_):
            Chessman(position, white_, board_) {}
 
 void King::calculateMoves(const Position &initial,
-                          std::vector<Position> &posible_moves)
+                          std::list<Position> &posible_moves)
                                  const {
-    posible_moves = std::vector<Position>();
-    posible_moves.reserve(8);
+    posible_moves = std::list<Position>();
 
     std::vector<int> x_sum = {1, 1, 0, -1, -1, -1, 0, 1};
     std::vector<int> y_sum = {0, 1, 1, 1, 0, -1, -1, -1};

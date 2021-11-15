@@ -14,7 +14,7 @@ public:
     Tower(const Position & position, bool white_, Board & board_);
     
     void calculateMoves(const Position &initial,
-                        std::vector<Position> &posible_moves)
+                        std::list<Position> &posible_moves)
                                const override;
 
     ~Tower() override = default;

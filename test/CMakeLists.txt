@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 set(This quantum-chess-test)
 
-set(Tests test_chessman.cpp test_position.cpp)
+file(GLOB Tests "*.cpp")
 
 add_executable(${This} ${Tests})
 target_link_libraries(${This} PUBLIC

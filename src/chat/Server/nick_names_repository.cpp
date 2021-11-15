@@ -1,6 +1,5 @@
 #include "nick_names_repository.h"
 
-#define BASE_CLIENTS 5
 
 NickNamesRepository::NickNamesRepository()
                     :nick_names(BASE_CLIENTS){

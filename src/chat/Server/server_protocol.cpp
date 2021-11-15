@@ -22,27 +22,27 @@ void ServerProtocol::getNickName(Socket& socket, std::string& nick_name) {
     this->getMessageFromSocket(socket, nick_name);
 }
 
-void ServerProtocol::fillChatInstructionsWithPacket(Socket& socket, const int& client_id,
+void ServerProtocol::fillChatInstructions(Socket& socket, const int& client_id,
                                                 std::shared_ptr<Instruction>& instruct_ptr) {
     std::string message;
     this->getMessageFromSocket(socket, message);
     instruct_ptr = std::make_shared<ChatInstruction>(client_id, std::move(message));
 }
 
-void ServerProtocol::fillMovementInstructionsWithPacket(Socket& socket, const int& client_it ,
+void ServerProtocol::fillMovementInstructions(Socket& socket, const int& client_it ,
                                                         std::shared_ptr<Instruction>& instruct_ptr) {
 
 }
 
-void ServerProtocol::fillInstructionsWithPacket(Socket& socket, const int& client_id,
+void ServerProtocol::fillInstructions(Socket& socket, const int& client_id,
                                                 std::shared_ptr<Instruction>& instruct_ptr) {
     Packet packet;
     socket.receive(packet, ONE_BYTE);
     char action = packet.getByte();
     if (action == 'c')
-        fillChatInstructionsWithPacket(socket, client_id, instruct_ptr);
+        fillChatInstructions(socket, client_id, instruct_ptr);
     else
-        fillMovementInstructionsWithPacket(socket, client_id, instruct_ptr);
+        fillMovementInstructions(socket, client_id, instruct_ptr);
 }
 
 void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& nick_name, const std::string& message) {

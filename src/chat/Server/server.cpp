@@ -4,10 +4,6 @@
 #include <chrono>
 #include <thread>
 
-
-
-#define MAX_CLIENTS 3
-
 Server::Server(const char* host, const char* service)
         :acceptor_socket(std::move(Socket::createAListeningSocket(host, service))) {
 }
@@ -28,15 +24,15 @@ void Server::executeAcceptorThread() {
 
 void Server::executeSingleThreadedServer(int type_of_single_thread) {
     MatchesRepository matches;
-    if (type_of_single_thread == 1){
+    if (type_of_single_thread == SINGLE_THREADED_MATCH_AND_CLIENTS){
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptSingleThreadedClientAndAddToAMatch(this->acceptor_socket);
     }
-    else if (type_of_single_thread == 2) {
+    else if (type_of_single_thread == SINGLE_THREADED_MATCH_AND_THREADED_CLIENTS) {
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptClientAndAddToAMatch(this->acceptor_socket, false);
     }
-    else if (type_of_single_thread == 3) {
+    else if (type_of_single_thread == THREADED_MATCH_AND_THREADED_CLIENTS) {
         for (int i = 0; i < MAX_CLIENTS; i++)
             matches.acceptClientAndAddToAMatch(this->acceptor_socket, true);
     }

@@ -13,20 +13,20 @@ class ThreadSafeQueue {
     std::condition_variable condition_variable;
 
 public:
-    ThreadSafeQueue();
+    ThreadSafeQueue() = default;
 
+    //Moves other_queue.queue to this new ThreadSafeQueue.queue. Because mutex is a non-movable object,
+    //a brand new mutex is created. This means there is no relation between other_queue.mutex and
+    //the new ThreadSafeQueue mutex. For this reason, it only makes sense to start using the thread
+    //safe queue once it is certain that it is not going to be moved anymore.
     ThreadSafeQueue(ThreadSafeQueue&& other_queue);
-    //Se agrega el elemento info a la cola. Se lockea el mutex
-    //correspondientemente para almacenar dicha información de forma válida. Se
-    //notifican a todos los hilos expectantes de hacer pop() que se agregó un
-    //nuevo objeto.
+
+    //Locks the mutex, pushes the instruc_ptr to queue and notifies using the conditional variable.
     void push(std::shared_ptr<Instruction> instruc_ptr);
 
-    //Se saca el primer elemento de la cola. En un ambiente de concurrencia,
-    //puede ser que un hilo quiera hacer un pop cuando la cola está vacía. Se
-    //espera entonces a que otro hilo haga un push a la cola para recibir la
-    //notificación y, con el lock activado poder extraer la información
-    //correspondientemente, guardándola en la info pasada por referencia.
+    //If the queue is not empty, the instruc_ptr points to the first element in the queue, and the
+    //pop method is called over the queue. If the queue is empty, a unique lock is applied to the mutex,
+    //and it waits until an element is added to que queue, and the sequence described before is done.
     void pop(std::shared_ptr<Instruction>& instruc_ptr);
 
     ~ThreadSafeQueue();

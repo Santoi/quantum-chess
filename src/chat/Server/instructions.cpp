@@ -4,16 +4,9 @@
 #include <exception>
 #include "client_handler.h"
 
-#define MATCH_ID -1
 
 void Instruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
                                                         std::vector<ClientHandler>& clients) {
-
-}
-
-void Instruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
-                                                   const NickNamesRepository& nick_names,
-                                                   const int& client_receiver_id) {
 
 }
 
@@ -24,8 +17,6 @@ ChatInstruction::ChatInstruction(const int& client_id, std::string&& message)
 
 void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
                                                             std::vector<ClientHandler>& clients) {
-    //Do something with the chat (is there a chat in the server?)
-    //Notify all queues
     std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(this->instructor_id, std::move(this->message));
     std::list<BlockingQueue>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)

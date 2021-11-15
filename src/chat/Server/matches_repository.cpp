@@ -4,7 +4,7 @@
 #include "unique_ptr.h"
 
 MatchesRepository::MatchesRepository()
-                    :active_matches(0) {
+                    :created_matches(0) {
 }
 
 void MatchesRepository::createNewMatch(bool threaded_match) {
@@ -12,14 +12,14 @@ void MatchesRepository::createNewMatch(bool threaded_match) {
     this->ptr_matches.push_back(std::move(new_match_ptr));
     if (threaded_match)
         this->ptr_matches[this->active_matches]->start();
-    this->active_matches++;
+    this->created_matches++;
 }
 
 int MatchesRepository::getClientChosenMatch(Socket& client_socket, bool threaded_match) {
     ServerProtocol protocol;
     protocol.sendNumberOfGamesRunning(client_socket, this->active_matches);
     int match_number = protocol.receiveNumberOfChosenGame(client_socket);
-    if (match_number == this->active_matches)
+    if (match_number == this->created_matches)
         this->createNewMatch(threaded_match);
     return match_number;
 }

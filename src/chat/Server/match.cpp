@@ -2,7 +2,6 @@
 #include "client_handler.h"
 #include "instructions.h"
 
-#define BASE_CLIENTS 5
 #define MATCH_ID -1
 
 Match::Match()
@@ -52,7 +51,6 @@ void Match::checkAndNotifyUpdates() {
     std::shared_ptr<Instruction> instruc_ptr;
     this->match_updates_queue.pop(instruc_ptr);
     instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues, this->clients);
-    //maybe game and a chat as parameters?
 }
 
 void Match::run() {

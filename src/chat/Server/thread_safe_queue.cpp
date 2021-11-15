@@ -1,10 +1,6 @@
 #include "thread_safe_queue.h"
 #include <utility>
 
-
-ThreadSafeQueue::ThreadSafeQueue() {
-}
-
 ThreadSafeQueue::ThreadSafeQueue(ThreadSafeQueue&& other_queue)
                 :queue(std::move(other_queue.queue)), mutex(), condition_variable() {
 

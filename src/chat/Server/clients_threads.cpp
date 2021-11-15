@@ -17,8 +17,8 @@ ClientHandlersReceiver::ClientHandlersReceiver(ClientHandlersReceiver&& otherRec
 void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
     std::shared_ptr <Instruction> ptr_instruction;
     ServerProtocol protocol;
-    protocol.fillInstructionsWithPacket(this->client_socket, this->client_id, ptr_instruction);
-    this->updates_queue.push(ptr_instruction);
+    protocol.fillInstructions(this->client_socket, this->client_id, ptr_instruction);
+     this->updates_queue.push(ptr_instruction);
 }
 
 void ClientHandlersReceiver::pushToQueueExitInstruction() {

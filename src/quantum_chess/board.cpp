@@ -1,8 +1,14 @@
 #include "board.h"
-#include "chessman/chessman_container.h"
 #include "chess_exception.h"
+#include "chessman/king.h"
+#include "chessman/queen.h"
+#include "chessman/tower.h"
+#include "chessman/bishop.h"
+#include "chessman/knight.h"
+#include "chessman/pawn.h"
 #include <utility>
 #include <algorithm>
+#include <memory>
 
 Board::Board(): chessmen(), board(), next_white(true), coin() {}
 
@@ -12,24 +18,20 @@ Board::Board(int seed): chessmen(), board(), next_white(true), coin(seed) {}
 
 // TODO testear BOARD.
 
-void Board::addChessman(ChessmanContainer && chessman_cont){
-    Chessman * chessman = chessman_cont.get();
-    chessmen.push_back(std::move(chessman_cont));
-    /*
-    auto positions = chessman->getAllPositions();
-    for (QuantumPosition & qpos: positions) {
-        if (board.count(Position(qpos)))
-            throw ChessException("ya hay una pieza alli");
-        board.insert(std::pair<Position, Chessman *>(Position(qpos),
-                                                     chessman));
-    }*/
-    // TODO Mejorar
-    for (size_t i = 0; i < chessman->countPositions(); i++){
-        Position position = Position(chessman->getPosition(i));
+void Board::addNewChessman(char chessman_, Position position_,
+                                 bool white_){
+    std::unique_ptr<Chessman> new_chessman = createChessman(chessman_,
+                                                            position_,
+                                                            white_);
+    Chessman * ptr = new_chessman.get();
+    chessmen.push_back(std::move(new_chessman));
+
+    for (size_t i = 0; i < ptr->countPositions(); i++){
+        Position position = Position(ptr->getPosition(i));
         if (board.count(Position(position)))
             throw ChessException("ya hay una pieza alli");
-        board.insert(std::pair<Position, Chessman *>(Position(position),
-                                                     chessman));
+        board.insert(std::make_pair(Position(position),
+                                    ptr));
     }
 }
 
@@ -121,47 +123,61 @@ bool Board::isThere(Chessman * chessman) {
                                     return pair.second == chessman; });
 }
 
+std::unique_ptr<Chessman> Board::createChessman(char chessman_,
+                                                Position position_,
+                                                bool white_) {
+    Chessman * pointer = nullptr;
+    switch (chessman_){
+        case 'K':
+            pointer = new King(position_, white_, *this);
+            break;
+        case 'Q':
+            pointer = new Queen(position_, white_, *this);
+            break;
+        case 'T':
+            pointer = new Tower(position_, white_, *this);
+            break;
+        case 'B':
+            pointer = new Bishop(position_, white_, *this);
+            break;
+        case 'H':
+            pointer = new Knight(position_, white_, *this);
+            break;
+        case 'P':
+            pointer = new Pawn(position_, white_, *this);
+            break;
+        default:
+            throw ChessException("esa letra no "
+                                 "representa ninguna pieza");
+    }
+    if (!pointer)
+        throw std::runtime_error("cannot allocate memory for chessman");
+    return std::unique_ptr<Chessman>(pointer);
+}
+
 void Board::load() {
-    addChessman(std::move(ChessmanContainer('T', Position(0, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('H', Position(1, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('B', Position(2, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('Q', Position(3, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('K', Position(4, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('B', Position(5, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('H', Position(6, 0),
-                                            true, *this)));
-    addChessman(std::move(ChessmanContainer('T', Position(7, 0),
-                                            true, *this)));
+    addNewChessman('T', Position(0, 0), true);
+    addNewChessman('H', Position(1, 0), true);
+    addNewChessman('B', Position(2, 0), true);
+    addNewChessman('Q', Position(3, 0), true);
+    addNewChessman('K', Position(4, 0), true);
+    addNewChessman('B', Position(5, 0), true);
+    addNewChessman('H', Position(6, 0), true);
+    addNewChessman('T', Position(7, 0), true);
+    addNewChessman('T', Position(0, 7), false);
+    addNewChessman('H', Position(1, 7), false);
+    addNewChessman('B', Position(2, 7), false);
+    addNewChessman('Q', Position(3, 7), false);
+    addNewChessman('K', Position(4, 7), false);
+    addNewChessman('B', Position(5, 7), false);
+    addNewChessman('H', Position(6, 7), false);
+    addNewChessman('T', Position(7, 7), false);
 
     for (uint8_t i = 0; i < 8; i++)
-        addChessman(std::move(ChessmanContainer('P', Position(i, 1),
-                                                true, *this)));
+        addNewChessman('P', Position(i, 1), true);
 
-    addChessman(std::move(ChessmanContainer('T', Position(0, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('H', Position(1, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('B', Position(2, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('Q', Position(3, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('K', Position(4, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('B', Position(5, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('H', Position(6, 7),
-                                            false, *this)));
-    addChessman(std::move(ChessmanContainer('T', Position(7, 7),
-                                            false, *this)));
     for (uint8_t i = 0; i < 8; i++)
-        addChessman(std::move(ChessmanContainer('P', Position(i, 6),
-                                                false, *this)));
+        addNewChessman('P', Position(i, 6), false);
 }
 
 bool Board::flipACoin() {

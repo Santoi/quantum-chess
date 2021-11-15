@@ -16,8 +16,6 @@
  // TODO Hacer measure privada, cambiando los test o ver que puedo hacer
  //  con test para que la vean
 
- // TODO HACER POSIBLE MOVES LIST!!!
-
 Chessman::Chessman(const Position & position_, bool white_, Board & board_):
         positions(1, QuantumPosition(position_, 1, this)),
         board(board_), white(white_) {}

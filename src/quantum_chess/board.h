@@ -2,11 +2,11 @@
 #define QUANTUM_CHESS_PROJ_BOARD_H
 
 #include <map>
+#include <vector>
+#include <memory>
 #include "position.h"
 #include "chessman/chessman.h"
-#include "chessman/chessman_container.h"
 #include "pseudo_random_coin.h"
-#include <vector>
 
 class Chessman;
 class ChessmanContainer;
@@ -16,10 +16,14 @@ class ChessmanContainer;
  * guarda segun posiciones y un booleano para indicar el 
  * turno. */
 class Board {
-    std::vector<ChessmanContainer> chessmen;
+    std::vector<std::unique_ptr<Chessman>> chessmen;
     std::map<const Position, Chessman *> board;
     bool next_white;
     PseudoRandomCoin coin;
+
+
+    std::unique_ptr<Chessman>
+    createChessman(char chessman_, Position position_, bool white_);
 
 public:
     Board();
@@ -46,10 +50,6 @@ public:
 	// Carga el tablero con las posiciones iniciales del ajedrez.
     void load();
 
-	/* Agrega una pieza en el vector contenedor y en su posicion
-	 * en el map. */
-    void addChessman(ChessmanContainer &&chessman_cont);
-
 	// Devuelve true si el siguiente turno es de las blancas.
     bool isNextWhite() const;
 
@@ -64,6 +64,8 @@ public:
                const Position &final);
 
     bool isThere(Chessman *chessman);
+
+    void addNewChessman(char chessman_, Position position_, bool white_);
 };
 
 

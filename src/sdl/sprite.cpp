@@ -5,27 +5,48 @@
 #include <SDL2pp/Texture.hh>
 #include <string>
 
-Sprite::Sprite(SDL2pp::Renderer &renderer, const std::string &file_name):
-                                        renderer(renderer),
-                                        sprite(renderer, file_name) {}
+Sprite::Sprite(Renderer &renderer, const std::string &file_name, int width,
+               int height): renderer(renderer),
+               sprite_(renderer.renderer(), file_name),
+               width_(width), height_(height) {}
 
-void Sprite::render() {
-  renderer.Copy(sprite);
+SDL2pp::Texture& Sprite::sprite() {
+  return sprite_;
 }
 
 void Sprite::render(int x, int y, int width, int height) {
-  const SDL2pp::Rect dest(x, y, width, height);
-  renderer.Copy(sprite, SDL2pp::NullOpt, dest);
-}
-void Sprite::loadImage(const std::string &file_name) {
-  SDL2pp::Texture new_sprite(renderer, file_name);
-  sprite = std::move(new_sprite);
+  width_ = width;
+  height_ = height;
+  renderer.copy(*this, x, y);
 }
 
-Sprite& Sprite::operator=(Sprite &other) {
+void Sprite::render(int x, int y) {
+  renderer.copy(*this, x, y);
+}
+
+void Sprite::loadImage(const std::string &file_name, int width, int height) {
+  if (width == 0)
+    width = width_;
+  if (height == 0)
+    height = height_;
+  SDL2pp::Texture new_sprite(renderer.renderer(), file_name);
+  sprite_ = std::move(new_sprite);
+  width_ = width;
+  height_ = height;
+}
+
+Sprite& Sprite::operator=(Sprite &&other) noexcept {
   renderer = std::move(other.renderer);
-  sprite = std::move(other.sprite);
+  sprite_ = std::move(other.sprite_);
   return *this;
+}
+
+int Sprite::width() const {
+  return width_;
+}
+
+int Sprite::height() const {
+  return height_;
 }
 
 Sprite::~Sprite() = default;

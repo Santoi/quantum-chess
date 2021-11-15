@@ -1,6 +1,7 @@
 #include "remote_clients_threads.h"
 #include "client_protocol.h"
 #include <iostream>
+#include "remote_client_instructions.h"
 
 RemoteClientSender::RemoteClientSender(Socket& client_socket)
                     :client_socket(client_socket) {
@@ -39,11 +40,10 @@ RemoteClientReceiver::RemoteClientReceiver(Socket& client_socket)
 }
 
 void RemoteClientReceiver::receiveMessage() {
-    std::string nick_name;
-    std::string message;
+    std::unique_ptr<RemoteClientInstruction> ptr_instruction;
     ClientProtocol protocol;
-    protocol.receiveInstruction(this->client_socket, nick_name, message);
-    std::cout << nick_name << " envia: " << message << std::endl;
+    protocol.receiveInstruction(this->client_socket, ptr_instruction);
+    ptr_instruction->makeAction();
 }
 
 void RemoteClientReceiver::run() {

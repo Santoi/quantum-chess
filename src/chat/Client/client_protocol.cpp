@@ -1,7 +1,7 @@
 #include "common_packet.h"
 #include <unistd.h>
 #include <arpa/inet.h>
-
+#include "unique_ptr.h"
 #include "client_protocol.h"
 
 #define ONE_BYTE 1
@@ -30,11 +30,33 @@ void ClientProtocol::sendChatMessage(Socket& socket, const std::string& message)
     socket.send(packet);
 }
 
-void ClientProtocol::receiveInstruction(Socket& socket, std::string& nick_name, std::string& message) {
-    Packet packet;
-    socket.receive(packet, ONE_BYTE);
+void ClientProtocol::fillClientInstructionWithChat(Socket& socket, std::unique_ptr<RemoteClientInstruction>&
+                                                                    ptr_instruction) {
+    std::string nick_name;
+    std::string message;
     this->getMessageFromSocket(socket, nick_name);
     this->getMessageFromSocket(socket, message);
+    ptr_instruction = make_unique<RemoteClientChatInstruction>(nick_name, message);
+
+}
+
+void ClientProtocol::fillClientInstructionWithExitMessage(Socket& socket, std::unique_ptr<RemoteClientInstruction>&
+                                                                            ptr_instruction) {
+    std::string nick_name;
+    this->getMessageFromSocket(socket, nick_name);
+    ptr_instruction = make_unique<RemoteClientExitMessageInstruction>(nick_name);
+}
+
+void ClientProtocol::receiveInstruction(Socket& socket, std::unique_ptr<RemoteClientInstruction>&
+                                                        ptr_instruction) {
+    Packet packet;
+    socket.receive(packet, ONE_BYTE);
+    char action = packet.getByte();
+    if (action == 'c')
+        this->fillClientInstructionWithChat(socket, ptr_instruction);
+    else if (action == 'e')
+        this->fillClientInstructionWithExitMessage(socket, ptr_instruction);
+
 }
 
 

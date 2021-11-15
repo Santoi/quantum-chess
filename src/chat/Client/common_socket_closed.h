@@ -4,8 +4,9 @@
 
 
 class SocketClosed: public std::exception {
+public:
     const char * what() const noexcept override {
-        return "el socket se cerro";
+        return "Socket is closed.";
     }
 };
 

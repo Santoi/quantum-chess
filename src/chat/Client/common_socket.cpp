@@ -16,7 +16,7 @@
 #define SOCKET_NO_DISPONIBLE 0
 #define INVALID_FILE_DESCRIPTOR -1
 #define MAX_MENSAJE 50
-#define MAX_MENSAJE_DE_ERROR 250
+#define MAX_ERROR_MESSAGE 250
 
 
 Socket::Socket()
@@ -145,14 +145,14 @@ void Socket::inicializarServidorConBindYListen(const char* host, const char* ser
 Socket Socket::acceptSocket() {
     int fd = accept(this->fd, nullptr, nullptr);
     if (fd == ERROR)
-        throw NoSePuedeAceptarSocketError();
+        throw CantAcceptClientSocketError();
     Socket socket_cliente(fd);
     return socket_cliente;
 }
 
 size_t Socket::send(Packet & packet) const {
     if (fd == INVALID_FILE_DESCRIPTOR)
-        throw std::runtime_error("el socket tiene un fd invalido");
+        throw InvalidSocketError("Error: uninitialized socket");
     packet.resetSent();
     // Mientras que quede algo pendiente de enviar se itera.
     while (packet.pendingToSentSize() > 0) {
@@ -176,7 +176,7 @@ size_t Socket::send(Packet & packet) const {
 
 size_t Socket::receive(Packet & packet, size_t size) const {
     if (fd == INVALID_FILE_DESCRIPTOR)
-        throw std::runtime_error("el socket tiene un fd invalido");
+        throw InvalidSocketError("Error: uninitialized socket");
     // Se crea un buffer para recibir.
     std::vector<char> buffer(size, 0);
     packet.reset();
@@ -199,41 +199,8 @@ size_t Socket::receive(Packet & packet, size_t size) const {
     // Se devuelven los bytes recibidos.
     return packet.size();
 }
-/*
-ssize_t Socket::enviarMensaje(const char* buffer, size_t length) {
-    size_t escritos = 0;
-    if (this->fd == SIN_FD)
-        throw SocketNoInicializadoError("Error: un socket que no fue inicializado no puede enviar "
-                                        "mensajes.");
-    while (escritos < length) {
-        int aux = send(this->fd, buffer + escritos,
-                       length - escritos, MSG_NOSIGNAL);
-        if (aux == ERROR)
-            return ERROR;
-        else if (aux == SOCKET_NO_DISPONIBLE)
-            return escritos;
-        escritos = escritos + aux;
-    }
-    return escritos;
-}
 
-ssize_t Socket::recibirMensaje(char* buffer, size_t length) {
-    size_t leidos = 0;
-    if (this->fd == SIN_FD)
-        throw SocketNoInicializadoError("Error: un socket que no fue inicializado no puede recibir "
-                                        "mensajes.");
-    while (leidos < length) {
-        int aux = recv(this->fd, buffer + leidos, length - leidos, 0);
-        if (aux == ERROR)
-            return ERROR;
-        else if (aux == SOCKET_NO_DISPONIBLE)
-            return leidos;
-        leidos = leidos + aux;
-    }
-    return leidos;
-}
-*/
-void Socket::shutdownYCerrar() {
+void Socket::shutdownAndClose() {
     shutdown(this->fd, SHUT_RDWR);
     int aux = close(this->fd);
     if (aux != EXITO)
@@ -242,7 +209,7 @@ void Socket::shutdownYCerrar() {
 
 void Socket::stopAccepting() {
     if (this->fd != INVALID_FILE_DESCRIPTOR)
-        this->shutdownYCerrar();
+        this->shutdownAndClose();
     this->fd = INVALID_FILE_DESCRIPTOR;
 }
 
@@ -252,21 +219,21 @@ void Socket::stopCommunication() {
 
 Socket::~Socket() {
     if (this->fd != INVALID_FILE_DESCRIPTOR)
-        this->shutdownYCerrar();
+        this->shutdownAndClose();
 }
 
-NoSePuedeAceptarSocketError::NoSePuedeAceptarSocketError() noexcept {
-    char str_aux[MAX_MENSAJE_DE_ERROR];
-    this->mensaje_de_error = strerror_r(errno, str_aux, MAX_MENSAJE_DE_ERROR);
+CantAcceptClientSocketError::CantAcceptClientSocketError() noexcept {
+    char str_aux[MAX_ERROR_MESSAGE];
+    this->error_message = strerror_r(errno, str_aux, MAX_ERROR_MESSAGE);
 }
 
-const char* NoSePuedeAceptarSocketError::what() const noexcept {
-    return this->mensaje_de_error;
+const char* CantAcceptClientSocketError::what() const noexcept {
+    return this->error_message;
 }
 
-SocketNoInicializadoError::SocketNoInicializadoError(const char* mensaje_de_error) noexcept {
-    this->mensaje_de_error = mensaje_de_error;
+InvalidSocketError::InvalidSocketError(const char* mensaje_de_error) noexcept {
+    this->error_message = error_message;
 }
-const char* SocketNoInicializadoError::what()  const noexcept {
-    return this->mensaje_de_error;
+const char* InvalidSocketError::what()  const noexcept {
+    return this->error_message;
 }

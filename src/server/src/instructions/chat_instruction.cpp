@@ -1,16 +1,16 @@
 #include "chat_instruction.h"
-#include "../blocking_queue.h"
+#include "../../../common/src/blocking_queue.h"
 #include "../client_handler.h"
 
-ChatInstruction::ChatInstruction(const int& client_id, std::string&& message)
-        :instructor_id(client_id), message(std::move(message)) {
-}
+ChatInstruction::ChatInstruction(const int& client_id, std::string&& message):
+                                 instructor_id(client_id),
+                                 message(std::move(message)) {}
 
 
-void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
-                                                            std::vector<ClientHandler>& clients) {
+void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
+                                                            std::vector<ClientHandler>& clients, Board & board) {
     std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(this->instructor_id, std::move(this->message));
-    std::list<BlockingQueue>::iterator it;
+    std::list<BlockingQueue<Instruction>>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)
         (*it).push(this_instruc_ptr);
 }

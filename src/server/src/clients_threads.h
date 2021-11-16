@@ -4,7 +4,7 @@
 #include "../../common/src/thread.h"
 #include "../../common/src/socket.h"
 #include "thread_safe_queue.h"
-#include "blocking_queue.h"
+#include "../../common/src/blocking_queue.h"
 
 
 class ClientHandlersReceiver: public Thread {
@@ -45,7 +45,7 @@ class ClientHandlersSender: public Thread {
 private:
     Socket& client_socket;
     const int client_id;
-    BlockingQueue& notifications_queue;
+    BlockingQueue<Instruction>& notifications_queue;
     const NickNamesRepository& nick_names;
 
 public:
@@ -53,7 +53,7 @@ public:
     //Creates a new client sender, saving the references to the socket, notifications_queue and
     //nick_names repository passed in the function parameters, and saves a copy of the
     //client_id.
-    ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue, const int& client_id, const NickNamesRepository& nick_names);
+    ClientHandlersSender(Socket& socket, BlockingQueue<Instruction>& notifications_queue, const int& client_id, const NickNamesRepository& nick_names);
 
     //Saves the other_receiver's BlockingQueue, NickNamesRepository references in new client
     //sender, and copies the other's client_id to new receivers's client_id. It receives a

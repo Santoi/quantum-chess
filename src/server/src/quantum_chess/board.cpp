@@ -123,6 +123,17 @@ bool Board::isThere(Chessman * chessman) {
                                     return pair.second == chessman; });
 }
 
+void Board::loadVectors(std::vector<char> & characters_,
+                        std::vector<Position> & positions_) {
+    characters_.reserve(board.size());
+    positions_.reserve(board.size());
+    for (auto it = board.begin(); it != board.end(); ++it) {
+        // TODO completar
+        characters_.push_back('l');
+        positions_.push_back(it->first);
+    }
+}
+
 std::unique_ptr<Chessman> Board::createChessman(char chessman_,
                                                 Position position_,
                                                 bool white_) {

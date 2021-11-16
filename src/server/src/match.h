@@ -4,11 +4,12 @@
 
 #include <list>
 #include "thread_safe_queue.h"
-#include "blocking_queue.h"
+#include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
 #include "client_handler.h"
 #include "nick_names_repository.h"
 #include "../../common/src/thread.h"
+#include "quantum_chess/board.h"
 
 #define BASE_CLIENTS 5
 
@@ -17,9 +18,10 @@ class ClientHandler;
 class Match: public Thread {
 private:
     int accepted_clients;
+    Board board;
     std::vector<ClientHandler> clients;
     NickNamesRepository nick_names;
-    std::list<BlockingQueue> listening_queues;
+    std::list<BlockingQueue<Instruction>> listening_queues;
     ThreadSafeQueue match_updates_queue;
 
 public:
@@ -47,7 +49,7 @@ public:
     //the isActive method). If the match is active then the game cannot be joined at the moment because
     //it is still executing, therefore a false is returned. If the match is not active the game can
     //be joined and a true is returned.
-    bool isJoinable();
+    bool isJoinable() override;
 
     //Iterates over the list of clients, asking each one if the respective client is active. If either
     //of them is active, then a true is returned. If neither is active, a false is returned.

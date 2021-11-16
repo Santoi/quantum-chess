@@ -72,4 +72,9 @@ void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool
     ptr_matches[match_number]->addClientToMatchAndStart(std::move(client_socket), threaded_match);
 }
 
+void MatchesRepository::addClientToMatchCreatingIfNeeded(Socket&& client_socket, bool threaded_match) {
+    int chosen_match = getClientChosenMatch(client_socket, true);
+    ptr_matches[chosen_match]->addClientToMatchAndStart(std::move(client_socket), threaded_match);
+}
+
 

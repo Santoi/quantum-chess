@@ -26,7 +26,7 @@ public:
     void join();
 
     //Returns true if the object has an active thread and can be joined, or false othrewise.
-    bool isJoinable();
+    virtual bool isJoinable();
 
     //Calls pure virtual protected method run(), catching any exception that may rise.
     void runCatchingExceptions();

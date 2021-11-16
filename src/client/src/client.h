@@ -3,14 +3,19 @@
 
 #include "remote_clients_threads.h"
 #include "../../common/src/socket.h"
+#include "../../common/src/blocking_queue.h"
+#include "remote_client_instructions.h"
 #include <string>
 
 class Client {
 private:
     Socket client_socket;
+    BlockingQueue<RemoteClientInstruction> received;
+    BlockingQueue<RemoteClientInstruction> send;
     RemoteClientSender remote_sender;
     RemoteClientReceiver remote_receiver;
     std::string clients_nick_name;
+    AsciiBoard board;
 
 public:
     Client() = delete;

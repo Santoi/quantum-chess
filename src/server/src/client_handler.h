@@ -7,7 +7,7 @@
 #include "../../common/src/socket.h"
 #include "match.h"
 #include "server_protocol.h"
-#include "blocking_queue.h"
+#include "../../common/src/blocking_queue.h"
 #include "nick_names_repository.h"
 #include <memory>
 #include "clients_threads.h"
@@ -26,7 +26,7 @@ public:
 
     //A ClientHandler is created, moving and storing the given socket. A ClientHandlersReceiver and
     //ClientHandlersSender are also created and saved. The boolean client_is_active is set to true.
-    ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue,
+    ClientHandler(Socket&& socket, BlockingQueue<Instruction>& notifications_queue, ThreadSafeQueue& updates_queue,
                     const int& client_id, const NickNamesRepository& nick_names);
 
     //Creates a new ClientHandler by moving the other_client's socket to the new handler, and creating

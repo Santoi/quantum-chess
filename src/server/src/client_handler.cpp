@@ -4,7 +4,7 @@
 #include "../../common/src/socket_closed.h"
 
 
-ClientHandler::ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue&
+ClientHandler::ClientHandler(Socket&& socket, BlockingQueue<Instruction>& notifications_queue, ThreadSafeQueue&
                               updates_queue, const int& client_id, const NickNamesRepository& nick_names)
               :client_socket(std::move(socket)),
                client_receiver(client_socket, client_id, updates_queue),

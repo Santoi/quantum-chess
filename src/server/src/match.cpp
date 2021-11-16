@@ -1,19 +1,21 @@
 #include "match.h"
 #include "client_handler.h"
+#include "quantum_chess/board.h"
 #include "instructions/instruction.h"
 #include "instructions/exit_instruction.h"
+#include "instructions/load_board_instruction.h"
 
 #define MATCH_ID -1
 
 Match::Match()
-        :Thread(), accepted_clients(0) {
+        :Thread(), accepted_clients(0), board() {
     this->clients.reserve(BASE_CLIENTS);
 }
 
 Match::Match(Match&& other_match)
        :Thread(std::move(other_match)), accepted_clients(other_match.accepted_clients),
         clients(std::move(other_match.clients)), listening_queues(std::move(other_match.listening_queues)),
-        match_updates_queue(std::move(other_match.match_updates_queue)) {
+        match_updates_queue(std::move(other_match.match_updates_queue)), board(std::move(other_match.board)) {
 }
 
 void Match::addClientsNickNameToRepository(const int& client_id) {
@@ -23,7 +25,7 @@ void Match::addClientsNickNameToRepository(const int& client_id) {
 }
 
 void Match::addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id) {
-    BlockingQueue new_listening_queue;
+    BlockingQueue<Instruction> new_listening_queue;
     this->listening_queues.push_front(std::move(new_listening_queue));
     ClientHandler client(std::move(client_socket), this->listening_queues.front(),
                          this->match_updates_queue, client_id, this->nick_names);
@@ -45,16 +47,20 @@ void Match::addClientToMatchAndStart(Socket&& client_socket, bool threaded_match
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
     this->addClientsNickNameToRepository(client_id);
     this->clients[client_id].startThreadedClient(*this, threaded_match);
+    LoadBoardInstruction instruction;
+    match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
 }
 
 
 void Match::checkAndNotifyUpdates() {
     std::shared_ptr<Instruction> instruc_ptr;
     this->match_updates_queue.pop(instruc_ptr);
-    instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues, this->clients);
+    instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues, this->clients, this->board);
 }
 
 void Match::run() {
+    board.load();
+    std::cout << "Termine de cargar" << std::endl;
     while (true)
         checkAndNotifyUpdates();
 }
@@ -84,3 +90,11 @@ void Match::pushExitInstructionToUpdatesQueue() {
 Match::~Match() {
 
 }
+
+/*
+ *    std::vector<Position> positions;
+    std::vector<char> characters;
+    board.loadVectors(characters, positions);
+    LoadBoardInstruction instr(std::move(characters), std::move(positions));
+    instr.makeActionAndNotifyAllListeningQueues(listening_queues, clients, board);
+ */

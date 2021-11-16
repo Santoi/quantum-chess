@@ -2,6 +2,7 @@
 #include "client_protocol.h"
 #include <iostream>
 #include "remote_client_instructions.h"
+#include "../../common/src/blocking_queue.h"
 
 RemoteClientSender::RemoteClientSender(Socket& client_socket)
                     :client_socket(client_socket) {
@@ -29,21 +30,22 @@ void RemoteClientSender::readFromStandardInputAndMakeAction() {
 }
 
 void RemoteClientSender::run() {
-    std::cout << "Escriba mensajes para el chat" << std::endl;
+    /*std::cout << "Escriba mensajes para el chat" << std::endl;
     while (this->sender_is_active)
-        this->readFromStandardInputAndMakeAction();
+        this->readFromStandardInputAndMakeAction();*/
 }
 
 
-RemoteClientReceiver::RemoteClientReceiver(Socket& client_socket)
-                    :client_socket(client_socket) {
-}
+RemoteClientReceiver::RemoteClientReceiver(Socket& client_socket,
+                                           BlockingQueue<RemoteClientInstruction> & queue_)
+                    :client_socket(client_socket), queue(queue_) {}
 
 void RemoteClientReceiver::receiveMessage() {
-    std::unique_ptr<RemoteClientInstruction> ptr_instruction;
+    std::shared_ptr<RemoteClientInstruction> ptr_instruction;
     ClientProtocol protocol;
     protocol.receiveInstruction(this->client_socket, ptr_instruction);
-    ptr_instruction->makeAction();
+
+    queue.push(ptr_instruction);
 }
 
 void RemoteClientReceiver::run() {

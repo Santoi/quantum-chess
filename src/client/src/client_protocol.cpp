@@ -8,7 +8,7 @@
 #define TWO_BYTES 2
 
 int ClientProtocol::receiveNumberOfRunningGames(Socket& socket) {
-    return (int)(this->getNumberFromSocket(socket));
+    return (int)(this->getNumber16FromSocket(socket));
 }
 
 void ClientProtocol::sendChosenGame(Socket& socket, const int& game_number) {
@@ -30,7 +30,7 @@ void ClientProtocol::sendChatMessage(Socket& socket, const std::string& message)
     socket.send(packet);
 }
 
-void ClientProtocol::fillClientInstructionWithChat(Socket& socket, std::unique_ptr<RemoteClientInstruction>&
+void ClientProtocol::fillClientInstructionWithChat(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
                                                                     ptr_instruction) {
     std::string nick_name;
     std::string message;
@@ -40,22 +40,46 @@ void ClientProtocol::fillClientInstructionWithChat(Socket& socket, std::unique_p
 
 }
 
-void ClientProtocol::fillClientInstructionWithExitMessage(Socket& socket, std::unique_ptr<RemoteClientInstruction>&
+void ClientProtocol::fillClientInstructionWithExitMessage(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
                                                                             ptr_instruction) {
     std::string nick_name;
     this->getMessageFromSocket(socket, nick_name);
     ptr_instruction = make_unique<RemoteClientExitMessageInstruction>(nick_name);
 }
 
-void ClientProtocol::receiveInstruction(Socket& socket, std::unique_ptr<RemoteClientInstruction>&
+void ClientProtocol::fillClientInstructionWithLoadBoard(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
+ptr_instruction) {
+    // TODO mejorar el protocolo con otros datos.
+    uint8_t amount = getNumber8FromSocket(socket);
+    std::vector<char> characters;
+    std::vector<Position> positions;
+    positions.reserve(amount);
+    characters.reserve(amount);
+    for (uint8_t i = 0; i < amount; i++) {
+        characters.push_back(getCharFromSocket(socket));
+        Position position(getNumber8FromSocket(socket), getNumber8FromSocket(socket));
+        positions.push_back(position);
+    }
+    ptr_instruction = make_unique<RemoteClientLoadMessageInstruction>(std::move(characters), std::move(positions));
+}
+
+void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
                                                         ptr_instruction) {
     Packet packet;
     socket.receive(packet, ONE_BYTE);
     char action = packet.getByte();
-    if (action == 'c')
-        this->fillClientInstructionWithChat(socket, ptr_instruction);
-    else if (action == 'e')
-        this->fillClientInstructionWithExitMessage(socket, ptr_instruction);
+    switch (action) {
+        case 'c':
+            this->fillClientInstructionWithChat(socket, ptr_instruction);
+            break;
+        case 'l':
+            std::cout << "hola" << std::endl;
+            this->fillClientInstructionWithLoadBoard(socket, ptr_instruction);
+            break;
+        case 'e':
+            this->fillClientInstructionWithExitMessage(socket, ptr_instruction);
+            break;
+    }
 
 }
 

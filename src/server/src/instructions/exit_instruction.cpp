@@ -1,18 +1,20 @@
 #include "exit_instruction.h"
-#include "../blocking_queue.h"
+#include "../../../common/src/blocking_queue.h"
 #include "../client_handler.h"
+#include "../quantum_chess/board.h"
 
 ExitInstruction::ExitInstruction(const int& client_id)
         :instructor_id(client_id) {
 }
 
-void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
-                                                            std::vector<ClientHandler>& clients) {
+void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
+                                                            std::vector<ClientHandler>& clients,
+                                                            Board & board) {
     if (this->instructor_id == MATCH_ID)
         throw std::runtime_error("");
     //Just notify existing queues that the player left the game
     std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ExitInstruction>(this->instructor_id);
-    std::list<BlockingQueue>::iterator it;
+    std::list<BlockingQueue<Instruction>>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)
         (*it).push(this_instruc_ptr);
     clients[this->instructor_id].join();

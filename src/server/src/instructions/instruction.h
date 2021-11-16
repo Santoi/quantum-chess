@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include "../quantum_chess/board.h"
 #include "../../../common/src/packet.h"
 #include "../nick_names_repository.h"
 #include "../server_protocol.h"
@@ -12,21 +13,20 @@
 
 class ServerProtocol;
 
+template <class T>
 class BlockingQueue;
 
 class ClientHandler;
 
 class Instruction {
-private:
-
-
 public:
     Instruction() = default;
 
     //Given the list of listening queues and the client's vector, it makes the appropiate action
     //and notifies all queues of the changes.
-    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
-                                                       std::vector<ClientHandler>& clients);
+    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
+                                                       std::vector<ClientHandler>& clients,
+                                                       Board & board) = 0;
 
     //The derived Instruction class asks the protocol to fill the given packet with the information
     //accordingly.
@@ -36,16 +36,5 @@ public:
 
     ~Instruction() = default;
 };
-
-/*
-class MovementInstruction: public Instruction {
-private:
-    const int instructor_id;
-public:
-    MovementInstruction(const int& client_id);
-    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues);
-    virtual void fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet
-                                                   const NickNamesRepository& nick_names);
-};*/
 
 #endif //QUANTUM_CHESS_PROJ_INSTRUCTION_H

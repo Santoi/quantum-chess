@@ -19,7 +19,7 @@ void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
     std::shared_ptr <Instruction> ptr_instruction;
     ServerProtocol protocol;
     protocol.fillInstructions(this->client_socket, this->client_id, ptr_instruction);
-     this->updates_queue.push(ptr_instruction);
+    this->updates_queue.push(ptr_instruction);
 }
 
 void ClientHandlersReceiver::pushToQueueExitInstruction() {
@@ -38,7 +38,7 @@ void ClientHandlersReceiver::run() {
     }
 }
 
-ClientHandlersSender::ClientHandlersSender(Socket& socket, BlockingQueue& notifications_queue,
+ClientHandlersSender::ClientHandlersSender(Socket& socket, BlockingQueue<Instruction>& notifications_queue,
                                            const int& client_id, const NickNamesRepository& nick_names)
                       :client_socket(socket), client_id(client_id),
                        notifications_queue(notifications_queue), nick_names(nick_names) {

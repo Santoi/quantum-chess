@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_CHAT_INSTRUCTION_H
 
 #include "instruction.h"
+#include "../quantum_chess/board.h"
 
 class ChatInstruction: public Instruction {
 private:
@@ -15,8 +16,9 @@ public:
     ChatInstruction(const int& client_id, std::string&& message);
 
     //Creates a new ChatInstruction and sends it to all listening queues.
-    void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue>& listening_queues,
-                                               std::vector<ClientHandler>& clients) override;
+    void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
+                                               std::vector<ClientHandler>& clients,
+                                               Board & board) override;
 
     //Gets the instructor's nickname from the NickNamesRepository using the object's instructor_id
     //attribute, and calls the protocol method fillPacketWithChatInfo to fill the given packet.

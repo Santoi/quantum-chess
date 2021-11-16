@@ -47,6 +47,11 @@ public:
     //the match.
     void fillPacketWithExitInfo(Packet& packet, const std::string& nick_name);
 
+    void
+    fillPacketWithLoadBoardInfo(Packet &packet,
+                                const std::vector<char> &characters,
+                                const std::vector<Position> &positions);
+
     ~ServerProtocol() = default;
 
 private:

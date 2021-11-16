@@ -13,4 +13,4 @@ add_executable(${This} ${Sources} ${Headers} main.cpp)
 add_subdirectory(quantum_chess)
 add_subdirectory(instructions)
 
-target_link_libraries(${This} common instructions)
+target_link_libraries(${This} common instructions quantum-chess-lib)

@@ -4,7 +4,9 @@
 
 Client::Client(const char* host, const char* servidor)
         :client_socket(std::move(Socket::createAConnectedSocket(host, servidor))),
-         remote_sender(client_socket), remote_receiver(client_socket) {
+        received(), send(),
+         remote_sender(client_socket), remote_receiver(client_socket, received),
+         board() {
 }
 
 
@@ -65,6 +67,11 @@ void Client::executeSingleThreadedClient() {
 void Client::executeThreadedClient() {
     this->remote_sender.start();
     this->remote_receiver.start();
+    while (true) {
+        std::shared_ptr<RemoteClientInstruction> ptr_instruction;
+        received.pop(ptr_instruction);
+        ptr_instruction->makeAction(board);
+    }
     this->remote_sender.join();
     this->remote_receiver.join();
 }

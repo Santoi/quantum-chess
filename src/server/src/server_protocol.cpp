@@ -16,7 +16,7 @@ void ServerProtocol::sendNumberOfGamesRunning(Socket& socket, const int& max_gam
 }
 
 int ServerProtocol::receiveNumberOfChosenGame(Socket& socket) {
-    return (int)(this->getNumberFromSocket(socket));
+    return (int)(this->getNumber16FromSocket(socket));
 }
 
 void ServerProtocol::getNickName(Socket& socket, std::string& nick_name) {
@@ -50,6 +50,16 @@ void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& n
     packet.addByte('c');
     this->addStringAndItsLengthToPacket(packet, nick_name);
     this->addStringAndItsLengthToPacket(packet, message);
+}
+
+void ServerProtocol::fillPacketWithLoadBoardInfo(Packet & packet, const std::vector<char> & characters, const std::vector<Position> & positions) {
+    packet.addByte('l');
+    packet.addByte(characters.size());
+    for (uint16_t i = 0; i < characters.size(); i++) {
+        packet.addByte(characters[i]);
+        packet.addByte(positions[i].x());
+        packet.addByte(positions[i].y());
+    }
 }
 
 void ServerProtocol::sendPacketWithUpdates(Socket& socket, std::shared_ptr<Instruction>& instruct_ptr,

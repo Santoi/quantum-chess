@@ -4,6 +4,8 @@
 #include "../../common/src/thread.h"
 #include <string>
 #include "../../common/src/socket.h"
+#include "remote_client_instructions.h"
+#include "../../common/src/blocking_queue.h"
 
 class RemoteClientSender: public Thread {
 private:
@@ -37,12 +39,13 @@ private:
 class RemoteClientReceiver: public Thread {
 private:
     Socket& client_socket;
+    BlockingQueue<RemoteClientInstruction> & queue;
 
 public:
     RemoteClientReceiver() = delete;
 
     //Creates a RemoteClientReceiver, saving a reference to client_socket.
-    RemoteClientReceiver(Socket& client_socket);
+    RemoteClientReceiver(Socket& client_socket, BlockingQueue<RemoteClientInstruction> & queue_);
 
     //Asks protocol to fill a pointer to a RemoteClientInstruction derived class and
     //tells it to makeAction.

@@ -42,14 +42,24 @@ void Scene::moveTiles(const std::list<Position> &positions) {
     board.moveTile(position);
 }
 
+void Scene::entangledTiles(const std::list<Position> &positions) {
+  for (const Position &position : positions)
+    board.entangledTile(position);
+}
+
 void Scene::quantumTiles(const std::list<Position> &positions) {
   for (const Position &position : positions)
-    board.moveTile(position);
+    board.quantumTile(position);
 }
 
 void Scene::splitTiles(const std::list<Position> &positions) {
   for (const Position &position : positions)
-    board.moveTile(position);
+    board.splitTile(position);
+}
+
+void Scene::mergeTiles(const std::list<Position> &positions) {
+  for (const Position &position : positions)
+    board.mergeTile(position);
 }
 
 void Scene::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {

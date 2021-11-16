@@ -24,8 +24,10 @@ public:
   void setDefaultBoard();
 
   void moveTiles(const std::list<Position> &positions);
+  void entangledTiles(const std::list<Position> &positions);
   void quantumTiles(const std::list<Position> &positions);
   void splitTiles(const std::list<Position> &positions);
+  void mergeTiles(const std::list<Position> &positions);
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 

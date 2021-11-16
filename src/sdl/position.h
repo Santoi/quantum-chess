@@ -34,10 +34,6 @@ public:
   // Return y coordinate.
   uint8_t y() const;
 
-  // Convert the given (x, y) coordinate into a position
-  // Return false if out of bounds
-  bool setCoordinate(SDL2pp::Renderer &renderer, int x, int y);
-
   bool isEven() const;
 };
 

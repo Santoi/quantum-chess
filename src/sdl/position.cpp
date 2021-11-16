@@ -31,21 +31,6 @@ bool operator<(const Position &a, const Position &b) {
          ((a.x_ == b.x_) && (a.y_ < b.y_));
 }
 
-bool Position::setCoordinate(SDL2pp::Renderer &renderer, int x, int y) {
-  int total = std::min(renderer.GetOutputHeight(), renderer.GetOutputWidth());
-  x *= 10;
-  y *= 10;
-  x /= total;
-  y /= -total;
-  x -= 1;
-  y += 8;
-  if (x > BOUND || y > BOUND)
-    return false;
-  x_ = x;
-  y_ = y;
-  return true;
-}
-
 bool Position::isEven() const {
   return (x_ + y_) % 2 == 0;
 }

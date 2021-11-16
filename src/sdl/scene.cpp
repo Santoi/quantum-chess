@@ -53,3 +53,20 @@ void Scene::moveTiles(const PixelCoordinate pixel) {
 void Scene::moveTiles(const Position position) {
   board.moveTile(position);
 }
+
+void Scene::quantumTiles(int x, int y) {
+  Position position;
+  PixelCoordinate pixel(x, y);
+  transformer.pixel2Position(pixel, position, scale);
+  board.quantumTile(position);
+}
+
+void Scene::quantumTiles(const PixelCoordinate pixel) {
+  Position position;
+  transformer.pixel2Position(pixel, position, scale);
+  board.quantumTile(position);
+}
+
+void Scene::quantumTiles(const Position position) {
+  board.quantumTile(position);
+}

@@ -6,17 +6,17 @@ Tile::Tile(Renderer &renderer, bool black) : renderer(renderer),
                                                      renderer.getMinDimension() / 10) {
   if (black) {
     images = {
-        {DEFAULT, "img/black_square.png"},
-        {MOVE, "img/black_square_move.png"},
-        {ENTANGLE, "img/black_square_entangle.png"},
-        {SPLIT, "img/black_square_split.png"}
+        {DEFAULT,   "img/black_square.png"},
+        {MOVE,      "img/black_square_move.png"},
+        {ENTANGLED, "img/black_square_entangle.png"},
+        {QUANTUM,   "img/black_square_split.png"}
     };
   } else {
     images = {
-        {DEFAULT, "img/white_square.png"},
-        {MOVE, "img/white_square_move.png"},
-        {ENTANGLE, "img/white_square_relation.png"},
-        {SPLIT, "img/white_square_split.png"}
+        {DEFAULT,   "img/white_square.png"},
+        {MOVE,      "img/white_square_move.png"},
+        {ENTANGLED, "img/white_square_relation.png"},
+        {QUANTUM,   "img/white_square_split.png"}
     };
   }
   sprite_.loadImage(images[DEFAULT]);
@@ -46,11 +46,11 @@ void Tile::loadMove() {
   sprite_.loadImage(images[MOVE]);
 }
 
-void Tile::loadEntagle() {
-  sprite_.loadImage(images[ENTANGLE]);
+void Tile::loadEntagled() {
+  sprite_.loadImage(images[ENTANGLED]);
 }
 
-void Tile::loadSplit() {
-  sprite_.loadImage(images[SPLIT]);
+void Tile::loadQuantum() {
+  sprite_.loadImage(images[QUANTUM]);
 }
 

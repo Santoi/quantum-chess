@@ -27,6 +27,8 @@ public:
   void moveChessman(Position &orig, Position &dest);
 
   void moveTile(int x, int y);
+  void quantumTile(int x, int y);
+  void entangledTile(int x, int y);
 
   void setDefault();
 };

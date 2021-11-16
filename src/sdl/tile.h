@@ -14,7 +14,7 @@ private:
   std::map<int, std::string> images;
 
   typedef enum {
-    DEFAULT, MOVE, ENTANGLE, SPLIT
+    DEFAULT, MOVE, ENTANGLED, QUANTUM
   } SquareType;
 
 public:
@@ -25,8 +25,8 @@ public:
   void render(int x, int y);
   void loadDefault();
   void loadMove();
-  void loadEntagle();
-  void loadSplit();
+  void loadEntagled();
+  void loadQuantum();
 };
 
 

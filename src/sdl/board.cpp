@@ -26,14 +26,29 @@ void Board::createChessman(const Position &dest, Chessman &chessman) {
 }
 
 void Board::moveChessman(Position &orig, Position &dest) {
-  Chessman &chessman = chessmen.at(orig); // TODO: catch exception
-  chessmen.erase(orig);
+  if (chessmen.count(orig) == 0)
+    return;
+  Chessman &chessman = chessmen.at(orig);
   chessmen.insert(std::move(std::pair<const Position, Chessman>(dest, std::move(chessman))));
+  chessmen.erase(orig);
 }
 
 void Board::moveTile(int x, int y) {
   const Position pos(x, y);
-  board.at(pos).loadMove();
+  if (board.count(pos))
+    board.at(pos).loadMove();
+}
+
+void Board::quantumTile(int x, int y) {
+  const Position pos(x, y);
+  if (board.count(pos))
+    board.at(pos).loadQuantum();
+}
+
+void Board::entangledTile(int x, int y) {
+  const Position pos(x, y);
+  if (board.count(pos))
+    board.at(pos).loadEntagled();
 }
 
 void Board::setDefault() {

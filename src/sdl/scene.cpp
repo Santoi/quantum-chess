@@ -36,3 +36,20 @@ void Scene::render() {
 void Scene::setDefaultBoard() {
   board.setDefault();
 }
+
+void Scene::moveTiles(int x, int y) {
+  Position position;
+  PixelCoordinate pixel(x, y);
+  transformer.pixel2Position(pixel, position, scale);
+  board.moveTile(position);
+}
+
+void Scene::moveTiles(const PixelCoordinate pixel) {
+  Position position;
+  transformer.pixel2Position(pixel, position, scale);
+  board.moveTile(position);
+}
+
+void Scene::moveTiles(const Position position) {
+  board.moveTile(position);
+}

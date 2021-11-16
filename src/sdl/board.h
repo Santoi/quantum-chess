@@ -26,9 +26,9 @@ public:
   void createChessman(const Position &dest, Chessman &chessman);
   void moveChessman(Position &orig, Position &dest);
 
-  void moveTile(int x, int y);
-  void quantumTile(int x, int y);
-  void entangledTile(int x, int y);
+  void moveTile(const Position pos);
+  void quantumTile(const Position pos);
+  void entangledTile(const Position pos);
 
   void setDefault();
 };

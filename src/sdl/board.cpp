@@ -33,20 +33,17 @@ void Board::moveChessman(Position &orig, Position &dest) {
   chessmen.erase(orig);
 }
 
-void Board::moveTile(int x, int y) {
-  const Position pos(x, y);
+void Board::moveTile(const Position pos) {
   if (board.count(pos))
     board.at(pos).loadMove();
 }
 
-void Board::quantumTile(int x, int y) {
-  const Position pos(x, y);
+void Board::quantumTile(const Position pos) {
   if (board.count(pos))
     board.at(pos).loadQuantum();
 }
 
-void Board::entangledTile(int x, int y) {
-  const Position pos(x, y);
+void Board::entangledTile(const Position pos) {
   if (board.count(pos))
     board.at(pos).loadEntagled();
 }

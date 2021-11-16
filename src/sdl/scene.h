@@ -19,6 +19,7 @@ private:
 public:
   Scene(int height, Board &board);
   void setScale(int scale_);
+  void setDefaultBoard();
   void loadSprite(Sprite &sprite, int x, int y);
   void render();
 };

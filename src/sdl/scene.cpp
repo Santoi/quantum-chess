@@ -32,3 +32,7 @@ void Scene::render() {
     it.second.render(pixel.x(), pixel.y());
   }
 }
+
+void Scene::setDefaultBoard() {
+  board.setDefault();
+}

@@ -2,16 +2,20 @@
 #define QUANTUM_CHESS_PROJ_EVENT_HANDLER_H
 
 #include "scene.h"
+#include "board.h"
 #include <SDL2/SDL.h>
 
 class EventHandler {
 private:
+  bool split, merge, move;
+  PixelCoordinate last;
   SDL_Event event;
 
 public:
-  EventHandler() = default;
+  EventHandler();
+  // Event loop
   bool handleEvents(Scene &scene, Board &board);
-  void handleMouse();
+//  void handleMouse();
 };
 
 

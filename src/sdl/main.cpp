@@ -1,61 +1,92 @@
+#include "window.h"
+#include "renderer.h"
 #include "sprite.h"
 #include "chessman.h"
+#include "board.h"
+#include "utility.h"
+#include "scene.h"
+#include "event_handler.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#define DEFAULT_HEIGHT 480
-#define DEFAULT_WIDTH 640
+void loadChessmen(Renderer &renderer, Board &board);
 
 int main() {
   SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-  // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-  SDL2pp::Window window("SDL2pp demo",
-                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                DEFAULT_WIDTH, DEFAULT_HEIGHT,
-                SDL_WINDOW_RESIZABLE);
+  Window window;
+  Renderer renderer(window);
 
-  // Create accelerated video renderer with default driver
-  SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+  Board board;
+  Sprite background(renderer, "img/board1.jpg", window.window().GetDrawableHeight(), window.window().GetDrawableHeight());
+  Scene scene(renderer.getMinDimension(), board);
+  scene.loadSprite(background, 0, 0);
+  board.create(renderer);
 
-  Sprite board(renderer, "img/board1.jpg");
-  Chessman tower(renderer, 't');
-  Chessman falcon(renderer, 'f');
-  Chessman bishop(renderer, 'b');
+  loadChessmen(renderer, board); // AUXILIARY FUNCTION
 
+  unsigned int prev_ticks = SDL_GetTicks();
 
+  EventHandler eventHandler;
+  bool running = true;
   // Main loop
-  while (true) {
-    // Event processing:
-    // - If window is closed, or Q or Escape buttons are pressed,
-    //   quit the application
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
-        return 0;
-      } else if (event.type == SDL_KEYDOWN) {
-        switch (event.key.keysym.sym) {
-          case SDLK_ESCAPE: case SDLK_q:
-            return 0;
-        }
-      }
-    }
+  while (running) {
+    // Timing: calculate difference between this and previous frame
+    // in milliseconds
+    unsigned int frame_ticks = SDL_GetTicks();
+    unsigned int frame_delta = frame_ticks - prev_ticks;
+    prev_ticks = frame_ticks;
 
-    int height = renderer.GetOutputHeight();
-
-    renderer.Clear();
-
-    board.render(0, 0, height, height);
-    tower.drawAt(0, 0);
-    falcon.drawAt(7, 7);
-    bishop.drawAt(2, 0);
+    running = eventHandler.handleEvents(scene, board);
 
     // Show rendered frame
-    renderer.Present();
+    renderer.render(scene);
 
     // Frame limiter: sleep for a little bit to not eat 100% of CPU
     SDL_Delay(1);
   }
   return 0;
+}
+
+void loadChessmen(Renderer &renderer, Board &board) {
+  // begin chessmen
+  Position p1(0, 0);
+  Chessman tl(renderer, 't');
+  board.createChessman(p1, tl);
+
+
+  Position p2(1, 0);
+  Chessman kl(renderer, 'k');
+  board.createChessman(p2, kl);
+
+
+  Position p3(2, 0);
+  Chessman bl(renderer, 'b');
+  board.createChessman(p3, bl);
+
+
+  Position p4(3, 0);
+  Chessman q(renderer, 'q');
+  board.createChessman(p4, q);
+
+
+  Position p5(4, 0);
+  Chessman k(renderer, 'K');
+  board.createChessman(p5, k);
+
+
+  Position p6(5, 0);
+  Chessman br(renderer, 'b');
+  board.createChessman(p6, br);
+
+
+  Position p7(6, 0);
+  Chessman kr(renderer, 'k');
+  board.createChessman(p7, kr);
+
+  Position p8(7, 0);
+  Chessman tr(renderer, 't');
+  board.createChessman(p8, tr);
+  // end chessmen
 }

@@ -7,8 +7,11 @@
 
 #define MATCH_ID -1
 
+// TODO AVeriguar donde arranca match.
+
 Match::Match()
         :Thread(), accepted_clients(0), board() {
+    // TODO convertir clients en map.
     this->clients.reserve(BASE_CLIENTS);
 }
 
@@ -42,7 +45,7 @@ void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
     this->clients[client_id].startSingleThreadedClient(*this);
 }
 
-void Match::addClientToMatchAndStart(Socket&& client_socket, bool threaded_match) {
+void Match::addClientToMatch(Socket&& client_socket, bool threaded_match) {
     int client_id = this->accepted_clients;
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
     this->addClientsNickNameToRepository(client_id);
@@ -55,12 +58,11 @@ void Match::addClientToMatchAndStart(Socket&& client_socket, bool threaded_match
 void Match::checkAndNotifyUpdates() {
     std::shared_ptr<Instruction> instruc_ptr;
     this->match_updates_queue.pop(instruc_ptr);
-    instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues, this->clients, this->board);
+    instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues, this->clients, this->board, match_updates_queue);
 }
 
 void Match::run() {
     board.load();
-    std::cout << "Termine de cargar" << std::endl;
     while (true)
         checkAndNotifyUpdates();
 }

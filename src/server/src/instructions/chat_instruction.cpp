@@ -8,7 +8,8 @@ ChatInstruction::ChatInstruction(const int& client_id, std::string&& message):
 
 
 void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
-                                                            std::vector<ClientHandler>& clients, Board & board) {
+                                                            std::vector<ClientHandler>& clients, Board & board,
+                                                            BlockingQueue<Instruction> & match_updates_queue) {
     std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(this->instructor_id, std::move(this->message));
     std::list<BlockingQueue<Instruction>>::iterator it;
     for (it = listening_queues.begin(); it != listening_queues.end(); it++)

@@ -10,13 +10,14 @@
 class RemoteClientSender: public Thread {
 private:
     Socket& client_socket;
+    BlockingQueue<RemoteClientInstruction> & send_queue;
     bool sender_is_active;
 
 public:
     RemoteClientSender() = delete;
 
     //Creates a RemoteClientSender, saving a reference to client_socket.
-    RemoteClientSender(Socket& client_socket);
+    RemoteClientSender(Socket& client_socket, BlockingQueue<RemoteClientInstruction> & send_queue_);
 
     //Reads from standard input and makes corresponding action.
     void readFromStandardInputAndMakeAction();

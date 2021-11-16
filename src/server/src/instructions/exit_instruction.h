@@ -25,7 +25,7 @@ public:
     //to stop the match's execution.
     void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
                                                std::vector<ClientHandler>& clients,
-                                               Board & board) override;
+                                               Board & board, BlockingQueue<Instruction> & match_updates_queue) override;
 
     //Gets the leaving instructor's nickname from the NickNamesRepository using the object's instructor_id
     //attribute, and calls the protocol method fillPacketWithExitInfo to fill the given packet. If the

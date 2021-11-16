@@ -2,6 +2,7 @@
 #include "../../common/src/packet.h"
 #include "instructions/instruction.h"
 #include "instructions/chat_instruction.h"
+#include "instructions/movement_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 
@@ -30,9 +31,15 @@ void ServerProtocol::fillChatInstructions(Socket& socket, const int& client_id,
     instruct_ptr = std::make_shared<ChatInstruction>(client_id, std::move(message));
 }
 
-void ServerProtocol::fillMovementInstructions(Socket& socket, const int& client_it ,
+void ServerProtocol::fillMovementInstructions(Socket& socket, const int& client_id ,
                                                         std::shared_ptr<Instruction>& instruct_ptr) {
-
+    uint8_t ix = getNumber8FromSocket(socket);
+    uint8_t iy = getNumber8FromSocket(socket);
+    uint8_t fx = getNumber8FromSocket(socket);
+    uint8_t fy = getNumber8FromSocket(socket);
+    Position initial(ix, iy);
+    Position final(fx, fy);
+    instruct_ptr = std::make_shared<MovementInstruction>(client_id, initial, final);
 }
 
 void ServerProtocol::fillInstructions(Socket& socket, const int& client_id,
@@ -40,10 +47,15 @@ void ServerProtocol::fillInstructions(Socket& socket, const int& client_id,
     Packet packet;
     socket.receive(packet, ONE_BYTE);
     char action = packet.getByte();
-    if (action == 'c')
-        fillChatInstructions(socket, client_id, instruct_ptr);
-    else
-        fillMovementInstructions(socket, client_id, instruct_ptr);
+
+    switch (action) {
+        case 'c':
+            fillChatInstructions(socket, client_id, instruct_ptr);
+            break;
+        case 'm':
+            fillMovementInstructions(socket, client_id, instruct_ptr);
+            break;
+    }
 }
 
 void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& nick_name, const std::string& message) {
@@ -52,11 +64,12 @@ void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& n
     this->addStringAndItsLengthToPacket(packet, message);
 }
 
-void ServerProtocol::fillPacketWithLoadBoardInfo(Packet & packet, const std::vector<char> & characters, const std::vector<Position> & positions) {
+void ServerProtocol::fillPacketWithLoadBoardInfo(Packet & packet, const std::vector<char> & characters, const std::vector<bool> & colors, const std::vector<Position> & positions) {
     packet.addByte('l');
     packet.addByte(characters.size());
     for (uint16_t i = 0; i < characters.size(); i++) {
         packet.addByte(characters[i]);
+        packet.addByte(colors[i]);
         packet.addByte(positions[i].x());
         packet.addByte(positions[i].y());
     }

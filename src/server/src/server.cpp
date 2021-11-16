@@ -50,6 +50,7 @@ void Server::executeServerWithThreads() {
     acceptor_thread.start();
     while (std::cin.get() != 'q') {
     }
+    // TODO salida
     this->acceptor_socket.stopAccepting();
     acceptor_thread.join();
 }

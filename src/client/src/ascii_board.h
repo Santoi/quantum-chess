@@ -4,16 +4,18 @@
 #include <map>
 #include <vector>
 #include "position.h"
+#include "ascii_chessman.h"
 
 // Clase que ejecuta el ajedrez en formato ASCII.
 class AsciiBoard {
-    std::map<Position, char> board;
+    std::map<Position, AsciiChessman> board;
 public:
     AsciiBoard();
 
     void draw();
 
-    void load(std::vector<Position> & positions, std::vector<char> & character);
+    void load(std::vector<Position> &positions, std::vector<bool> colors,
+              std::vector<char> &character);
 };
 
 

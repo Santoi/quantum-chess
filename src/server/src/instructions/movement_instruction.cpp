@@ -1,4 +1,5 @@
 #include "movement_instruction.h"
+#include "load_board_instruction.h"
 
 MovementInstruction::MovementInstruction(const int& client_id,
                                      const Position & initial_,
@@ -9,13 +10,12 @@ MovementInstruction::MovementInstruction(const int& client_id,
 
 void MovementInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
                                                             std::vector<ClientHandler>& clients,
-                                                            Board & board) {
-    /*std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(this->instructor_id, std::move(this->message));
-    std::list<BlockingQueue>::iterator it;
-    for (it = listening_queues.begin(); it != listening_queues.end(); it++)
-        (*it).push(this_instruc_ptr);*/
+                                                            Board & board, BlockingQueue<Instruction> & match_updates_queue) {
     // TODO validar color, permisos, etc
     board.move(initial, final);
+    LoadBoardInstruction instruction;
+    match_updates_queue.push(
+            std::make_shared<LoadBoardInstruction>(instruction));
 }
 
 void MovementInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,

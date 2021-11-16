@@ -7,6 +7,8 @@
 #include "remote_client_instructions.h"
 #include <memory>
 
+class RemoteClientInstruction;
+
 class ClientProtocol: public Protocol {
 public:
     ClientProtocol() = default;
@@ -20,15 +22,21 @@ public:
     //It sends to the client socket the client's nick_name, following the protocol.
     void sendClientsNickName(Socket& socket, std::string& nick_name);
 
-    //It sends to the client socket the given message, following the protocol.
-    void sendChatMessage(Socket& socket, const std::string& message);
+    void fillPacketWithChatMessage(Packet &packet, const std::string & message);
 
     //Following the protocol, it receives from socket the information necessary to create the
     //appropiate RemoteClientInstruction. After the function ends, the ptr_instruction points to a
     //valid instruction that can be executed calling the makeAction instruction.
     void receiveInstruction(Socket& socket, std::shared_ptr<RemoteClientInstruction>& ptr_instruction);
 
+    void sendInstruction(Socket &socket,
+                         std::shared_ptr<RemoteClientInstruction> &instruction);
+
     ~ClientProtocol() = default;
+
+    void
+    fillPacketWithMoveMessage(Packet &packet, Position &initial,
+                              Position &final);
 
 private:
     //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
@@ -45,6 +53,7 @@ private:
 
     void fillClientInstructionWithLoadBoard(Socket &socket,
                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

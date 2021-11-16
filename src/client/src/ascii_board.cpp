@@ -11,7 +11,7 @@ void AsciiBoard::draw() {
             Position position(i, j);
             std::cout << "[";
             if (board.count(position)) {
-                std::cout << board[position];
+                std::cout << board.at(position);
             }
             else
                 std::cout << " ";
@@ -26,8 +26,11 @@ void AsciiBoard::draw() {
 }
 
 void AsciiBoard::load(std::vector<Position> &positions,
+                      std::vector<bool> colors,
                       std::vector<char> &character) {
+    board = std::map<Position, AsciiChessman>();
     for (size_t i = 0; i < positions.size(); i++) {
-        board.insert(std::make_pair(positions[i], character[i]));
+        AsciiChessman chessman(colors[i], character[i]);
+        board.insert(std::make_pair(positions[i], chessman));
     }
 }

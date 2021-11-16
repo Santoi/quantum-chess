@@ -5,7 +5,7 @@
 #include "iostream"
 #include "instructions/exit_instruction.h"
 
-ClientHandlersReceiver::ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue&
+ClientHandlersReceiver::ClientHandlersReceiver(Socket& socket, const int& client_id, BlockingQueue<Instruction>&
                                                 updates_queue)
                         :client_socket(socket), client_id(client_id), updates_queue(updates_queue) {
 }

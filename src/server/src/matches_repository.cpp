@@ -69,12 +69,14 @@ void MatchesRepository::joinInactiveMatches() {
 void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool threaded_match) {
     int match_number;
     Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number, threaded_match);
-    ptr_matches[match_number]->addClientToMatchAndStart(std::move(client_socket), threaded_match);
+    ptr_matches[match_number]->addClientToMatch(std::move(client_socket),
+                                                threaded_match);
 }
 
 void MatchesRepository::addClientToMatchCreatingIfNeeded(Socket&& client_socket, bool threaded_match) {
     int chosen_match = getClientChosenMatch(client_socket, true);
-    ptr_matches[chosen_match]->addClientToMatchAndStart(std::move(client_socket), threaded_match);
+    ptr_matches[chosen_match]->addClientToMatch(std::move(client_socket),
+                                                threaded_match);
 }
 
 

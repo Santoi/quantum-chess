@@ -68,7 +68,7 @@ public:
     void addNewChessman(char chessman_, Position position_, bool white_);
 
     void
-    loadVectors(std::vector<char> &characters_,
+    loadVectors(std::vector<char> &characters_, std::vector<bool> & colors_,
                 std::vector<Position> &positions_);
 };
 

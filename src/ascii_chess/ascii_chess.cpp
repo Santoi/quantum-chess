@@ -65,3 +65,5 @@ bool AsciiChess::readCommand() {
     }
     return false;
 }
+
+

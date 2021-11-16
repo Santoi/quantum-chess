@@ -9,7 +9,7 @@ ExitInstruction::ExitInstruction(const int& client_id)
 
 void ExitInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
                                                             std::vector<ClientHandler>& clients,
-                                                            Board & board) {
+                                                            Board & board, BlockingQueue<Instruction> & match_updates_queue) {
     if (this->instructor_id == MATCH_ID)
         throw std::runtime_error("");
     //Just notify existing queues that the player left the game

@@ -2,7 +2,7 @@
 
 
 NickNamesRepository::NickNamesRepository()
-                    :nick_names(BASE_CLIENTS){
+                    :nick_names(){
 }
 
 
@@ -11,12 +11,11 @@ NickNamesRepository::NickNamesRepository(NickNamesRepository&& other_repository)
 
 }
 void NickNamesRepository::saveNickNameRelatedToId(std::string&& clients_nick_name, const int& client_id) {
-    if (this->nick_names.size() < (size_t)client_id)
-        this->nick_names.resize(this->nick_names.size() + BASE_CLIENTS);
-    this->nick_names[client_id] = clients_nick_name;
+    nick_names.insert(std::make_pair(client_id, std::move(clients_nick_name)));
 }
 
 void NickNamesRepository::getNickNameRelatedToId(std::string& clients_nick_name, const int& client_id) const {
-    clients_nick_name = this->nick_names[client_id];
+    if (nick_names.count(client_id))
+        clients_nick_name = this->nick_names.at(client_id);
 }
 

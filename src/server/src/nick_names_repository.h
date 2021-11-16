@@ -3,12 +3,11 @@
 
 #include <vector>
 #include <string>
-
-#define BASE_CLIENTS 5
+#include <map>
 
 class NickNamesRepository {
 private:
-    std::vector<std::string> nick_names;
+    std::map<int, std::string> nick_names;
 
 public:
     //Creates a NickNamesRepository with string vector of size BASE_CLIENTS.

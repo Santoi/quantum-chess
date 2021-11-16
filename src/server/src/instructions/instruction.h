@@ -7,14 +7,12 @@
 #include "../../../common/src/packet.h"
 #include "../nick_names_repository.h"
 #include "../server_protocol.h"
+#include "../../../common/src/blocking_queue.h"
 #include <vector>
 
 #define MATCH_ID -1
 
 class ServerProtocol;
-
-template <class T>
-class BlockingQueue;
 
 class ClientHandler;
 
@@ -26,7 +24,7 @@ public:
     //and notifies all queues of the changes.
     virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
                                                        std::vector<ClientHandler>& clients,
-                                                       Board & board) = 0;
+                                                       Board & board, BlockingQueue<Instruction> & match_updates_queue) = 0;
 
     //The derived Instruction class asks the protocol to fill the given packet with the information
     //accordingly.

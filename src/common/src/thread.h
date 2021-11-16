@@ -39,4 +39,4 @@ protected:
     virtual void run() = 0;
 };
 
-#endif //QUANTUM_CHESS_PROJ_THREAD_H
+#endif //QUANTUM_CHESS_PROJ_ACTION_THREAD_H

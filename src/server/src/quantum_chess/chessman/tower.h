@@ -8,7 +8,7 @@
 
 class Tower: public Chessman {
 private:
-    std::string print() const override;
+    char print() const override;
 
 public:
     Tower(const Position & position, bool white_, Board & board_);

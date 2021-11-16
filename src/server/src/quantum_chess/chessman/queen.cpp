@@ -45,8 +45,8 @@ void Queen::calculateMoves(const Position &initial,
     }
 }
 
-std::string Queen::print() const {
-    return "Q";
+char Queen::print() const {
+    return 'Q';
 }
 
 

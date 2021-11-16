@@ -78,9 +78,6 @@ protected:
     bool checkFreePath(const std::vector<Position> &path, std::pair<Position,
             Chessman *> &chessman_in_path, bool final_same_color_free) const;
 
-	// Metodo que devuelve la letra que representa a la pieza.
-    virtual std::string print() const = 0;
-
     std::list<QuantumPosition *>
     searchEntangledWithAllPositionsExceptWith(const QuantumPosition &
                                               filtered_qp);
@@ -157,6 +154,9 @@ public:
 
     virtual void calculatePosibleMerges(const Position &initial,
                                 std::list<Position> &posible_moves);
+
+    // Metodo que devuelve la letra que representa a la pieza.
+    virtual char print() const = 0;
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

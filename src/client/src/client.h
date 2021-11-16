@@ -63,6 +63,8 @@ private:
 
     //Saves what is in standard input into message..
     void readFromStandardInput(std::string& message);
+
+    bool readCommand();
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_H

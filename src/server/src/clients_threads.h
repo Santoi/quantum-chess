@@ -3,24 +3,24 @@
 
 #include "../../common/src/thread.h"
 #include "../../common/src/socket.h"
-#include "thread_safe_queue.h"
 #include "../../common/src/blocking_queue.h"
+#include "instructions/instruction.h"
 
 
 class ClientHandlersReceiver: public Thread {
 private:
     Socket& client_socket;
     const int client_id;
-    ThreadSafeQueue& updates_queue;
+    BlockingQueue<Instruction>& updates_queue;
 
 public:
     ClientHandlersReceiver() = delete;
 
     //Creates a new client receiver, saving the references to the socket and updates_queue passed in
     //the function parameters, and saves a copy of the client_id.
-    ClientHandlersReceiver(Socket& socket, const int& client_id, ThreadSafeQueue& updates_queue);
+    ClientHandlersReceiver(Socket& socket, const int& client_id, BlockingQueue<Instruction>& updates_queue);
 
-    //Saves the other_receiver's ThreadSafeQueue reference in new client receiver, and
+    //Saves the other_receiver's BlockingQueue<Instruction> reference in new client receiver, and
     //copies the other's client_id to new receivers's client_id. It receives a reference
     //to a valid socket.
     ClientHandlersReceiver(ClientHandlersReceiver&& other_receiver, Socket& socket);

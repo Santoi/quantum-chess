@@ -3,13 +3,13 @@
 
 
 #include <list>
-#include "thread_safe_queue.h"
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
 #include "client_handler.h"
 #include "nick_names_repository.h"
 #include "../../common/src/thread.h"
 #include "quantum_chess/board.h"
+#include "instructions/instruction.h"
 
 #define BASE_CLIENTS 5
 
@@ -22,10 +22,10 @@ private:
     std::vector<ClientHandler> clients;
     NickNamesRepository nick_names;
     std::list<BlockingQueue<Instruction>> listening_queues;
-    ThreadSafeQueue match_updates_queue;
+    BlockingQueue<Instruction> match_updates_queue;
 
 public:
-    //Creates a match, creating the NickNamesRepository and the ThreadSafeQueue. The client's vector
+    //Creates a match, creating the NickNamesRepository and the BlockingQueue<Instruction>. The client's vector
     //is also created and set with an initial capacity of BASE_CLIENTS.
     Match();
 
@@ -39,7 +39,7 @@ public:
 
     //Adds client to list of clients and nick names repository, and calls the client to start with threads,
     //also sending the client the boolean threaded_match.
-    void addClientToMatchAndStart(Socket&& client_socket, bool threaded_match);
+    void addClientToMatch(Socket&& client_socket, bool threaded_match);
 
     //Pops from updates_queue an instruction, and asks this instruction to makeActionAndNotifyAllListeningQueues.
     void checkAndNotifyUpdates();

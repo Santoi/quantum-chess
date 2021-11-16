@@ -14,7 +14,8 @@ public:
                         const Position &final_);
 
     void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>> &listening_queues,
-                                               std::vector<ClientHandler> &clients, Board &board) override;
+                                               std::vector<ClientHandler> &clients, Board &board,
+                                               BlockingQueue<Instruction> & match_queues_update) override;
 
     void fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
                                                   const NickNamesRepository& nick_names,

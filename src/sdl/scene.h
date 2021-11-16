@@ -23,12 +23,14 @@ public:
   void setDefaultBoard();
 
   void moveTiles(int x, int y);
-  void moveTiles(const PixelCoordinate pixel);
-  void moveTiles(const Position position);
+  void moveTiles(const PixelCoordinate &pixel);
+  void moveTiles(const Position &position);
 
   void quantumTiles(int x, int y);
-  void quantumTiles(const PixelCoordinate pixel);
-  void quantumTiles(const Position position);
+  void quantumTiles(const PixelCoordinate &pixel);
+  void quantumTiles(const Position &position);
+
+  void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 
   void loadSprite(Sprite &sprite, int x, int y);
   void render();

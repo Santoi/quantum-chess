@@ -44,13 +44,13 @@ void Scene::moveTiles(int x, int y) {
   board.moveTile(position);
 }
 
-void Scene::moveTiles(const PixelCoordinate pixel) {
+void Scene::moveTiles(const PixelCoordinate &pixel) {
   Position position;
   transformer.pixel2Position(pixel, position, scale);
   board.moveTile(position);
 }
 
-void Scene::moveTiles(const Position position) {
+void Scene::moveTiles(const Position &position) {
   board.moveTile(position);
 }
 
@@ -61,12 +61,19 @@ void Scene::quantumTiles(int x, int y) {
   board.quantumTile(position);
 }
 
-void Scene::quantumTiles(const PixelCoordinate pixel) {
+void Scene::quantumTiles(const PixelCoordinate &pixel) {
   Position position;
   transformer.pixel2Position(pixel, position, scale);
   board.quantumTile(position);
 }
 
-void Scene::quantumTiles(const Position position) {
+void Scene::quantumTiles(const Position &position) {
   board.quantumTile(position);
+}
+
+void Scene::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
+  Position orig_, dest_;
+  transformer.pixel2Position(orig, orig_, scale);
+  transformer.pixel2Position(dest, dest_, scale);
+  board.moveChessman(orig_, dest_);
 }

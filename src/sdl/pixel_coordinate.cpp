@@ -16,3 +16,7 @@ uint32_t PixelCoordinate::y() const {
   return y_;
 }
 
+void PixelCoordinate::operator()(int x, int y) {
+  x_ = x;
+  y_ = y;
+}

@@ -14,6 +14,7 @@ public:
   friend bool operator<(const PixelCoordinate &a, const PixelCoordinate &b);
   uint32_t x() const;
   uint32_t y() const;
+  void operator()(int x, int y);
 };
 
 

@@ -21,7 +21,6 @@ public:
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)
   void copy(Sprite &sprite, int x, int y);
-  void clear();
   int getMinDimension();
 };
 

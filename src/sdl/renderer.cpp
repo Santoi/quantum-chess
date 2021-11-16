@@ -15,11 +15,8 @@ void Renderer::copy(Sprite &sprite, int x, int y) {
   renderer_.Copy(sprite.sprite(), SDL2pp::NullOpt, dest);
 }
 
-void Renderer::clear() {
-  renderer_.Clear();
-}
-
 void Renderer::render(Scene &scene) {
+  renderer_.Clear();
   scene.setScale(getMinDimension());
   scene.render();
   renderer_.Present();

@@ -5,6 +5,7 @@
 #include "sprite.h"
 #include "board.h"
 #include "coordinate_transformer.h"
+#include <list>
 #include <map>
 
 class Sprite;
@@ -22,13 +23,9 @@ public:
 
   void setDefaultBoard();
 
-  void moveTiles(int x, int y);
-  void moveTiles(const PixelCoordinate &pixel);
-  void moveTiles(const Position &position);
-
-  void quantumTiles(int x, int y);
-  void quantumTiles(const PixelCoordinate &pixel);
-  void quantumTiles(const Position &position);
+  void moveTiles(const std::list<Position> &positions);
+  void quantumTiles(const std::list<Position> &positions);
+  void splitTiles(const std::list<Position> &positions);
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 

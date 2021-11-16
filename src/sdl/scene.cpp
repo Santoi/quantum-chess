@@ -37,38 +37,19 @@ void Scene::setDefaultBoard() {
   board.setDefault();
 }
 
-void Scene::moveTiles(int x, int y) {
-  Position position;
-  PixelCoordinate pixel(x, y);
-  transformer.pixel2Position(pixel, position, scale);
-  board.moveTile(position);
+void Scene::moveTiles(const std::list<Position> &positions) {
+  for (const Position &position : positions)
+    board.moveTile(position);
 }
 
-void Scene::moveTiles(const PixelCoordinate &pixel) {
-  Position position;
-  transformer.pixel2Position(pixel, position, scale);
-  board.moveTile(position);
+void Scene::quantumTiles(const std::list<Position> &positions) {
+  for (const Position &position : positions)
+    board.moveTile(position);
 }
 
-void Scene::moveTiles(const Position &position) {
-  board.moveTile(position);
-}
-
-void Scene::quantumTiles(int x, int y) {
-  Position position;
-  PixelCoordinate pixel(x, y);
-  transformer.pixel2Position(pixel, position, scale);
-  board.quantumTile(position);
-}
-
-void Scene::quantumTiles(const PixelCoordinate &pixel) {
-  Position position;
-  transformer.pixel2Position(pixel, position, scale);
-  board.quantumTile(position);
-}
-
-void Scene::quantumTiles(const Position &position) {
-  board.quantumTile(position);
+void Scene::splitTiles(const std::list<Position> &positions) {
+  for (const Position &position : positions)
+    board.moveTile(position);
 }
 
 void Scene::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {

@@ -8,7 +8,7 @@ private:
   uint32_t x_, y_;
 
 public:
-  PixelCoordinate() = default;
+  PixelCoordinate();
   PixelCoordinate(uint32_t x, uint32_t y);
   PixelCoordinate(const PixelCoordinate &orig) = default;
   friend bool operator<(const PixelCoordinate &a, const PixelCoordinate &b);

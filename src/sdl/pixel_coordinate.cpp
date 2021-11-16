@@ -1,5 +1,6 @@
 #include "pixel_coordinate.h"
 
+PixelCoordinate::PixelCoordinate(): x_(0), y_(0) {}
 PixelCoordinate::PixelCoordinate(uint32_t x, uint32_t y): x_(x), y_(y) {}
 
 bool operator<(const PixelCoordinate &a, const PixelCoordinate &b) {

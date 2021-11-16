@@ -1,13 +1,14 @@
 #include "event_handler.h"
 #include <iostream>
+#include <list>
 
 EventHandler::EventHandler(): split(false), merge(false), move(false) {}
 
 bool EventHandler::handleEvents(Scene &scene, Board &board) {
   PixelCoordinate dest;
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
-  while(SDL_PollEvent(&event)){
-    switch(event.type) {
+  while (SDL_PollEvent(&event)) {
+    switch (event.type) {
       case SDL_QUIT: {
         return false;
       }
@@ -15,9 +16,11 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
         switch (event.key.keysym.sym) {
           case SDLK_ESCAPE: {
             scene.setDefaultBoard();
+            move = false;
             break;
           }
-          case SDLK_RSHIFT: case SDLK_LSHIFT: {
+          case SDLK_RSHIFT:
+          case SDLK_LSHIFT: {
             split = true;
             break;
           }
@@ -49,12 +52,22 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT) {
           PixelCoordinate pixel(mouse.x, mouse.y);
+          std::list<Position> coords;
+          for (size_t i = 0; i < 8; i++) {
+            Position pos(0, i);
+            coords.push_back(pos);
+          }
           if (split) {
             // TODO: notify split
+            scene.splitTiles(coords);
           } else if (merge) {
             // TODO: notify merge
+            scene.moveTiles(coords);
+          } else {
+            // TODO: notify move
+            scene.moveTiles(coords);
           }
-          scene.moveTiles(pixel);
+
           if (move) {
             scene.moveChessman(last, pixel);
             scene.setDefaultBoard();

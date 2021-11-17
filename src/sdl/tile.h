@@ -13,20 +13,22 @@ private:
   Sprite sprite_;
   std::map<int, std::string> images;
 
-  typedef enum {
-    DEFAULT, MOVE, ENTANGLED, QUANTUM
-  } SquareType;
-
 public:
+  typedef enum {
+    TILE_DEFAULT,
+    TILE_MOVE,
+    TILE_ENTANGLED,
+    TILE_QUANTUM,
+    TILE_SPLIT,
+    TILE_MERGE
+  } TileType;
+  void loadTile(TileType type);
+
   Tile(Renderer &renderer, bool black);
   Tile(Tile &&other) noexcept;
   Tile(const Tile &other) = delete;
   Tile& operator=(Tile &&other) noexcept;
   void render(int x, int y);
-  void loadDefault();
-  void loadMove();
-  void loadEntagled();
-  void loadQuantum();
 };
 
 

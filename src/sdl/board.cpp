@@ -1,5 +1,6 @@
 #include "board.h"
 #include "renderer.h"
+#include "tile.h"
 #include <map>
 
 void Board::create(Renderer &renderer) {
@@ -35,32 +36,32 @@ void Board::moveChessman(Position &orig, Position &dest) {
 
 void Board::moveTile(const Position &pos) {
   if (board.count(pos))
-    board.at(pos).loadMove();
+    board.at(pos).loadTile(Tile::TILE_MOVE);
 }
 
 void Board::quantumTile(const Position &pos) {
   if (board.count(pos))
-    board.at(pos).loadQuantum();
+    board.at(pos).loadTile(Tile::TILE_QUANTUM);
 }
 
 void Board::entangledTile(const Position &pos) {
   if (board.count(pos))
-    board.at(pos).loadEntagled();
+    board.at(pos).loadTile(Tile::TILE_ENTANGLED);
 }
 
 void Board::splitTile(const Position &pos) {
   if (board.count(pos))
-    board.at(pos).loadQuantum(); // TODO loadSplit
+    board.at(pos).loadTile(Tile::TILE_SPLIT);
 }
 
 void Board::mergeTile(const Position &pos) {
   if (board.count(pos))
-    board.at(pos).loadQuantum(); // TODO loadMerge
+    board.at(pos).loadTile(Tile::TILE_MERGE);
 }
 
 void Board::setDefault() {
   for (auto & it : board) {
-    it.second.loadDefault();
+    it.second.loadTile(Tile::TILE_DEFAULT);
   }
 }
 

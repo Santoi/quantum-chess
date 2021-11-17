@@ -6,20 +6,24 @@ Tile::Tile(Renderer &renderer, bool black) : renderer(renderer),
                                                      renderer.getMinDimension() / 10) {
   if (black) {
     images = {
-        {DEFAULT,   "img/black_square.png"},
-        {MOVE,      "img/black_square_move.png"},
-        {ENTANGLED, "img/black_square_entangle.png"},
-        {QUANTUM,   "img/black_square_split.png"}
+        {TILE_DEFAULT,   "img/black_square.png"},
+        {TILE_MOVE,      "img/black_square_move.png"},
+        {TILE_ENTANGLED, "img/black_square_entangled.png"},
+        {TILE_QUANTUM, "img/black_square_quantum.png"},
+        {TILE_SPLIT, "img/black_square_split.png"},
+        {TILE_MERGE, "img/black_square_merge.png"}
     };
   } else {
     images = {
-        {DEFAULT,   "img/white_square.png"},
-        {MOVE,      "img/white_square_move.png"},
-        {ENTANGLED, "img/white_square_relation.png"},
-        {QUANTUM,   "img/white_square_split.png"}
+        {TILE_DEFAULT,   "img/white_square.png"},
+        {TILE_MOVE,      "img/white_square_move.png"},
+        {TILE_ENTANGLED, "img/white_square_entangled.png"},
+        {TILE_QUANTUM, "img/white_square_quantum.png"},
+        {TILE_SPLIT, "img/white_square_split.png"},
+        {TILE_MERGE, "img/white_square_merge.png"}
     };
   }
-  sprite_.loadImage(images[DEFAULT]);
+  sprite_.loadImage(images[TILE_DEFAULT]);
 }
 
 Tile::Tile(Tile &&other) noexcept: renderer(other.renderer),
@@ -38,19 +42,6 @@ Tile& Tile::operator=(Tile &&other) noexcept {
   return *this;
 }
 
-void Tile::loadDefault() {
-  sprite_.loadImage(images[DEFAULT]);
+void Tile::loadTile(TileType type) {
+  sprite_.loadImage(images[type]);
 }
-
-void Tile::loadMove() {
-  sprite_.loadImage(images[MOVE]);
-}
-
-void Tile::loadEntagled() {
-  sprite_.loadImage(images[ENTANGLED]);
-}
-
-void Tile::loadQuantum() {
-  sprite_.loadImage(images[QUANTUM]);
-}
-

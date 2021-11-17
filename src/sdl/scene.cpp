@@ -3,6 +3,9 @@
 #include "pixel_coordinate.h"
 #include <map>
 
+#define BOARD_MIN_LIMIT .1
+#define BOARD_MAX_LIMIT .9
+
 Scene::Scene(int height, Board &board): scale(height), board(board) {}
 
 void Scene::loadSprite(Sprite &sprite, int x, int y) {
@@ -31,6 +34,13 @@ void Scene::render() {
     transformer.position2Pixel(it.first, pixel, scale);
     it.second.render(pixel.x(), pixel.y());
   }
+}
+
+bool Scene::isPixelInBoard(const PixelCoordinate &pixel) {
+  return pixel.x() > scale * BOARD_MIN_LIMIT &&
+         pixel.x() < scale * BOARD_MAX_LIMIT &&
+         pixel.y() > scale * BOARD_MIN_LIMIT &&
+         pixel.y() < scale * BOARD_MAX_LIMIT;
 }
 
 void Scene::setDefaultBoard() {

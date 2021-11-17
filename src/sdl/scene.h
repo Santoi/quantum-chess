@@ -21,6 +21,8 @@ public:
   Scene(int height, Board &board);
   void setScale(int scale_);
 
+  bool isPixelInBoard(const PixelCoordinate &pixel);
+
   void setDefaultBoard();
 
   void moveTiles(const std::list<Position> &positions);

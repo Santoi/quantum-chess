@@ -52,6 +52,9 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT) {
           PixelCoordinate pixel(mouse.x, mouse.y);
+          if (!scene.isPixelInBoard(pixel))
+            break;
+
           std::list<Position> coords;
           for (size_t i = 0; i < 8; i++) {
             Position pos(0, i);

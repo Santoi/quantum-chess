@@ -3,6 +3,7 @@
 #include <iostream>
 #include "remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"
+#include "../../common/src/socket_closed.h"
 
 RemoteClientSender::RemoteClientSender(Socket& client_socket, BlockingQueue<RemoteClientInstruction> & send_queue_)
                     :client_socket(client_socket), send_queue(send_queue_) {
@@ -35,9 +36,14 @@ void RemoteClientSender::run() {
     while (this->sender_is_active)
         this->readFromStandardInputAndMakeAction();*/
     while (true) {
-        std::shared_ptr<RemoteClientInstruction> instruction;
-        send_queue.pop(instruction);
-        protocol.sendInstruction(client_socket, instruction);
+        try {
+            std::shared_ptr<RemoteClientInstruction> instruction;
+            send_queue.pop(instruction);
+            protocol.sendInstruction(client_socket, instruction);
+        }
+        catch(const BlockingQueueClosed & e){
+            break;
+        }
     }
 }
 
@@ -50,11 +56,16 @@ void RemoteClientReceiver::receiveMessage() {
     std::shared_ptr<RemoteClientInstruction> ptr_instruction;
     ClientProtocol protocol;
     protocol.receiveInstruction(this->client_socket, ptr_instruction);
-
     queue.push(ptr_instruction);
 }
 
 void RemoteClientReceiver::run() {
-    while (true)
-        this->receiveMessage();
+    while (true) {
+        try {
+            this->receiveMessage();
+        }
+        catch (const SocketClosed & e) {
+            break;
+        }
+    }
 }

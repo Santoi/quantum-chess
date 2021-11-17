@@ -8,8 +8,13 @@ ActionThread::ActionThread(BlockingQueue<RemoteClientInstruction> & instructions
 
 void ActionThread::run() {
     while (true) {
-        std::shared_ptr<RemoteClientInstruction> ptr_instruction;
-        instructions.pop(ptr_instruction);
-        ptr_instruction->makeAction(board);
+        try {
+            std::shared_ptr<RemoteClientInstruction> ptr_instruction;
+            instructions.pop(ptr_instruction);
+            ptr_instruction->makeAction(board);
+        }
+        catch(const BlockingQueueClosed & e){
+            break;
+        }
     }
 }

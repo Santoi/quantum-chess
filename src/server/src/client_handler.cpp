@@ -5,23 +5,19 @@
 
 
 ClientHandler::ClientHandler(Socket&& socket, BlockingQueue<Instruction>& notifications_queue, BlockingQueue<Instruction>&
-                              updates_queue, const int& client_id, const NickNamesRepository& nick_names)
-              :client_socket(std::move(socket)), notifications_queue(notifications_queue), client_is_active(true),
-               client_receiver(client_socket, client_id, updates_queue),
-               client_sender(client_socket, notifications_queue, client_id, nick_names) {
+                              updates_queue, const ClientData & client_data_)
+              :client_socket(std::move(socket)), notifications_queue(notifications_queue),
+              client_data(client_data_), client_is_active(true),
+               client_receiver(client_socket, client_data, updates_queue),
+               client_sender(client_socket, notifications_queue, client_data) {
 }
 
 ClientHandler::ClientHandler(ClientHandler&& other_client)
                 :client_socket(std::move(other_client.client_socket)),
-                notifications_queue(other_client.notifications_queue), client_is_active(other_client.client_is_active),
+                notifications_queue(other_client.notifications_queue), client_data(other_client.client_data),
+                client_is_active(other_client.client_is_active),
                  client_receiver(std::move(other_client.client_receiver), client_socket),
                  client_sender(std::move(other_client.client_sender), client_socket) {
-}
-
-int ClientHandler::chooseGame(const int& max_games) {
-    ServerProtocol protocol;
-    protocol.sendNumberOfGamesRunning(this->client_socket, max_games);
-    return (protocol.receiveNumberOfChosenGame(this->client_socket));
 }
 
 void ClientHandler::getClientsNickName(std::string& nick_name) {

@@ -4,6 +4,7 @@
 #include <string>
 #include "../../common/src/socket.h"
 #include "../../common/src/protocol.h"
+#include "../../common/src/client_data_repository.h"
 #include "remote_client_instructions.h"
 #include <memory>
 
@@ -14,10 +15,10 @@ public:
     ClientProtocol() = default;
 
     //Given the client socket, it returns the number of games running in server.
-    int receiveNumberOfRunningGames(Socket& socket);
+    std::map<uint16_t, ClientDataRepository> receiveMatchesInfo(Socket& socket);
 
     //It sends to the client socket the game_number received as parameter.
-    void sendChosenGame(Socket& socket, const int& game_number);
+    void sendChosenGame(Socket& socket, uint16_t game_number);
 
     //It sends to the client socket the client's nick_name, following the protocol.
     void sendClientsNickName(Socket& socket, std::string& nick_name);

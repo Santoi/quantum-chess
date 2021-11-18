@@ -25,6 +25,12 @@ void Packet::addBytes(const uint16_t &bytes) {
     addBytes(bytes_, 2);
 }
 
+void Packet::addBytes(const uint8_t & bytes){
+    expandUntilMatchSize(1);
+    char * bytes_ = (char*) & bytes;
+    addBytes(bytes_, 1);
+}
+
 void Packet::addByte(char byte){
     expandUntilMatchSize(1);
     array[size_++] = byte;

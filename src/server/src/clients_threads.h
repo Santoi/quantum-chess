@@ -4,13 +4,15 @@
 #include "../../common/src/thread.h"
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
-#include "instructions/instruction.h"
+#include "../../common/src/client_data.h"
+//#include "instructions/instruction.h"
 
+class Instruction;
 
 class ClientHandlersReceiver: public Thread {
 private:
     Socket& client_socket;
-    const int client_id;
+    const ClientData & client_data;
     BlockingQueue<Instruction>& updates_queue;
 
 public:
@@ -18,7 +20,8 @@ public:
 
     //Creates a new client receiver, saving the references to the socket and updates_queue passed in
     //the function parameters, and saves a copy of the client_id.
-    ClientHandlersReceiver(Socket& socket, const int& client_id, BlockingQueue<Instruction>& updates_queue);
+    ClientHandlersReceiver(Socket& socket, const ClientData & client_data_, BlockingQueue<Instruction>&
+    updates_queue);
 
     //Saves the other_receiver's BlockingQueue<Instruction> reference in new client receiver, and
     //copies the other's client_id to new receivers's client_id. It receives a reference
@@ -44,18 +47,17 @@ protected:
 class ClientHandlersSender: public Thread {
 private:
     Socket& client_socket;
-    const int client_id;
+    const ClientData & client_data;
     BlockingQueue<Instruction>& notifications_queue;
-    const NickNamesRepository& nick_names;
 
 public:
     ClientHandlersSender() = delete;
     //Creates a new client sender, saving the references to the socket, notifications_queue and
-    //nick_names repository passed in the function parameters, and saves a copy of the
+    //data repository passed in the function parameters, and saves a copy of the
     //client_id.
-    ClientHandlersSender(Socket& socket, BlockingQueue<Instruction>& notifications_queue, const int& client_id, const NickNamesRepository& nick_names);
+    ClientHandlersSender(Socket& socket, BlockingQueue<Instruction>& notifications_queue, const ClientData & client_data_);
 
-    //Saves the other_receiver's BlockingQueue, NickNamesRepository references in new client
+    //Saves the other_receiver's BlockingQueue, ClientDataRepository references in new client
     //sender, and copies the other's client_id to new receivers's client_id. It receives a
     //reference to the valid socket.
     ClientHandlersSender(ClientHandlersSender&& other_sender, Socket& socket);
@@ -64,7 +66,7 @@ public:
     //necessary information to the remote client's socket.
     void popFromQueueAndSendInstruction();
 
-    ~ClientHandlersSender() = default;
+    ~ClientHandlersSender() override = default;
 
 protected:
     //Calls popFromQueueAndSendInstruction until the ExitInstruction of the corresponding client

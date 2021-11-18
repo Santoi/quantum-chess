@@ -7,8 +7,8 @@ int main(int argc, char* argv[]) {
     if (argc == 4)
        single_threaded_client = true;
     try {
-        Client client(argv[1], argv[2]);
-        client.execute(single_threaded_client);
+        Client client;
+        client.execute(argv[1], argv[2], single_threaded_client);
     } catch(const std::exception & e){
         std::cerr << "Error: " << e.what() << std::endl;
     }

@@ -10,7 +10,7 @@
 // TODO AVeriguar donde arranca match.
 
 Match::Match()
-        :Thread(), accepted_clients(0), board() {
+        :Thread(), accepted_clients(0), board(), clients(), client_data_repository(), listening_queues(), match_updates_queue() {
 }
 
 Match::Match(Match&& other_match)
@@ -19,32 +19,45 @@ Match::Match(Match&& other_match)
         match_updates_queue(std::move(other_match.match_updates_queue)), board(std::move(other_match.board)) {
 }
 
-void Match::addClientsNickNameToRepository(const int& client_id) {
-    std::string nick_name;
-    this->clients.at(client_id).getClientsNickName(nick_name);
-    this->nick_names.saveNickNameRelatedToId(std::move(nick_name), client_id);
+ClientData Match::askClientData(Socket & socket, uint16_t client_id){
+    ServerProtocol protocol;
+    std::string nickname;
+    protocol.getNickName(socket, nickname);
+    ClientData client_data(client_id, nickname, true, false);
+    return client_data;
 }
 
-void Match::addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id) {
+// TODO refactor.
+void Match::addClientsNickNameToRepository(uint16_t client_id) {
+    std::string nick_name;
+    // TODO aca pedir todos los datos.
+    this->clients.at(client_id).getClientsNickName(nick_name);
+    ClientData new_client_data(client_id, nick_name, true, false);
+
+}
+// TODO refactor.
+void Match::addClientWithIdToListOfClients(Socket&& client_socket, uint16_t client_id) {
     BlockingQueue<Instruction> new_listening_queue;
     listening_queues.insert(std::make_pair(client_id, std::move(new_listening_queue)));
     ClientHandler client(std::move(client_socket), this->listening_queues.at(client_id),
-                         this->match_updates_queue, client_id, this->nick_names);
+                         this->match_updates_queue,
+                         client_data_repository.getClientData(client_id));
     clients.insert(std::make_pair(client_id, std::move(client)));
     this->accepted_clients++;
 }
-
+/*
 void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
-    int client_id = this->accepted_clients;
+    uint16_t client_id = this->accepted_clients;
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
     this->addClientsNickNameToRepository(client_id);
     this->clients.at(client_id).startSingleThreadedClient(*this);
-}
+}*/
 
 void Match::addClientToMatch(Socket&& client_socket, bool threaded_match) {
-    int client_id = this->accepted_clients;
+    uint16_t client_id = this->accepted_clients;
+    ClientData client_data = askClientData(client_socket, client_id);
+    this->client_data_repository.saveClientData(std::move(client_data), client_id);
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
-    this->addClientsNickNameToRepository(client_id);
     this->clients.at(client_id).startThreadedClient(*this, threaded_match);
     LoadBoardInstruction instruction;
     match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
@@ -77,10 +90,14 @@ void Match::run() {
 bool Match::hasActiveClients() const {
     return clients.size() > 0;
 }
-
+/*
 void Match::pushExitInstructionToUpdatesQueue() {
     std::shared_ptr<Instruction> exit_instruc =  std::make_shared<ExitInstruction>(MATCH_ID);
     this->match_updates_queue.push(exit_instruc);
+}*/
+
+std::vector<const ClientData*> Match::getClientsData() const {
+    return client_data_repository.getAllData();
 }
 
 

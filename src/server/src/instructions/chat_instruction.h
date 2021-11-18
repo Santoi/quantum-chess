@@ -6,26 +6,26 @@
 
 class ChatInstruction: public Instruction {
 private:
-    const int instructor_id;
+    const ClientData & instructor_data;
     std::string message;
 
 public:
     ChatInstruction() = delete;
 
     //Creates a ChatInstruction, saving the client_id and message passed to the function parameters.
-    ChatInstruction(const int& client_id, std::string&& message);
+    ChatInstruction(const ClientData & instructor_data_, std::string&& message);
 
     //Creates a new ChatInstruction and sends it to all listening queues.
     void makeActionAndNotifyAllListeningQueues(
-            std::map<int, BlockingQueue<Instruction>> &listening_queues,
-            std::map<int, ClientHandler>& clients,
+            std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
+            std::map<uint16_t, ClientHandler>& clients,
             Board & board, BlockingQueue<Instruction> & match_updates_queue) override;
 
-    //Gets the instructor's nickname from the NickNamesRepository using the object's instructor_id
+    //Gets the instructor's nickname from the ClientDataRepository using the object's instructor_id
     //attribute, and calls the protocol method fillPacketWithChatInfo to fill the given packet.
-    void fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
-                                          const NickNamesRepository& nick_names,
-                                          const int& client_receiver_id) override;
+    void
+    fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
+                                     const ClientData &client_receiver_data) override;
 
     ~ChatInstruction() = default;
 };

@@ -5,22 +5,22 @@
 #include "../quantum_chess/position.h"
 
 class MovementInstruction: public Instruction {
-    const int instructor_id;
+    const ClientData & instructor_data;
     const Position initial;
     const Position final;
 
 public:
-    MovementInstruction(const int &client_id, const Position &initial_,
+    MovementInstruction(const ClientData &instructor_data, const Position &initial_,
                         const Position &final_);
 
     void makeActionAndNotifyAllListeningQueues(
-            std::map<int, BlockingQueue<Instruction>> &listening_queues,
-            std::map<int, ClientHandler> &clients, Board &board,
+            std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
+            std::map<uint16_t, ClientHandler> &clients, Board &board,
             BlockingQueue<Instruction> & match_queues_update) override;
 
-    void fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
-                                                  const NickNamesRepository& nick_names,
-                                                  const int& client_receiver_id) override;
+    void
+    fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
+                                     const ClientData &client_receiver_data) override;
 };
 
 

@@ -5,9 +5,9 @@
 #include <list>
 #include "../quantum_chess/board.h"
 #include "../../../common/src/packet.h"
-#include "../nick_names_repository.h"
 #include "../server_protocol.h"
 #include "../../../common/src/blocking_queue.h"
+#include "../../../common/src/client_data.h"
 #include <vector>
 
 #define MATCH_ID -1
@@ -23,15 +23,15 @@ public:
     //Given the list of listening queues and the client's vector, it makes the appropiate action
     //and notifies all queues of the changes.
     virtual void makeActionAndNotifyAllListeningQueues(
-            std::map<int, BlockingQueue<Instruction>> &listening_queues,
-            std::map<int, ClientHandler>& clients,
+            std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
+            std::map<uint16_t, ClientHandler>& clients,
             Board & board, BlockingQueue<Instruction> & match_updates_queue) = 0;
 
     //The derived Instruction class asks the protocol to fill the given packet with the information
     //accordingly.
-    virtual void fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,
-                                                  const NickNamesRepository& nick_names,
-                                                  const int& client_receiver_id) = 0;
+    virtual void
+    fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
+                                     const ClientData &client_receiver_data) = 0;
 
     ~Instruction() = default;
 };

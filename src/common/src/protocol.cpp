@@ -14,6 +14,10 @@ void Protocol::changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint1
     packet.addBytes(numberBE);
 }
 
+void Protocol::addNumber8ToPacket(Packet & packet, const uint8_t & number) {
+    packet.addBytes(number);
+}
+
 uint16_t Protocol::getNumber16FromSocket(Socket& socket) {
     Packet packet;
     socket.receive(packet, TWO_BYTES);

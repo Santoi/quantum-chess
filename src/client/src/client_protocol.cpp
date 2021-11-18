@@ -3,15 +3,35 @@
 #include <arpa/inet.h>
 #include "../../common/src/unique_ptr.h"
 #include "client_protocol.h"
+#include "../../common/src/client_data_repository.h"
+#include "../../common/src/client_data.h"
 
 #define ONE_BYTE 1
 #define TWO_BYTES 2
 
-int ClientProtocol::receiveNumberOfRunningGames(Socket& socket) {
-    return (int)(this->getNumber16FromSocket(socket));
+std::map<uint16_t, ClientDataRepository>
+ClientProtocol::receiveMatchesInfo(Socket& socket) {
+    std::map<uint16_t, ClientDataRepository> matches_info;
+    uint16_t matches_amount = getNumber16FromSocket(socket);
+    for (uint16_t i = 0; i < matches_amount; i++){
+        uint16_t match_id = getNumber16FromSocket(socket);
+        uint16_t clients_amount = getNumber16FromSocket(socket);
+        ClientDataRepository client_data_repository;
+        for (uint16_t j = 0; j < clients_amount; j++) {
+            uint16_t client_id = getNumber16FromSocket(socket);
+            std::string client_name;
+            getMessageFromSocket(socket, client_name);
+            bool is_player = getNumber8FromSocket(socket);
+            ClientData data(client_id, client_name, is_player, false);
+            uint16_t id = data.getId();
+            client_data_repository.saveClientData(std::move(data), id);
+        }
+        matches_info.insert(std::make_pair(match_id, std::move(client_data_repository)));
+    }
+    return matches_info;
 }
- // TODO HACER UN MENSAJE DE "PRESENTACION"
-void ClientProtocol::sendChosenGame(Socket& socket, const int& game_number) {
+
+void ClientProtocol::sendChosenGame(Socket& socket, uint16_t game_number) {
     Packet packet;
     this->changeNumberToBigEndianAndAddToPacket(packet, (uint16_t)game_number);
     socket.send(packet);

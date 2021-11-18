@@ -5,27 +5,27 @@
 #include <list>
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
-#include "client_handler.h"
-#include "nick_names_repository.h"
 #include "../../common/src/thread.h"
 #include "quantum_chess/board.h"
 #include "instructions/instruction.h"
-
-#define BASE_CLIENTS 5
+#include "../../common/src/client_data_repository.h"
+#include "client_handler.h"
 
 class ClientHandler;
 
+class Instruction;
+
 class Match: public Thread {
 private:
-    int accepted_clients;
+    uint16_t accepted_clients;
     Board board;
-    std::map<int, ClientHandler> clients;
-    NickNamesRepository nick_names;
-    std::map<int, BlockingQueue<Instruction>> listening_queues;
+    std::map<uint16_t, ClientHandler> clients;
+    ClientDataRepository client_data_repository;
+    std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
     BlockingQueue<Instruction> match_updates_queue;
 
 public:
-    //Creates a match, creating the NickNamesRepository and the BlockingQueue<Instruction>. The client's vector
+    //Creates a match, creating the ClientDataRepository and the BlockingQueue<Instruction>. The client's vector
     //is also created and set with an initial capacity of BASE_CLIENTS.
     Match();
 
@@ -56,6 +56,8 @@ public:
 
     void stop();
 
+    std::vector<const ClientData *> getClientsData() const;
+
 protected:
     //Calls checkAndNotifyUpdates until the match's ExitInstruction is popped and asked to
     //makeActionAndNotifyAllListeningQueues. This throws a running exception that is catched and
@@ -65,11 +67,13 @@ protected:
 private:
     //Creates a new ClientHandler and adds it to the client's vector (if the vector's capacity is not
     //enough, it is incremented by BASE_CLIENTS). The number of accepted clients is incremented by one.
-    void addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id);
+    void addClientWithIdToListOfClients(Socket&& client_socket, uint16_t client_id);
 
     //Asks the new remote client for its nickname and saves it into the nick names repository,
     //associating it with the given client_id.
-    void addClientsNickNameToRepository(const int& client_id);
+    void addClientsNickNameToRepository(uint16_t client_id);
+
+    ClientData askClientData(Socket &socket, uint16_t client_id);
 };
 
 

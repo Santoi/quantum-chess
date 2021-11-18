@@ -40,30 +40,23 @@ void MatchesRepository::acceptSingleThreadedClientAndAddToAMatch(Socket& accepto
 bool MatchesRepository::thereAreActiveMatches() {
     std::vector<std::unique_ptr<Match>>::iterator it;
     for (it = this->ptr_matches.begin(); it != this->ptr_matches.end(); it++){
-        if ((*it)->isActive())
+        if ((*it)->hasActiveClients())
             return true;
     }
     return false;
 }
 
-bool isInactive(const std::unique_ptr<Match>& match_ptr) {
-    return (!match_ptr->isActive());
-}
-
-void MatchesRepository::deleteInactiveMatchesFromList() {
-    this->ptr_matches.erase(std::remove_if(ptr_matches.begin(), ptr_matches.end(), isInactive), ptr_matches.end());
-}
-
 
 void MatchesRepository::joinInactiveMatches() {
-    std::vector<std::unique_ptr<Match>>::iterator it;
-    for (it = this->ptr_matches.begin(); it != this->ptr_matches.end(); it++){
-        if ((*it)->isJoinable()){
-            (*it)->pushExitInstructionToUpdatesQueue();
+    for (auto it = ptr_matches.begin(); it != ptr_matches.end(); ){
+        if (!(*it)->hasActiveClients()) {
+            (*it)->stop();
             (*it)->join();
+            it = ptr_matches.erase(it);
+            continue;
         }
+        ++it;
     }
-    this->deleteInactiveMatchesFromList();
 }
 
 void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool threaded_match) {
@@ -77,6 +70,20 @@ void MatchesRepository::addClientToMatchCreatingIfNeeded(Socket&& client_socket,
     int chosen_match = getClientChosenMatch(client_socket, true);
     ptr_matches[chosen_match]->addClientToMatch(std::move(client_socket),
                                                 threaded_match);
+}
+
+void MatchesRepository::stopMatches() {
+    for (auto & match: ptr_matches) {
+        std::cout << "detengo esta match" << std::endl;
+        match->stop();
+    }
+}
+
+void MatchesRepository::joinMatches() {
+    for (auto & match: ptr_matches) {
+        std::cout << "joineo el match" << std::endl;
+        match->join();
+    }
 }
 
 

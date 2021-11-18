@@ -22,9 +22,10 @@ public:
 
     //Given the list of listening queues and the client's vector, it makes the appropiate action
     //and notifies all queues of the changes.
-    virtual void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
-                                                       std::vector<ClientHandler>& clients,
-                                                       Board & board, BlockingQueue<Instruction> & match_updates_queue) = 0;
+    virtual void makeActionAndNotifyAllListeningQueues(
+            std::map<int, BlockingQueue<Instruction>> &listening_queues,
+            std::map<int, ClientHandler>& clients,
+            Board & board, BlockingQueue<Instruction> & match_updates_queue) = 0;
 
     //The derived Instruction class asks the protocol to fill the given packet with the information
     //accordingly.

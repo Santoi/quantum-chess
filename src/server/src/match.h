@@ -19,9 +19,9 @@ class Match: public Thread {
 private:
     int accepted_clients;
     Board board;
-    std::vector<ClientHandler> clients;
+    std::map<int, ClientHandler> clients;
     NickNamesRepository nick_names;
-    std::list<BlockingQueue<Instruction>> listening_queues;
+    std::map<int, BlockingQueue<Instruction>> listening_queues;
     BlockingQueue<Instruction> match_updates_queue;
 
 public:
@@ -44,22 +44,17 @@ public:
     //Pops from updates_queue an instruction, and asks this instruction to makeActionAndNotifyAllListeningQueues.
     void checkAndNotifyUpdates();
 
-    //Returns if the match is joinable: if the match's attribute has_active_thread is set to false,
-    //false is returned. If it has an active thread, then it asks if the match is active (by calling
-    //the isActive method). If the match is active then the game cannot be joined at the moment because
-    //it is still executing, therefore a false is returned. If the match is not active the game can
-    //be joined and a true is returned.
-    bool isJoinable() override;
-
     //Iterates over the list of clients, asking each one if the respective client is active. If either
     //of them is active, then a true is returned. If neither is active, a false is returned.
-    bool isActive() const;
+    bool hasActiveClients() const;
 
     //Creates an ExitInstruction with MATCH_ID, and pushes it to the match_updates_queue. This is ideal
     //for when one wants to end the game's execution.
     void pushExitInstructionToUpdatesQueue();
 
-    ~Match();
+    ~Match() = default;
+
+    void stop();
 
 protected:
     //Calls checkAndNotifyUpdates until the match's ExitInstruction is popped and asked to

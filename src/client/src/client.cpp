@@ -82,14 +82,11 @@ void Client::executeThreadedClient() {
             std::cerr << "Error: " << e.what() << std::endl;
         }
     }
-    client_socket.stopCommunication();
+    client_socket.shutdownAndClose();
     received.close();
     send.close();
-    std::cout << "joineo action thread" << std::endl;
     action_thread.join();
-    std::cout << "joineo action thread" << std::endl;
     this->remote_sender.join();
-    std::cout << "joineo action thread" << std::endl;
     this->remote_receiver.join();
 }
 

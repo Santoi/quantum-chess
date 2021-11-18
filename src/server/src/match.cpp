@@ -11,8 +11,6 @@
 
 Match::Match()
         :Thread(), accepted_clients(0), board() {
-    // TODO convertir clients en map.
-    this->clients.reserve(BASE_CLIENTS);
 }
 
 Match::Match(Match&& other_match)
@@ -23,18 +21,16 @@ Match::Match(Match&& other_match)
 
 void Match::addClientsNickNameToRepository(const int& client_id) {
     std::string nick_name;
-    this->clients[client_id].getClientsNickName(nick_name);
+    this->clients.at(client_id).getClientsNickName(nick_name);
     this->nick_names.saveNickNameRelatedToId(std::move(nick_name), client_id);
 }
 
 void Match::addClientWithIdToListOfClients(Socket&& client_socket, const int& client_id) {
     BlockingQueue<Instruction> new_listening_queue;
-    this->listening_queues.push_front(std::move(new_listening_queue));
-    ClientHandler client(std::move(client_socket), this->listening_queues.front(),
+    listening_queues.insert(std::make_pair(client_id, std::move(new_listening_queue)));
+    ClientHandler client(std::move(client_socket), this->listening_queues.at(client_id),
                          this->match_updates_queue, client_id, this->nick_names);
-    if ((int)this->clients.capacity() <= this->accepted_clients)
-        this->clients.reserve(this->clients.capacity() + BASE_CLIENTS);
-    this->clients.push_back(std::move(client));
+    clients.insert(std::make_pair(client_id, std::move(client)));
     this->accepted_clients++;
 }
 
@@ -42,18 +38,22 @@ void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
     int client_id = this->accepted_clients;
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
     this->addClientsNickNameToRepository(client_id);
-    this->clients[client_id].startSingleThreadedClient(*this);
+    this->clients.at(client_id).startSingleThreadedClient(*this);
 }
 
 void Match::addClientToMatch(Socket&& client_socket, bool threaded_match) {
     int client_id = this->accepted_clients;
     this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
     this->addClientsNickNameToRepository(client_id);
-    this->clients[client_id].startThreadedClient(*this, threaded_match);
+    this->clients.at(client_id).startThreadedClient(*this, threaded_match);
     LoadBoardInstruction instruction;
     match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
 }
 
+void Match::stop() {
+    std::cout << "detengo esta match" << std::endl;
+    match_updates_queue.close();
+}
 
 void Match::checkAndNotifyUpdates() {
     std::shared_ptr<Instruction> instruc_ptr;
@@ -63,24 +63,26 @@ void Match::checkAndNotifyUpdates() {
 
 void Match::run() {
     board.load();
-    while (true)
-        checkAndNotifyUpdates();
-}
-
-bool Match::isJoinable() {
-    if (!this->has_active_thread) //Match is not an alive object
-        return false;
-    return !(this->isActive()); //If it is active then match is not joinable. If its not, then match
-                                //is joinable
-}
-
-bool Match::isActive() const {
-    std::vector<ClientHandler>::const_iterator it;
-    for (it = this->clients.begin(); it != this->clients.end(); it++) {
-        if (it->isActive())
-            return true;
+    try {
+        while (true)
+            checkAndNotifyUpdates();
     }
-    return false;
+    catch (const BlockingQueueClosed& error) {
+        std::cout << "entro al catch" << std::endl;
+        std::cout << clients.size() << std::endl;
+        for (auto & client: clients) {
+            // TODO hacer que si mueren matarlos.
+            std::cout << "stopear cliente" << std::endl;
+            client.second.stop();
+            std::cout << "joineo" << std::endl;
+            client.second.join();
+            std::cout << "termine de joinear" << std::endl;
+        }
+    }
+}
+
+bool Match::hasActiveClients() const {
+    return clients.size() > 0;
 }
 
 void Match::pushExitInstructionToUpdatesQueue() {
@@ -88,10 +90,6 @@ void Match::pushExitInstructionToUpdatesQueue() {
     this->match_updates_queue.push(exit_instruc);
 }
 
-
-Match::~Match() {
-
-}
 
 /*
  *    std::vector<Position> positions;

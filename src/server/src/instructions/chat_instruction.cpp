@@ -7,13 +7,13 @@ ChatInstruction::ChatInstruction(const int& client_id, std::string&& message):
                                  message(std::move(message)) {}
 
 
-void ChatInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
-                                                            std::vector<ClientHandler>& clients, Board & board,
-                                                            BlockingQueue<Instruction> & match_updates_queue) {
+void ChatInstruction::makeActionAndNotifyAllListeningQueues(
+        std::map<int, BlockingQueue<Instruction>> &listening_queues,
+        std::map<int, ClientHandler>& clients, Board & board,
+        BlockingQueue<Instruction> & match_updates_queue) {
     std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(this->instructor_id, std::move(this->message));
-    std::list<BlockingQueue<Instruction>>::iterator it;
-    for (it = listening_queues.begin(); it != listening_queues.end(); it++)
-        (*it).push(this_instruc_ptr);
+    for (auto it = listening_queues.begin(); it != listening_queues.end(); it++)
+        it->second.push(this_instruc_ptr);
 }
 
 void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol& protocol, Packet& packet,

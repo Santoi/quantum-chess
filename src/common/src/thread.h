@@ -10,7 +10,6 @@ private:
     std::thread thread;
 
 protected:
-    bool has_active_thread;
 
 public:
     //Creates thread object. has_active_thread is set to false.
@@ -32,7 +31,7 @@ public:
     void runCatchingExceptions();
 
     //Default destructor
-    virtual ~Thread();
+    virtual ~Thread() = default;
 
 protected:
     //Method that any class that inherits this Thread class needs to implement.

@@ -48,10 +48,14 @@ void Server::executeServerWithThreads() {
     MatchesRepository matches;
     AcceptorThread acceptor_thread(acceptor_socket, matches);
     acceptor_thread.start();
-    while (std::cin.get() != 'q') {
+    while (true) {
+        std::string input;
+        std::cin >> input;
+        if (input == "q")
+            break;
     }
-    // TODO salida
-    this->acceptor_socket.stopAccepting();
+    acceptor_socket.shutdownAndClose();
+    std::cout << "intento joinear acceptor"<< std::endl;
     acceptor_thread.join();
 }
 

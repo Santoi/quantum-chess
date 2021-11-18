@@ -8,9 +8,10 @@ MovementInstruction::MovementInstruction(const int& client_id,
                                      initial(initial_), final(final_) {}
 
 
-void MovementInstruction::makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
-                                                            std::vector<ClientHandler>& clients,
-                                                            Board & board, BlockingQueue<Instruction> & match_updates_queue) {
+void MovementInstruction::makeActionAndNotifyAllListeningQueues(
+        std::map<int, BlockingQueue<Instruction>> &listening_queues,
+        std::map<int, ClientHandler>& clients,
+        Board & board, BlockingQueue<Instruction> & match_updates_queue) {
     // TODO validar color, permisos, etc
     board.move(initial, final);
     LoadBoardInstruction instruction;

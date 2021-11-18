@@ -31,10 +31,10 @@ void ClientHandlersReceiver::run() {
     try{
         while (true)
             this->receiveInstructionAndPushToQueue();
-    } catch (const SocketClosed& error) {
-        std::cerr << error.what() << std::endl;
+    }
+    catch (const SocketClosed& error) {
+        std::cerr << "Client id" << client_id << " " << error.what() << std::endl;
         this->pushToQueueExitInstruction();
-    } catch (...) {
     }
 }
 
@@ -59,6 +59,11 @@ void ClientHandlersSender::popFromQueueAndSendInstruction() {
 }
 
 void ClientHandlersSender::run() {
-    while (true)
-        this->popFromQueueAndSendInstruction();
+    try {
+        while (true)
+            this->popFromQueueAndSendInstruction();
+    }
+    catch(const BlockingQueueClosed & e) {
+        std::cout << "me cachie" << std::endl;
+    }
 }

@@ -4,6 +4,7 @@
 #include <queue>
 #include <memory>
 #include <condition_variable>
+#include <iostream>
 
 template <class T>
 class BlockingQueue {
@@ -58,6 +59,8 @@ BlockingQueue<T>::BlockingQueue(BlockingQueue<T> && other_queue) noexcept
 template <class T>
 void BlockingQueue<T>::push(std::shared_ptr<T> ptr) {
     const std::lock_guard<std::mutex> u_lock(this->mutex);
+    if (closed_queue)
+        return;
     this->queue.push(ptr);
     this->condition_variable.notify_all();
 }
@@ -68,8 +71,10 @@ void BlockingQueue<T>::pop(std::shared_ptr<T>& ptr) {
     condition_variable.wait(u_lock, [&] {
         return !queue.empty() || closed_queue;
     });
-    if (closed_queue)
+    if (queue.empty() && closed_queue) {
+        std::cout << "salgo por closed queue" << std::endl;
         throw BlockingQueueClosed("");
+    }
     ptr = this->queue.front();
     this->queue.pop();
 }

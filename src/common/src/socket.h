@@ -32,17 +32,14 @@ public:
     //socket is returned.
     Socket acceptSocket();
 
-    //Server socket is shutdowned and closed. Socket's fd is set to an invalid fd.
-    void stopAccepting();
-
-    //client socket is shutdowned and closed. It is equivalent to stopAccepting().
-    void stopCommunication();
-
     //Sends the contents of the packet.
     size_t send(Packet & packet) const;
 
     //Receives size bytes from socket, storing them in the given packet.
     size_t receive(Packet & packet, size_t size) const;
+
+    //The given socket is shutdowned and closed.
+    void shutdownAndClose();
 
     //Sockets resources are freed. If socket has an valid fd, it is shutdowned and closed. If it is
     //an invalid fd, nothing is done.
@@ -62,9 +59,6 @@ private:
     //Server socket is initialized, and a bind and listen is applied to it, leaving it on a valid
     //state so it can be used to accept client sockets.
     void inicializarServidorConBindYListen(const char* host, const char* service);
-
-    //The given socket is shutdowned and closed.
-    void shutdownAndClose();
 };
 
 class CantAcceptClientSocketError: public std::exception {
@@ -78,7 +72,7 @@ public:
     //Returns a pointer to the buffer containing the saved error message.
     const char* what()  const noexcept;
 
-    ~CantAcceptClientSocketError() = default;
+    ~CantAcceptClientSocketError() override = default;
 };
 
 class InvalidSocketError: public std::exception {

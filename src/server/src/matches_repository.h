@@ -38,9 +38,13 @@ public:
 
     ~MatchesRepository() = default;
 
+    void stopMatches();
+
     void
     addClientToMatchCreatingIfNeeded(Socket &&client_socket,
                                      bool threaded_match);
+
+    void joinMatches();
 
 private:
     //Accepts the new remote client using the acceptor_socket. It gets the client's chosen match
@@ -50,9 +54,6 @@ private:
     //Creates a new match and increases the created_matches number by one. If the boolean
     //threaded_match is true, then the new match is asked to start execution.
     void createNewMatch(bool threaded_match);
-
-    //Deletes from matches vector the matches that are not active.
-    void deleteInactiveMatchesFromList();
 
     //Following the protocol, it sends the number of games running to the remote client,
     //and receives the client's chosen game. If the client wants to play in a new match, a new match

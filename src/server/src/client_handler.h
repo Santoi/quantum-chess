@@ -16,9 +16,11 @@ class Match;
 class ClientHandler {
 private:
     Socket client_socket;
+    BlockingQueue<Instruction>& notifications_queue;
+    bool client_is_active;
     ClientHandlersReceiver client_receiver;
     ClientHandlersSender client_sender;
-    bool client_is_active;
+
 
 public:
     ClientHandler() = delete;
@@ -58,15 +60,12 @@ public:
     //client_is_active is set to true.
     void join();
 
+    void stop();
+
     //Returns client_is_active boolean.
     bool isActive() const;
 
     ~ClientHandler() = default;
-
-private:
-    //Starts both ClientHandlersSender and ClientHandlersReceiver threads.
-    void start();
-
 };
 
 

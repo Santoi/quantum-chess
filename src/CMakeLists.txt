@@ -8,3 +8,4 @@ add_subdirectory(server/src)
 add_subdirectory(client/src)
 add_subdirectory(common/src)
 add_subdirectory(ascii_chess)
+

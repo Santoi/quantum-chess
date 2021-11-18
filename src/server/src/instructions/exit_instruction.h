@@ -23,9 +23,10 @@ public:
     //client queue), and joins the ClientHandler that corresponds to the object's instructor_id.
     //If the instructor's id is the MATCH_ID, a runtime_error exception is thrown. This is useful
     //to stop the match's execution.
-    void makeActionAndNotifyAllListeningQueues(std::list<BlockingQueue<Instruction>>& listening_queues,
-                                               std::vector<ClientHandler>& clients,
-                                               Board & board, BlockingQueue<Instruction> & match_updates_queue) override;
+    void makeActionAndNotifyAllListeningQueues(
+            std::map<int, BlockingQueue<Instruction>> &listening_queues,
+            std::map<int, ClientHandler>& clients,
+            Board & board, BlockingQueue<Instruction> & match_updates_queue) override;
 
     //Gets the leaving instructor's nickname from the NickNamesRepository using the object's instructor_id
     //attribute, and calls the protocol method fillPacketWithExitInfo to fill the given packet. If the

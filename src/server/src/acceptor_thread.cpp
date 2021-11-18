@@ -14,19 +14,12 @@ void AcceptorThread::run() {
     try {
         while (true) {
             Socket peer = socket.acceptSocket();
-
             peer_queue.push(std::make_shared<Socket>(std::move(peer)));
         }
     }
-
     catch(const SocketClosed & e) {
-        // TODO cerrar la cola
+        std::cout << "intento joinear lobby"<< std::endl;
+        peer_queue.close();
+        lobby_thread.join();
     }
-    catch(const std::exception & e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-    }
-    catch(...){
-        std::cerr << "Error desconocido" << std::endl;
-    }
-
 }

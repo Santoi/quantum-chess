@@ -32,19 +32,14 @@ void RemoteClientSender::readFromStandardInputAndMakeAction() {
 
 void RemoteClientSender::run() {
     ClientProtocol protocol;
-    /*std::cout << "Escriba mensajes para el chat" << std::endl;
-    while (this->sender_is_active)
-        this->readFromStandardInputAndMakeAction();*/
-    while (true) {
-        try {
+    try {
+        while (true) {
             std::shared_ptr<RemoteClientInstruction> instruction;
             send_queue.pop(instruction);
             protocol.sendInstruction(client_socket, instruction);
         }
-        catch(const BlockingQueueClosed & e){
-            break;
-        }
     }
+    catch (const BlockingQueueClosed &e) {}
 }
 
 
@@ -60,12 +55,11 @@ void RemoteClientReceiver::receiveMessage() {
 }
 
 void RemoteClientReceiver::run() {
-    while (true) {
-        try {
+    try {
+        while (true)
             this->receiveMessage();
-        }
-        catch (const SocketClosed & e) {
-            break;
-        }
+    }
+    catch (const SocketClosed & e) {
+        std::cerr << "Error: se perdio conexion con el server" << std::endl;
     }
 }

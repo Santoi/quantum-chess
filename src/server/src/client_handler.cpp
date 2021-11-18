@@ -76,10 +76,7 @@ void ClientHandler::stop() {
 }
 
 void ClientHandler::join() {
-    std::cout << "joineo el recibidor" << std::endl;
     this->client_receiver.join();
-    std::cout << "joineo sender" << std::endl;
     this->client_sender.join();
     //client_is_active = false;
-    std::cout << "joinee todo" << std::endl;
 }

@@ -55,7 +55,6 @@ void Server::executeServerWithThreads() {
             break;
     }
     acceptor_socket.shutdownAndClose();
-    std::cout << "intento joinear acceptor"<< std::endl;
     acceptor_thread.join();
 }
 

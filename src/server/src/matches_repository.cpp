@@ -74,16 +74,13 @@ void MatchesRepository::addClientToMatchCreatingIfNeeded(Socket&& client_socket,
 
 void MatchesRepository::stopMatches() {
     for (auto & match: ptr_matches) {
-        std::cout << "detengo esta match" << std::endl;
         match->stop();
     }
 }
 
 void MatchesRepository::joinMatches() {
-    for (auto & match: ptr_matches) {
-        std::cout << "joineo el match" << std::endl;
+    for (auto & match: ptr_matches)
         match->join();
-    }
 }
 
 

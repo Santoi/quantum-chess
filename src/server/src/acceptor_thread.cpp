@@ -18,7 +18,6 @@ void AcceptorThread::run() {
         }
     }
     catch(const SocketClosed & e) {
-        std::cout << "intento joinear lobby"<< std::endl;
         peer_queue.close();
         lobby_thread.join();
     }

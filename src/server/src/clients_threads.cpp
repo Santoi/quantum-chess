@@ -63,7 +63,5 @@ void ClientHandlersSender::run() {
         while (true)
             this->popFromQueueAndSendInstruction();
     }
-    catch(const BlockingQueueClosed & e) {
-        std::cout << "me cachie" << std::endl;
-    }
+    catch(const BlockingQueueClosed & e) {}
 }

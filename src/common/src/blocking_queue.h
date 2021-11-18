@@ -71,10 +71,8 @@ void BlockingQueue<T>::pop(std::shared_ptr<T>& ptr) {
     condition_variable.wait(u_lock, [&] {
         return !queue.empty() || closed_queue;
     });
-    if (queue.empty() && closed_queue) {
-        std::cout << "salgo por closed queue" << std::endl;
+    if (queue.empty() && closed_queue)
         throw BlockingQueueClosed("");
-    }
     ptr = this->queue.front();
     this->queue.pop();
 }

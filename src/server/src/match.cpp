@@ -51,7 +51,6 @@ void Match::addClientToMatch(Socket&& client_socket, bool threaded_match) {
 }
 
 void Match::stop() {
-    std::cout << "detengo esta match" << std::endl;
     match_updates_queue.close();
 }
 
@@ -68,15 +67,9 @@ void Match::run() {
             checkAndNotifyUpdates();
     }
     catch (const BlockingQueueClosed& error) {
-        std::cout << "entro al catch" << std::endl;
-        std::cout << clients.size() << std::endl;
         for (auto & client: clients) {
-            // TODO hacer que si mueren matarlos.
-            std::cout << "stopear cliente" << std::endl;
             client.second.stop();
-            std::cout << "joineo" << std::endl;
             client.second.join();
-            std::cout << "termine de joinear" << std::endl;
         }
     }
 }

@@ -6,7 +6,6 @@
 LobbyThread::LobbyThread(BlockingQueue<Socket> & queue_, MatchesRepository & matches_): Thread(), queue(queue_), matches(matches_) {}
 
 void LobbyThread::run() {
-    std::cout << "soy el lobby" << std::endl;
     try {
         while (true) {
             std::shared_ptr<Socket> peer;
@@ -16,9 +15,7 @@ void LobbyThread::run() {
         }
     }
     catch(const BlockingQueueClosed & e) {
-        std::cout << "detengo matches" << std::endl;
         matches.stopMatches();
         matches.joinMatches();
     }
-    std::cout << "chau me las pico" << std::endl;
 }

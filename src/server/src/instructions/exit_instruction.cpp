@@ -23,7 +23,6 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(
         if (it_queue->first == instructor_id) {
             it_client->second.stop();
             it_client->second.join();
-            std::cout << "hola" << std::endl;
             it_client = clients.erase(it_client);
             it_queue = listening_queues.erase(it_queue);
             continue;

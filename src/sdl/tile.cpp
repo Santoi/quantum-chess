@@ -1,9 +1,10 @@
 #include "tile.h"
 
-Tile::Tile(Renderer &renderer, bool black) : renderer(renderer),
-                                             sprite_(renderer, "img/falcon.png",
-                                                     renderer.getMinDimension() / 10,
-                                                     renderer.getMinDimension() / 10) {
+Tile::Tile(Renderer &renderer, bool black) :
+           renderer(renderer),
+           sprite_(renderer, "img/falcon.png",
+                   renderer.getMinDimension() / 10,
+                   renderer.getMinDimension() / 10) {
   if (black) {
     images = {
         {TILE_DEFAULT,   "img/black_square.png"},

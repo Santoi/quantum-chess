@@ -2,13 +2,15 @@
 #include "renderer.h"
 #include "tile.h"
 #include <map>
+#include <utility>
 
 void Board::create(Renderer &renderer) {
   for (size_t i = 0; i < 8; i++) {
     for (size_t j = 0; j < 8; j++) {
       const Position position(i, j);
       Tile tile(renderer, position.isEven());
-      board.insert(std::move(std::pair<const Position, Tile>(position, std::move(tile))));
+      board.insert(std::move(std::pair<const Position, Tile>(position,
+                                                             std::move(tile))));
     }
   }
 }
@@ -23,14 +25,16 @@ void Board::render() {
 }
 
 void Board::createChessman(const Position &dest, Chessman &chessman) {
-  chessmen.insert(std::move(std::pair<const Position, Chessman>(dest, std::move(chessman))));
+  chessmen.insert(std::move(std::pair<const Position, Chessman>
+                            (dest, std::move(chessman))));
 }
 
 void Board::moveChessman(Position &orig, Position &dest) {
   if (chessmen.count(orig) == 0)
     return;
   Chessman &chessman = chessmen.at(orig);
-  chessmen.insert(std::move(std::pair<const Position, Chessman>(dest, std::move(chessman))));
+  chessmen.insert(std::move(std::pair<const Position, Chessman>
+                            (dest, std::move(chessman))));
   chessmen.erase(orig);
 }
 

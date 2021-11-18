@@ -4,6 +4,7 @@
 #include "window.h"
 #include "sprite.h"
 #include <SDL2pp/SDL2pp.hh>
+#include <algorithm>
 
 class Sprite;
 class Scene;

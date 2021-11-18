@@ -2,6 +2,8 @@
 #include "sprite.h"
 #include "pixel_coordinate.h"
 #include <map>
+#include <utility>
+#include <list>
 
 #define BOARD_MIN_LIMIT .1
 #define BOARD_MAX_LIMIT .9
@@ -10,7 +12,8 @@ Scene::Scene(int height, Board &board): scale(height), board(board) {}
 
 void Scene::loadSprite(Sprite &sprite, int x, int y) {
   const PixelCoordinate pixel(x, y);
-  sprites.insert(std::pair<const PixelCoordinate, Sprite>(pixel, std::move(sprite)));
+  sprites.insert(std::pair<const PixelCoordinate, Sprite>(pixel,
+                                                          std::move(sprite)));
 }
 
 void Scene::setScale(int scale_) {

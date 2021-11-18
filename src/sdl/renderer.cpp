@@ -4,6 +4,7 @@
 #include "scene.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <iostream>
+#include <algorithm>
 
 Renderer::Renderer(Window &window): renderer_(window.window(),
                                              -1,

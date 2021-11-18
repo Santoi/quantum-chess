@@ -19,7 +19,10 @@ int main() {
   Renderer renderer(window);
 
   Board board;
-  Sprite background(renderer, "img/board1.jpg", window.window().GetDrawableHeight(), window.window().GetDrawableHeight());
+  Sprite background(renderer,
+                    "img/board1.jpg",
+                    window.window().GetDrawableHeight(),
+                    window.window().GetDrawableHeight());
   Scene scene(renderer.getMinDimension(), board);
   scene.loadSprite(background, 0, 0);
   board.create(renderer);

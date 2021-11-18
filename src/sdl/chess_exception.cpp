@@ -1,4 +1,5 @@
 #include "chess_exception.h"
+#include <string>
 
 ChessException::ChessException(std::string text_): text(std::move(text_)) {}
 

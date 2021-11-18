@@ -1,10 +1,11 @@
 #include "chessman.h"
 #include <utility>
 
-Chessman::Chessman(Renderer &renderer, char chessman): renderer(renderer),
-                                                       sprite_(renderer, "img/falcon.png",
-                                           renderer.getMinDimension() / 10,
-                                           renderer.getMinDimension() / 10) {
+Chessman::Chessman(Renderer &renderer, char chessman):
+                   renderer(renderer),
+                   sprite_(renderer, "img/falcon.png",
+                           renderer.getMinDimension() / 10,
+                           renderer.getMinDimension() / 10) {
   switch (chessman) {
     case 't':
       sprite_.loadImage("img/tower.png");

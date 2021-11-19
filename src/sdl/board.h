@@ -7,21 +7,23 @@
 #include "tile.h"
 #include "position.h"
 #include <map>
+#include <string>
 
 class Board {
 private:
+  Sprite background;
   std::map<const Position, Chessman> chessmen;
   std::map<const Position, Tile> board;
 
 public:
-  Board() = default;
+  Board(Renderer &renderer, const std::string &image, int width, int height);
   ~Board() = default;
 
-  void create(Renderer &renderer);
   void render();
 
   std::map<const Position, Tile>& getTiles();
   std::map<const Position, Chessman>& getChessmen();
+  Sprite& getBackground();
 
   void createChessman(const Position &dest, Chessman &chessman);
   void moveChessman(Position &orig, Position &dest);

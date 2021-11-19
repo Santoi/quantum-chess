@@ -29,6 +29,10 @@ public:
   void render(int x, int y, int width, int height);
   void render(int x, int y);
 
+  void setBlendMode(int blendMode);
+  void setAlpha(float alpha);
+  float getAlpha();
+
   void loadImage(const std::string &file_name, int width = 0, int height = 0);
 
   int width() const;

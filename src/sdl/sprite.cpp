@@ -24,6 +24,22 @@ void Sprite::render(int x, int y) {
   renderer.copy(*this, x, y);
 }
 
+void Sprite::setBlendMode(int blendMode) {
+  sprite_.SetBlendMode(static_cast<SDL_BlendMode>(blendMode));
+}
+
+void Sprite::setAlpha(float alpha) {
+  if (alpha > 1)
+    alpha = 1;
+  if (alpha < 0)
+    alpha = 0;
+  sprite_.SetAlphaMod(alpha * 255);
+}
+
+float Sprite::getAlpha() {
+  return sprite_.GetAlphaMod() / 255.0f;
+}
+
 void Sprite::loadImage(const std::string &file_name, int width, int height) {
   if (width == 0)
     width = width_;

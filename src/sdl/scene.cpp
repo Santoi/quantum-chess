@@ -22,6 +22,7 @@ void Scene::setScale(int scale_) {
 
 void Scene::render() {
   auto &tiles = board.getTiles();
+  Sprite &background = board.getBackground();
   auto &chessmen = board.getChessmen();
 
   for (auto &it : sprites) {
@@ -32,6 +33,8 @@ void Scene::render() {
     transformer.position2Pixel(it.first, pixel, scale);
     it.second.render(pixel.x(), pixel.y());
   }
+  background.setAlpha(.4);
+  background.render(0, 0, scale, scale);
   for (auto &it : chessmen) {
     PixelCoordinate pixel(0, 0);
     transformer.position2Pixel(it.first, pixel, scale);

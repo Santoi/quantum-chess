@@ -1,5 +1,4 @@
 #include "chessman.h"
-#include <iostream>
 #include <utility>
 
 Chessman::Chessman(Renderer &renderer, const std::string &chessman,
@@ -59,8 +58,11 @@ Chessman& Chessman::operator=(Chessman &&other) noexcept {
 
 void Chessman::render(int x, int y) {
   int size = renderer.getMinDimension() / 10;
-  int dy = size - size * probability;
-  fill.render(0, dy, x, y + dy, size, size * probability, size, size);
+  int ref_height = fill.getImageHeight();
+  int dh = size - size * probability;
+  int dy = ref_height - ref_height * probability;
+  fill.render(0, dy, x, y + dh, ref_height, ref_height * probability,
+              size, size - dh);
   sprite_.render(x, y, size, size);
 }
 

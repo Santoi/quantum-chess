@@ -33,7 +33,9 @@ public:
 
   void setBlendMode(int blendMode);
   void setAlpha(float alpha);
-  float getAlpha();
+  float getAlpha() const;
+  int getImageWidth() const;
+  int getImageHeight() const;
 
   void loadImage(const std::string &file_name, int width = 0, int height = 0);
 

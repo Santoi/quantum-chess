@@ -44,8 +44,16 @@ void Sprite::setAlpha(float alpha) {
   sprite_.SetAlphaMod(alpha * 255);
 }
 
-float Sprite::getAlpha() {
+float Sprite::getAlpha() const {
   return sprite_.GetAlphaMod() / 255.0f;
+}
+
+int Sprite::getImageWidth() const {
+  return sprite_.GetWidth();
+}
+
+int Sprite::getImageHeight() const {
+  return sprite_.GetHeight();
 }
 
 void Sprite::loadImage(const std::string &file_name, int width, int height) {

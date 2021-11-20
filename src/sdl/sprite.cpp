@@ -14,6 +14,13 @@ SDL2pp::Texture& Sprite::sprite() {
   return sprite_;
 }
 
+void Sprite::render(int x_src, int y_src, int x, int y, int width_src,
+                    int height_src, int width, int height) {
+  width_ = width;
+  height_ = height;
+  renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
+}
+
 void Sprite::render(int x, int y, int width, int height) {
   width_ = width;
   height_ = height;

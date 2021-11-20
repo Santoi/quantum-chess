@@ -55,6 +55,8 @@ int game(Window &window, Renderer &renderer) {
   return 0;
 }
 
+// TODO: remove testing
+
 void loadWhiteChessmen(Renderer &renderer, Board &board) {
   // begin chessmen
   Position p1(0, 7);

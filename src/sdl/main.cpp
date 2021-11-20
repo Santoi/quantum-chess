@@ -63,17 +63,17 @@ void loadWhiteChessmen(Renderer &renderer, Board &board) {
 
 
   Position p2(1, 7);
-  Chessman kl(renderer, "kw", 100);
+  Chessman kl(renderer, "kw", 50);
   board.createChessman(p2, kl);
 
 
   Position p3(2, 7);
-  Chessman bl(renderer, "bw", 100);
+  Chessman bl(renderer, "bw", 75);
   board.createChessman(p3, bl);
 
 
   Position p4(3, 7);
-  Chessman q(renderer, "qw", 100);
+  Chessman q(renderer, "qw", 25);
   board.createChessman(p4, q);
 
 

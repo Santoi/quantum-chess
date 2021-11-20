@@ -16,9 +16,13 @@ void Renderer::copy(Sprite &sprite, int x, int y) {
   renderer_.Copy(sprite.sprite(), SDL2pp::NullOpt, dest);
 }
 
+#include <iostream>
 void Renderer::copy(Sprite &sprite, int x_src, int y_src, int x_dst,
                     int y_dst, int width, int height) {
-  const SDL2pp::Rect src(x_src, y_src, width, height);
+  // TODO: check why this is broken and why it fixes with 4
+  // Still bugged if probability isnt 100
+  // Multiply by magic number to fix scale
+  const SDL2pp::Rect src(x_src, y_src, width * 4, height * 4);
   const SDL2pp::Rect dest(x_dst, y_dst, width, height);
   renderer_.Copy(sprite.sprite(), src, dest);
 }

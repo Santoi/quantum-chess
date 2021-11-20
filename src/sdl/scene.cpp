@@ -25,20 +25,19 @@ void Scene::render() {
   Sprite &background = board.getBackground();
   auto &chessmen = board.getChessmen();
 
-  for (auto &it : sprites) {
-    it.second.render(it.first.x(), it.first.y());
-  }
   for (auto &it : tiles) {
     PixelCoordinate pixel(0, 0);
     transformer.position2Pixel(it.first, pixel, scale);
     it.second.render(pixel.x(), pixel.y());
   }
-  background.setAlpha(.4);
   background.render(0, 0, scale, scale);
   for (auto &it : chessmen) {
     PixelCoordinate pixel(0, 0);
     transformer.position2Pixel(it.first, pixel, scale);
     it.second.render(pixel.x(), pixel.y());
+  }
+  for (auto &it : sprites) {
+    it.second.render(it.first.x(), it.first.y());
   }
 }
 

@@ -5,11 +5,13 @@
 #include <utility>
 #include <string>
 
+#define BACKGROUND_TRANSPARENCY 0.4
+
 Board::Board(Renderer &renderer, const std::string &image,
              int width, int height): background(renderer, image,
                                                 width, height) {
   background.setBlendMode(SDL_BLENDMODE_BLEND);
-  background.setAlpha(.4);
+  background.setAlpha(BACKGROUND_TRANSPARENCY);
   for (size_t i = 0; i < 8; i++) {
     for (size_t j = 0; j < 8; j++) {
       const Position position(i, j);

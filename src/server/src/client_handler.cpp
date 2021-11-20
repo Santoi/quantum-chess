@@ -76,3 +76,7 @@ void ClientHandler::join() {
     this->client_sender.join();
     //client_is_active = false;
 }
+
+const ClientData &ClientHandler::getData() const {
+    return client_data;
+}

@@ -3,20 +3,20 @@
 #include <arpa/inet.h>
 #include "../../common/src/unique_ptr.h"
 #include "client_protocol.h"
-#include "../../common/src/client_data_repository.h"
 #include "../../common/src/client_data.h"
 
 #define ONE_BYTE 1
 #define TWO_BYTES 2
 
-std::map<uint16_t, ClientDataRepository>
+std::map<uint16_t, std::vector<ClientData>>
 ClientProtocol::receiveMatchesInfo(Socket& socket) {
-    std::map<uint16_t, ClientDataRepository> matches_info;
+    std::map<uint16_t, std::vector<ClientData>> matches_info;
     uint16_t matches_amount = getNumber16FromSocket(socket);
     for (uint16_t i = 0; i < matches_amount; i++){
         uint16_t match_id = getNumber16FromSocket(socket);
         uint16_t clients_amount = getNumber16FromSocket(socket);
-        ClientDataRepository client_data_repository;
+        std::vector<ClientData> client_data_vector;
+        client_data_vector.reserve(clients_amount);
         for (uint16_t j = 0; j < clients_amount; j++) {
             uint16_t client_id = getNumber16FromSocket(socket);
             std::string client_name;
@@ -24,9 +24,9 @@ ClientProtocol::receiveMatchesInfo(Socket& socket) {
             bool is_player = getNumber8FromSocket(socket);
             ClientData data(client_id, client_name, is_player, false);
             uint16_t id = data.getId();
-            client_data_repository.saveClientData(std::move(data), id);
+            client_data_vector.push_back(std::move(data));
         }
-        matches_info.insert(std::make_pair(match_id, std::move(client_data_repository)));
+        matches_info.insert(std::make_pair(match_id, std::move(client_data_vector)));
     }
     return matches_info;
 }

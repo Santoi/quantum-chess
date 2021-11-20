@@ -5,22 +5,21 @@
 #include "client_protocol.h"
 #include "action_thread.h"
 #include "../../server/src/quantum_chess/chess_exception.h"
-#include "../../common/src/client_data_repository.h"
 #include "../../common/src/client_data.h"
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
     ClientProtocol protocol;
-    std::map<uint16_t, ClientDataRepository> data = std::move(protocol.receiveMatchesInfo(client_socket));
+    std::map<uint16_t, std::vector<ClientData>> data = std::move(protocol.receiveMatchesInfo(client_socket));
     std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                  " quieres entrar." << std::endl;
     std::cout << "Las partidas disponibles son" << std::endl;
     uint16_t last_id = 0;
     for (auto it = data.begin(); it != data.end(); ++it){
         std::cout << "#" << it->first << ": ";
-        std::vector<const ClientData *> client_data = it->second.getAllData();
+        std::vector<ClientData> & client_data = it->second;
         for (auto it_match = client_data.begin(); it_match != client_data.end(); ++it_match){
-            char playing = ((*it_match)->isPlayer()) ? 'p' : 'o';
-            std::cout << (*it_match)->getName() << "#" << (*it_match)->getId() << "(" << playing << "), ";
+            char playing = (it_match->isPlayer()) ? 'p' : 'o';
+            std::cout << it_match->getName() << "#" << it_match->getId() << "(" << playing << "), ";
         }
         std::cout << std::endl;
         last_id = it->first;

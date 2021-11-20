@@ -8,7 +8,6 @@
 #include "../../common/src/thread.h"
 #include "quantum_chess/board.h"
 #include "instructions/instruction.h"
-#include "../../common/src/client_data_repository.h"
 #include "client_handler.h"
 
 class ClientHandler;
@@ -20,7 +19,6 @@ private:
     uint16_t accepted_clients;
     Board board;
     std::map<uint16_t, ClientHandler> clients;
-    ClientDataRepository client_data_repository;
     std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
     BlockingQueue<Instruction> match_updates_queue;
 
@@ -67,7 +65,7 @@ protected:
 private:
     //Creates a new ClientHandler and adds it to the client's vector (if the vector's capacity is not
     //enough, it is incremented by BASE_CLIENTS). The number of accepted clients is incremented by one.
-    void addClientWithIdToListOfClients(Socket&& client_socket, uint16_t client_id);
+    void addClientWithIdToListOfClients(Socket&& client_socket, ClientData &client_data);
 
     //Asks the new remote client for its nickname and saves it into the nick names repository,
     //associating it with the given client_id.

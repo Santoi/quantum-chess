@@ -4,14 +4,14 @@
 #include <string>
 #include <list>
 #include "../../../common/src/packet.h"
-#include "../../../common/src/client_data_repository.h"
 #include "../server_protocol.h"
 #include "../quantum_chess/board.h"
 #include <vector>
 
 class ExitInstruction: public Instruction {
 private:
-    const ClientData & instructor_data;
+    // It is copied because client is destroyed
+    ClientData instructor_data;
 
 public:
     ExitInstruction() = delete;

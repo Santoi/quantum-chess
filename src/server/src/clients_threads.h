@@ -12,7 +12,7 @@ class Instruction;
 class ClientHandlersReceiver: public Thread {
 private:
     Socket& client_socket;
-    const ClientData & client_data;
+    ClientData client_data;
     BlockingQueue<Instruction>& updates_queue;
 
 public:
@@ -47,7 +47,7 @@ protected:
 class ClientHandlersSender: public Thread {
 private:
     Socket& client_socket;
-    const ClientData & client_data;
+    ClientData client_data;
     BlockingQueue<Instruction>& notifications_queue;
 
 public:

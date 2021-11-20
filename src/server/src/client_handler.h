@@ -6,7 +6,6 @@
 #include <memory>
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
-#include "../../common/src/client_data_repository.h"
 #include "clients_threads.h"
 #include "match.h"
 #include "server_protocol.h"
@@ -20,7 +19,7 @@ class ClientHandler {
 private:
     Socket client_socket;
     BlockingQueue<Instruction>& notifications_queue;
-    const ClientData & client_data;
+    const ClientData client_data;
     bool client_is_active;
     ClientHandlersReceiver client_receiver;
     ClientHandlersSender client_sender;
@@ -55,6 +54,8 @@ public:
     //client_is_active is true, the match is asked to check updates coming from the receiver's thread
     //and notify updates to the sender's thread.
     void startThreadedClient(Match& match, bool threaded_match);
+
+    const ClientData & getData() const;
 
     //Joins (if joinable) both the handler's receiver and sender threads. Object's boolean
     //client_is_active is set to true.

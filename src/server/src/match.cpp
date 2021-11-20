@@ -10,7 +10,7 @@
 // TODO AVeriguar donde arranca match.
 
 Match::Match()
-        :Thread(), accepted_clients(0), board(), clients(), client_data_repository(), listening_queues(), match_updates_queue() {
+        :Thread(), accepted_clients(0), board(), clients(), listening_queues(), match_updates_queue() {
 }
 
 Match::Match(Match&& other_match)
@@ -36,12 +36,13 @@ void Match::addClientsNickNameToRepository(uint16_t client_id) {
 
 }
 // TODO refactor.
-void Match::addClientWithIdToListOfClients(Socket&& client_socket, uint16_t client_id) {
+void Match::addClientWithIdToListOfClients(Socket&& client_socket, ClientData &client_data) {
     BlockingQueue<Instruction> new_listening_queue;
+    uint16_t client_id = client_data.getId();
     listening_queues.insert(std::make_pair(client_id, std::move(new_listening_queue)));
     ClientHandler client(std::move(client_socket), this->listening_queues.at(client_id),
                          this->match_updates_queue,
-                         client_data_repository.getClientData(client_id));
+                         client_data);
     clients.insert(std::make_pair(client_id, std::move(client)));
     this->accepted_clients++;
 }
@@ -56,8 +57,7 @@ void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
 void Match::addClientToMatch(Socket&& client_socket, bool threaded_match) {
     uint16_t client_id = this->accepted_clients;
     ClientData client_data = askClientData(client_socket, client_id);
-    this->client_data_repository.saveClientData(std::move(client_data), client_id);
-    this->addClientWithIdToListOfClients(std::move(client_socket), client_id);
+    this->addClientWithIdToListOfClients(std::move(client_socket), client_data);
     this->clients.at(client_id).startThreadedClient(*this, threaded_match);
     LoadBoardInstruction instruction;
     match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
@@ -97,7 +97,11 @@ void Match::pushExitInstructionToUpdatesQueue() {
 }*/
 
 std::vector<const ClientData*> Match::getClientsData() const {
-    return client_data_repository.getAllData();
+    std::vector<const ClientData*> output;
+    output.reserve(clients.size());
+    for (auto & client: clients)
+        output.push_back(&(client.second.getData()));
+    return output;
 }
 
 

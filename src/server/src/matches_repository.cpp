@@ -4,7 +4,7 @@
 #include "../../common/src/unique_ptr.h"
 
 MatchesRepository::MatchesRepository()
-                    :created_matches(0) {
+                    :created_matches(0), ptr_matches(), accepted_clients(0) {
 }
 
 void MatchesRepository::createNewMatch(bool threaded_match) {
@@ -63,13 +63,15 @@ void MatchesRepository::acceptClientAndAddToAMatch(Socket& acceptor_socket, bool
     uint16_t match_number;
     Socket client_socket = this->acceptClientAndGetClientChosenMatch(acceptor_socket, match_number, threaded_match);
     ptr_matches[match_number]->addClientToMatch(std::move(client_socket),
-                                                threaded_match);
+                                                threaded_match, 0);
 }
 
-void MatchesRepository::addClientToMatchCreatingIfNeeded(Socket&& client_socket, bool threaded_match) {
+void MatchesRepository::addClientToMatchCreatingIfNeeded(Socket &&client_socket,
+                                                         bool threaded_match) {
     uint16_t chosen_match = getClientChosenMatch(client_socket, true);
     ptr_matches[chosen_match]->addClientToMatch(std::move(client_socket),
-                                                threaded_match);
+                                                threaded_match, accepted_clients);
+    accepted_clients++;
 }
 
 void MatchesRepository::stopMatches() {

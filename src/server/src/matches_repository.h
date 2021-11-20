@@ -10,6 +10,7 @@ class MatchesRepository {
 private:
     uint16_t created_matches;
     std::map<uint16_t, std::unique_ptr<Match>> ptr_matches;
+    uint16_t accepted_clients;
 
 public:
     //Creates a MatchesRepository, setting the number of created_matches equal to cero.

@@ -16,7 +16,6 @@ class Instruction;
 
 class Match: public Thread {
 private:
-    uint16_t accepted_clients;
     Board board;
     std::map<uint16_t, ClientHandler> clients;
     std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
@@ -37,7 +36,8 @@ public:
 
     //Adds client to list of clients and nick names repository, and calls the client to start with threads,
     //also sending the client the boolean threaded_match.
-    void addClientToMatch(Socket&& client_socket, bool threaded_match);
+    void addClientToMatch(Socket &&client_socket, bool threaded_match,
+                          uint16_t client_id);
 
     //Pops from updates_queue an instruction, and asks this instruction to makeActionAndNotifyAllListeningQueues.
     void checkAndNotifyUpdates();

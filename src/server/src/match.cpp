@@ -10,11 +10,11 @@
 // TODO AVeriguar donde arranca match.
 
 Match::Match()
-        :Thread(), accepted_clients(0), board(), clients(), listening_queues(), match_updates_queue() {
+        :Thread(), board(), clients(), listening_queues(), match_updates_queue() {
 }
 
 Match::Match(Match&& other_match)
-       :Thread(std::move(other_match)), accepted_clients(other_match.accepted_clients),
+       :Thread(std::move(other_match)),
         clients(std::move(other_match.clients)), listening_queues(std::move(other_match.listening_queues)),
         match_updates_queue(std::move(other_match.match_updates_queue)), board(std::move(other_match.board)) {
 }
@@ -44,7 +44,6 @@ void Match::addClientWithIdToListOfClients(Socket&& client_socket, ClientData &c
                          this->match_updates_queue,
                          client_data);
     clients.insert(std::make_pair(client_id, std::move(client)));
-    this->accepted_clients++;
 }
 /*
 void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
@@ -54,8 +53,8 @@ void Match::addSingleThreadedClientToMatchAndStart(Socket&& client_socket) {
     this->clients.at(client_id).startSingleThreadedClient(*this);
 }*/
 
-void Match::addClientToMatch(Socket&& client_socket, bool threaded_match) {
-    uint16_t client_id = this->accepted_clients;
+void Match::addClientToMatch(Socket &&client_socket, bool threaded_match,
+                             uint16_t client_id) {
     ClientData client_data = askClientData(client_socket, client_id);
     this->addClientWithIdToListOfClients(std::move(client_socket), client_data);
     this->clients.at(client_id).startThreadedClient(*this, threaded_match);

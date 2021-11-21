@@ -2,8 +2,8 @@
 #include "../../server/src/instructions/instruction.h"
 
 ActionThread::ActionThread(BlockingQueue<RemoteClientInstruction> & instructions_,
-                           Scene &scene_)
-        :Thread(), instructions(instructions_), scene(scene_) {
+                           Game &game_)
+        :Thread(), instructions(instructions_), game(game_) {
 }
 
 void ActionThread::run() {
@@ -11,7 +11,7 @@ void ActionThread::run() {
         while (true) {
             std::shared_ptr<RemoteClientInstruction> ptr_instruction;
             instructions.pop(ptr_instruction);
-            ptr_instruction->makeAction(scene);
+            ptr_instruction->makeAction(game);
         }
     }
     catch(const BlockingQueueClosed & e) {}

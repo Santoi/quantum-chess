@@ -9,7 +9,7 @@
 #include "../../common/src/packet.h"
 #include "client_protocol.h"
 #include "chessman_data.h"
-#include "../sdl/scene.h"
+#include "../game/game.h"
 
 // TODO diferenciar las que llegan de las que se van.
 
@@ -31,7 +31,7 @@ public:
     virtual void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol);
 
     //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
-    virtual void makeAction(Scene &scene) = 0;
+    virtual void makeAction(Game &game) = 0;
 
     ~RemoteClientInstruction() = default;
 
@@ -49,7 +49,7 @@ public:
     RemoteClientChatInstruction(const std::string& nick_name, const std::string& message);
 
     //Prints to stdout "instructor_nick_name sends message"
-    void makeAction(Scene &scene) override;
+    void makeAction(Game &game) override;
 
     void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
 
@@ -65,7 +65,7 @@ public:
     RemoteClientExitMessageInstruction(const std::string& nick_name);
 
     //Prints to stdout "instructor_nick_name left the game"
-    void makeAction(Scene &scene);
+    void makeAction(Game &game);
 
     ~RemoteClientExitMessageInstruction() = default;
 };
@@ -81,7 +81,7 @@ public:
     RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector);
 
     //Prints to stdout "instructor_nick_name left the game"
-    void makeAction(Scene &scene);
+    void makeAction(Game &game);
 
     ~RemoteClientLoadMessageInstruction() = default;
 };
@@ -95,7 +95,7 @@ public:
 
     RemoteClientMoveInstruction(const Position &initial_, const Position &final_);
 
-    void makeAction(Scene &scene);
+    void makeAction(Game &game);
 
     void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
 

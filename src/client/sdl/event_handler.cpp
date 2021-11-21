@@ -4,7 +4,7 @@
 
 EventHandler::EventHandler(): split(false), merge(false), move(false) {}
 
-bool EventHandler::handleEvents(Scene &scene, Board &board) {
+bool EventHandler::handleEvents(Game &game, Board &board) {
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
@@ -14,7 +14,7 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
       case SDL_KEYDOWN: {
         switch (event.key.keysym.sym) {
           case SDLK_ESCAPE: {
-            scene.setDefaultBoard();
+            game.setDefaultBoard();
             move = false;
             break;
           }
@@ -51,7 +51,7 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT) {
           PixelCoordinate pixel(mouse.x, mouse.y);
-          if (!scene.isPixelInBoard(pixel))
+          if (!game.isPixelInBoard(pixel))
             break;
 
           std::list<Position> coords;
@@ -61,18 +61,18 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
           }
           if (split) {
             // TODO: notify split
-            scene.splitTiles(coords);
+            game.splitTiles(coords);
           } else if (merge) {
             // TODO: notify merge
-            scene.moveTiles(coords);
+            game.moveTiles(coords);
           } else {
             // TODO: notify move
-            scene.moveTiles(coords);
+            game.moveTiles(coords);
           }
 
           if (move) {
-            scene.moveChessman(last, pixel);
-            scene.setDefaultBoard();
+            game.moveChessman(last, pixel);
+            game.setDefaultBoard();
           } else {
             last(pixel.x(), pixel.y());
           }

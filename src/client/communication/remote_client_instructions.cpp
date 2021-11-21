@@ -1,7 +1,7 @@
 #include "remote_client_instructions.h"
 #include "client_protocol.h"
 #include "../position.h"
-#include "../sdl/scene.h"
+#include "../game/game.h"
 #include <iostream>
 
 
@@ -20,7 +20,7 @@ RemoteClientChatInstruction::RemoteClientChatInstruction(const std::string& nick
                             :RemoteClientInstruction(nick_name), message(message) {
 }
 
-void RemoteClientChatInstruction::makeAction(Scene &scene) {
+void RemoteClientChatInstruction::makeAction(Game &game) {
     std::cout << this->instructor_nick_name << " envia: " << this->message << std::endl;
 }
 
@@ -33,20 +33,20 @@ RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(const std
 }
 
 
-void RemoteClientExitMessageInstruction::makeAction(Scene &scene) {
+void RemoteClientExitMessageInstruction::makeAction(Game &game) {
     std::cout << this->instructor_nick_name << " se fue de la partida." << std::endl;
 }
 
 RemoteClientLoadMessageInstruction::RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector){}
 
-void RemoteClientLoadMessageInstruction::makeAction(Scene &scene) {
-    scene.load(chessman_data_vector);
+void RemoteClientLoadMessageInstruction::makeAction(Game &game) {
+    game.load(chessman_data_vector);
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(const Position &initial_,
                                                          const Position &final_): initial(initial_), final(final_) {}
 
-void RemoteClientMoveInstruction::makeAction(Scene &scene) {
+void RemoteClientMoveInstruction::makeAction(Game &game) {
 
 }
 

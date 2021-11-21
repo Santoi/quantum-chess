@@ -4,7 +4,7 @@
 #include "sdl/sprite.h"
 #include "game/chessman.h"
 #include "game/board.h"
-#include "sdl/scene.h"
+#include "game/game.h"
 #include "sdl/event_handler.h"
 #include "../common/src/blocking_queue.h"
 #include "communication/remote_client_instructions.h"
@@ -27,7 +27,7 @@ int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstructi
               "img/stars.jpg",
               renderer.getMinDimension(),
               renderer.getMinDimension());
-  Scene scene(renderer.getMinDimension(), board, send_queue);
+  Game game(renderer.getMinDimension(), board, send_queue);
 
   unsigned int prev_ticks = SDL_GetTicks();
 
@@ -41,10 +41,10 @@ int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstructi
     unsigned int frame_delta = frame_ticks - prev_ticks;
     prev_ticks = frame_ticks;
 
-    running = eventHandler.handleEvents(scene, board);
+    running = eventHandler.handleEvents(game, board);
 
     // Show rendered frame
-    renderer.render(scene);
+    renderer.render(game);
 
     // Frame limiter: sleep for a little bit to not eat 100% of CPU
     SDL_Delay(1);

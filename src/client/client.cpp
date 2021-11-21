@@ -63,7 +63,7 @@ void Client::execute(const char * host, const char * port, bool single_threaded_
     welcomeClientAndAskForNickName();
     Socket socket = Socket::createAConnectedSocket(host, port);
     setUpClientsDataInServer(socket);
-    ActionThread action_thread(received, scene);
+    ActionThread action_thread(received, game);
     RemoteClientSender sender_thread(socket, send);
     RemoteClientReceiver receiver_thread(socket, received);
     receiver_thread.start();

@@ -1,10 +1,10 @@
-#ifndef QUANTUM_CHESS_PROJ_SCENE_H
-#define QUANTUM_CHESS_PROJ_SCENE_H
+#ifndef QUANTUM_CHESS_PROJ_GAME_H
+#define QUANTUM_CHESS_PROJ_GAME_H
 
-#include "pixel_coordinate.h"
-#include "sprite.h"
-#include "../game/board.h"
-#include "coordinate_transformer.h"
+#include "../sdl/pixel_coordinate.h"
+#include "../sdl/sprite.h"
+#include "board.h"
+#include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"
 #include <list>
@@ -12,7 +12,7 @@
 
 class Sprite;
 
-class Scene {
+class Game {
 private:
   int scale;
   Board &board;
@@ -21,7 +21,7 @@ private:
   CoordinateTransformer transformer;
 
 public:
-  Scene(int height, Board &board, BlockingQueue<RemoteClientInstruction> &send_queue_);
+  Game(int height, Board &board, BlockingQueue<RemoteClientInstruction> &send_queue_);
   void setScale(int scale_);
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
@@ -43,4 +43,4 @@ public:
 };
 
 
-#endif //QUANTUM_CHESS_PROJ_SCENE_H
+#endif //QUANTUM_CHESS_PROJ_GAME_H

@@ -1,7 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_EVENT_HANDLER_H
 #define QUANTUM_CHESS_PROJ_EVENT_HANDLER_H
 
-#include "scene.h"
+#include "../game/game.h"
 #include "../game/board.h"
 #include <SDL2/SDL.h>
 
@@ -14,7 +14,7 @@ private:
 public:
   EventHandler();
   // Event loop
-  bool handleEvents(Scene &scene, Board &board);
+  bool handleEvents(Game &game, Board &board);
 //  void handleMouse();
 };
 

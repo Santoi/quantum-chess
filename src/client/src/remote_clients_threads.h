@@ -4,17 +4,20 @@
 #include "../../common/src/thread.h"
 #include <string>
 #include "../../common/src/socket.h"
+#include "remote_client_instructions.h"
+#include "../../common/src/blocking_queue.h"
 
 class RemoteClientSender: public Thread {
 private:
     Socket& client_socket;
+    BlockingQueue<RemoteClientInstruction> & send_queue;
     bool sender_is_active;
 
 public:
     RemoteClientSender() = delete;
 
     //Creates a RemoteClientSender, saving a reference to client_socket.
-    RemoteClientSender(Socket& client_socket);
+    RemoteClientSender(Socket& client_socket, BlockingQueue<RemoteClientInstruction> & send_queue_);
 
     //Reads from standard input and makes corresponding action.
     void readFromStandardInputAndMakeAction();
@@ -37,12 +40,13 @@ private:
 class RemoteClientReceiver: public Thread {
 private:
     Socket& client_socket;
+    BlockingQueue<RemoteClientInstruction> & queue;
 
 public:
     RemoteClientReceiver() = delete;
 
     //Creates a RemoteClientReceiver, saving a reference to client_socket.
-    RemoteClientReceiver(Socket& client_socket);
+    RemoteClientReceiver(Socket& client_socket, BlockingQueue<RemoteClientInstruction> & queue_);
 
     //Asks protocol to fill a pointer to a RemoteClientInstruction derived class and
     //tells it to makeAction.

@@ -123,6 +123,19 @@ bool Board::isThere(Chessman * chessman) {
                                     return pair.second == chessman; });
 }
 
+void Board::loadVectors(std::vector<char> & characters_, std::vector<bool> & colors_,
+                        std::vector<Position> & positions_) {
+    // TODO hacerlo un paquete solo.
+    characters_.reserve(board.size());
+    colors_.reserve(board.size());
+    positions_.reserve(board.size());
+    for (auto it = board.begin(); it != board.end(); ++it) {
+        characters_.push_back(it->second->print());
+        positions_.push_back(it->first);
+        colors_.push_back(it->second->isWhite());
+    }
+}
+
 std::unique_ptr<Chessman> Board::createChessman(char chessman_,
                                                 Position position_,
                                                 bool white_) {

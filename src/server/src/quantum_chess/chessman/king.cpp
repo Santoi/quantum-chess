@@ -22,8 +22,8 @@ void King::calculateMoves(const Position &initial,
     }
 }
 
-std::string King::print() const {
-    return "K";
+char King::print() const {
+    return 'K';
 }
 
 

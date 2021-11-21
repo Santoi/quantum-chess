@@ -26,6 +26,6 @@ void Tower::calculateMoves(const Position & initial,
     }
 }
 
-std::string Tower::print() const {
-    return "T";
+char Tower::print() const {
+    return 'T';
 }

@@ -10,7 +10,7 @@ class Pawn: public Chessman {
 private:
     bool first_move;
 
-    std::string print() const override;
+    char print() const override;
 
 public:
     Pawn(const Position & position, bool white_, Board & board_);

@@ -9,3 +9,4 @@ add_subdirectory(client/src)
 add_subdirectory(common/src)
 add_subdirectory(sdl)
 add_subdirectory(ascii_chess)
+

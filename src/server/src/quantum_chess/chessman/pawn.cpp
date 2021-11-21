@@ -33,8 +33,8 @@ void Pawn::move(const Position &initial, const Position &final) {
     first_move = false;
 }
 
-std::string Pawn::print() const {
-    return "P";
+char Pawn::print() const {
+    return 'P';
 }
 // TODO validate.
 void Pawn::calculatePosibleMerges(const Position &initial,

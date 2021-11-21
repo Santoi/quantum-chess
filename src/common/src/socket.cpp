@@ -144,8 +144,11 @@ void Socket::inicializarServidorConBindYListen(const char* host, const char* ser
 
 Socket Socket::acceptSocket() {
     int fd = accept(this->fd, nullptr, nullptr);
-    if (fd == ERROR)
+    if (fd == ERROR) {
+        if (errno == EBADF || errno == EINVAL)
+            throw SocketClosed();
         throw CantAcceptClientSocketError();
+    }
     Socket socket_cliente(fd);
     return socket_cliente;
 }
@@ -201,25 +204,17 @@ size_t Socket::receive(Packet & packet, size_t size) const {
 }
 
 void Socket::shutdownAndClose() {
-    shutdown(this->fd, SHUT_RDWR);
-    int aux = close(this->fd);
-    if (aux != EXITO)
-        fprintf(stderr, "Error: %s\n", strerror(errno));
-}
-
-void Socket::stopAccepting() {
-    if (this->fd != INVALID_FILE_DESCRIPTOR)
-        this->shutdownAndClose();
-    this->fd = INVALID_FILE_DESCRIPTOR;
-}
-
-void Socket::stopCommunication() {
-    this->stopAccepting();
+    if (fd != INVALID_FILE_DESCRIPTOR) {
+        shutdown(this->fd, SHUT_RDWR);
+        int aux = close(this->fd);
+        fd = INVALID_FILE_DESCRIPTOR;
+        if (aux != EXITO)
+            fprintf(stderr, "Error: %s\n", strerror(errno));
+    }
 }
 
 Socket::~Socket() {
-    if (this->fd != INVALID_FILE_DESCRIPTOR)
-        this->shutdownAndClose();
+    shutdownAndClose();
 }
 
 CantAcceptClientSocketError::CantAcceptClientSocketError() noexcept {

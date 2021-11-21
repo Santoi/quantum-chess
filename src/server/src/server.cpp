@@ -1,5 +1,6 @@
 #include "server.h"
 #include "matches_repository.h"
+#include "acceptor_thread.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -44,10 +45,16 @@ void Server::executeSingleThreadedServer(int type_of_single_thread) {
 }
 
 void Server::executeServerWithThreads() {
-    std::thread acceptor_thread(&Server::executeAcceptorThread, this);
-    while (std::cin.get() != 'q') {
+    MatchesRepository matches;
+    AcceptorThread acceptor_thread(acceptor_socket, matches);
+    acceptor_thread.start();
+    while (true) {
+        std::string input;
+        std::cin >> input;
+        if (input == "q")
+            break;
     }
-    this->acceptor_socket.stopAccepting();
+    acceptor_socket.shutdownAndClose();
     acceptor_thread.join();
 }
 

@@ -30,8 +30,8 @@ void Bishop::calculateMoves(const Position &initial,
     }
 }
 
-std::string Bishop::print() const {
-    return "B";
+char Bishop::print() const {
+    return 'B';
 }
 
 

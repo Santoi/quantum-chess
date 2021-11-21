@@ -3,40 +3,40 @@
 
 
 #include <thread>
-#include "thread_safe_queue.h"
+#include <memory>
 #include "../../common/src/socket.h"
+#include "../../common/src/blocking_queue.h"
+#include "clients_threads.h"
 #include "match.h"
 #include "server_protocol.h"
-#include "blocking_queue.h"
-#include "nick_names_repository.h"
-#include <memory>
-#include "clients_threads.h"
+
 
 class Match;
+
+class Instruction;
 
 class ClientHandler {
 private:
     Socket client_socket;
+    BlockingQueue<Instruction>& notifications_queue;
+    const ClientData client_data;
+    bool client_is_active;
     ClientHandlersReceiver client_receiver;
     ClientHandlersSender client_sender;
-    bool client_is_active;
+
 
 public:
     ClientHandler() = delete;
 
     //A ClientHandler is created, moving and storing the given socket. A ClientHandlersReceiver and
     //ClientHandlersSender are also created and saved. The boolean client_is_active is set to true.
-    ClientHandler(Socket&& socket, BlockingQueue& notifications_queue, ThreadSafeQueue& updates_queue,
-                    const int& client_id, const NickNamesRepository& nick_names);
+    ClientHandler(Socket&& socket, BlockingQueue<Instruction>& notifications_queue, BlockingQueue<Instruction>& updates_queue,
+                    const ClientData & client_data_);
 
     //Creates a new ClientHandler by moving the other_client's socket to the new handler, and creating
     //the new receivers and senders respectively. The new handler saves the other_client boolean
     //client_is_active.
     ClientHandler(ClientHandler&& other_client);
-
-    //Sends to the socket, using the protocol, the number of games running. It then receives from the
-    //socket the number of the chosen game, returning it.
-    int chooseGame(const int& max_games);
 
     //Receives from the socket the client's nick name.
     void getClientsNickName(std::string& nick_name);
@@ -55,19 +55,18 @@ public:
     //and notify updates to the sender's thread.
     void startThreadedClient(Match& match, bool threaded_match);
 
+    const ClientData & getData() const;
+
     //Joins (if joinable) both the handler's receiver and sender threads. Object's boolean
     //client_is_active is set to true.
     void join();
+
+    void stop();
 
     //Returns client_is_active boolean.
     bool isActive() const;
 
     ~ClientHandler() = default;
-
-private:
-    //Starts both ClientHandlersSender and ClientHandlersReceiver threads.
-    void start();
-
 };
 
 

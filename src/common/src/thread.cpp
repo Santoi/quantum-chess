@@ -1,34 +1,33 @@
+#include <iostream>
 #include "thread.h"
 
-Thread::Thread()
-        :has_active_thread(false) {
+Thread::Thread(): thread(){
 }
 
 Thread::Thread(Thread&& other_thread)
-        :thread(std::move(other_thread.thread)), has_active_thread(other_thread.has_active_thread){
+        :thread(std::move(other_thread.thread)){
 }
 
 void Thread::start() {
     this->thread = std::thread(&Thread::runCatchingExceptions, this);
-    this->has_active_thread = true;
 }
 
 void Thread::join() {
-    if (this->isJoinable())
-        this->thread.join();
+    this->thread.join();
 }
 
 bool Thread::isJoinable() {
-    return this->has_active_thread;
+    return thread.joinable();
 }
 
 void Thread::runCatchingExceptions() {
     try {
         this->run();
-    } catch (...) {
-        
     }
-}
-
-Thread::~Thread() {
+    catch (const std::exception & e){
+        std::cerr << "Error:" << e.what() << std::endl;
+    }
+    catch (...) {
+        std::cerr << "Error desconocido" << std::endl;
+    }
 }

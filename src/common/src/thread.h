@@ -10,7 +10,6 @@ private:
     std::thread thread;
 
 protected:
-    bool has_active_thread;
 
 public:
     //Creates thread object. has_active_thread is set to false.
@@ -26,17 +25,17 @@ public:
     void join();
 
     //Returns true if the object has an active thread and can be joined, or false othrewise.
-    bool isJoinable();
+    virtual bool isJoinable();
 
     //Calls pure virtual protected method run(), catching any exception that may rise.
     void runCatchingExceptions();
 
     //Default destructor
-    virtual ~Thread();
+    virtual ~Thread() = default;
 
 protected:
     //Method that any class that inherits this Thread class needs to implement.
     virtual void run() = 0;
 };
 
-#endif //QUANTUM_CHESS_PROJ_THREAD_H
+#endif //QUANTUM_CHESS_PROJ_ACTION_THREAD_H

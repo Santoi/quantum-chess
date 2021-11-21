@@ -66,6 +66,8 @@ public:
 
     // Resetea el contador de bytes enviados.
     void resetSent();
+
+    void addBytes(const uint8_t &bytes);
 };
 
 

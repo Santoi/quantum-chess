@@ -33,8 +33,8 @@ void Knight::calculatePath(const Position &initial, const Position &final,
     path.push_back(final);
 }
 
-std::string Knight::print() const {
-    return "H";
+char Knight::print() const {
+    return 'H';
 }
 
 

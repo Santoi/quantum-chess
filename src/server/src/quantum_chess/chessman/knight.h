@@ -8,7 +8,7 @@
 
 class Knight: public Chessman {
 private:
-    std::string print() const override;
+    char print() const override;
 
 public:
     Knight(const Position & position, bool white_, Board & board_);

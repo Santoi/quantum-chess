@@ -1,1 +1,1 @@
-./build/src/sdl/sdl-lib
+./build/src/client/client

@@ -3,6 +3,7 @@
 
 #include "../sdl/renderer.h"
 #include "../sdl/sprite.h"
+#include "../communication/client_protocol.h"
 #include <map>
 #include <string>
 
@@ -14,10 +15,10 @@ private:
   Sprite sprite_;
   Sprite fill;
   std::map<std::string, std::pair<std::string, std::string>> image;
-  float probability;
+  double probability;
 
 public:
-  Chessman(Renderer &renderer, const std::string &chessman, int probability_);
+  Chessman(Renderer &renderer, const ClientProtocol::ChessmanData &data);
   Chessman(Chessman &&other) noexcept;
   Chessman(const Chessman &other) = delete;
   Chessman& operator=(Chessman &&other) noexcept;

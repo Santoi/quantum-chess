@@ -6,26 +6,28 @@
 #include "game/board.h"
 #include "sdl/scene.h"
 #include "sdl/event_handler.h"
+#include "../common/src/blocking_queue.h"
+#include "communication/remote_client_instructions.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
 // TODO: drawer thread
-int main_drawer() {
+int main_drawer(BlockingQueue<RemoteClientInstruction> &send_queue) {
   SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
   Window window;
-  Renderer renderer(window);
-  game(window, renderer);
+  Renderer &renderer = window.renderer();
+  game(window, renderer, send_queue);
   return 0;
 }
 
-int game(Window &window, Renderer &renderer) {
+int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstruction> &send_queue) {
   Board board(renderer,
               "img/stars.jpg",
               renderer.getMinDimension(),
               renderer.getMinDimension());
-  Scene scene(renderer.getMinDimension(), board);
+  Scene scene(renderer.getMinDimension(), board, send_queue);
 
   unsigned int prev_ticks = SDL_GetTicks();
 

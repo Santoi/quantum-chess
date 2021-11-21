@@ -5,6 +5,8 @@
 #include "sprite.h"
 #include "../game/board.h"
 #include "coordinate_transformer.h"
+#include "../communication/remote_client_instructions.h"
+#include "../../common/src/blocking_queue.h"
 #include <list>
 #include <map>
 
@@ -14,11 +16,12 @@ class Scene {
 private:
   int scale;
   Board &board;
+  BlockingQueue<RemoteClientInstruction> &send_queue;
   std::map<const PixelCoordinate, Sprite> sprites;
   CoordinateTransformer transformer;
 
 public:
-  Scene(int height, Board &board);
+  Scene(int height, Board &board, BlockingQueue<RemoteClientInstruction> &send_queue_);
   void setScale(int scale_);
 
   bool isPixelInBoard(const PixelCoordinate &pixel);

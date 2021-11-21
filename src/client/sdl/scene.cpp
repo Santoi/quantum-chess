@@ -8,7 +8,9 @@
 #define BOARD_MIN_LIMIT .1
 #define BOARD_MAX_LIMIT .9
 
-Scene::Scene(int height, Board &board): scale(height), board(board) {}
+Scene::Scene(int height, Board &board,
+             BlockingQueue<RemoteClientInstruction> &send_queue_):
+             scale(height), board(board), send_queue(send_queue_) {}
 
 void Scene::loadSprite(Sprite &sprite, int x, int y) {
   const PixelCoordinate pixel(x, y);
@@ -81,7 +83,7 @@ void Scene::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
   Position orig_, dest_;
   transformer.pixel2Position(orig, orig_, scale);
   transformer.pixel2Position(dest, dest_, scale);
-  board.moveChessman(orig_, dest_);
+  send_queue.push(std::make_shared<RemoteClientMoveInstruction>(orig_, dest_));
 }
 
 void Scene::load(std::vector<ChessmanData> & chessman_data_vector) {

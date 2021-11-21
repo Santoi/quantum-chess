@@ -5,7 +5,6 @@
 EventHandler::EventHandler(): split(false), merge(false), move(false) {}
 
 bool EventHandler::handleEvents(Scene &scene, Board &board) {
-  PixelCoordinate dest;
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (SDL_PollEvent(&event)) {
     switch (event.type) {

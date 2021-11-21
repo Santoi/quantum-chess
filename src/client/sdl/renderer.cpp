@@ -1,11 +1,10 @@
 #include "renderer.h"
-#include "window.h"
 #include "sprite.h"
 #include "scene.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
-Renderer::Renderer(Window &window): renderer_(window.window(),
+Renderer::Renderer(SDL2pp::Window &window): renderer_(window,
                                              -1,
                                              SDL_RENDERER_ACCELERATED) {
 }

@@ -3,8 +3,15 @@
 #include "tile.h"
 #include <map>
 #include <utility>
+#include <string>
 
-void Board::create(Renderer &renderer) {
+#define BACKGROUND_TRANSPARENCY 0.4
+
+Board::Board(Renderer &renderer, const std::string &image,
+             int width, int height): background(renderer, image,
+                                                width, height) {
+  background.setBlendMode(SDL_BLENDMODE_BLEND);
+  background.setAlpha(BACKGROUND_TRANSPARENCY);
   for (size_t i = 0; i < 8; i++) {
     for (size_t j = 0; j < 8; j++) {
       const Position position(i, j);
@@ -75,4 +82,8 @@ std::map<const Position, Tile>& Board::getTiles() {
 
 std::map<const Position, Chessman>& Board::getChessmen() {
   return chessmen;
+}
+
+Sprite& Board::getBackground() {
+  return background;
 }

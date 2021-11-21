@@ -14,6 +14,14 @@ SDL2pp::Texture& Sprite::sprite() {
   return sprite_;
 }
 
+void Sprite::render(int x_src, int y_src, int x, int y, int width_src,
+                    int height_src, int width, int height) {
+  width_ = width;
+  height_ = height;
+//  renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
+  renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
+}
+
 void Sprite::render(int x, int y, int width, int height) {
   width_ = width;
   height_ = height;
@@ -22,6 +30,30 @@ void Sprite::render(int x, int y, int width, int height) {
 
 void Sprite::render(int x, int y) {
   renderer.copy(*this, x, y);
+}
+
+void Sprite::setBlendMode(int blendMode) {
+  sprite_.SetBlendMode(static_cast<SDL_BlendMode>(blendMode));
+}
+
+void Sprite::setAlpha(float alpha) {
+  if (alpha > 1)
+    alpha = 1;
+  if (alpha < 0)
+    alpha = 0;
+  sprite_.SetAlphaMod(alpha * 255);
+}
+
+float Sprite::getAlpha() const {
+  return sprite_.GetAlphaMod() / 255.0f;
+}
+
+int Sprite::getImageWidth() const {
+  return sprite_.GetWidth();
+}
+
+int Sprite::getImageHeight() const {
+  return sprite_.GetHeight();
 }
 
 void Sprite::loadImage(const std::string &file_name, int width, int height) {

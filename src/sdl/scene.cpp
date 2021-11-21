@@ -22,20 +22,22 @@ void Scene::setScale(int scale_) {
 
 void Scene::render() {
   auto &tiles = board.getTiles();
+  Sprite &background = board.getBackground();
   auto &chessmen = board.getChessmen();
 
-  for (auto &it : sprites) {
-    it.second.render(it.first.x(), it.first.y());
-  }
   for (auto &it : tiles) {
     PixelCoordinate pixel(0, 0);
     transformer.position2Pixel(it.first, pixel, scale);
     it.second.render(pixel.x(), pixel.y());
   }
+  background.render(0, 0, scale, scale);
   for (auto &it : chessmen) {
     PixelCoordinate pixel(0, 0);
     transformer.position2Pixel(it.first, pixel, scale);
     it.second.render(pixel.x(), pixel.y());
+  }
+  for (auto &it : sprites) {
+    it.second.render(it.first.x(), it.first.y());
   }
 }
 

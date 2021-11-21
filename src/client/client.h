@@ -4,6 +4,7 @@
 #include "communication/remote_clients_threads.h"
 #include "../common/src/socket.h"
 #include "../common/src/blocking_queue.h"
+#include "sdl/scene.h"
 #include "communication/remote_client_instructions.h"
 #include <string>
 
@@ -12,7 +13,6 @@ private:
     BlockingQueue<RemoteClientInstruction> received;
     BlockingQueue<RemoteClientInstruction> send;
     std::string clients_nick_name;
-    AsciiBoard board;
 
 public:
     Client() = default;

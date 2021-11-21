@@ -1,21 +1,23 @@
 #include "board.h"
 #include "../sdl/renderer.h"
 #include "tile.h"
+#include "../communication/client_protocol.h"
+#include "../communication/chessman_data.h"
 #include <map>
 #include <utility>
 #include <string>
 
 #define BACKGROUND_TRANSPARENCY 0.4
 
-Board::Board(Renderer &renderer, const std::string &image,
-             int width, int height): background(renderer, image,
-                                                width, height) {
+Board::Board(Renderer &renderer_, const std::string &image,
+             int width, int height): renderer(renderer_),
+             background(renderer_, image, width, height) {
   background.setBlendMode(SDL_BLENDMODE_BLEND);
   background.setAlpha(BACKGROUND_TRANSPARENCY);
   for (size_t i = 0; i < 8; i++) {
     for (size_t j = 0; j < 8; j++) {
       const Position position(i, j);
-      Tile tile(renderer, position.isEven());
+      Tile tile(renderer_, position.isEven());
       board.insert(std::move(std::pair<const Position, Tile>(position,
                                                              std::move(tile))));
     }
@@ -31,9 +33,12 @@ void Board::render() {
   }
 }
 
-void Board::createChessman(const Position &dest, Chessman &chessman) {
-  chessmen.insert(std::move(std::pair<const Position, Chessman>
-                            (dest, std::move(chessman))));
+void Board::load(std::vector<ChessmanData> & chessman_data_vector) {
+  for (auto & chessman_data: chessman_data_vector) {
+    Chessman chessman(renderer, chessman_data);
+    chessmen.insert(std::move(std::pair<const Position, Chessman>
+                                (chessman_data.position, std::move(chessman))));
+  }
 }
 
 void Board::moveChessman(Position &orig, Position &dest) {

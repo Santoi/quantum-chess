@@ -10,11 +10,11 @@
 
 class ActionThread: public Thread {
     BlockingQueue<RemoteClientInstruction> & instructions;
-    AsciiBoard & board;
+    Scene & scene;
 
 public:
-    ActionThread(BlockingQueue<RemoteClientInstruction> &,
-            AsciiBoard & board_);
+    ActionThread(BlockingQueue<RemoteClientInstruction> &instructions_,
+                 Scene &board_);
 
 
     void run() override;

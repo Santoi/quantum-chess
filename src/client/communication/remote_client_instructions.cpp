@@ -1,6 +1,7 @@
 #include "remote_client_instructions.h"
 #include "client_protocol.h"
 #include "../position.h"
+#include "../sdl/scene.h"
 #include <iostream>
 
 
@@ -19,7 +20,7 @@ RemoteClientChatInstruction::RemoteClientChatInstruction(const std::string& nick
                             :RemoteClientInstruction(nick_name), message(message) {
 }
 
-void RemoteClientChatInstruction::makeAction(AsciiBoard & board) {
+void RemoteClientChatInstruction::makeAction(Scene &scene) {
     std::cout << this->instructor_nick_name << " envia: " << this->message << std::endl;
 }
 
@@ -32,22 +33,20 @@ RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(const std
 }
 
 
-void RemoteClientExitMessageInstruction::makeAction(AsciiBoard & board) {
+void RemoteClientExitMessageInstruction::makeAction(Scene &scene) {
     std::cout << this->instructor_nick_name << " se fue de la partida." << std::endl;
 }
 
-RemoteClientLoadMessageInstruction::RemoteClientLoadMessageInstruction(std::vector<char> &&characters_, std::vector<bool> &&colors_, std::vector<Position> &&positions_):
-characters(std::move(characters_)), colors(std::move(colors_)), positions(std::move(positions_)){}
+RemoteClientLoadMessageInstruction::RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector){}
 
-void RemoteClientLoadMessageInstruction::makeAction(AsciiBoard & board) {
-    board.load(positions, colors, characters);
-    board.draw();
+void RemoteClientLoadMessageInstruction::makeAction(Scene &scene) {
+    scene.load(chessman_data_vector);
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(const Position &initial_,
                                                          const Position &final_): initial(initial_), final(final_) {}
 
-void RemoteClientMoveInstruction::makeAction(AsciiBoard &board) {
+void RemoteClientMoveInstruction::makeAction(Scene &scene) {
 
 }
 

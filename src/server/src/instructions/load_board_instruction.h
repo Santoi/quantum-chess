@@ -9,6 +9,7 @@ class LoadBoardInstruction: public Instruction {
     std::vector<Position> positions;
     std::vector<char> characters;
     std::vector<bool> colors;
+    std::vector<double> probabilities;
 
 public:
     LoadBoardInstruction();

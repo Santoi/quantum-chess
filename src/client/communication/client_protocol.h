@@ -12,15 +12,6 @@ class RemoteClientInstruction;
 
 class ClientProtocol: public Protocol {
 public:
-    typedef struct ChessmanData {
-        const Position position;
-        const std::string chessman;
-        const double probability;
-
-        ChessmanData(const Position & position_, std::string  chessman_, double prob);
-    } ChessmanData;
-
-
     ClientProtocol() = default;
 
     //Given the client socket, it returns the number of games running in server.

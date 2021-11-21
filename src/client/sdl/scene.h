@@ -35,6 +35,8 @@ public:
 
   void loadSprite(Sprite &sprite, int x, int y);
   void render();
+
+    void load(std::vector<ChessmanData> &chessman_data_vector);
 };
 
 

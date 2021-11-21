@@ -4,7 +4,7 @@
 #define SUCCESS 0
 
 int main(int argc, char* argv[]) {
-  return main_drawer();
+  //return main_drawer();
   bool single_threaded_client = false;
     if (argc == 4)
        single_threaded_client = true;

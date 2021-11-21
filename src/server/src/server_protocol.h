@@ -52,8 +52,10 @@ public:
 
     void
     fillPacketWithLoadBoardInfo(Packet &packet,
-                                const std::vector<char> &characters, const std::vector<bool> & colors,
-                                const std::vector<Position> &positions);
+                                const std::vector<char> &characters,
+                                const std::vector<bool> &colors,
+                                const std::vector<Position> &positions,
+                                const std::vector<double> &probabilities);
 
     ~ServerProtocol() = default;
 

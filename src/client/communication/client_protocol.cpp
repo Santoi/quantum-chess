@@ -6,6 +6,7 @@
 #include "../../common/src/unique_ptr.h"
 #include "client_protocol.h"
 #include "../../common/src/client_data.h"
+#include "chessman_data.h"
 
 #define ONE_BYTE 1
 #define TWO_BYTES 2
@@ -85,21 +86,20 @@ void ClientProtocol::fillClientInstructionWithExitMessage(Socket& socket, std::s
 
 void ClientProtocol::fillClientInstructionWithLoadBoard(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
 ptr_instruction) {
-    // TODO mejorar el protocolo con otros datos.
-    uint8_t amount = getNumber8FromSocket(socket);
-    std::vector<char> characters;
-    std::vector<Position> positions;
-    std::vector<bool> colors;
-    positions.reserve(amount);
-    characters.reserve(amount);
-    colors.reserve(amount);
-    for (uint8_t i = 0; i < amount; i++) {
-        characters.push_back(getCharFromSocket(socket));
-        colors.push_back(getCharFromSocket(socket));
-        Position position(getNumber8FromSocket(socket), getNumber8FromSocket(socket));
-        positions.push_back(position);
-    }
-    ptr_instruction = make_unique<RemoteClientLoadMessageInstruction>(std::move(characters), std::move(colors), std::move(positions));
+  uint8_t amount = getNumber8FromSocket(socket);
+  std::vector<ChessmanData> chessman_data_vector;
+  chessman_data_vector.reserve(amount);
+  for (uint8_t i = 0; i < amount; i++) {
+    char character = getCharFromSocket(socket);
+    bool white = getCharFromSocket(socket);
+    std::string chessman = character + ((white) ? "w" : "b");
+    Position position(getNumber8FromSocket(socket), getNumber8FromSocket(socket));
+    uint16_t prob_int = getNumber16FromSocket(socket);
+    double prob = ((double) prob_int + 1) / (UINT16_MAX + 1);
+    chessman_data_vector.push_back(ChessmanData(position, chessman, prob));
+  }
+
+  ptr_instruction = make_unique<RemoteClientLoadMessageInstruction>(std::move(chessman_data_vector));
 }
 
 void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
@@ -120,10 +120,3 @@ void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteCl
     }
 
 }
-
-
-ClientProtocol::ChessmanData::ChessmanData(const Position &position_,
-                                           std::string chessman_,
-                                           double prob): position(position_),
-                                           chessman(std::move(chessman_)),
-                                           probability(prob) {}

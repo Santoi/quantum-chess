@@ -3,7 +3,7 @@
 
 #include "../sdl/renderer.h"
 #include "../sdl/sprite.h"
-#include "../communication/client_protocol.h"
+#include "../communication/chessman_data.h"
 #include <map>
 #include <string>
 
@@ -18,7 +18,7 @@ private:
   double probability;
 
 public:
-  Chessman(Renderer &renderer, const ClientProtocol::ChessmanData &data);
+  Chessman(Renderer &renderer, const ChessmanData &data);
   Chessman(Chessman &&other) noexcept;
   Chessman(const Chessman &other) = delete;
   Chessman& operator=(Chessman &&other) noexcept;

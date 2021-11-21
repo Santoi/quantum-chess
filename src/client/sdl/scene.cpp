@@ -83,3 +83,7 @@ void Scene::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
   transformer.pixel2Position(dest, dest_, scale);
   board.moveChessman(orig_, dest_);
 }
+
+void Scene::load(std::vector<ChessmanData> & chessman_data_vector) {
+  board.load(chessman_data_vector);
+}

@@ -8,10 +8,14 @@
 #include "../ascii/ascii_board.h"
 #include "../../common/src/packet.h"
 #include "client_protocol.h"
+#include "chessman_data.h"
+#include "../sdl/scene.h"
 
 // TODO diferenciar las que llegan de las que se van.
 
 class ClientProtocol;
+
+class ChessmanData;
 
 class RemoteClientInstruction {
 protected:
@@ -27,7 +31,7 @@ public:
     virtual void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol);
 
     //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
-    virtual void makeAction(AsciiBoard & board) = 0;
+    virtual void makeAction(Scene &scene) = 0;
 
     ~RemoteClientInstruction() = default;
 
@@ -45,7 +49,7 @@ public:
     RemoteClientChatInstruction(const std::string& nick_name, const std::string& message);
 
     //Prints to stdout "instructor_nick_name sends message"
-    void makeAction(AsciiBoard & board) override;
+    void makeAction(Scene &scene) override;
 
     void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
 
@@ -61,26 +65,23 @@ public:
     RemoteClientExitMessageInstruction(const std::string& nick_name);
 
     //Prints to stdout "instructor_nick_name left the game"
-    void makeAction(AsciiBoard & board);
+    void makeAction(Scene &scene);
 
     ~RemoteClientExitMessageInstruction() = default;
 };
 
 class RemoteClientLoadMessageInstruction: public RemoteClientInstruction {
-    std::vector<char> characters;
-    std::vector<Position> positions;
-    std::vector<bool> colors;
+    std::vector<ChessmanData> chessman_data_vector;
 
 public:
     RemoteClientLoadMessageInstruction() = delete;
 
     //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
     //passed as function parameters.
-    RemoteClientLoadMessageInstruction(std::vector<char> && characters_,  std::vector<bool> &&colors_,
-                                       std::vector<Position> && positions_);
+    RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector);
 
     //Prints to stdout "instructor_nick_name left the game"
-    void makeAction(AsciiBoard & board);
+    void makeAction(Scene &scene);
 
     ~RemoteClientLoadMessageInstruction() = default;
 };
@@ -94,7 +95,7 @@ public:
 
     RemoteClientMoveInstruction(const Position &initial_, const Position &final_);
 
-    void makeAction(AsciiBoard & board);
+    void makeAction(Scene &scene);
 
     void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
 

@@ -6,17 +6,20 @@
 #include "chessman.h"
 #include "tile.h"
 #include "../position.h"
+#include "../communication/chessman_data.h"
 #include <map>
 #include <string>
+#include <vector>
 
 class Board {
 private:
+  Renderer & renderer;
   Sprite background;
   std::map<const Position, Chessman> chessmen;
   std::map<const Position, Tile> board;
 
 public:
-  Board(Renderer &renderer, const std::string &image, int width, int height);
+  Board(Renderer &renderer_, const std::string &image, int width, int height);
   ~Board() = default;
 
   void render();
@@ -25,7 +28,7 @@ public:
   std::map<const Position, Chessman>& getChessmen();
   Sprite& getBackground();
 
-  void createChessman(const Position &dest, Chessman &chessman);
+  void load(std::vector<ChessmanData> & chessman_data_vector);
   void moveChessman(Position &orig, Position &dest);
 
   void moveTile(const Position &pos);

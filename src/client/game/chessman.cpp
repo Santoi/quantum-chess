@@ -2,7 +2,7 @@
 #include <utility>
 
 Chessman::Chessman(Renderer &renderer,
-                   const ClientProtocol::ChessmanData &data):
+                   const ChessmanData &data):
                    renderer(renderer),
                    sprite_(renderer, "img/falcon.png",
                            renderer.getMinDimension() / 10,

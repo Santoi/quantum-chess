@@ -69,7 +69,8 @@ public:
 
     void
     loadVectors(std::vector<char> &characters_, std::vector<bool> & colors_,
-                std::vector<Position> &positions_);
+                std::vector<Position> &positions_,
+                std::vector<double> &probabilities);
 };
 
 

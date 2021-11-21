@@ -77,7 +77,11 @@ void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& n
     this->addStringAndItsLengthToPacket(packet, message);
 }
 
-void ServerProtocol::fillPacketWithLoadBoardInfo(Packet & packet, const std::vector<char> & characters, const std::vector<bool> & colors, const std::vector<Position> & positions) {
+void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
+                                                 const std::vector<char> &characters,
+                                                 const std::vector<bool> &colors,
+                                                 const std::vector<Position> &positions,
+                                                 const std::vector<double> &probabilities) {
     packet.addByte('l');
     packet.addByte(characters.size());
     for (uint16_t i = 0; i < characters.size(); i++) {
@@ -85,6 +89,8 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet & packet, const std::vec
         packet.addByte(colors[i]);
         packet.addByte(positions[i].x());
         packet.addByte(positions[i].y());
+        uint16_t prob_int = probabilities[i] * (UINT16_MAX + 1) - 1;
+      changeNumberToBigEndianAndAddToPacket(packet, prob_int);
     }
 }
 

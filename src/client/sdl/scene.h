@@ -3,7 +3,7 @@
 
 #include "pixel_coordinate.h"
 #include "sprite.h"
-#include "board.h"
+#include "../game/board.h"
 #include "coordinate_transformer.h"
 #include <list>
 #include <map>

@@ -1,7 +1,7 @@
 #include <vector>
 #include "load_board_instruction.h"
 #include "../../../common/src/blocking_queue.h"
-#include "../../../client/src/position.h"
+#include "../../../client/position.h" // TODO: can use server's position?
 
 LoadBoardInstruction::LoadBoardInstruction(): characters(), positions(), colors(){}
 

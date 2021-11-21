@@ -3,7 +3,7 @@
 
 #include <map>
 #include <vector>
-#include "position.h"
+#include "../position.h"
 #include "ascii_chessman.h"
 
 // Clase que ejecuta el ajedrez en formato ASCII.

@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_COORDINATE_TRANSFORMER_H
 
 #include "pixel_coordinate.h"
-#include "position.h"
+#include "../position.h"
 
 class CoordinateTransformer {
 public:

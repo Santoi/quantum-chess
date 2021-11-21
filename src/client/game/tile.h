@@ -1,8 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_TILE_H
 #define QUANTUM_CHESS_PROJ_TILE_H
 
-#include "sprite.h"
-#include "renderer.h"
+#include "../sdl/sprite.h"
+#include "../sdl/renderer.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <map>
 #include <string>

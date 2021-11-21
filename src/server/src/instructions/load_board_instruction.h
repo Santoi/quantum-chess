@@ -1,7 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_LOAD_BOARD_INSTRUCTION_H
 #define QUANTUM_CHESS_PROJ_LOAD_BOARD_INSTRUCTION_H
 
-#include "../../../client/src/position.h"
+#include "../../../client/position.h" // TODO: can use server's position?
 #include "instruction.h"
 #include "../../../common/src/blocking_queue.h"
 

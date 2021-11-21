@@ -2,10 +2,10 @@
 #include <sstream>
 #include "client.h"
 #include "position.h"
-#include "client_protocol.h"
-#include "action_thread.h"
-#include "../../server/src/quantum_chess/chess_exception.h"
-#include "../../common/src/client_data.h"
+#include "communication/client_protocol.h"
+#include "communication/action_thread.h"
+#include "../server/src/quantum_chess/chess_exception.h"
+#include "../common/src/client_data.h"
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
     ClientProtocol protocol;

@@ -1,6 +1,6 @@
 #include "remote_client_instructions.h"
 #include "client_protocol.h"
-#include "position.h"
+#include "../position.h"
 #include <iostream>
 
 

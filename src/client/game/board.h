@@ -1,11 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_BOARD_H
 #define QUANTUM_CHESS_PROJ_BOARD_H
 
-#include "renderer.h"
-#include "sprite.h"
+#include "../sdl/renderer.h"
+#include "../sdl/sprite.h"
 #include "chessman.h"
 #include "tile.h"
-#include "position.h"
+#include "../position.h"
 #include <map>
 #include <string>
 

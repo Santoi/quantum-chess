@@ -1,8 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_CHESSMAN_H
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
-#include "renderer.h"
-#include "sprite.h"
+#include "../sdl/renderer.h"
+#include "../sdl/sprite.h"
 #include <map>
 #include <string>
 

@@ -1,7 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_POSITION_H
 #define QUANTUM_CHESS_PROJ_POSITION_H
 
-#include <SDL2pp/SDL2pp.hh>
+#include <iostream>
 #include <cstdint>
 
 #define BOUND 7
@@ -33,6 +33,9 @@ public:
 
   // Return y coordinate.
   uint8_t y() const;
+
+  friend std::ostream & operator<<(std::ostream & os,
+                                   const Position & position);
 
   bool isEven() const;
 };

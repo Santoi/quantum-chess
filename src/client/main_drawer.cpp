@@ -1,19 +1,17 @@
-#include "window.h"
-#include "renderer.h"
-#include "sprite.h"
-#include "chessman.h"
-#include "board.h"
-#include "scene.h"
-#include "event_handler.h"
+#include "main_drawer.h"
+#include "sdl/window.h"
+#include "sdl/renderer.h"
+#include "sdl/sprite.h"
+#include "game/chessman.h"
+#include "game/board.h"
+#include "sdl/scene.h"
+#include "sdl/event_handler.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
-void loadWhiteChessmen(Renderer &renderer, Board &board);
-void loadChessmen(Renderer &renderer, Board &board);
-int game(Window &window, Renderer &renderer);
-
-int main() {
+// TODO: drawer thread
+int main_drawer() {
   SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
   Window window;

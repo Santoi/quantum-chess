@@ -1,6 +1,6 @@
 #include "position.h"
-#include "chess_exception.h"
-#include <SDL2pp/SDL2pp.hh>
+#include "game/chess_exception.h"
+#include <iostream>
 #include <cstdint>
 
 Position::Position(): x_(0), y_(0) {}
@@ -29,6 +29,11 @@ bool Position::operator!=(const Position &other) const {
 bool operator<(const Position &a, const Position &b) {
   return (a.x_ < b.x_) ||
          ((a.x_ == b.x_) && (a.y_ < b.y_));
+}
+
+std::ostream & operator<<(std::ostream & os, const Position & position){
+  os << "(" << (uint) position.x_ << ", " << (uint) position.y_ << ")";
+  return os;
 }
 
 bool Position::isEven() const {

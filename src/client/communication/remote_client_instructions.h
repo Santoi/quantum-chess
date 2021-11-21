@@ -4,8 +4,8 @@
 #include <string>
 #include <list>
 #include <vector>
-#include "position.h"
-#include "ascii_board.h"
+#include "../position.h"
+#include "../ascii/ascii_board.h"
 #include "../../common/src/packet.h"
 #include "client_protocol.h"
 

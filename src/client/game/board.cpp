@@ -1,5 +1,5 @@
 #include "board.h"
-#include "renderer.h"
+#include "../sdl/renderer.h"
 #include "tile.h"
 #include <map>
 #include <utility>

@@ -1,6 +1,8 @@
 #include "../../common/src/packet.h"
 #include <unistd.h>
 #include <arpa/inet.h>
+
+#include <utility>
 #include "../../common/src/unique_ptr.h"
 #include "client_protocol.h"
 #include "../../common/src/client_data.h"
@@ -120,5 +122,8 @@ void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteCl
 }
 
 
-
-
+ClientProtocol::ChessmanData::ChessmanData(const Position &position_,
+                                           std::string chessman_,
+                                           double prob): position(position_),
+                                           chessman(std::move(chessman_)),
+                                           probability(prob) {}

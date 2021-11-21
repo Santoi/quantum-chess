@@ -18,7 +18,7 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(
             this->instructor_data);
     auto it_queue = listening_queues.begin();
     auto it_client = clients.begin();
-    for (; it_queue != listening_queues.end() && it_client != clients.end(); ) {
+    while (it_queue != listening_queues.end() && it_client != clients.end()) {
         // TODO estoy suponiendo que estan en el mismo orden.
         if (it_queue->first == instructor_data.getId()) {
             it_client->second.stop();

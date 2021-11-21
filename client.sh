@@ -1,4 +1,4 @@
-./build/src/client/src/client localhost 7777
+./build/src/client/client localhost 7777
 
 
 

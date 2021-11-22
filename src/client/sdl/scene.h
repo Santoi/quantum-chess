@@ -2,19 +2,19 @@
 #define QUANTUM_CHESS_PROJ_SCENE_H
 
 #include "pixel_coordinate.h"
-#include "sprite.h"
+#include "texture_sprite.h"
 #include "../game/board.h"
 #include "coordinate_transformer.h"
 #include <list>
 #include <map>
 
-class Sprite;
+class TextureSprite;
 
 class Scene {
 private:
   int scale;
   Board &board;
-  std::map<const PixelCoordinate, Sprite> sprites;
+  std::map<const PixelCoordinate, TextureSprite> sprites;
   CoordinateTransformer transformer;
 
 public:
@@ -33,7 +33,7 @@ public:
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 
-  void loadSprite(Sprite &sprite, int x, int y);
+  void loadSprite(TextureSprite &sprite, int x, int y);
   void render();
 };
 

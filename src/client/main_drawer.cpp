@@ -1,7 +1,7 @@
 #include "main_drawer.h"
 #include "sdl/window.h"
 #include "sdl/renderer.h"
-#include "sdl/sprite.h"
+#include "sdl/texture_sprite.h"
 #include "game/chessman.h"
 #include "game/board.h"
 #include "sdl/scene.h"

@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_BOARD_H
 
 #include "../sdl/renderer.h"
-#include "../sdl/sprite.h"
+#include "../sdl/texture_sprite.h"
 #include "chessman.h"
 #include "tile.h"
 #include "../position.h"
@@ -11,7 +11,7 @@
 
 class Board {
 private:
-  Sprite background;
+  TextureSprite background;
   std::map<const Position, Chessman> chessmen;
   std::map<const Position, Tile> board;
 
@@ -23,7 +23,7 @@ public:
 
   std::map<const Position, Tile>& getTiles();
   std::map<const Position, Chessman>& getChessmen();
-  Sprite& getBackground();
+  TextureSprite& getBackground();
 
   void createChessman(const Position &dest, Chessman &chessman);
   void moveChessman(Position &orig, Position &dest);

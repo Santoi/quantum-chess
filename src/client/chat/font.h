@@ -1,0 +1,10 @@
+#ifndef QUANTUM_CHESS_PROJ_FONT_H
+#define QUANTUM_CHESS_PROJ_FONT_H
+
+
+class font {
+
+};
+
+
+#endif //QUANTUM_CHESS_PROJ_FONT_H

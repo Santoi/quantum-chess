@@ -1,5 +1,5 @@
 #include "scene.h"
-#include "sprite.h"
+#include "texture_sprite.h"
 #include "pixel_coordinate.h"
 #include <map>
 #include <utility>
@@ -10,10 +10,10 @@
 
 Scene::Scene(int height, Board &board): scale(height), board(board) {}
 
-void Scene::loadSprite(Sprite &sprite, int x, int y) {
+void Scene::loadSprite(TextureSprite &sprite, int x, int y) {
   const PixelCoordinate pixel(x, y);
-  sprites.insert(std::pair<const PixelCoordinate, Sprite>(pixel,
-                                                          std::move(sprite)));
+  sprites.insert(std::pair<const PixelCoordinate, TextureSprite>(pixel,
+                                                                 std::move(sprite)));
 }
 
 void Scene::setScale(int scale_) {
@@ -22,7 +22,7 @@ void Scene::setScale(int scale_) {
 
 void Scene::render() {
   auto &tiles = board.getTiles();
-  Sprite &background = board.getBackground();
+  TextureSprite &background = board.getBackground();
   auto &chessmen = board.getChessmen();
 
   for (auto &it : tiles) {

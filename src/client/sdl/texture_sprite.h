@@ -1,5 +1,5 @@
-#ifndef QUANTUM_CHESS_PROJ_SPRITE_H
-#define QUANTUM_CHESS_PROJ_SPRITE_H
+#ifndef QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
+#define QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 
 #include "renderer.h"
 #include <SDL2pp/SDL2pp.hh>
@@ -9,19 +9,21 @@
 
 class Renderer;
 
-class Sprite {
-private:
+class TextureSprite {
+protected:
   Renderer &renderer;
+
+private:
   SDL2pp::Texture sprite_;
   int width_, height_;
 
 public:
-  explicit Sprite(Renderer &renderer,
-                  const std::string &file_name = DEFAULT_SPRITE,
-                  int width = 0, int height = 0);
+  explicit TextureSprite(Renderer &renderer,
+                         const std::string &file_name = DEFAULT_SPRITE,
+                         int width = 0, int height = 0);
 
-  Sprite(Sprite &&other) = default;
-  Sprite& operator=(Sprite &&other) noexcept;
+  TextureSprite(TextureSprite &&other) = default;
+  TextureSprite& operator=(TextureSprite &&other) noexcept;
 
   SDL2pp::Texture& sprite();
 
@@ -42,8 +44,8 @@ public:
   int width() const;
   int height() const;
 
-  ~Sprite();
+  ~TextureSprite();
 };
 
 
-#endif //QUANTUM_CHESS_PROJ_SPRITE_H
+#endif //QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H

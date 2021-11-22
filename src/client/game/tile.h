@@ -1,7 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_TILE_H
 #define QUANTUM_CHESS_PROJ_TILE_H
 
-#include "../sdl/sprite.h"
+#include "../sdl/texture_sprite.h"
 #include "../sdl/renderer.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <map>
@@ -10,7 +10,7 @@
 class Tile {
 private:
   Renderer &renderer;
-  Sprite sprite_;
+  TextureSprite sprite_;
   std::map<int, std::string> images;
 
 public:

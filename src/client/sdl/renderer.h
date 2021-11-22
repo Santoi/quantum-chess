@@ -2,11 +2,11 @@
 #define QUANTUM_CHESS_PROJ_RENDERER_H
 
 #include "window.h"
-#include "sprite.h"
+#include "texture_sprite.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
-class Sprite;
+class TextureSprite;
 class Scene;
 
 class Renderer {
@@ -21,8 +21,8 @@ public:
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)
-  void copy(Sprite &sprite, int x, int y);
-  void copy(Sprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
+  void copy(TextureSprite &sprite, int x, int y);
+  void copy(TextureSprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
             int width, int height);
   int getMinDimension();
 };

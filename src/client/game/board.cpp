@@ -84,6 +84,6 @@ std::map<const Position, Chessman>& Board::getChessmen() {
   return chessmen;
 }
 
-Sprite& Board::getBackground() {
+TextureSprite& Board::getBackground() {
   return background;
 }

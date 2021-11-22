@@ -50,6 +50,8 @@ public:
     //the match.
     void fillPacketWithExitInfo(Packet& packet, const std::string& nick_name);
 
+    void fillPacketWithExceptionInfo(Packet& packet, const std::string& message);
+
     void
     fillPacketWithLoadBoardInfo(Packet &packet,
                                 const std::vector<char> &characters,

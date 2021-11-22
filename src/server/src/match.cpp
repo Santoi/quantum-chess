@@ -76,7 +76,7 @@ void Match::run() {
     board.load();
     try {
         while (true)
-            checkAndNotifyUpdates();
+          checkAndNotifyUpdates();
     }
     catch (const BlockingQueueClosed& error) {
         for (auto & client: clients) {
@@ -84,6 +84,7 @@ void Match::run() {
             client.second.join();
         }
     }
+
 }
 
 bool Match::hasActiveClients() const {

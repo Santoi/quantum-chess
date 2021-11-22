@@ -57,5 +57,15 @@ RemoteClientMoveInstruction::fillPacketWithInstructionsToSend(Packet &packet,
     protocol.fillPacketWithMoveMessage(packet, initial, final);
 }
 
+RemoteClientExceptionInstruction::RemoteClientExceptionInstruction(const std::string& message)
+        :message(message) {
+}
+
+void RemoteClientExceptionInstruction::makeAction(Game &game) {
+  std::cout << "Error: " << this->message << std::endl;
+}
+
+void RemoteClientExceptionInstruction::fillPacketWithInstructionsToSend(Packet &packet, ClientProtocol & protocol) {
+}
 
 

@@ -102,4 +102,19 @@ public:
     ~RemoteClientMoveInstruction() = default;
 };
 
+class RemoteClientExceptionInstruction: public RemoteClientInstruction {
+    const std::string message;
+
+public:
+    RemoteClientExceptionInstruction() = delete;
+
+    RemoteClientExceptionInstruction(const std::string & message);
+
+    void makeAction(Game &game);
+
+    void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
+
+    ~RemoteClientExceptionInstruction() = default;
+};
+
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

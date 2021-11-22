@@ -77,6 +77,11 @@ void ServerProtocol::fillPacketWithChatInfo(Packet& packet, const std::string& n
     this->addStringAndItsLengthToPacket(packet, message);
 }
 
+void ServerProtocol::fillPacketWithExceptionInfo(Packet& packet, const std::string& message) {
+  packet.addByte('x');
+  this->addStringAndItsLengthToPacket(packet, message);
+}
+
 void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
                                                  const std::vector<char> &characters,
                                                  const std::vector<bool> &colors,

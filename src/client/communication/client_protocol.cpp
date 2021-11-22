@@ -106,6 +106,13 @@ ptr_instruction) {
   ptr_instruction = make_unique<RemoteClientLoadMessageInstruction>(std::move(chessman_data_vector));
 }
 
+void ClientProtocol::fillClientInstructionWithException(Socket &socket,
+                                                        std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  std::string message;
+  this->getMessageFromSocket(socket, message);
+  ptr_instruction = make_unique<RemoteClientExceptionInstruction>(message);
+}
+
 void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
                                                         ptr_instruction) {
     Packet packet;
@@ -120,6 +127,9 @@ void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteCl
             break;
         case 'e':
             this->fillClientInstructionWithExitMessage(socket, ptr_instruction);
+            break;
+        case 'x':
+            fillClientInstructionWithException(socket, ptr_instruction);
             break;
     }
 

@@ -55,6 +55,8 @@ private:
     void fillClientInstructionWithLoadBoard(Socket &socket,
                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
+    void fillClientInstructionWithException(Socket &socket,
+                                            std::shared_ptr<RemoteClientInstruction> &sharedPtr);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

@@ -70,7 +70,6 @@ bool EventHandler::handleEvents(Game &game) {
             game.moveTiles(coords);
           }
 
-          std::cout << move << std::endl;
           if (move) {
             game.moveChessman(last, pixel);
             game.setDefaultBoard();

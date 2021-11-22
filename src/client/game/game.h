@@ -9,8 +9,11 @@
 #include "../../common/src/blocking_queue.h"
 #include <list>
 #include <map>
+#include <mutex>
 
 class Sprite;
+
+class RemoteClientInstruction;
 
 class Game {
 private:
@@ -19,6 +22,7 @@ private:
   BlockingQueue<RemoteClientInstruction> &send_queue;
   std::map<const PixelCoordinate, Sprite> sprites;
   CoordinateTransformer transformer;
+  std::mutex mutex;
 
 public:
   Game(int height, Board &board, BlockingQueue<RemoteClientInstruction> &send_queue_);

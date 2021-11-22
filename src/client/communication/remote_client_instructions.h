@@ -78,7 +78,7 @@ public:
 
     //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
     //passed as function parameters.
-    RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector);
+    RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector_);
 
     //Prints to stdout "instructor_nick_name left the game"
     void makeAction(Game &game);

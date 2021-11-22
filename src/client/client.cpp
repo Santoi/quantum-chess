@@ -6,6 +6,8 @@
 #include "communication/action_thread.h"
 #include "../server/src/quantum_chess/chess_exception.h"
 #include "../common/src/client_data.h"
+#include "sdl/window.h"
+#include "sdl/event_handler.h"
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
     ClientProtocol protocol;
@@ -60,24 +62,56 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 
 
 void Client::execute(const char * host, const char * port, bool single_threaded_client) {
+  SDL2pp::SDL sdl(SDL_INIT_VIDEO);
+
     welcomeClientAndAskForNickName();
     Socket socket = Socket::createAConnectedSocket(host, port);
-    setUpClientsDataInServer(socket);
-    ActionThread action_thread(received, game);
+
     RemoteClientSender sender_thread(socket, send);
     RemoteClientReceiver receiver_thread(socket, received);
+  setUpClientsDataInServer(socket);
+
+    // TODO modificar despues (hacer que el juego reciba la window y setee el board).
+
+    // TODO GAME PROTEGIDO
+    Window window;
+    Renderer & renderer = window.renderer();
+    Board board(renderer, "img/stars.jpg", renderer.getMinDimension(), renderer.getMinDimension());
+    Game game(renderer.getMinDimension(), board, send);
+
+    ActionThread action_thread(received, game);
+
     receiver_thread.start();
     sender_thread.start();
     action_thread.start();
+
+  try {
     while (true) {
-        try {
-            if (readCommand())
-                break;
-        }
-        catch(const ChessException & e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-        }
+      unsigned int prev_ticks = SDL_GetTicks();
+
+      EventHandler eventHandler;
+
+      // Timing: calculate difference between this and previous frame
+      // in milliseconds
+      unsigned int frame_ticks = SDL_GetTicks();
+      unsigned int frame_delta = frame_ticks - prev_ticks;
+      prev_ticks = frame_ticks;
+
+      if (!eventHandler.handleEvents(game, board)) {
+        send.close();
+        break;
+      }
+
+
+      // Show rendered frame
+      renderer.render(game);
+
+      // Frame limiter: sleep for a little bit to not eat 100% of CPU
+      SDL_Delay(1);
     }
+  }
+  catch(const BlockingQueueClosed & e) {}
+
     socket.shutdownAndClose();
     received.close();
     send.close();

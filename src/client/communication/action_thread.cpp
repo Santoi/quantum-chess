@@ -1,5 +1,6 @@
 #include "action_thread.h"
 #include "../../server/src/instructions/instruction.h"
+#include "../sdl/event_handler.h"
 
 ActionThread::ActionThread(BlockingQueue<RemoteClientInstruction> & instructions_,
                            Game &game_)
@@ -16,3 +17,4 @@ void ActionThread::run() {
     }
     catch(const BlockingQueueClosed & e) {}
 }
+

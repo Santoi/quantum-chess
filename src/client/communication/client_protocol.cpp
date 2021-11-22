@@ -90,15 +90,19 @@ ptr_instruction) {
   std::vector<ChessmanData> chessman_data_vector;
   chessman_data_vector.reserve(amount);
   for (uint8_t i = 0; i < amount; i++) {
-    char character = getCharFromSocket(socket);
+    char character_ = getCharFromSocket(socket);
+    character_ = std::tolower(character_);
+    char character [] = {character_, '\0'};
     bool white = getCharFromSocket(socket);
-    std::string chessman = character + ((white) ? "w" : "b");
-    Position position(getNumber8FromSocket(socket), getNumber8FromSocket(socket));
+    std::string chessman(character);
+    chessman += white ? "w" : "b";
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
     uint16_t prob_int = getNumber16FromSocket(socket);
     double prob = ((double) prob_int + 1) / (UINT16_MAX + 1);
     chessman_data_vector.push_back(ChessmanData(position, chessman, prob));
   }
-
   ptr_instruction = make_unique<RemoteClientLoadMessageInstruction>(std::move(chessman_data_vector));
 }
 

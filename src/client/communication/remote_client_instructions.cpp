@@ -37,10 +37,11 @@ void RemoteClientExitMessageInstruction::makeAction(Game &game) {
     std::cout << this->instructor_nick_name << " se fue de la partida." << std::endl;
 }
 
-RemoteClientLoadMessageInstruction::RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector){}
+RemoteClientLoadMessageInstruction::RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector_):
+chessman_data_vector(std::move(chessman_data_vector_)){}
 
 void RemoteClientLoadMessageInstruction::makeAction(Game &game) {
-    game.load(chessman_data_vector);
+   game.load(chessman_data_vector);
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(const Position &initial_,

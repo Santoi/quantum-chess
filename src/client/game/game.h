@@ -3,6 +3,7 @@
 
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
+#include "../sdl/window.h"
 #include "board.h"
 #include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
@@ -18,14 +19,15 @@ class RemoteClientInstruction;
 class Game {
 private:
   int scale;
-  Board &board;
+  Board board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
   std::map<const PixelCoordinate, Sprite> sprites;
   CoordinateTransformer transformer;
   std::mutex mutex;
 
 public:
-  Game(int height, Board &board, BlockingQueue<RemoteClientInstruction> &send_queue_);
+  Game(Window & window, BlockingQueue<RemoteClientInstruction> &send_queue_);
+
   void setScale(int scale_);
 
   bool isPixelInBoard(const PixelCoordinate &pixel);

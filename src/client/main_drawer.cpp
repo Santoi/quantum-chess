@@ -23,11 +23,7 @@ int main_drawer(BlockingQueue<RemoteClientInstruction> &send_queue) {
 }
 
 int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstruction> &send_queue) {
-  Board board(renderer,
-              "img/stars.jpg",
-              renderer.getMinDimension(),
-              renderer.getMinDimension());
-  Game game(renderer.getMinDimension(), board, send_queue);
+  Game game(window, send_queue);
 
   unsigned int prev_ticks = SDL_GetTicks();
 
@@ -41,7 +37,7 @@ int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstructi
     unsigned int frame_delta = frame_ticks - prev_ticks;
     prev_ticks = frame_ticks;
 
-    running = eventHandler.handleEvents(game, board);
+    running = eventHandler.handleEvents(game);
 
     // Show rendered frame
     renderer.render(game);

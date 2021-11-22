@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <mutex>
 
 class Board {
 private:
@@ -17,6 +18,9 @@ private:
   Sprite background;
   std::map<const Position, Chessman> chessmen;
   std::map<const Position, Tile> board;
+  ChessmanSpriteRepository chessman_repository;
+  TileSpriteRepository tile_repository;
+  std::mutex mutex;
 
 public:
   Board(Renderer &renderer_, const std::string &image, int width, int height);
@@ -24,7 +28,7 @@ public:
 
   void render();
 
-  std::map<const Position, Tile>& getTiles();
+  std::map<const Position, Tile> &getTiles();
   std::map<const Position, Chessman>& getChessmen();
   Sprite& getBackground();
 

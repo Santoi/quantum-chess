@@ -1,6 +1,7 @@
 #include "game.h"
 #include "../sdl/sprite.h"
 #include "../sdl/pixel_coordinate.h"
+#include "../sdl/window.h"
 #include <map>
 #include <mutex>
 #include <utility>
@@ -9,9 +10,11 @@
 #define BOARD_MIN_LIMIT .1
 #define BOARD_MAX_LIMIT .9
 
-Game::Game(int height, Board &board,
+Game::Game(Window & window,
            BlockingQueue<RemoteClientInstruction> &send_queue_):
-             scale(height), board(board), send_queue(send_queue_), mutex() {}
+             scale(window.renderer().getMinDimension()),
+             board(window.renderer(), "img/stars.jpg", scale, scale),
+             send_queue(send_queue_), mutex() {}
 
 void Game::loadSprite(Sprite &sprite, int x, int y) {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -27,9 +30,9 @@ void Game::setScale(int scale_) {
 
 void Game::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  auto &tiles = board.getTiles();
+  auto & tiles = board.getTiles();
   Sprite &background = board.getBackground();
-  auto &chessmen = board.getChessmen();
+  auto & chessmen = board.getChessmen();
 
   for (auto &it : tiles) {
     PixelCoordinate pixel(0, 0);

@@ -4,6 +4,7 @@
 #include "../sdl/renderer.h"
 #include "../sdl/sprite.h"
 #include "../communication/chessman_data.h"
+#include "../sdl/chessman_sprite_repository.h"
 #include <map>
 #include <string>
 
@@ -12,13 +13,14 @@ class Renderer;
 class Chessman {
 private:
   Renderer &renderer;
-  Sprite sprite_;
-  Sprite fill;
+  Sprite & sprite_;
+  Sprite & fill;
   std::map<std::string, std::pair<std::string, std::string>> image;
   double probability;
 
 public:
-  Chessman(Renderer &renderer, const ChessmanData &data);
+  Chessman(Renderer &renderer, ChessmanSpriteRepository & repository,
+           const ChessmanData &data);
   Chessman(Chessman &&other) noexcept;
   Chessman(const Chessman &other) = delete;
   Chessman& operator=(Chessman &&other) noexcept;

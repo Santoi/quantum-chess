@@ -14,7 +14,7 @@ private:
 public:
   EventHandler();
   // Event loop
-  bool handleEvents(Game &game, Board &board);
+  bool handleEvents(Game &game);
 //  void handleMouse();
 };
 

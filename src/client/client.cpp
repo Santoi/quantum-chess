@@ -76,8 +76,7 @@ void Client::execute(const char * host, const char * port, bool single_threaded_
     // TODO GAME PROTEGIDO
     Window window;
     Renderer & renderer = window.renderer();
-    Board board(renderer, "img/stars.jpg", renderer.getMinDimension(), renderer.getMinDimension());
-    Game game(renderer.getMinDimension(), board, send);
+    Game game(window, send);
 
     ActionThread action_thread(received, game);
 
@@ -85,19 +84,18 @@ void Client::execute(const char * host, const char * port, bool single_threaded_
     sender_thread.start();
     action_thread.start();
 
+  EventHandler eventHandler;
+
   try {
     while (true) {
       unsigned int prev_ticks = SDL_GetTicks();
-
-      EventHandler eventHandler;
-
       // Timing: calculate difference between this and previous frame
       // in milliseconds
       unsigned int frame_ticks = SDL_GetTicks();
       unsigned int frame_delta = frame_ticks - prev_ticks;
       prev_ticks = frame_ticks;
 
-      if (!eventHandler.handleEvents(game, board)) {
+      if (!eventHandler.handleEvents(game)) {
         send.close();
         break;
       }

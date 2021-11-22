@@ -4,7 +4,7 @@
 
 EventHandler::EventHandler(): split(false), merge(false), move(false) {}
 
-bool EventHandler::handleEvents(Game &game, Board &board) {
+bool EventHandler::handleEvents(Game &game) {
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
@@ -70,6 +70,7 @@ bool EventHandler::handleEvents(Game &game, Board &board) {
             game.moveTiles(coords);
           }
 
+          std::cout << move << std::endl;
           if (move) {
             game.moveChessman(last, pixel);
             game.setDefaultBoard();

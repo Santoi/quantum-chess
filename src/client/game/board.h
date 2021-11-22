@@ -20,7 +20,6 @@ private:
   std::map<const Position, Tile> board;
   ChessmanSpriteRepository chessman_repository;
   TileSpriteRepository tile_repository;
-  std::mutex mutex;
 
 public:
   Board(Renderer &renderer_, const std::string &image, int width, int height);

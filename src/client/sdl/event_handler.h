@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_EVENT_HANDLER_H
 
 #include "../game/game.h"
-#include "../game/board.h"
+#include "../game/client_board.h"
 #include <SDL2/SDL.h>
 
 class EventHandler {

@@ -3,7 +3,7 @@
 #include "sdl/renderer.h"
 #include "sdl/sprite.h"
 #include "game/chessman.h"
-#include "game/board.h"
+#include "game/client_board.h"
 #include "game/game.h"
 #include "sdl/event_handler.h"
 #include "../common/src/blocking_queue.h"

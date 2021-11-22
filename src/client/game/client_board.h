@@ -44,4 +44,4 @@ public:
 };
 
 
-#endif //QUANTUM_CHESS_PROJ_BOARD_H
+#endif //QUANTUM_CHESS_PROJ_BOARD_CLIENT_H

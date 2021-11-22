@@ -61,6 +61,10 @@ public:
 
     ~ServerProtocol() = default;
 
+    void
+    fillPacketWithPossibleMoves(Packet &packet,
+                                const std::list<Position> &positions);
+
 private:
     //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.
     //By the end of the function, the instruc_ptr points to this new ChatInstruction object.
@@ -68,6 +72,9 @@ private:
 
 
     void fillMovementInstructions(Socket& socket, const ClientData &client_data, std::shared_ptr<Instruction>& instruct_ptr);
+
+    void fillPossibleMovesInstruction(Socket &socket, const ClientData &data,
+                                      std::shared_ptr<Instruction> &sharedPtr);
 };
 
 

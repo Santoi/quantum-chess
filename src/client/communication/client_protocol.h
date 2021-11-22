@@ -39,6 +39,9 @@ public:
     fillPacketWithMoveMessage(Packet &packet, Position &initial,
                               Position &final);
 
+    void fillPacketWithPossibleMovesMessage(Packet &packet,
+                                            const Position &position);
+
 private:
     //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
     //name and the corresponding message). After the function ends, the ptr_instruction points to this
@@ -57,6 +60,9 @@ private:
 
     void fillClientInstructionWithException(Socket &socket,
                                             std::shared_ptr<RemoteClientInstruction> &sharedPtr);
+
+    void fillClientInstructionWithPossibleMoves(Socket &socket,
+                                                std::shared_ptr<RemoteClientInstruction> &sharedPtr);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

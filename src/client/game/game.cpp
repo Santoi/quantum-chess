@@ -69,6 +69,13 @@ void Game::moveTiles(const std::list<Position> &positions) {
     board.moveTile(position);
 }
 
+void Game::askMoveTiles(PixelCoordinate &coords) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position;
+  transformer.pixel2Position(coords, position, scale);
+  send_queue.push(std::make_shared<RemoteClientPossibleMovesInstruction>(std::list<Position>(1, position)));
+}
+
 void Game::entangledTiles(const std::list<Position> &positions) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position : positions)

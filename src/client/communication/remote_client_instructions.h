@@ -117,4 +117,19 @@ public:
     ~RemoteClientExceptionInstruction() = default;
 };
 
+class RemoteClientPossibleMovesInstruction: public RemoteClientInstruction {
+    std::list<Position> positions;
+
+public:
+    RemoteClientPossibleMovesInstruction() = delete;
+
+    RemoteClientPossibleMovesInstruction(std::list<Position> && positions_);
+
+    void makeAction(Game &game);
+
+    void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
+
+    ~RemoteClientPossibleMovesInstruction() = default;
+};
+
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

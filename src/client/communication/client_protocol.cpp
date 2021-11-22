@@ -61,6 +61,13 @@ ClientProtocol::fillPacketWithMoveMessage(Packet &packet, Position &initial,
     packet.addByte(final.y());
 }
 
+void ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
+                                                        const Position &position) {
+  packet.addByte('a');
+  addNumber8ToPacket(packet, position.x());
+  addNumber8ToPacket(packet, position.y());
+}
+
 void ClientProtocol::sendInstruction(Socket & socket, std::shared_ptr<RemoteClientInstruction> & instruction){
     Packet packet;
     instruction->fillPacketWithInstructionsToSend(packet, *this);
@@ -113,6 +120,20 @@ void ClientProtocol::fillClientInstructionWithException(Socket &socket,
   ptr_instruction = make_unique<RemoteClientExceptionInstruction>(message);
 }
 
+void ClientProtocol::fillClientInstructionWithPossibleMoves(Socket &socket,
+                                                            std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  uint8_t amount = getNumber8FromSocket(socket);
+  std::list<Position> posible_moves;
+  for (uint8_t i = 0; i < amount; i++) {
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
+    posible_moves.push_back(position);
+  }
+  ptr_instruction = make_unique<RemoteClientPossibleMovesInstruction>(std::move(posible_moves));
+}
+
+
 void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
                                                         ptr_instruction) {
     Packet packet;
@@ -131,6 +152,13 @@ void ClientProtocol::receiveInstruction(Socket& socket, std::shared_ptr<RemoteCl
         case 'x':
             fillClientInstructionWithException(socket, ptr_instruction);
             break;
+      case 'a':
+        fillClientInstructionWithPossibleMoves(socket, ptr_instruction);
+        break;
     }
 
 }
+
+
+
+

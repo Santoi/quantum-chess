@@ -73,6 +73,14 @@ void Board::merge(const Position & initial1, const Position & initial2,
     next_white = !next_white;
 }
 
+std::list<Position> Board::getPossibleMovesOf(const Position & position) {
+  std::list<Position> output;
+  Chessman * chessman = getChessmanAt(position);
+  if (chessman)
+    chessman->calculatePosibleMoves(position, output);
+  return output;
+}
+
 void Board::addChessmanIn(const Position &position, Chessman * chessman) {
     if (board.count(position))
         throw ChessException("ya hay una pieza alli");

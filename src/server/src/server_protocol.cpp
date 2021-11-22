@@ -5,6 +5,7 @@
 #include "instructions/movement_instruction.h"
 #include "match.h"
 #include "../../common/src/client_data.h"
+#include "instructions/possible_moves_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 
@@ -55,6 +56,18 @@ void ServerProtocol::fillMovementInstructions(Socket& socket, const ClientData &
     instruct_ptr = std::make_shared<MovementInstruction>(client_data, initial, final);
 }
 
+void ServerProtocol::fillPossibleMovesInstruction(Socket &socket,
+                                                  const ClientData &client_data,
+                                                  std::shared_ptr<Instruction> &instruct_ptr) {
+  std::list<Position> positions;
+  uint8_t x = getNumber8FromSocket(socket);
+  uint8_t y = getNumber8FromSocket(socket);
+  Position position(x, y);
+  positions.push_back(position);
+  instruct_ptr = std::make_shared<PossibleMovesInstruction>(client_data, std::move(positions));
+}
+
+
 void ServerProtocol::fillInstructions(Socket& socket, const ClientData &client_data,
                                       std::shared_ptr<Instruction>& instruct_ptr) {
     Packet packet;
@@ -68,6 +81,8 @@ void ServerProtocol::fillInstructions(Socket& socket, const ClientData &client_d
         case 'm':
             fillMovementInstructions(socket, client_data, instruct_ptr);
             break;
+      case 'a':
+        fillPossibleMovesInstruction(socket, client_data, instruct_ptr);
     }
 }
 
@@ -99,6 +114,16 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
     }
 }
 
+void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,
+                                                 const std::list<Position> & positions) {
+  packet.addByte('a');
+  addNumber8ToPacket(packet, positions.size());
+  for (auto & position: positions) {
+    addNumber8ToPacket(packet, position.x());
+    addNumber8ToPacket(packet, position.y());
+  }
+}
+
 void ServerProtocol::sendPacketWithUpdates(Socket &socket,
                                            std::shared_ptr<Instruction> &instruct_ptr,
                                            const ClientData &client_data) {
@@ -111,5 +136,7 @@ void ServerProtocol::fillPacketWithExitInfo(Packet& packet, const std::string& n
     packet.addByte('e');
     this->addStringAndItsLengthToPacket(packet, nick_name);
 }
+
+
 
 

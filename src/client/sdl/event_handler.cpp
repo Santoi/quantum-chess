@@ -59,15 +59,19 @@ bool EventHandler::handleEvents(Game &game) {
             Position pos(0, i);
             coords.push_back(pos);
           }
+          /*
           if (split) {
             // TODO: notify split
             game.splitTiles(coords);
           } else if (merge) {
             // TODO: notify merge
             game.moveTiles(coords);
-          } else {
+          }  {
             // TODO: notify move
-            game.moveTiles(coords);
+            game.askMoveTiles(pixel);
+          }*/
+          if (!move) {
+            game.askMoveTiles(pixel);
           }
 
           if (move) {

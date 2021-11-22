@@ -32,7 +32,6 @@ RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(const std
                                         :RemoteClientInstruction(nick_name) {
 }
 
-
 void RemoteClientExitMessageInstruction::makeAction(Game &game) {
     std::cout << this->instructor_nick_name << " se fue de la partida." << std::endl;
 }
@@ -47,9 +46,7 @@ void RemoteClientLoadMessageInstruction::makeAction(Game &game) {
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(const Position &initial_,
                                                          const Position &final_): initial(initial_), final(final_) {}
 
-void RemoteClientMoveInstruction::makeAction(Game &game) {
-
-}
+void RemoteClientMoveInstruction::makeAction(Game &game) {}
 
 void
 RemoteClientMoveInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -58,14 +55,27 @@ RemoteClientMoveInstruction::fillPacketWithInstructionsToSend(Packet &packet,
 }
 
 RemoteClientExceptionInstruction::RemoteClientExceptionInstruction(const std::string& message)
-        :message(message) {
-}
+        : message(message) {}
 
 void RemoteClientExceptionInstruction::makeAction(Game &game) {
   std::cout << "Error: " << this->message << std::endl;
 }
 
 void RemoteClientExceptionInstruction::fillPacketWithInstructionsToSend(Packet &packet, ClientProtocol & protocol) {
+}
+
+RemoteClientPossibleMovesInstruction::RemoteClientPossibleMovesInstruction
+        (std::list<Position> && positions_):
+        positions(std::move(positions_)) {}
+
+void RemoteClientPossibleMovesInstruction::makeAction(Game &game) {
+  game.moveTiles(positions);
+}
+
+void
+RemoteClientPossibleMovesInstruction::fillPacketWithInstructionsToSend(Packet &packet,
+                                                              ClientProtocol &protocol) {
+  protocol.fillPacketWithPossibleMovesMessage(packet, *positions.begin());
 }
 
 

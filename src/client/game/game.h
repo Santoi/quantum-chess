@@ -4,7 +4,7 @@
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
 #include "../sdl/window.h"
-#include "board.h"
+#include "client_board.h"
 #include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"
@@ -46,6 +46,8 @@ public:
   void render();
 
     void load(std::vector<ChessmanData> &chessman_data_vector);
+
+    void askMoveTiles(PixelCoordinate &coords);
 };
 
 

@@ -1,4 +1,4 @@
-#include "board.h"
+#include "client_board.h"
 #include "../sdl/renderer.h"
 #include "tile.h"
 #include "../communication/client_protocol.h"

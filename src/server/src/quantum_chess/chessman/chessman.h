@@ -103,6 +103,10 @@ protected:
     virtual Chessman::MoveValidationStatus
     checkIsAValidMerge(const Position &initial1, const Position &final);
 
+    // Carga un vector con todos las posiciones a donde se puede mover la pieza.
+    virtual void calculateMoves(const Position &initial,
+                                std::list<Position> &posible_moves) const = 0;
+
 public:
 	// Constructor, se le pasa posicion, color y referencia al tablero.
     Chessman(const Position & position_, bool white_, Board & board_);
@@ -121,11 +125,6 @@ public:
 
 	// Devuelve true si la pieza es blanca.
 	bool isWhite() const;
-
-    // Carga un vector con todos las posiciones a donde se puede mover la pieza.
-    virtual void calculateMoves(const Position &initial,
-                                std::list<Position> &posible_moves)
-                                       const = 0;
 	
     friend std::ostream & operator<<(std::ostream & os,
                                      const Chessman & chessman);

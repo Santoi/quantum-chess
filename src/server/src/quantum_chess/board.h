@@ -37,6 +37,8 @@ public:
     void split(const Position &initial, const Position &pos1,
                const Position &pos2);
 
+    std::list<Position> getPossibleMovesOf(const Position & position);
+
 	// Devuelve un puntero a la pieza en la posicion dada.
     Chessman * getChessmanAt(const Position & position);
 

@@ -4,7 +4,7 @@
 #include "../common/src/blocking_queue.h"
 #include "communication/remote_client_instructions.h"
 #include "sdl/renderer.h"
-#include "game/board.h"
+#include "game/client_board.h"
 #include "sdl/window.h"
 
 int main_drawer(BlockingQueue<RemoteClientInstruction> &send_queue);

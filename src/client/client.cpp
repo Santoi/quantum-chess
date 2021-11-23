@@ -9,6 +9,9 @@
 #include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
 
+
+#define FRAME_RATE 60
+
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
   std::map<uint16_t, std::vector<ClientData>> data = std::move(
@@ -74,7 +77,7 @@ void Client::execute(const char *host, const char *port,
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
   setUpClientsDataInServer(socket);
-  
+
   Window window;
   Renderer &renderer = window.renderer();
   Game game(window, send);
@@ -88,18 +91,20 @@ void Client::execute(const char *host, const char *port,
   event_handler.start();
 
   while (event_handler.isOpen()) {
-    unsigned int prev_ticks = SDL_GetTicks();
     // Timing: calculate difference between this and previous frame
     // in milliseconds
-    unsigned int frame_ticks = SDL_GetTicks();
-    unsigned int frame_delta = frame_ticks - prev_ticks;
-    prev_ticks = frame_ticks;
+    uint32_t before_render_ticks = SDL_GetTicks();
 
     // Show rendered frame
     renderer.render(game);
 
+    uint32_t after_render_ticks = SDL_GetTicks();
+    uint32_t frame_delta = after_render_ticks - before_render_ticks;
+
     // Frame limiter: sleep for a little bit to not eat 100% of CPU
-    SDL_Delay(1);
+    if (frame_delta < 1000 / FRAME_RATE)
+      SDL_Delay(1000 / FRAME_RATE);
+
   }
 
   received.close();

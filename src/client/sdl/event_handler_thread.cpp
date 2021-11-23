@@ -5,7 +5,7 @@
 
 EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
                                                      split(false), merge(false),
-                                                     move(false) {}
+                                                     first_click(false) {}
 
 void EventHandlerThread::run() {
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
@@ -38,7 +38,10 @@ void EventHandlerThread::handleKeyDown() {
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
       game.setDefaultBoard();
-      move = false;
+      first_click = false;
+      second_click = false;
+      split = false;
+      merge = false;
       break;
     }
     case SDLK_LSHIFT: {
@@ -55,11 +58,13 @@ void EventHandlerThread::handleKeyDown() {
 void EventHandlerThread::handleKeyUp() {
   switch (event.key.keysym.sym) {
     case SDLK_LSHIFT: {
-      split = false;
+      if (!first_click)
+        split = false;
       break;
     }
     case SDLK_LCTRL: {
-      merge = false;
+      if (!first_click)
+        merge = false;
       break;
     }
   }
@@ -76,28 +81,42 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       Position pos(0, i);
       coords.push_back(pos);
     }
-    /*
-    if (split) {
-      // TODO: notify split
-      game.splitTiles(coords);
-    } else if (merge) {
-      // TODO: notify merge
-      game.moveTiles(coords);
-    }  {
-      // TODO: notify move
-      game.askMoveTiles(pixel);
-    }*/
-    if (!move) {
-      game.askMoveTiles(pixel);
+    if (!first_click) {
+      if (split)
+        game.askSplitTiles(pixel);
+      else if (merge);
+        //game.askMergeTiles(pixel);
+      else
+        game.askMoveTiles(pixel);
+      first_click = true;
+      last_click = pixel;
+      return;
     }
 
-    if (move) {
-      game.moveChessman(last, pixel);
-      game.setDefaultBoard();
-    } else {
-      last(pixel.x(), pixel.y());
+    if (!second_click) {
+      if (split || merge) {
+        penultimate_click = last_click;
+        last_click = pixel;
+        second_click = true;
+      } else {
+        game.moveChessman(last_click, pixel);
+        game.setDefaultBoard();
+        first_click = false;
+      }
+      return;
     }
-    move = !move;
+
+    if (second_click) {
+      if (split) {
+        game.splitChessman(penultimate_click, last_click, pixel);
+        game.setDefaultBoard();
+        first_click = false;
+        second_click = false;
+        split = false;
+      }
+      //merge.
+    }
+
   }
   catch (const ChessException &e) {
     std::cerr << e.what() << std::endl;

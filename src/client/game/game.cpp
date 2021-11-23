@@ -80,6 +80,14 @@ void Game::askMoveTiles(PixelCoordinate &coords) {
           std::list<Position>(1, position)));
 }
 
+void Game::askSplitTiles(PixelCoordinate &coords) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position;
+  transformer.pixel2Position(coords, position, scale);
+  send_queue.push(std::make_shared<RemoteClientPossibleSplitsInstruction>(
+          std::list<Position>(1, position)));
+}
+
 void Game::entangledTiles(const std::list<Position> &positions) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
@@ -107,11 +115,24 @@ void Game::mergeTiles(const std::list<Position> &positions) {
 void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
-    throw ChessException("you cannot move been spectator");
+    throw ChessException("you cannot move being spectator");
   Position orig_, dest_;
   transformer.pixel2Position(orig, orig_, scale);
   transformer.pixel2Position(dest, dest_, scale);
   send_queue.push(std::make_shared<RemoteClientMoveInstruction>(orig_, dest_));
+}
+
+void Game::splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
+                         PixelCoordinate &to2) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (role == ClientData::ROLE_SPECTATOR)
+    throw ChessException("you cannot move being spectator");
+  Position from_, to1_, to2_;
+  transformer.pixel2Position(from, from_, scale);
+  transformer.pixel2Position(to1, to1_, scale);
+  transformer.pixel2Position(to2, to2_, scale);
+  send_queue.push(
+          std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
 }
 
 void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
@@ -119,3 +140,5 @@ void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   board.load(chessman_data_vector);
 }
+
+

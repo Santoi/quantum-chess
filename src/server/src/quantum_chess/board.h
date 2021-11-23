@@ -36,7 +36,7 @@ public:
   void move(const Position &initial, const Position &final, bool player_white);
 
   void split(const Position &initial, const Position &pos1,
-             const Position &pos2);
+             const Position &pos2, bool player_white);
 
   std::list<Position> getPossibleMovesOf(const Position &position);
 
@@ -74,6 +74,8 @@ public:
   loadVectors(std::vector<char> &characters_, std::vector<bool> &colors_,
               std::vector<Position> &positions_,
               std::vector<double> &probabilities);
+
+  std::list<Position> getPossibleSplitsOf(const Position &position);
 };
 
 

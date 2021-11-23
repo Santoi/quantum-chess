@@ -12,8 +12,8 @@ void LobbyThread::run() {
     while (true) {
       std::shared_ptr<Socket> peer;
       queue.pop(peer);
-      matches.addClientToMatchCreatingIfNeeded((std::move(*peer)));
       matches.joinInactiveMatches();
+      matches.addClientToMatchCreatingIfNeeded((std::move(*peer)));
     }
   }
   catch (const BlockingQueueClosed &e) {

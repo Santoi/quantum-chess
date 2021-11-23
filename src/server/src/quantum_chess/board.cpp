@@ -50,12 +50,15 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
 }
 
 void Board::split(const Position &initial, const Position &pos1,
-                  const Position &pos2) {
+                  const Position &pos2, bool player_white) {
+  if (player_white != next_white)
+    throw ChessException("is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
     throw ChessException("no hay ninguna pieza alli");
-  if (chessman->isWhite() != next_white)
-    throw ChessException("no es tu turno");
+  if (chessman->isWhite() != player_white)
+    throw ChessException("you cannot move a chessman"
+                         " of the other player");
   chessman->split(initial, pos1, pos2);
   next_white = !next_white;
 }
@@ -82,6 +85,14 @@ std::list<Position> Board::getPossibleMovesOf(const Position &position) {
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
     chessman->calculatePosibleMoves(position, output);
+  return output;
+}
+
+std::list<Position> Board::getPossibleSplitsOf(const Position &position) {
+  std::list<Position> output;
+  Chessman *chessman = getChessmanAt(position);
+  if (chessman)
+    chessman->calculatePosibleSplits(position, output);
   return output;
 }
 
@@ -187,6 +198,10 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
 
 void Board::load() {
   addNewChessman('T', Position(0, 0), true);
+  addNewChessman('T', Position(0, 7), false);
+
+  /*
+  addNewChessman('T', Position(0, 0), true);
   addNewChessman('H', Position(1, 0), true);
   addNewChessman('B', Position(2, 0), true);
   addNewChessman('Q', Position(3, 0), true);
@@ -208,6 +223,7 @@ void Board::load() {
 
   for (uint8_t i = 0; i < 8; i++)
     addNewChessman('P', Position(i, 6), false);
+    */
 }
 
 bool Board::flipACoin() {

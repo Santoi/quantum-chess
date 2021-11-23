@@ -78,9 +78,28 @@ ClientProtocol::fillPacketWithMoveMessage(Packet &packet, Position &initial,
   packet.addByte(final.y());
 }
 
+void
+ClientProtocol::fillPacketWithSplitMessage(Packet &packet, Position &from,
+                                           Position &to1, Position &to2) {
+  packet.addByte('s');
+  packet.addByte(from.x());
+  packet.addByte(from.y());
+  packet.addByte(to1.x());
+  packet.addByte(to1.y());
+  packet.addByte(to2.x());
+  packet.addByte(to2.y());
+}
+
 void ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
                                                         const Position &position) {
   packet.addByte('a');
+  addNumber8ToPacket(packet, position.x());
+  addNumber8ToPacket(packet, position.y());
+}
+
+void ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
+                                                         const Position &position) {
+  packet.addByte('b');
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
@@ -157,6 +176,20 @@ void ClientProtocol::fillClientInstructionWithPossibleMoves(Socket &socket,
           std::move(posible_moves));
 }
 
+void ClientProtocol::fillClientInstructionWithPossibleSplits(Socket &socket,
+                                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  uint8_t amount = getNumber8FromSocket(socket);
+  std::list<Position> posible_moves;
+  for (uint8_t i = 0; i < amount; i++) {
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
+    posible_moves.push_back(position);
+  }
+  ptr_instruction = make_unique<RemoteClientPossibleSplitsInstruction>(
+          std::move(posible_moves));
+}
+
 
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
@@ -180,6 +213,8 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case 'a':
       fillClientInstructionWithPossibleMoves(socket, ptr_instruction);
       break;
+    case 'b':
+      fillClientInstructionWithPossibleSplits(socket, ptr_instruction);
   }
 
 }

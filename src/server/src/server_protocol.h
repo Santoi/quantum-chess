@@ -68,6 +68,10 @@ public:
   fillPacketWithPossibleMoves(Packet &packet,
                               const std::list<Position> &positions);
 
+
+  void fillPacketWithPossibleSplits(Packet &packet,
+                                    const std::list<Position> &positions);
+
   void
   sendAvailableRoles(Socket &socket, const std::list<ClientData::Role> &roles);
 
@@ -86,6 +90,14 @@ private:
 
   void fillPossibleMovesInstruction(Socket &socket, const ClientData &data,
                                     std::shared_ptr<Instruction> &sharedPtr);
+
+  void fillSplitInstruction(Socket &socket,
+                            const ClientData &client_data,
+                            std::shared_ptr<Instruction> &instruct_ptr);
+
+  void
+  fillPossibleSplitsInstruction(Socket &socket, const ClientData &client_data,
+                                std::shared_ptr<Instruction> &instruct_ptr);
 };
 
 

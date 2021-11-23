@@ -56,6 +56,11 @@ public:
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
   void askMoveTiles(PixelCoordinate &coords);
+
+  void askSplitTiles(PixelCoordinate &coords);
+
+  void splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
+                     PixelCoordinate &to2);
 };
 
 

@@ -6,6 +6,8 @@
 #include "match.h"
 #include "../../common/src/client_data.h"
 #include "instructions/possible_moves_instruction.h"
+#include "instructions/possible_splits_instruction.h"
+#include "instructions/split_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <algorithm>
@@ -81,6 +83,23 @@ void ServerProtocol::fillMovementInstructions(Socket &socket,
                                                        final);
 }
 
+void ServerProtocol::fillSplitInstruction(Socket &socket,
+                                          const ClientData &client_data,
+                                          std::shared_ptr<Instruction> &instruct_ptr) {
+  uint8_t ix = getNumber8FromSocket(socket);
+  uint8_t iy = getNumber8FromSocket(socket);
+  uint8_t fx1 = getNumber8FromSocket(socket);
+  uint8_t fy1 = getNumber8FromSocket(socket);
+  uint8_t fx2 = getNumber8FromSocket(socket);
+  uint8_t fy2 = getNumber8FromSocket(socket);
+  Position initial(ix, iy);
+  Position final1(fx1, fy1);
+  Position final2(fx2, fy2);
+  instruct_ptr = std::make_shared<SplitInstruction>(client_data, initial,
+                                                    final1,
+                                                    final2);
+}
+
 void ServerProtocol::fillPossibleMovesInstruction(Socket &socket,
                                                   const ClientData &client_data,
                                                   std::shared_ptr<Instruction> &instruct_ptr) {
@@ -92,6 +111,19 @@ void ServerProtocol::fillPossibleMovesInstruction(Socket &socket,
   instruct_ptr = std::make_shared<PossibleMovesInstruction>(client_data,
                                                             std::move(
                                                                     positions));
+}
+
+void ServerProtocol::fillPossibleSplitsInstruction(Socket &socket,
+                                                   const ClientData &client_data,
+                                                   std::shared_ptr<Instruction> &instruct_ptr) {
+  std::list<Position> positions;
+  uint8_t x = getNumber8FromSocket(socket);
+  uint8_t y = getNumber8FromSocket(socket);
+  Position position(x, y);
+  positions.push_back(position);
+  instruct_ptr = std::make_shared<PossibleSplitsInstruction>(client_data,
+                                                             std::move(
+                                                                     positions));
 }
 
 
@@ -111,6 +143,13 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
       break;
     case 'a':
       fillPossibleMovesInstruction(socket, client_data, instruct_ptr);
+      break;
+    case 'b':
+      fillPossibleSplitsInstruction(socket, client_data, instruct_ptr);
+      break;
+    case 's':
+      fillSplitInstruction(socket, client_data, instruct_ptr);
+      break;
   }
 }
 
@@ -148,6 +187,16 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
 void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,
                                                  const std::list<Position> &positions) {
   packet.addByte('a');
+  addNumber8ToPacket(packet, positions.size());
+  for (auto &position: positions) {
+    addNumber8ToPacket(packet, position.x());
+    addNumber8ToPacket(packet, position.y());
+  }
+}
+
+void ServerProtocol::fillPacketWithPossibleSplits(Packet &packet,
+                                                  const std::list<Position> &positions) {
+  packet.addByte('b');
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());

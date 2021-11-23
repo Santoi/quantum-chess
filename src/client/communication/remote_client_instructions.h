@@ -19,117 +19,160 @@ class ChessmanData;
 
 class RemoteClientInstruction {
 protected:
-    const std::string instructor_nick_name;
+  const std::string instructor_nick_name;
 
 public:
-    RemoteClientInstruction() = default;
+  RemoteClientInstruction() = default;
 
-    //A RemoteClientInstruction is created, saving the instructor's nick name received in the
-    //function parameter.
-    RemoteClientInstruction(const std::string& instructor_nick_name);
+  //A RemoteClientInstruction is created, saving the instructor's nick name received in the
+  //function parameter.
+  RemoteClientInstruction(const std::string &instructor_nick_name);
 
-    virtual void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol);
+  virtual void
+  fillPacketWithInstructionsToSend(Packet &packet, ClientProtocol &protocol);
 
-    //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
-    virtual void makeAction(Game &game) = 0;
+  //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
+  virtual void makeAction(Game &game) = 0;
 
-    ~RemoteClientInstruction() = default;
+  ~RemoteClientInstruction() = default;
 
 };
 
-class RemoteClientChatInstruction: public RemoteClientInstruction {
+class RemoteClientChatInstruction : public RemoteClientInstruction {
 private:
-    const std::string message;
+  const std::string message;
 
 public:
-    RemoteClientChatInstruction() = delete;
+  RemoteClientChatInstruction() = delete;
 
-    //Creates a RemoteClientChatInstruction saving the nick_name and message passed as function
-    //parameters.
-    RemoteClientChatInstruction(const std::string& nick_name, const std::string& message);
+  //Creates a RemoteClientChatInstruction saving the nick_name and message passed as function
+  //parameters.
+  RemoteClientChatInstruction(const std::string &nick_name,
+                              const std::string &message);
 
-    //Prints to stdout "instructor_nick_name sends message"
-    void makeAction(Game &game) override;
+  //Prints to stdout "instructor_nick_name sends message"
+  void makeAction(Game &game) override;
 
-    void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
 
-    ~RemoteClientChatInstruction() = default;
+  ~RemoteClientChatInstruction() = default;
 };
 
-class RemoteClientExitMessageInstruction: public RemoteClientInstruction {
+class RemoteClientExitMessageInstruction : public RemoteClientInstruction {
 public:
-    RemoteClientExitMessageInstruction() = delete;
+  RemoteClientExitMessageInstruction() = delete;
 
-    //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
-    //passed as function parameters.
-    RemoteClientExitMessageInstruction(const std::string& nick_name);
+  //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
+  //passed as function parameters.
+  RemoteClientExitMessageInstruction(const std::string &nick_name);
 
-    //Prints to stdout "instructor_nick_name left the game"
-    void makeAction(Game &game);
+  //Prints to stdout "instructor_nick_name left the game"
+  void makeAction(Game &game);
 
-    ~RemoteClientExitMessageInstruction() = default;
+  ~RemoteClientExitMessageInstruction() = default;
 };
 
-class RemoteClientLoadMessageInstruction: public RemoteClientInstruction {
-    std::vector<ChessmanData> chessman_data_vector;
+class RemoteClientLoadMessageInstruction : public RemoteClientInstruction {
+  std::vector<ChessmanData> chessman_data_vector;
 
 public:
-    RemoteClientLoadMessageInstruction() = delete;
+  RemoteClientLoadMessageInstruction() = delete;
 
-    //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
-    //passed as function parameters.
-    RemoteClientLoadMessageInstruction(std::vector<ChessmanData> && chessman_data_vector_);
+  //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
+  //passed as function parameters.
+  RemoteClientLoadMessageInstruction(
+          std::vector<ChessmanData> &&chessman_data_vector_);
 
-    //Prints to stdout "instructor_nick_name left the game"
-    void makeAction(Game &game);
+  //Prints to stdout "instructor_nick_name left the game"
+  void makeAction(Game &game);
 
-    ~RemoteClientLoadMessageInstruction() = default;
+  ~RemoteClientLoadMessageInstruction() = default;
 };
 
-class RemoteClientMoveInstruction: public RemoteClientInstruction {
-    Position initial;
-    Position final;
+class RemoteClientMoveInstruction : public RemoteClientInstruction {
+  Position initial;
+  Position final;
 
 public:
-    RemoteClientMoveInstruction() = delete;
+  RemoteClientMoveInstruction() = delete;
 
-    RemoteClientMoveInstruction(const Position &initial_, const Position &final_);
+  RemoteClientMoveInstruction(const Position &initial_, const Position &final_);
 
-    void makeAction(Game &game);
+  void makeAction(Game &game);
 
-    void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
 
-    ~RemoteClientMoveInstruction() = default;
+  ~RemoteClientMoveInstruction() = default;
 };
 
-class RemoteClientExceptionInstruction: public RemoteClientInstruction {
-    const std::string message;
+class RemoteClientExceptionInstruction : public RemoteClientInstruction {
+  const std::string message;
 
 public:
-    RemoteClientExceptionInstruction() = delete;
+  RemoteClientExceptionInstruction() = delete;
 
-    RemoteClientExceptionInstruction(const std::string & message);
+  RemoteClientExceptionInstruction(const std::string &message);
 
-    void makeAction(Game &game);
+  void makeAction(Game &game);
 
-    void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
 
-    ~RemoteClientExceptionInstruction() = default;
+  ~RemoteClientExceptionInstruction() = default;
 };
 
-class RemoteClientPossibleMovesInstruction: public RemoteClientInstruction {
-    std::list<Position> positions;
+class RemoteClientPossibleMovesInstruction : public RemoteClientInstruction {
+  std::list<Position> positions;
 
 public:
-    RemoteClientPossibleMovesInstruction() = delete;
+  RemoteClientPossibleMovesInstruction() = delete;
 
-    RemoteClientPossibleMovesInstruction(std::list<Position> && positions_);
+  RemoteClientPossibleMovesInstruction(std::list<Position> &&positions_);
 
-    void makeAction(Game &game);
+  void makeAction(Game &game);
 
-    void fillPacketWithInstructionsToSend(Packet & packet, ClientProtocol & protocol) override;
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
 
-    ~RemoteClientPossibleMovesInstruction() = default;
+  ~RemoteClientPossibleMovesInstruction() = default;
+};
+
+class RemoteClientPossibleSplitsInstruction : public RemoteClientInstruction {
+  std::list<Position> positions;
+
+public:
+  RemoteClientPossibleSplitsInstruction() = delete;
+
+  RemoteClientPossibleSplitsInstruction(std::list<Position>
+                                        &&positions_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientPossibleSplitsInstruction() = default;
+};
+
+class RemoteClientSplitInstruction : public RemoteClientInstruction {
+  Position from;
+  Position to1;
+  Position to2;
+
+public:
+  RemoteClientSplitInstruction() = delete;
+
+  RemoteClientSplitInstruction(
+          const Position &from, const Position &to1, const Position &to2);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientSplitInstruction() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

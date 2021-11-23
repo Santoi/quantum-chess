@@ -48,6 +48,12 @@ public:
 
   void sendChosenRole(Socket &socket, ClientData::Role role);
 
+  void
+  fillPacketWithPossibleSplitsMessage(Packet &packet, const Position &position);
+
+  void fillPacketWithSplitMessage(Packet &packet, Position &from, Position &to1,
+                                  Position &to2);
+
 private:
   //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
   //name and the corresponding message). After the function ends, the ptr_instruction points to this
@@ -71,6 +77,9 @@ private:
 
   void fillClientInstructionWithPossibleMoves(Socket &socket,
                                               std::shared_ptr<RemoteClientInstruction> &sharedPtr);
+
+  void fillClientInstructionWithPossibleSplits(Socket &socket,
+                                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

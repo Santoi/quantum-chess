@@ -11,8 +11,9 @@ class EventHandlerThread : public Thread {
 private:
   std::atomic<bool> open;
   Game &game;
-  bool split, merge, move;
-  PixelCoordinate last;
+  bool split, merge, first_click, second_click;
+  PixelCoordinate penultimate_click;
+  PixelCoordinate last_click;
   SDL_Event event;
 
   void handleKeyDown();

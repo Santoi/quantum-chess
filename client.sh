@@ -1,5 +1,2 @@
-./build/src/client/client d43333333.asuscomm.com 3643
-
-
-
+./build/src/client/client localhost 7777
 

@@ -87,7 +87,7 @@ void Packet::expandUntilMatchSize(const uint32_t &size) {
 }
 
 void Packet::expand() {
-  array.resize(array.size() + PREDEFINED_SIZE_BLOCK);
+  array.resize(array.size() * 1.5);
 }
 
 void Packet::resetSent() {

@@ -28,7 +28,7 @@ void ServerProtocol::sendMatchesInfo(Socket &socket,
       changeNumberToBigEndianAndAddToPacket(packet,
                                             (uint16_t) client_data->id);
       addStringAndItsLengthToPacket(packet, client_data->name);
-      addNumber8ToPacket(packet, client_data->id);
+      addNumber8ToPacket(packet, client_data->role);
     }
   }
   socket.send(packet);
@@ -50,7 +50,6 @@ uint16_t ServerProtocol::receiveChosenGame(Socket &socket) {
 ClientData::Role ServerProtocol::receivePlayerRole(Socket &socket,
                                                    const std::list<ClientData::Role> &roles) {
   auto role = (ClientData::Role) getNumber8FromSocket(socket);
-  std::cout << "role" << role << std::endl;
   if (std::find(roles.begin(), roles.end(), role) != roles.end())
     return role;
   throw std::runtime_error("invalid role");

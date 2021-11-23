@@ -1,4 +1,5 @@
 #include "event_handler_thread.h"
+#include "../game/chess_exception.h"
 #include <iostream>
 #include <list>
 
@@ -65,35 +66,40 @@ void EventHandlerThread::handleKeyUp() {
 }
 
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
-  PixelCoordinate pixel(mouse.x, mouse.y);
-  if (!game.isPixelInBoard(pixel))
-    return;
+  try {
+    PixelCoordinate pixel(mouse.x, mouse.y);
+    if (!game.isPixelInBoard(pixel))
+      return;
 
-  std::list<Position> coords;
-  for (size_t i = 0; i < 8; i++) {
-    Position pos(0, i);
-    coords.push_back(pos);
-  }
-  /*
-  if (split) {
-    // TODO: notify split
-    game.splitTiles(coords);
-  } else if (merge) {
-    // TODO: notify merge
-    game.moveTiles(coords);
-  }  {
-    // TODO: notify move
-    game.askMoveTiles(pixel);
-  }*/
-  if (!move) {
-    game.askMoveTiles(pixel);
-  }
+    std::list<Position> coords;
+    for (size_t i = 0; i < 8; i++) {
+      Position pos(0, i);
+      coords.push_back(pos);
+    }
+    /*
+    if (split) {
+      // TODO: notify split
+      game.splitTiles(coords);
+    } else if (merge) {
+      // TODO: notify merge
+      game.moveTiles(coords);
+    }  {
+      // TODO: notify move
+      game.askMoveTiles(pixel);
+    }*/
+    if (!move) {
+      game.askMoveTiles(pixel);
+    }
 
-  if (move) {
-    game.moveChessman(last, pixel);
-    game.setDefaultBoard();
-  } else {
-    last(pixel.x(), pixel.y());
+    if (move) {
+      game.moveChessman(last, pixel);
+      game.setDefaultBoard();
+    } else {
+      last(pixel.x(), pixel.y());
+    }
+    move = !move;
   }
-  move = !move;
+  catch (const ChessException &e) {
+    std::cerr << e.what() << std::endl;
+  }
 }

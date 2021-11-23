@@ -22,8 +22,9 @@ int main_drawer(BlockingQueue<RemoteClientInstruction> &send_queue) {
   return 0;
 }
 
-int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstruction> &send_queue) {
-  Game game(window, send_queue);
+int game(Window &window, Renderer &renderer,
+         BlockingQueue<RemoteClientInstruction> &send_queue) {
+  Game game(window, send_queue, ClientData::ROLE_WHITE);
 
   unsigned int prev_ticks = SDL_GetTicks();
   bool running = true;

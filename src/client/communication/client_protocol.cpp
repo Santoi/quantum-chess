@@ -24,9 +24,8 @@ ClientProtocol::receiveMatchesInfo(Socket &socket) {
       uint16_t client_id = getNumber16FromSocket(socket);
       std::string client_name;
       getMessageFromSocket(socket, client_name);
-      bool is_player = getNumber8FromSocket(socket);
-      ClientData data(client_id, client_name, ClientData::ROLE_BLACK);
-      uint16_t id = data.id;
+      auto role = (ClientData::Role) getNumber8FromSocket(socket);
+      ClientData data(client_id, client_name, role);
       client_data_vector.push_back(std::move(data));
     }
     matches_info.insert(

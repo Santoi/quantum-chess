@@ -15,7 +15,10 @@ void MovementInstruction::makeActionAndNotifyAllListeningQueues(
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
   // TODO validar color, permisos, etc
   try {
-    match.getBoard().move(initial, final);
+    if (instructor_data.role == ClientData::ROLE_SPECTATOR)
+      throw ChessException("you cannot move been spectator");
+    match.getBoard().move(initial, final,
+                          instructor_data.role == ClientData::ROLE_WHITE);
   }
   catch (const ChessException &e) {
     ChessExceptionInstruction instruction(instructor_data, e.what());

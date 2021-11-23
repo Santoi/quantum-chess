@@ -25,9 +25,20 @@ uint16_t Client::getMatchesInfo(Socket &client_socket) {
     std::vector<ClientData> &client_data = it->second;
     for (auto it_match = client_data.begin();
          it_match != client_data.end(); ++it_match) {
-      char playing = (it_match->role) ? 'p' : 'o';
+      char role = ' ';
+      switch (it_match->role) {
+        case ClientData::ROLE_WHITE:
+          role = 'w';
+          break;
+        case ClientData::ROLE_BLACK:
+          role = 'b';
+          break;
+        case ClientData::ROLE_SPECTATOR:
+          role = 'o';
+          break;
+      }
       std::cout << it_match->name << "#" << it_match->id << "("
-                << playing << "), ";
+                << role << "), ";
     }
     std::cout << std::endl;
     last_id = it->first;
@@ -62,17 +73,18 @@ void Client::associateClientWithARunningMatch(Socket &socket) {
 void Client::welcomeClientAndAskForNickName() {
   std::cout << "Bienvenido a Quantum Chess. Por favor, ingresá tu nombre para "
                "comenzar a jugar." << std::endl;
-  std::cin >> clients_nick_name;
-  std::cout << "¡Qué tal, " << this->clients_nick_name << "! ¿Listo para jugar?"
+  std::cin >> client_nick_name;
+  std::cout << "¡Qué tal, " << this->client_nick_name << "! ¿Listo para jugar?"
             << std::endl;
 }
 
 void Client::setUpClientsDataInServer(Socket &socket) {
   this->associateClientWithARunningMatch(socket);
   ClientProtocol protocol;
-  protocol.sendClientsNickName(socket, this->clients_nick_name);
+  protocol.sendClientsNickName(socket, this->client_nick_name);
   std::list<ClientData::Role> available_roles = getAvailableRoles(socket);
   // TODO, ahora agarra el primero que haya
+  role = *available_roles.begin();
   protocol.sendChosenRole(socket, *available_roles.begin());
 }
 
@@ -90,7 +102,7 @@ void Client::execute(const char *host, const char *port,
 
   Window window;
   Renderer &renderer = window.renderer();
-  Game game(window, send);
+  Game game(window, send, role);
 
   ActionThread action_thread(received, game);
   EventHandlerThread event_handler(game);
@@ -141,7 +153,7 @@ bool Client::readCommand() {
       iss >> temp_message;
       message += temp_message + " ";
     }
-    send.push(std::make_shared<RemoteClientChatInstruction>(clients_nick_name,
+    send.push(std::make_shared<RemoteClientChatInstruction>(client_nick_name,
                                                             message));
 
   }

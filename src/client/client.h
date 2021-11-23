@@ -12,7 +12,8 @@ class Client {
 private:
   BlockingQueue<RemoteClientInstruction> received;
   BlockingQueue<RemoteClientInstruction> send;
-  std::string clients_nick_name;
+  std::string client_nick_name;
+  ClientData::Role role;
 
 public:
   Client() = default;

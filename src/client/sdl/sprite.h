@@ -1,0 +1,10 @@
+#ifndef QUANTUM_CHESS_PROJ_SPRITE_H
+#define QUANTUM_CHESS_PROJ_SPRITE_H
+
+
+class sprite {
+
+};
+
+
+#endif //QUANTUM_CHESS_PROJ_SPRITE_H

@@ -4,8 +4,10 @@ set(This client)
 
 project(${This} C CXX)
 
-file(GLOB Sources "*.cpp" "*/*.cpp")
-file(GLOB Headers "*.h" "*/*.h")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
+file(GLOB Sources "*.cpp" "*/*.cpp" "*/*/*.cpp")
+file(GLOB Headers "*.h" "*/*.h" "*/*/*.h")
 
 include(FindPkgConfig)
 

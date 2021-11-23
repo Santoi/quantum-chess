@@ -85,3 +85,18 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
   }
   return true;
 }
+
+bool EventHandler::writeMessage(Renderer &renderer, TextSprite &text) {
+  while (SDL_PollEvent(&event)) {
+    switch (event.type) {
+      case SDL_QUIT: {
+        return false;
+      }
+    }
+    renderer.renderer().Clear();
+    text.render();
+    renderer.renderer().Present();
+    SDL_Delay(1);
+  }
+  return true;
+}

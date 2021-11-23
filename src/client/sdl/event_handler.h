@@ -15,6 +15,7 @@ public:
   EventHandler();
   // Event loop
   bool handleEvents(Scene &scene, Board &board);
+  bool writeMessage(Renderer &renderer, TextSprite &text);
 //  void handleMouse();
 };
 

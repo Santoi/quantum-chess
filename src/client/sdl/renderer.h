@@ -3,10 +3,12 @@
 
 #include "window.h"
 #include "texture_sprite.h"
+#include "chat/text_sprite.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
 class TextureSprite;
+class TextSprite;
 class Scene;
 
 class Renderer {
@@ -24,6 +26,7 @@ public:
   void copy(TextureSprite &sprite, int x, int y);
   void copy(TextureSprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
             int width, int height);
+  void copy(TextSprite &sprite, int x, int y);
   int getMinDimension();
 };
 

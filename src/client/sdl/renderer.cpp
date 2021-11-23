@@ -22,6 +22,10 @@ void Renderer::copy(TextureSprite &sprite, int x_src, int y_src, int x_dst,
   renderer_.Copy(sprite.sprite(), src, dest);
 }
 
+void Renderer::copy(TextSprite &sprite, int x, int y) {
+  renderer_.Copy(sprite.sprite());
+}
+
 void Renderer::render(Scene &scene) {
   renderer_.Clear();
   scene.setScale(getMinDimension());

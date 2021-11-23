@@ -9,8 +9,7 @@ EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
 void EventHandlerThread::run() {
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (true) {
-    if (!SDL_PollEvent(&event))
-      continue;
+    SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT: {
         open = false;

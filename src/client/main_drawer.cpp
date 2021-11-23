@@ -3,9 +3,9 @@
 #include "sdl/renderer.h"
 #include "sdl/sprite.h"
 #include "game/chessman.h"
-#include "game/client_board.h"
+#include "game/board.h"
 #include "game/game.h"
-#include "sdl/event_handler.h"
+#include "sdl/event_handler_thread.h"
 #include "../common/src/blocking_queue.h"
 #include "communication/remote_client_instructions.h"
 #include <SDL2/SDL.h>
@@ -26,8 +26,6 @@ int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstructi
   Game game(window, send_queue);
 
   unsigned int prev_ticks = SDL_GetTicks();
-
-  EventHandler eventHandler;
   bool running = true;
   // Main loop
   while (running) {
@@ -37,7 +35,7 @@ int game(Window &window, Renderer &renderer, BlockingQueue<RemoteClientInstructi
     unsigned int frame_delta = frame_ticks - prev_ticks;
     prev_ticks = frame_ticks;
 
-    running = eventHandler.handleEvents(game);
+    //running = eventHandler.run(game);
 
     // Show rendered frame
     renderer.render(game);

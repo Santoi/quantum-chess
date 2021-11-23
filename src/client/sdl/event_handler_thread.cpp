@@ -1,15 +1,20 @@
-#include "event_handler.h"
+#include "event_handler_thread.h"
 #include <iostream>
 #include <list>
 
-EventHandler::EventHandler(): split(false), merge(false), move(false) {}
+EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
+                                                     split(false), merge(false),
+                                                     move(false) {}
 
-bool EventHandler::handleEvents(Game &game) {
+void EventHandlerThread::run() {
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
-  while (SDL_PollEvent(&event)) {
+  while (true) {
+    if (!SDL_PollEvent(&event))
+      continue;
     switch (event.type) {
       case SDL_QUIT: {
-        return false;
+        open = false;
+        return;
       }
       case SDL_KEYDOWN: {
         switch (event.key.keysym.sym) {
@@ -28,7 +33,8 @@ bool EventHandler::handleEvents(Game &game) {
             break;
           }
           case SDLK_q: // TODO: temporary
-            return false;
+            open = false;
+            return;
         }
         break;
       }
@@ -86,5 +92,8 @@ bool EventHandler::handleEvents(Game &game) {
       }
     }
   }
-  return true;
+}
+
+bool EventHandlerThread::isOpen() {
+  return open;
 }

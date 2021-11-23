@@ -4,7 +4,7 @@
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
 #include "../sdl/window.h"
-#include "client_board.h"
+#include "board.h"
 #include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"

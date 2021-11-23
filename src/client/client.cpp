@@ -37,9 +37,7 @@ uint16_t Client::getMatchesInfo(Socket &client_socket) {
 
 void Client::askForMatchNumber(Socket &socket, uint16_t first_empty_id) {
   uint16_t game_number;
-  do {
-    std::cin >> game_number;
-  } while ((game_number < 0) || game_number > first_empty_id);
+  std::cin >> game_number;
   ClientProtocol protocol;
   protocol.sendChosenGame(socket, game_number);
   std::string aux;
@@ -76,10 +74,7 @@ void Client::execute(const char *host, const char *port,
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
   setUpClientsDataInServer(socket);
-
-  // TODO modificar despues (hacer que el juego reciba la window y setee el board).
-
-  // TODO GAME PROTEGIDO
+  
   Window window;
   Renderer &renderer = window.renderer();
   Game game(window, send);

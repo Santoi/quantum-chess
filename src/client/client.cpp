@@ -25,8 +25,8 @@ uint16_t Client::getMatchesInfo(Socket &client_socket) {
     std::vector<ClientData> &client_data = it->second;
     for (auto it_match = client_data.begin();
          it_match != client_data.end(); ++it_match) {
-      char playing = (it_match->isPlayer()) ? 'p' : 'o';
-      std::cout << it_match->getName() << "#" << it_match->getId() << "("
+      char playing = (it_match->role) ? 'p' : 'o';
+      std::cout << it_match->name << "#" << it_match->id << "("
                 << playing << "), ";
     }
     std::cout << std::endl;
@@ -38,7 +38,7 @@ uint16_t Client::getMatchesInfo(Socket &client_socket) {
   return last_id;
 }
 
-void Client::askForMatchNumber(Socket &socket, uint16_t first_empty_id) {
+void Client::askPlayerForMatchNumber(Socket &socket, uint16_t first_empty_id) {
   uint16_t game_number;
   std::cin >> game_number;
   ClientProtocol protocol;
@@ -47,9 +47,16 @@ void Client::askForMatchNumber(Socket &socket, uint16_t first_empty_id) {
   std::getline(std::cin, aux); //empty cin buffer
 }
 
+std::list<ClientData::Role> Client::getAvailableRoles(Socket &socket) {
+  std::list<ClientData::Role> available_roles;
+  ClientProtocol protocol;
+  protocol.getAvailableRoles(socket, available_roles);
+  return available_roles;
+}
+
 void Client::associateClientWithARunningMatch(Socket &socket) {
   uint16_t first_empty_id = this->getMatchesInfo(socket) + 1;
-  askForMatchNumber(socket, first_empty_id);
+  askPlayerForMatchNumber(socket, first_empty_id);
 }
 
 void Client::welcomeClientAndAskForNickName() {
@@ -64,6 +71,9 @@ void Client::setUpClientsDataInServer(Socket &socket) {
   this->associateClientWithARunningMatch(socket);
   ClientProtocol protocol;
   protocol.sendClientsNickName(socket, this->clients_nick_name);
+  std::list<ClientData::Role> available_roles = getAvailableRoles(socket);
+  // TODO, ahora agarra el primero que haya
+  protocol.sendChosenRole(socket, *available_roles.begin());
 }
 
 
@@ -104,7 +114,6 @@ void Client::execute(const char *host, const char *port,
     // Frame limiter: sleep for a little bit to not eat 100% of CPU
     if (frame_delta < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE);
-
   }
 
   received.close();
@@ -150,3 +159,7 @@ bool Client::readCommand() {
   }
   return false;
 }
+
+
+
+

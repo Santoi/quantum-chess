@@ -26,7 +26,7 @@ ClientHandler::ClientHandler(ClientHandler &&other_client) noexcept:
         client_sender(std::move(other_client.client_sender), client_socket) {
 }
 
-void ClientHandler::startThreadedClient(Match &match) {
+void ClientHandler::start() {
   client_receiver.start();
   client_sender.start();
 }
@@ -39,7 +39,6 @@ void ClientHandler::stop() {
 void ClientHandler::join() {
   this->client_receiver.join();
   this->client_sender.join();
-  //client_is_active = false;
 }
 
 const ClientData &ClientHandler::getData() const {

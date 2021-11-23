@@ -68,6 +68,12 @@ public:
   fillPacketWithPossibleMoves(Packet &packet,
                               const std::list<Position> &positions);
 
+  void
+  sendAvailableRoles(Socket &socket, const std::list<ClientData::Role> &roles);
+
+  ClientData::Role receivePlayerRole(Socket &socket,
+                                     const std::list<ClientData::Role> &roles);
+
 private:
   //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.
   //By the end of the function, the instruc_ptr points to this new ChatInstruction object.

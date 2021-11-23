@@ -46,12 +46,11 @@ private:
   uint16_t getMatchesInfo(Socket &client_socket);
 
   //Asks the client to write to stdin the chosen match.
-  void askForMatchNumber(Socket &socket, uint16_t first_empty_id);
-
-  //Saves what is in standard input into message..
-  void readFromStandardInput(std::string &message);
+  void askPlayerForMatchNumber(Socket &socket, uint16_t first_empty_id);
 
   bool readCommand();
+
+  std::list<ClientData::Role> getAvailableRoles(Socket &socket);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_H

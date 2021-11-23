@@ -5,11 +5,6 @@
 #include "../../common/src/socket.h"
 #include "client_handler.h"
 
-#define SINGLE_THREADED_MATCH_AND_CLIENTS 1
-#define SINGLE_THREADED_MATCH_AND_THREADED_CLIENTS 2
-#define THREADED_MATCH_AND_THREADED_CLIENTS 3
-#define MAX_CLIENTS 3
-
 class Server {
 private:
   Socket acceptor_socket;

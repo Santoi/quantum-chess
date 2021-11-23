@@ -15,8 +15,7 @@ uint16_t MatchesRepository::createNewMatch() {
   return created_matches++;
 }
 
-uint16_t MatchesRepository::getClientChosenMatch(Socket &client_socket,
-                                                 bool threaded_match) {
+uint16_t MatchesRepository::getClientChosenMatch(Socket &client_socket) {
   ServerProtocol protocol;
   protocol.sendMatchesInfo(client_socket, ptr_matches);
   uint16_t match_number = protocol.receiveChosenGame(client_socket);
@@ -46,7 +45,7 @@ void MatchesRepository::joinInactiveMatches() {
 
 void
 MatchesRepository::addClientToMatchCreatingIfNeeded(Socket &&client_socket) {
-  uint16_t match = getClientChosenMatch(client_socket, true);
+  uint16_t match = getClientChosenMatch(client_socket);
   if (!ptr_matches.count(match))
     match = createNewMatch();
   ptr_matches[match]->addClientToMatch(std::move(client_socket),

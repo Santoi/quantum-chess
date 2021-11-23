@@ -5,23 +5,23 @@
 #include "instruction.h"
 #include "../../../common/src/blocking_queue.h"
 
-class LoadBoardInstruction: public Instruction {
-    std::vector<Position> positions;
-    std::vector<char> characters;
-    std::vector<bool> colors;
-    std::vector<double> probabilities;
+class LoadBoardInstruction : public Instruction {
+  std::vector<Position> positions;
+  std::vector<char> characters;
+  std::vector<bool> colors;
+  std::vector<double> probabilities;
 
 public:
-    LoadBoardInstruction();
+  LoadBoardInstruction();
 
-    void makeActionAndNotifyAllListeningQueues(
-            std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-            std::map<uint16_t, ClientHandler>& clients,
-            Board & board, BlockingQueue<Instruction> & match_updates_queue) override;
+  void makeActionAndNotifyAllListeningQueues(
+          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
+          Match &match,
+          BlockingQueue<Instruction> &match_updates_queue) override;
 
-    void
-    fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                     const ClientData &client_receiver_data) override;
+  void
+  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
+                                   const ClientData &client_receiver_data) override;
 
 
 };

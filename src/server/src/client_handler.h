@@ -1,17 +1,12 @@
 #ifndef QUANTUM_CHESS_PROJ_CLIENT_HANDLER_H
 #define QUANTUM_CHESS_PROJ_CLIENT_HANDLER_H
 
-
 #include <thread>
 #include <memory>
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
 #include "clients_threads.h"
-#include "match.h"
 #include "server_protocol.h"
-
-
-class Match;
 
 class Instruction;
 
@@ -22,7 +17,6 @@ private:
   const ClientData client_data;
   ClientHandlersReceiver client_receiver;
   ClientHandlersSender client_sender;
-
 
 public:
   ClientHandler() = delete;
@@ -39,15 +33,12 @@ public:
   //client_is_active.
   ClientHandler(ClientHandler &&other_client) noexcept;
 
-  //Starts ClientHandler's threads by calling the private start method. If match has its own thread
-  //(threaded_match is true), then the function ends. If threaded_match is false, while the boolean
-  //client_is_active is true, the match is asked to check updates coming from the receiver's thread
-  //and notify updates to the sender's thread.
-  void startThreadedClient(Match &match);
+  //Starts ClientHandler's threads by calling the private start method.
+  void start();
 
   const ClientData &getData() const;
 
-  //Joins (if joinable) both the handler's receiver and sender threads. Object's boolean
+  //Joins both the handler's receiver and sender threads. Object's boolean
   //client_is_active is set to true.
   void join();
 

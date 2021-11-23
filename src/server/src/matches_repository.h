@@ -34,14 +34,13 @@ public:
   void joinMatches();
 
 private:
-  //Creates a new match and increases the created_matches number by one. If the boolean
-  //threaded_match is true, then the new match is asked to start execution.
+  //Creates a new match and increases the created_matches number by one.
   uint16_t createNewMatch();
 
   //Following the protocol, it sends the number of games running to the remote client,
   //and receives the client's chosen game. If the client wants to play in a new match, a new match
-  //is created (using the boolean threaded_match).
-  uint16_t getClientChosenMatch(Socket &client_socket, bool threaded_match);
+  //is created.
+  uint16_t getClientChosenMatch(Socket &client_socket);
 };
 
 #endif //QUANTUM_CHESS_PROJ_MATCHES_REPOSITORY_H

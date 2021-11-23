@@ -1,7 +1,6 @@
 #ifndef QUANTUM_CHESS_PROJ_MATCH_H
 #define QUANTUM_CHESS_PROJ_MATCH_H
 
-
 #include <list>
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
@@ -9,8 +8,6 @@
 #include "quantum_chess/board.h"
 #include "instructions/instruction.h"
 #include "client_handler.h"
-
-class ClientHandler;
 
 class Instruction;
 
@@ -30,8 +27,7 @@ public:
   //match. The new match also copies the number of accepted clients of the other_match.
   Match(Match &&other_match);
 
-  //Adds client to list of clients and nick names repository, and calls the client to start with threads,
-  //also sending the client the boolean threaded_match.
+  //Adds client to list of clients and nick names repository, and calls the client to start.
   void addClientToMatch(Socket &&client_socket, uint16_t client_id);
 
   //Pops from updates_queue an instruction, and asks this instruction to makeActionAndNotifyAllListeningQueues.
@@ -47,6 +43,11 @@ public:
 
   std::vector<const ClientData *> getClientsData() const;
 
+  void deleteClientWithId(uint16_t client_id);
+
+
+  Board &getBoard();
+
 protected:
   //Calls checkAndNotifyUpdates until the match's ExitInstruction is popped and asked to
   //makeActionAndNotifyAllListeningQueues. This throws a running exception that is catched and
@@ -60,6 +61,8 @@ private:
                                       ClientData &client_data);
 
   ClientData askClientData(Socket &socket, uint16_t client_id);
+
+  std::list<ClientData::Role> getAvailableRoles();
 };
 
 

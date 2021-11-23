@@ -8,6 +8,7 @@
 #include "instructions/possible_moves_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <algorithm>
 
 #define ONE_BYTE 1
 #define TWO_BYTES 2
@@ -25,16 +26,34 @@ void ServerProtocol::sendMatchesInfo(Socket &socket,
                                           (uint16_t) client_data_repository.size());
     for (auto &client_data: client_data_repository) {
       changeNumberToBigEndianAndAddToPacket(packet,
-                                            (uint16_t) client_data->getId());
-      addStringAndItsLengthToPacket(packet, client_data->getName());
-      addNumber8ToPacket(packet, client_data->isPlayer());
+                                            (uint16_t) client_data->id);
+      addStringAndItsLengthToPacket(packet, client_data->name);
+      addNumber8ToPacket(packet, client_data->id);
     }
   }
   socket.send(packet);
 }
 
+void ServerProtocol::sendAvailableRoles(Socket &socket,
+                                        const std::list<ClientData::Role> &roles) {
+  Packet packet;
+  addNumber8ToPacket(packet, roles.size());
+  for (auto &role: roles)
+    addNumber8ToPacket(packet, role);
+  socket.send(packet);
+}
+
 uint16_t ServerProtocol::receiveChosenGame(Socket &socket) {
   return (uint16_t) (this->getNumber16FromSocket(socket));
+}
+
+ClientData::Role ServerProtocol::receivePlayerRole(Socket &socket,
+                                                   const std::list<ClientData::Role> &roles) {
+  auto role = (ClientData::Role) getNumber8FromSocket(socket);
+  std::cout << "role" << role << std::endl;
+  if (std::find(roles.begin(), roles.end(), role) != roles.end())
+    return role;
+  throw std::runtime_error("invalid role");
 }
 
 void ServerProtocol::getNickName(Socket &socket, std::string &nick_name) {
@@ -150,6 +169,10 @@ void ServerProtocol::fillPacketWithExitInfo(Packet &packet,
   packet.addByte('e');
   this->addStringAndItsLengthToPacket(packet, nick_name);
 }
+
+
+
+
 
 
 

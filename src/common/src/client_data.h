@@ -1,24 +1,23 @@
 #ifndef QUANTUM_CHESS_PROJ_CLIENT_DATA_H
 #define QUANTUM_CHESS_PROJ_CLIENT_DATA_H
 
-
 #include <cstdint>
 #include <string>
 
-class ClientData {
-    uint16_t id;
-    std::string name;
-    bool player;
-    bool white;
-
+typedef struct ClientData {
 public:
-    ClientData(uint16_t id_, const std::string & name_, bool player_, bool white_);
+  typedef enum {
+    ROLE_WHITE,
+    ROLE_BLACK,
+    ROLE_SPECTATOR
+  } Role;
 
-    uint16_t getId() const;
-    const std::string & getName() const;
-    bool isPlayer() const;
-    bool isWhite() const;
-};
+  const uint16_t id;
+  const std::string name;
+  const Role role;
+
+  ClientData(uint16_t id_, const std::string &name_, Role role_);
+} ClientData;
 
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_DATA_H

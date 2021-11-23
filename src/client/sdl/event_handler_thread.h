@@ -15,12 +15,17 @@ private:
   PixelCoordinate last;
   SDL_Event event;
 
+  void handleKeyDown();
+
+  void handleKeyUp();
+
+  void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
+
 public:
   explicit EventHandlerThread(Game &game);
 
   // Event loop
   void run() override;
-//  void handleMouse();
 
   bool isOpen();
 };

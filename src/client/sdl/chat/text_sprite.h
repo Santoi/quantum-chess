@@ -1,16 +1,22 @@
 #ifndef QUANTUM_CHESS_PROJ_TEXT_SPRITE_H
 #define QUANTUM_CHESS_PROJ_TEXT_SPRITE_H
 
-#include "../sdl/texture_sprite.h"
+//#include "text_entry.h"
+#include "../renderer.h"
+#include "../sprite.h"
 #include "font.h"
-#include "text_entry.h"
-#include "../sdl/renderer.h"
+#include <SDL2pp/SDL2pp.hh>
 
-class TextSprite: public TextureSprite {
+class Renderer;
+class Font;
+
+class TextSprite: public Sprite {
 private:
-  TextEntry text;
+  SDL2pp::Texture sprite_;
 public:
-  TextSprite(Renderer &renderer, Font &font);
+  TextSprite(Renderer &renderer, Font &font, const std::string &text);
+  void render();
+  SDL2pp::Texture & sprite();
 
 };
 

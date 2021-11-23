@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 
 #include "renderer.h"
+#include "sprite.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <string>
 
@@ -9,10 +10,7 @@
 
 class Renderer;
 
-class TextureSprite {
-protected:
-  Renderer &renderer;
-
+class TextureSprite: public Sprite {
 private:
   SDL2pp::Texture sprite_;
   int width_, height_;

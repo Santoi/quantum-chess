@@ -6,7 +6,7 @@
 #include <string>
 
 TextureSprite::TextureSprite(Renderer &renderer, const std::string &file_name, int width,
-                             int height): renderer(renderer),
+                             int height): Sprite(renderer),
                sprite_(renderer.renderer(), file_name),
                width_(width), height_(height) {}
 

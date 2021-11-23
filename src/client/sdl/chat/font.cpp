@@ -1,9 +1,14 @@
 #include "font.h"
-#include "../sdl/renderer.h"
+#include "../renderer.h"
+
+#define WHITE {255, 255, 255, 255}
+#define BLACK {0, 0, 0, 255}
 
 Font::Font(const std::string &font, int ptx, int index): font_(font,
-                                                               ptx, index) {}
+                                                               ptx,
+                                                               index),
+                                                         color(WHITE) {}
 
-void Font::renderText(Renderer &renderer, const std::string &text) {
-  font_.RenderText_Solid(text, (SDL_Color){255, 255, 255, 255});
+SDL2pp::Surface Font::renderText(const std::string &text) {
+  return font_.RenderText_Solid(text, color);
 }

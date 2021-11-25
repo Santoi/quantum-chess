@@ -8,7 +8,8 @@
 #include "../common/src/client_data.h"
 #include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
-
+#include <SDL2pp/Mixer.hh>
+#include "sdl/sound/sound_handler.h"
 
 #define FRAME_RATE 60
 
@@ -91,8 +92,9 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
-  SDL2pp::SDL sdl(SDL_INIT_VIDEO);
-
+  SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+  SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
+  SoundHandler sound(mixer);
   welcomeClientAndAskForNickName();
   Socket socket = Socket::createAConnectedSocket(host, port);
 

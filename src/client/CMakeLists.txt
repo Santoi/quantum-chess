@@ -4,8 +4,8 @@ set(This client)
 
 project(${This} C CXX)
 
-file(GLOB Sources "*.cpp" "*/*.cpp")
-file(GLOB Headers "*.h" "*/*.h")
+file(GLOB Sources "*.cpp" "*/*.cpp" "*/*/*.cpp")
+file(GLOB Headers "*.h" "*/*.h" "*/*/*.h")
 
 include(FindPkgConfig)
 

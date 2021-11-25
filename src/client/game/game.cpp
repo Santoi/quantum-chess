@@ -13,10 +13,10 @@
 
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_) :
+           ClientData::Role role_, SoundHandler& sound_handler_) :
         scale(window.renderer().getMinDimension()),
         board(window.renderer(), "img/stars.jpg", scale, scale),
-        send_queue(send_queue_), mutex(), role(role_) {}
+        send_queue(send_queue_), mutex(), role(role_), sound_handler(sound_handler_) {}
 
 void Game::loadSprite(Sprite &sprite, int x, int y) {
   std::lock_guard<std::mutex> lock_guard(mutex);

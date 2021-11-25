@@ -8,13 +8,14 @@
 #include "sdl/event_handler_thread.h"
 #include "../common/src/blocking_queue.h"
 #include "communication/remote_client_instructions.h"
+#include "sdl/sound/sound_handler.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2pp/SDL2pp.hh>
 
 // TODO: drawer thread
 int main_drawer(BlockingQueue<RemoteClientInstruction> &send_queue) {
-  SDL2pp::SDL sdl(SDL_INIT_VIDEO);
+  SDL2pp::SDL sdl(SDL_INIT_VIDEO|SDL_INIT_AUDIO);
 
   Window window;
   Renderer &renderer = window.renderer();
@@ -24,7 +25,9 @@ int main_drawer(BlockingQueue<RemoteClientInstruction> &send_queue) {
 
 int game(Window &window, Renderer &renderer,
          BlockingQueue<RemoteClientInstruction> &send_queue) {
-  Game game(window, send_queue, ClientData::ROLE_WHITE);
+  SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
+  SoundHandler sound_handler(mixer);
+  Game game(window, send_queue, ClientData::ROLE_WHITE, sound_handler);
 
   unsigned int prev_ticks = SDL_GetTicks();
   bool running = true;

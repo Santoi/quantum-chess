@@ -17,17 +17,17 @@ public:
 
     explicit SoundHandler(SDL2pp::Mixer& mixer);
 
-    void playMusic();
+    void playMusic() const;
 
-    void stopMusic();
+    void stopMusic() const;
 
-    void playSplitSound();
+    void playSplitSound() const;
 
-    void playMovementSound();
+    void playMovementSound() const;
 
-    void playTakenPieceSound();
+    void playTakenPieceSound() const;
 
-    void playNewClientSound();
+    void playNewClientSound() const;
 
 };
 

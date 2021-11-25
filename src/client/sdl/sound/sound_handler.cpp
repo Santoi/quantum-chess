@@ -11,27 +11,27 @@ SoundHandler::SoundHandler(SDL2pp::Mixer& mixer)
     chunks.push_back(std::move(SDL2pp::Chunk("21_sound_effects_and_music/beat.wav")));
 }
 
-void SoundHandler::playMusic() {
+void SoundHandler::playMusic() const {
     mixer.PlayMusic(music);
 }
 
-void SoundHandler::stopMusic() {
+void SoundHandler::stopMusic() const {
     mixer.PauseMusic();
 }
 
-void SoundHandler::playSplitSound() {
+void SoundHandler::playSplitSound() const {
     mixer.PlayChannel(-1, chunks[0]);
 }
 
-void SoundHandler::playMovementSound() {
+void SoundHandler::playMovementSound() const {
     mixer.PlayChannel(-1, chunks[1]);
 }
 
-void SoundHandler::playTakenPieceSound() {
+void SoundHandler::playTakenPieceSound() const {
     mixer.PlayChannel(-1, chunks[2]);
 }
 
-void SoundHandler::playNewClientSound() {
+void SoundHandler::playNewClientSound() const {
 
 }
 

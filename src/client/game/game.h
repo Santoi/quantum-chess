@@ -27,11 +27,11 @@ private:
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
-  SoundHandler& sound_handler;
+  const SoundHandler& sound_handler;
 
 public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, SoundHandler& sound_handler);
+       ClientData::Role role_, const SoundHandler& sound_handler);
 
   void setScale(int scale_);
 

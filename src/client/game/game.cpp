@@ -13,7 +13,7 @@
 
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_, SoundHandler& sound_handler_) :
+           ClientData::Role role_, const SoundHandler& sound_handler_) :
         scale(window.renderer().getMinDimension()),
         board(window.renderer(), "img/stars.jpg", scale, scale),
         send_queue(send_queue_), mutex(), role(role_), sound_handler(sound_handler_) {}

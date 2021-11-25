@@ -9,6 +9,7 @@
 #include "../communication/remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/client_data.h"
+#include "../sdl/sound/sound_handler.h"
 #include <list>
 #include <map>
 #include <mutex>
@@ -26,10 +27,11 @@ private:
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
+  const SoundHandler& sound_handler;
 
 public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_);
+       ClientData::Role role_, const SoundHandler& sound_handler);
 
   void setScale(int scale_);
 
@@ -61,6 +63,12 @@ public:
 
   void splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
                      PixelCoordinate &to2);
+
+  void playSplitSound();
+
+  void playMovementSound();
+
+  void playTakenPieceSound();
 };
 
 

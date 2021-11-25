@@ -13,10 +13,10 @@
 
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_) :
+           ClientData::Role role_, const SoundHandler& sound_handler_) :
         scale(window.renderer().getMinDimension()),
         board(window.renderer(), "img/stars.jpg", scale, scale),
-        send_queue(send_queue_), mutex(), role(role_) {}
+        send_queue(send_queue_), mutex(), role(role_), sound_handler(sound_handler_) {}
 
 void Game::loadSprite(Sprite &sprite, int x, int y) {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -141,4 +141,14 @@ void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
   board.load(chessman_data_vector);
 }
 
+void Game::playSplitSound() {
+    sound_handler.playSplitSound();
+}
 
+void Game::playMovementSound() {
+    sound_handler.playMovementSound();
+}
+
+void Game::playTakenPieceSound() {
+    sound_handler.playTakenPieceSound();
+}

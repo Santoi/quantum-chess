@@ -73,7 +73,6 @@ void Board::merge(const Position &initial1, const Position &initial2,
     throw ChessException("no hay ninguna pieza alli");
   if (chessman_1 != chessman_2)
     throw ChessException("se esta tratando de unir dos piezas distintas");
-  // TODO chequear el otro? chessman ya chequea.
   if (chessman_1->isWhite() != next_white)
     throw ChessException("no es tu turno");
   chessman_1->merge(initial1, initial2, final);
@@ -93,6 +92,14 @@ std::list<Position> Board::getPossibleSplitsOf(const Position &position) {
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
     chessman->calculatePosibleSplits(position, output);
+  return output;
+}
+
+std::list<Position> Board::getPossibleMergesOf(const Position &position) {
+  std::list<Position> output;
+  Chessman *chessman = getChessmanAt(position);
+  if (chessman)
+    chessman->calculatePosibleMerges(position, output);
   return output;
 }
 

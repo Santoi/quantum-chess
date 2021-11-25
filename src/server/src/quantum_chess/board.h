@@ -76,6 +76,8 @@ public:
               std::vector<double> &probabilities);
 
   std::list<Position> getPossibleSplitsOf(const Position &position);
+
+  std::list<Position> getPossibleMergesOf(const Position &position);
 };
 
 

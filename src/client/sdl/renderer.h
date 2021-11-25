@@ -8,7 +8,9 @@
 #include <algorithm>
 
 class TextureSprite;
+
 class TextSprite;
+
 class Scene;
 
 class Renderer {
@@ -17,16 +19,20 @@ private:
 
 public:
   explicit Renderer(Window &window);
-  SDL2pp::Renderer& renderer();
+
+  SDL2pp::Renderer &renderer();
 
   void render(Scene &scene);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)
   void copy(TextureSprite &sprite, int x, int y);
+
   void copy(TextureSprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
             int width, int height);
+
   void copy(TextSprite &sprite, int x, int y);
+
   int getMinDimension();
 };
 

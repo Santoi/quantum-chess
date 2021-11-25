@@ -1,8 +1,9 @@
 #include "event_handler.h"
+#include "chat/text_entry.h"
 #include <iostream>
 #include <list>
 
-EventHandler::EventHandler(): split(false), merge(false), move(false) {}
+EventHandler::EventHandler() : split(false), merge(false), move(false) {}
 
 bool EventHandler::handleEvents(Scene &scene, Board &board) {
   PixelCoordinate dest;
@@ -86,15 +87,22 @@ bool EventHandler::handleEvents(Scene &scene, Board &board) {
   return true;
 }
 
-bool EventHandler::writeMessage(Renderer &renderer, TextSprite &text) {
+bool EventHandler::writeMessage(Renderer &renderer, TextEntry &text_entry) {
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
       case SDL_QUIT: {
         return false;
       }
+      case SDL_TEXTINPUT: {
+        text_entry.add(event.text.text);
+      }
+      case SDL_KEYDOWN: {
+        if (event.key.keysym.sym == SDLK_BACKSPACE)
+          text_entry.erase();
+      }
     }
     renderer.renderer().Clear();
-    text.render();
+    text_entry.render(240, 240);
     renderer.renderer().Present();
     SDL_Delay(1);
   }

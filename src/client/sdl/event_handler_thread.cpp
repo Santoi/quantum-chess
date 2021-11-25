@@ -35,6 +35,7 @@ bool EventHandlerThread::isOpen() {
 }
 
 void EventHandlerThread::handleKeyDown() {
+  game.playSplitSound();
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
       game.setDefaultBoard();
@@ -56,6 +57,7 @@ void EventHandlerThread::handleKeyDown() {
 }
 
 void EventHandlerThread::handleKeyUp() {
+  game.playTakenPieceSound();
   switch (event.key.keysym.sym) {
     case SDLK_LSHIFT: {
       if (!first_click)
@@ -71,6 +73,7 @@ void EventHandlerThread::handleKeyUp() {
 }
 
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
+  game.playMovementSound();
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (!game.isPixelInBoard(pixel))

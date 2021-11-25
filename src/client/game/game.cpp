@@ -141,4 +141,14 @@ void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
   board.load(chessman_data_vector);
 }
 
+void Game::playSplitSound() {
+    sound_handler.playSplitSound();
+}
 
+void Game::playMovementSound() {
+    sound_handler.playMovementSound();
+}
+
+void Game::playTakenPieceSound() {
+    sound_handler.playTakenPieceSound();
+}

@@ -63,6 +63,12 @@ public:
 
   void splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
                      PixelCoordinate &to2);
+
+  void playSplitSound();
+
+  void playMovementSound();
+
+  void playTakenPieceSound();
 };
 
 

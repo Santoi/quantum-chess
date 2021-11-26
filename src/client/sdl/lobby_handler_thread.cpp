@@ -1,8 +1,7 @@
 #include "lobby_handler_thread.h"
 
-LobbyHandlerThread::LobbyHandlerThread()
-                    :active_lobby(true) {
-
+LobbyHandlerThread::LobbyHandlerThread(Lobby& lobby_)
+                    :active_lobby(true), lobby(lobby_) {
 }
 
 
@@ -25,6 +24,8 @@ void LobbyHandlerThread::setLobbyInactive() {
 }
 
 void LobbyHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
-
+    PixelCoordinate pixel(mouse.x, mouse.y);
+    if (!lobby.pixelIsOnBottom(pixel))
+        return;
 }
 

@@ -11,6 +11,7 @@
 #include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
 #include "sdl/lobby_handler_thread.h"
+#include "sdl/lobby.h"
 
 #define FRAME_RATE 60
 
@@ -97,9 +98,11 @@ void Client::execute(const char *host, const char *port,
   SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
   SoundHandler sound_handler(mixer);
   sound_handler.playMusic();
-  
-  LobbyHandlerThread login_thread;
+  Window window;
+  Lobby lobby;
+  LobbyHandlerThread login_thread(lobby);
   login_thread.start();
+
   welcomeClientAndAskForNickName();
   login_thread.setLobbyInactive();
   login_thread.join();
@@ -109,7 +112,6 @@ void Client::execute(const char *host, const char *port,
   RemoteClientReceiver receiver_thread(socket, received);
   setUpClientsDataInServer(socket);
 
-  Window window;
   Renderer &renderer = window.renderer();
   Game game(window, send, role, sound_handler);
 

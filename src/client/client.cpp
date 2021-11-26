@@ -93,7 +93,7 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 }
 
 
-void doRenderingLoopForSceneWithHandler(Game& game, EventHandlerThread& event_handler,
+void doRenderingLoopForSceneWithHandler(Scene* scene, EventHandlerThread& event_handler,
                                         Renderer& renderer) {
     while (event_handler.isOpen()) {
         // Timing: calculate difference between this and previous frame
@@ -101,7 +101,7 @@ void doRenderingLoopForSceneWithHandler(Game& game, EventHandlerThread& event_ha
         uint32_t before_render_ticks = SDL_GetTicks();
 
         // Show rendered frame
-        renderer.render(game);
+        renderer.render(scene);
 
         uint32_t after_render_ticks = SDL_GetTicks();
         uint32_t frame_delta = after_render_ticks - before_render_ticks;
@@ -153,7 +153,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.start();
   event_handler.start();
 
-  doRenderingLoopForSceneWithHandler(game, event_handler, renderer);
+  doRenderingLoopForSceneWithHandler(&game, event_handler, renderer);
 
   received.close();
   send.close();

@@ -13,6 +13,8 @@
 
 // TODO diferenciar las que llegan de las que se van.
 
+class Game;
+
 class ClientProtocol;
 
 class ChessmanData;

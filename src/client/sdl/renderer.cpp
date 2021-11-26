@@ -21,10 +21,10 @@ void Renderer::copy(Sprite &sprite, int x_src, int y_src, int x_dst,
   renderer_.Copy(sprite.sprite(), src, dest);
 }
 
-void Renderer::render(Game &game) {
+void Renderer::render(Scene* scene) {
   renderer_.Clear();
-  game.setScale(getMinDimension());
-  game.render();
+  scene->setScale(getMinDimension());
+  scene->render();
   renderer_.Present();
 }
 

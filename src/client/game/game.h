@@ -78,6 +78,9 @@ public:
   void askEntangledTiles(PixelCoordinate &coords);
 
   void askQuantumTiles(PixelCoordinate &coords);
+
+  void mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
+                     PixelCoordinate &to);
 };
 
 

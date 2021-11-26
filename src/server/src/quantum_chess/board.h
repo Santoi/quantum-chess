@@ -64,7 +64,7 @@ public:
   void addChessmanIn(const Position &position, Chessman *chessman);
 
   void merge(const Position &initial1, const Position &initial2,
-             const Position &final);
+             const Position &final, bool player_white);
 
   bool isThere(Chessman *chessman);
 

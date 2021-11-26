@@ -179,6 +179,19 @@ void Game::splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
           std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
 }
 
+void Game::mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
+                         PixelCoordinate &to) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (role == ClientData::ROLE_SPECTATOR)
+    throw ChessException("you cannot move being spectator");
+  Position from1_, from2_, to_;
+  transformer.pixel2Position(from1, from1_, scale);
+  transformer.pixel2Position(from2, from2_, scale);
+  transformer.pixel2Position(to, to_, scale);
+  send_queue.push(
+          std::make_shared<RemoteClientMergeInstruction>(from1_, from2_, to_));
+}
+
 void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
   setDefaultBoard();
   std::lock_guard<std::mutex> lock_guard(mutex);

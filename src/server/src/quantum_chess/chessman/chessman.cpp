@@ -111,6 +111,9 @@ void Chessman::split(const Position &initial, const Position &final1,
 
 void Chessman::merge(const Position &initial1, const Position &initial2,
                      const Position &final) {
+  if (initial1 == initial2)
+    throw ChessException("cannot merge from same square");
+
   std::list<Position> posible_moves;
   calculateMoves(initial1, posible_moves);
   posible_moves.push_back(initial1);
@@ -127,9 +130,6 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
   if (final_it == posible_moves.end())
     throw ChessException("that chessman cant do that merge");
   moveValidationExceptionThrower(checkIsAValidMerge(initial2, final));
-
-  if (initial1 == initial2)
-    throw ChessException("cannot merge from same square");
 
   // Remove chessman of final places if there.
   if (board.getChessmanAt(final) == this)
@@ -156,7 +156,8 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
     it2->setProb(prob);
     it2->setPosition(final);
   }
-
+  board.removeChessmanOf(initial1);
+  board.removeChessmanOf(initial2);
   board.addChessmanIn(final, this);
 }
 

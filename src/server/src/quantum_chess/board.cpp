@@ -64,7 +64,9 @@ void Board::split(const Position &initial, const Position &pos1,
 }
 
 void Board::merge(const Position &initial1, const Position &initial2,
-                  const Position &final) {
+                  const Position &final, bool player_white) {
+  if (player_white != next_white)
+    throw ChessException("is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
           *chessman_2 = getChessmanAt(initial2);
   if (!chessman_1)
@@ -73,8 +75,10 @@ void Board::merge(const Position &initial1, const Position &initial2,
     throw ChessException("no hay ninguna pieza alli");
   if (chessman_1 != chessman_2)
     throw ChessException("se esta tratando de unir dos piezas distintas");
-  if (chessman_1->isWhite() != next_white)
-    throw ChessException("no es tu turno");
+  if (chessman_1->isWhite() != player_white ||
+      chessman_2->isWhite() != player_white)
+    throw ChessException("you cannot move a chessman"
+                         " of the other player");
   chessman_1->merge(initial1, initial2, final);
   next_white = !next_white;
 }

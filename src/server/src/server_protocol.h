@@ -103,6 +103,10 @@ private:
                             const ClientData &client_data,
                             std::shared_ptr<Instruction> &instruct_ptr);
 
+  void fillMergeInstruction(Socket &socket,
+                            const ClientData &client_data,
+                            std::shared_ptr<Instruction> &instruct_ptr);
+
   void
   fillPossibleSplitsInstruction(Socket &socket, const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);

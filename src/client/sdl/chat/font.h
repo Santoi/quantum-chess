@@ -9,17 +9,16 @@ class Font {
   SDL2pp::Font mono_font;
   SDL2pp::Font bold_font;
   SDL2pp::Font italic_font;
-  SDL_Color color;
-
+  std::map<char, SDL_Color> colors;
 
 public:
-  explicit Font(int ptx, int index = 0, char color_ = 'b');
+  explicit Font(int ptx, int index = 0);
 
-  SDL2pp::Surface renderText(const std::string &text);
+  SDL2pp::Surface renderText(const std::string &text, char color = 'b');
 
-  SDL2pp::Surface renderBoldText(const std::string &text);
+  SDL2pp::Surface renderBoldText(const std::string &text, char color = 'b');
 
-  SDL2pp::Surface renderItalicText(const std::string &text);
+  SDL2pp::Surface renderItalicText(const std::string &text, char color = 'b');
 
 };
 

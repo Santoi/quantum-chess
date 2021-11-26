@@ -1,23 +1,22 @@
 #ifndef QUANTUM_CHESS_PROJ_RENDERER_H
 #define QUANTUM_CHESS_PROJ_RENDERER_H
 
-#include "window.h"
 #include "sprite.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
 class Sprite;
-class Scene;
+class Game;
 
 class Renderer {
 private:
   SDL2pp::Renderer renderer_;
 
 public:
-  explicit Renderer(Window &window);
+  explicit Renderer(SDL2pp::Window &window);
   SDL2pp::Renderer& renderer();
 
-  void render(Scene &scene);
+  void render(Game &game);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)

@@ -9,13 +9,20 @@ private:
 
 public:
   PixelCoordinate();
+
   PixelCoordinate(uint32_t x, uint32_t y);
+
   PixelCoordinate(const PixelCoordinate &orig) = default;
-  PixelCoordinate& operator=(const PixelCoordinate &other) = default;
+
+  PixelCoordinate &operator=(const PixelCoordinate &other) = default;
+
   friend bool operator<(const PixelCoordinate &a, const PixelCoordinate &b);
+
   uint32_t x() const;
+
   uint32_t y() const;
-  void operator()(int x, int y);
+
+  void operator()(uint32_t x, uint32_t y);
 };
 
 

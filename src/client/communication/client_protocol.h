@@ -10,51 +10,102 @@
 
 class RemoteClientInstruction;
 
-class ClientProtocol: public Protocol {
+class ClientProtocol : public Protocol {
 public:
-    ClientProtocol() = default;
+  ClientProtocol() = default;
 
-    //Given the client socket, it returns the number of games running in server.
-    std::map<uint16_t, std::vector<ClientData>> receiveMatchesInfo(Socket& socket);
+  //Given the client socket, it returns the number of games running in server.
+  std::map<uint16_t, std::vector<ClientData>>
+  receiveMatchesInfo(Socket &socket);
 
-    //It sends to the client socket the game_number received as parameter.
-    void sendChosenGame(Socket& socket, uint16_t game_number);
+  //It sends to the client socket the game_number received as parameter.
+  void sendChosenGame(Socket &socket, uint16_t game_number);
 
-    //It sends to the client socket the client's nick_name, following the protocol.
-    void sendClientsNickName(Socket& socket, std::string& nick_name);
+  //It sends to the client socket the client's nick_name, following the protocol.
+  void sendClientsNickName(Socket &socket, std::string &nick_name);
 
-    void fillPacketWithChatMessage(Packet &packet, const std::string & message);
+  void fillPacketWithChatMessage(Packet &packet, const std::string &message);
 
-    //Following the protocol, it receives from socket the information necessary to create the
-    //appropiate RemoteClientInstruction. After the function ends, the ptr_instruction points to a
-    //valid instruction that can be executed calling the makeAction instruction.
-    void receiveInstruction(Socket& socket, std::shared_ptr<RemoteClientInstruction>& ptr_instruction);
+  //Following the protocol, it receives from socket the information necessary to create the
+  //appropiate RemoteClientInstruction. After the function ends, the ptr_instruction points to a
+  //valid instruction that can be executed calling the makeAction instruction.
+  void receiveInstruction(Socket &socket,
+                          std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-    void sendInstruction(Socket &socket,
-                         std::shared_ptr<RemoteClientInstruction> &instruction);
+  void sendInstruction(Socket &socket,
+                       std::shared_ptr<RemoteClientInstruction> &instruction);
 
-    ~ClientProtocol() = default;
+  ~ClientProtocol() = default;
 
-    void
-    fillPacketWithMoveMessage(Packet &packet, Position &initial,
-                              Position &final);
+  void
+  fillPacketWithMoveMessage(Packet &packet, Position &initial,
+                            Position &final);
+
+  void fillPacketWithPossibleMovesMessage(Packet &packet,
+                                          const Position &position);
+
+  void getAvailableRoles(Socket &socket, std::list<ClientData::Role> &roles);
+
+  void sendChosenRole(Socket &socket, ClientData::Role role);
+
+  void
+  fillPacketWithPossibleSplitsMessage(Packet &packet, const Position &position);
+
+  void fillPacketWithSplitMessage(Packet &packet, Position &from, Position &to1,
+                                  Position &to2);
+
+  void
+  fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position);
+
+  void
+  fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position1,
+                                      const Position &position2);
+
+  void
+  fillPacketWithSameChessmanInstruction(Packet &packet, Position &position);
+
+  void
+  fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                             Position &position);
+
+  void fillPacketWithMergeMessage(Packet &packet, const Position &from1,
+                                  const Position &from2, const Position &to);
 
 private:
-    //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
-    //name and the corresponding message). After the function ends, the ptr_instruction points to this
-    //new ChatInstruction.
-    void fillClientInstructionWithChat(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
-                                                        ptr_instruction);
+  //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
+  //name and the corresponding message). After the function ends, the ptr_instruction points to this
+  //new ChatInstruction.
+  void fillClientInstructionWithChat(Socket &socket,
+                                     std::shared_ptr<RemoteClientInstruction> &
+                                     ptr_instruction);
 
-    //Gets necessary information to create the RemoteClientExitMessageInstruction (the instructor's nick
-    //name, this is, the person that left the match). After the function ends, the ptr_instruction
-    //points to this new ExitInstruction.
-    void fillClientInstructionWithExitMessage(Socket& socket, std::shared_ptr<RemoteClientInstruction>&
-                                                             ptr_instruction);
+  //Gets necessary information to create the RemoteClientExitMessageInstruction (the instructor's nick
+  //name, this is, the person that left the match). After the function ends, the ptr_instruction
+  //points to this new ExitInstruction.
+  void fillClientInstructionWithExitMessage(Socket &socket,
+                                            std::shared_ptr<RemoteClientInstruction> &
+                                            ptr_instruction);
 
-    void fillClientInstructionWithLoadBoard(Socket &socket,
-                                            std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+  void fillClientInstructionWithLoadBoard(Socket &socket,
+                                          std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
+  void fillClientInstructionWithException(Socket &socket,
+                                          std::shared_ptr<RemoteClientInstruction> &sharedPtr);
+
+  void fillClientInstructionWithPossibleMoves(Socket &socket,
+                                              std::shared_ptr<RemoteClientInstruction> &sharedPtr);
+
+  void fillClientInstructionWithPossibleSplits(Socket &socket,
+                                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillClientInstructionWithPossibleMerges(Socket &socket,
+                                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillClientInstructionWithSameChessman(Socket &socket,
+                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillClientInstructionWithEntangledChessman(Socket &socket,
+                                                  std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

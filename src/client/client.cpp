@@ -93,6 +93,25 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 }
 
 
+void doRenderingLoopForSceneWithHandler(Game& game, EventHandlerThread& event_handler,
+                                        Renderer& renderer) {
+    while (event_handler.isOpen()) {
+        // Timing: calculate difference between this and previous frame
+        // in milliseconds
+        uint32_t before_render_ticks = SDL_GetTicks();
+
+        // Show rendered frame
+        renderer.render(game);
+
+        uint32_t after_render_ticks = SDL_GetTicks();
+        uint32_t frame_delta = after_render_ticks - before_render_ticks;
+
+        // Frame limiter: sleep for a little bit to not eat 100% of CPU
+        if (frame_delta < 1000 / FRAME_RATE)
+            SDL_Delay(1000 / FRAME_RATE);
+    }
+}
+
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
   SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -100,10 +119,10 @@ void Client::execute(const char *host, const char *port,
   SoundHandler sound_handler(mixer);
   sound_handler.playMusic();
   Window window;
-  BlockingQueue<std::string> queue;
-  Login login(queue);
-  LoginHandlerThread login_thread(login);
-  login_thread.start();
+ // BlockingQueue<std::string> queue;
+ // Login login(queue);
+  //LoginHandlerThread login_thread(login);
+  //login_thread.start();
 
  // std::shared_ptr<std::string> string_ptr;
   //queue.pop(string_ptr);
@@ -115,8 +134,8 @@ void Client::execute(const char *host, const char *port,
   //queue.pop(string_ptr);
   //MATCH_NUMBER = string_PTR->stoi();
   welcomeClientAndAskForNickName();
-  login_thread.setLobbyInactive();
-  login_thread.join();
+ // login_thread.setLobbyInactive();
+  //login_thread.join();
   Socket socket = Socket::createAConnectedSocket(host, port);
 
   RemoteClientSender sender_thread(socket, send);
@@ -134,21 +153,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.start();
   event_handler.start();
 
-  while (event_handler.isOpen()) {
-    // Timing: calculate difference between this and previous frame
-    // in milliseconds
-    uint32_t before_render_ticks = SDL_GetTicks();
-
-    // Show rendered frame
-    renderer.render(game);
-
-    uint32_t after_render_ticks = SDL_GetTicks();
-    uint32_t frame_delta = after_render_ticks - before_render_ticks;
-
-    // Frame limiter: sleep for a little bit to not eat 100% of CPU
-    if (frame_delta < 1000 / FRAME_RATE)
-      SDL_Delay(1000 / FRAME_RATE);
-  }
+  doRenderingLoopForSceneWithHandler(game, event_handler, renderer);
 
   received.close();
   send.close();

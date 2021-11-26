@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <memory>
 #include "client.h"
 #include "position.h"
 #include "communication/client_protocol.h"
@@ -99,8 +100,18 @@ void Client::execute(const char *host, const char *port,
   SoundHandler sound_handler(mixer);
   sound_handler.playMusic();
   Window window;
-  Lobby lobby;
+  BlockingQueue<std::string> queue;
+  Lobby lobby(queue);
   LobbyHandlerThread login_thread(lobby);
+  std::shared_ptr<std::string> string_ptr;
+  //queue.pop(string_ptr);
+  //IP = string_ptr->stoi();
+  //queue.pop(string_ptr);
+  //PORT = string_ptr->stoi();
+  //queue.pop(string_ptr);
+  //client_nick_name = *string_ptr;
+  //queue.pop(string_ptr);
+  //MATCH_NUMBER = string_PTR->stoi();
   login_thread.start();
 
   welcomeClientAndAskForNickName();

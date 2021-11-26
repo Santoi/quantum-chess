@@ -1,6 +1,7 @@
 #include "socket.h"
 #include "socket_closed.h"
 #include "socket_exception.h"
+#include "unique_ptr.h"
 #include <cerrno>
 #include <cstring>
 #include <unistd.h>
@@ -34,6 +35,12 @@ Socket Socket::createAConnectedSocket(const char *host, const char *service) {
   Socket skt(host, service);
   skt.connect();
   return skt;
+}
+
+void Socket::createAConnectedSocketPointedByUniquePointer(std::unique_ptr<Socket>& socket_ptr,
+                                                         const char* host, const char* service) {
+    socket_ptr = make_unique<Socket>(host, service);
+
 }
 
 Socket Socket::createAListeningSocket(const char *host, const char *service) {

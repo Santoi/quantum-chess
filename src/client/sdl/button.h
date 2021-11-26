@@ -9,6 +9,6 @@ public:
     Button() = default;
 
     bool pixelIsOnButton(const PixelCoordinate& pixel_);
-};
+    };
 
 #endif //QUANTUM_CHESS_PROJ_BUTTON_H

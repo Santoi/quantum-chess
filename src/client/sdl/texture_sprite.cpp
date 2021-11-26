@@ -5,12 +5,13 @@
 #include <SDL2pp/Texture.hh>
 #include <string>
 
-TextureSprite::TextureSprite(Renderer &renderer, const std::string &file_name, int width,
-                             int height): Sprite(renderer),
-               sprite_(renderer.renderer(), file_name),
-               width_(width), height_(height) {}
+TextureSprite::TextureSprite(Renderer &renderer, const std::string &file_name,
+                             int width,
+                             int height) : Sprite(renderer, width, height),
+                                           sprite_(renderer.renderer(),
+                                                   file_name) {}
 
-SDL2pp::Texture& TextureSprite::sprite() {
+SDL2pp::Texture &TextureSprite::sprite() {
   return sprite_;
 }
 
@@ -56,7 +57,8 @@ int TextureSprite::getImageHeight() const {
   return sprite_.GetHeight();
 }
 
-void TextureSprite::loadImage(const std::string &file_name, int width, int height) {
+void
+TextureSprite::loadImage(const std::string &file_name, int width, int height) {
   if (width == 0)
     width = width_;
   if (height == 0)
@@ -67,18 +69,10 @@ void TextureSprite::loadImage(const std::string &file_name, int width, int heigh
   height_ = height;
 }
 
-TextureSprite& TextureSprite::operator=(TextureSprite &&other) noexcept {
+TextureSprite &TextureSprite::operator=(TextureSprite &&other) noexcept {
   renderer = std::move(other.renderer);
   sprite_ = std::move(other.sprite_);
   return *this;
-}
-
-int TextureSprite::width() const {
-  return width_;
-}
-
-int TextureSprite::height() const {
-  return height_;
 }
 
 TextureSprite::~TextureSprite() = default;

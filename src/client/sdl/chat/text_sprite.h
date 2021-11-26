@@ -5,6 +5,7 @@
 #include "../sprite.h"
 #include "font.h"
 #include <SDL2pp/SDL2pp.hh>
+#include <string>
 
 class Renderer;
 
@@ -19,6 +20,8 @@ public:
   TextSprite(Renderer &renderer, Font &font_, const std::string &text);
 
   void render(const std::string &text, int x, int y);
+
+  void render(const std::string &text, int x, int y, int width, int height);
 
   SDL2pp::Texture &sprite();
 

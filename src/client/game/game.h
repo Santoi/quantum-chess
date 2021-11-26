@@ -27,11 +27,11 @@ private:
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
-  const SoundHandler& sound_handler;
+  const SoundHandler &sound_handler;
 
 public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, const SoundHandler& sound_handler);
+       ClientData::Role role_, const SoundHandler &sound_handler);
 
   void setScale(int scale_);
 
@@ -74,6 +74,10 @@ public:
   void playMovementSound();
 
   void playTakenPieceSound();
+
+  void askEntangledTiles(PixelCoordinate &coords);
+
+  void askQuantumTiles(PixelCoordinate &coords);
 };
 
 

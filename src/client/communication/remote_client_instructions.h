@@ -34,7 +34,7 @@ public:
   //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
   virtual void makeAction(Game &game) = 0;
 
-  ~RemoteClientInstruction() = default;
+  virtual ~RemoteClientInstruction() = default;
 
 };
 
@@ -187,6 +187,41 @@ public:
                                         ClientProtocol &protocol) override;
 
   ~RemoteClientSplitInstruction() = default;
+};
+
+class RemoteClientSameChessmanInstruction : public RemoteClientInstruction {
+  std::list<Position> positions;
+
+public:
+  RemoteClientSameChessmanInstruction() = delete;
+
+  RemoteClientSameChessmanInstruction(std::list<Position>
+                                      &&positions_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientSameChessmanInstruction() = default;
+};
+
+class RemoteClientEntangledChessmanInstruction
+        : public RemoteClientInstruction {
+  std::list<Position> positions;
+
+public:
+  RemoteClientEntangledChessmanInstruction() = delete;
+
+  RemoteClientEntangledChessmanInstruction(std::list<Position>
+                                           &&positions_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientEntangledChessmanInstruction() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

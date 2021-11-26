@@ -462,6 +462,25 @@ const QuantumPosition &Chessman::getPosition(size_t index) const {
   return positions.front();
 }
 
+void Chessman::getAllPositions(std::list<Position> &output) {
+  for (auto &position: positions)
+    output.push_back(Position(position));
+}
+
+void Chessman::getEntangledPositions(std::list<Position> &output) {
+  for (auto &position: positions) {
+    std::list<QuantumPosition *> entangled_list = position.getEntangled();
+    for (auto &entangled: entangled_list) {
+      Chessman *chessman = board.getChessmanAt(Position(*entangled));
+      if (chessman && entangled->isMyChessman(chessman))
+        chessman->getAllPositions(output);
+      else
+        throw std::runtime_error("chessman has pointer that doesnt point"
+                                 "to him");
+    }
+  }
+}
+
 size_t Chessman::countPositions() const {
   return positions.size();
 }
@@ -632,6 +651,7 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
       throw ChessException("pawn cannot merge");
   }
 }
+
 
 
 

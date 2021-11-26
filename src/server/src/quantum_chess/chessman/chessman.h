@@ -163,6 +163,10 @@ public:
 
   // Metodo que devuelve la letra que representa a la pieza.
   virtual char print() const = 0;
+
+  void getAllPositions(std::list<Position> &output);
+
+  void getEntangledPositions(std::list<Position> &output);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

@@ -33,7 +33,7 @@ public:
   fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
                                    const ClientData &client_receiver_data) = 0;
 
-  ~Instruction() = default;
+  virtual ~Instruction() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_INSTRUCTION_H

@@ -80,6 +80,12 @@ public:
   ClientData::Role receivePlayerRole(Socket &socket,
                                      const std::list<ClientData::Role> &roles);
 
+  void fillPacketWithSameChessmanInstruction(Packet &packet,
+                                             const std::list<Position> &positions);
+
+  void fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                                  const std::list<Position> &positions);
+
 private:
   //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.
   //By the end of the function, the instruc_ptr points to this new ChatInstruction object.
@@ -104,6 +110,13 @@ private:
 
   void
   fillPossibleMergesInstruction(Socket &socket, const ClientData &client_data,
+                                std::shared_ptr<Instruction> &instruct_ptr);
+
+  void
+  fillSameChessmanInstruction(Socket &socket, const ClientData &client_data,
+                              std::shared_ptr<Instruction> &instruct_ptr);
+
+  void fillEntangledInstruction(Socket &socket, const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 };
 

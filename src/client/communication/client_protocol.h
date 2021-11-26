@@ -61,6 +61,13 @@ public:
   fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position1,
                                       const Position &position2);
 
+  void
+  fillPacketWithSameChessmanInstruction(Packet &packet, Position &position);
+
+  void
+  fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                             Position &position);
+
 private:
   //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
   //name and the corresponding message). After the function ends, the ptr_instruction points to this
@@ -91,6 +98,11 @@ private:
   void fillClientInstructionWithPossibleMerges(Socket &socket,
                                                std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
+  void fillClientInstructionWithSameChessman(Socket &socket,
+                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillClientInstructionWithEntangledChessman(Socket &socket,
+                                                  std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

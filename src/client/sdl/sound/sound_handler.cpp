@@ -3,12 +3,12 @@
 #define NUMBER_OF_DIFFERENT_CHUNKS 5
 
 SoundHandler::SoundHandler(SDL2pp::Mixer &mixer)
-    : mixer(mixer), music("sound/music.wav") {
+        : mixer(mixer), music("sound/music.wav") {
   chunks.reserve(NUMBER_OF_DIFFERENT_CHUNKS);
-  chunks.push_back(std::move(SDL2pp::Chunk("sound/low.wav")));
-  chunks.push_back(std::move(SDL2pp::Chunk("sound/high.wav")));
-  chunks.push_back(std::move(SDL2pp::Chunk("sound/medium.wav")));
-  chunks.push_back(std::move(SDL2pp::Chunk("sound/beat.wav")));
+  chunks.push_back(SDL2pp::Chunk("sound/low.wav"));
+  chunks.push_back(SDL2pp::Chunk("sound/high.wav"));
+  chunks.push_back(SDL2pp::Chunk("sound/medium.wav"));
+  chunks.push_back(SDL2pp::Chunk("sound/beat.wav"));
 }
 
 void SoundHandler::playMusic() const {

@@ -68,6 +68,7 @@ void Game::setDefaultBoard() {
 
 // TODO poner esta logica aca o ahcer que lo haga el event handler?
 void Game::moveTiles(const std::list<Position> &positions) {
+  setDefaultBoard();
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.moveTile(position);
@@ -109,6 +110,26 @@ void Game::askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2) {
           std::move(positions)));
 }
 
+void
+Game::askEntangledTiles(PixelCoordinate &coords) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position;
+  transformer.pixel2Position(coords, position, scale);
+  send_queue.push(
+          std::make_shared<RemoteClientEntangledChessmanInstruction>(
+                  std::list<Position>(1, position)));
+}
+
+void
+Game::askQuantumTiles(PixelCoordinate &coords) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position;
+  transformer.pixel2Position(coords, position, scale);
+  send_queue.push(
+          std::make_shared<RemoteClientSameChessmanInstruction>(
+                  std::list<Position>(1, position)));
+}
+
 void Game::entangledTiles(const std::list<Position> &positions) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
@@ -122,6 +143,7 @@ void Game::quantumTiles(const std::list<Position> &positions) {
 }
 
 void Game::splitTiles(const std::list<Position> &positions) {
+  setDefaultBoard();
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.splitTile(position);

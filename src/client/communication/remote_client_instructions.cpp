@@ -139,3 +139,34 @@ RemoteClientSplitInstruction::fillPacketWithInstructionsToSend(Packet &packet,
   protocol.fillPacketWithSplitMessage(packet, from, to1, to2);
 }
 
+
+RemoteClientSameChessmanInstruction::RemoteClientSameChessmanInstruction
+        (std::list<Position> &&positions_) :
+        positions(std::move(positions_)) {}
+
+void RemoteClientSameChessmanInstruction::makeAction(Game &game) {
+  game.quantumTiles(positions);
+}
+
+void
+RemoteClientSameChessmanInstruction::fillPacketWithInstructionsToSend(
+        Packet &packet,
+        ClientProtocol &protocol) {
+  protocol.fillPacketWithSameChessmanInstruction(packet, *positions.begin());
+}
+
+RemoteClientEntangledChessmanInstruction::RemoteClientEntangledChessmanInstruction
+        (std::list<Position>
+         &&positions_) : positions(std::move(positions_)) {}
+
+void RemoteClientEntangledChessmanInstruction::makeAction(Game &game) {
+  game.entangledTiles(positions);
+}
+
+void
+RemoteClientEntangledChessmanInstruction::fillPacketWithInstructionsToSend(
+        Packet &packet,
+        ClientProtocol &protocol) {
+  protocol.fillPacketWithEntangledChessmanInstruction(packet,
+                                                      *positions.begin());
+}

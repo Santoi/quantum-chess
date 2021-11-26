@@ -29,6 +29,8 @@ public:
   void run() override;
 
   bool isOpen();
+
+  void handleMouseButtonRight(SDL_MouseButtonEvent &mouse);
 };
 
 

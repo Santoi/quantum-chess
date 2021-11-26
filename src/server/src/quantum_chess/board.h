@@ -81,6 +81,10 @@ public:
 
   std::list<Position>
   getPossibleMergesOf(const Position &position1, const Position &position2);
+
+  std::list<Position> getPositionsOf(const Position &position1);
+
+  std::list<Position> getEntangledOf(const Position &position1);
 };
 
 

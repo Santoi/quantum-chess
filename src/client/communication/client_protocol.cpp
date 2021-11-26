@@ -123,6 +123,20 @@ void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
   addNumber8ToPacket(packet, position2.y());
 }
 
+void ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
+                                                           Position &position) {
+  packet.addByte('f');
+  addNumber8ToPacket(packet, position.x());
+  addNumber8ToPacket(packet, position.y());
+}
+
+void ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                                                Position &position) {
+  packet.addByte('g');
+  addNumber8ToPacket(packet, position.x());
+  addNumber8ToPacket(packet, position.y());
+}
+
 void ClientProtocol::sendInstruction(Socket &socket,
                                      std::shared_ptr<RemoteClientInstruction> &instruction) {
   Packet packet;
@@ -223,6 +237,33 @@ void ClientProtocol::fillClientInstructionWithPossibleMerges(Socket &socket,
           std::move(posible_moves));
 }
 
+void ClientProtocol::fillClientInstructionWithSameChessman(Socket &socket,
+                                                           std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  uint8_t amount = getNumber8FromSocket(socket);
+  std::list<Position> posible_moves;
+  for (uint8_t i = 0; i < amount; i++) {
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
+    posible_moves.push_back(position);
+  }
+  ptr_instruction = make_unique<RemoteClientSameChessmanInstruction>(
+          std::move(posible_moves));
+}
+
+void ClientProtocol::fillClientInstructionWithEntangledChessman(Socket &socket,
+                                                                std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  uint8_t amount = getNumber8FromSocket(socket);
+  std::list<Position> posible_moves;
+  for (uint8_t i = 0; i < amount; i++) {
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
+    posible_moves.push_back(position);
+  }
+  ptr_instruction = make_unique<RemoteClientEntangledChessmanInstruction>(
+          std::move(posible_moves));
+}
 
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
@@ -252,9 +293,16 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case 'd':
       fillClientInstructionWithPossibleMerges(socket, ptr_instruction);
       break;
+    case 'f':
+      fillClientInstructionWithSameChessman(socket, ptr_instruction);
+      break;
+    case 'g':
+      fillClientInstructionWithEntangledChessman(socket, ptr_instruction);
+      break;
   }
 
 }
+
 
 
 

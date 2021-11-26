@@ -95,7 +95,7 @@ void Client::execute(const char *host, const char *port,
   SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
   SoundHandler sound_handler(mixer);
-  sound_handler.playMusic();
+  //sound_handler.playMusic();
   welcomeClientAndAskForNickName();
   Socket socket = Socket::createAConnectedSocket(host, port);
 

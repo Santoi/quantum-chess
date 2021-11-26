@@ -112,6 +112,22 @@ std::list<Position> Board::getPossibleMergesOf(const Position &position1,
   return output;
 }
 
+std::list<Position> Board::getPositionsOf(const Position &position1) {
+  std::list<Position> output;
+  Chessman *chessman = getChessmanAt(position1);
+  if (chessman)
+    chessman->getAllPositions(output);
+  return output;
+}
+
+std::list<Position> Board::getEntangledOf(const Position &position1) {
+  std::list<Position> output;
+  Chessman *chessman = getChessmanAt(position1);
+  if (chessman)
+    chessman->getEntangledPositions(output);
+  return output;
+}
+
 void Board::addChessmanIn(const Position &position, Chessman *chessman) {
   if (board.count(position))
     throw ChessException("ya hay una pieza alli");

@@ -9,6 +9,8 @@
 #include "instructions/possible_splits_instruction.h"
 #include "instructions/split_instruction.h"
 #include "instructions/possible_merges_instruction.h"
+#include "instructions/same_chessman_instruction.h"
+#include "instructions/entangled_chessman_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <algorithm>
@@ -137,14 +139,40 @@ void ServerProtocol::fillPossibleMergesInstruction(Socket &socket,
   Position position(x, y);
   positions.push_back(position);
   if (amount == 2) {
-    uint8_t x = getNumber8FromSocket(socket);
-    uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    x = getNumber8FromSocket(socket);
+    y = getNumber8FromSocket(socket);
+    position = Position(x, y);
     positions.push_back(position);
   }
   instruct_ptr = std::make_shared<PossibleMergesInstruction>(client_data,
                                                              std::move(
                                                                      positions));
+}
+
+void ServerProtocol::fillSameChessmanInstruction(Socket &socket,
+                                                 const ClientData &client_data,
+                                                 std::shared_ptr<Instruction> &instruct_ptr) {
+  std::list<Position> positions;
+  uint8_t x = getNumber8FromSocket(socket);
+  uint8_t y = getNumber8FromSocket(socket);
+  Position position(x, y);
+  positions.push_back(position);
+  instruct_ptr = std::make_shared<SameChessmanInstruction>(client_data,
+                                                           std::move(
+                                                                   positions));
+}
+
+void ServerProtocol::fillEntangledInstruction(Socket &socket,
+                                              const ClientData &client_data,
+                                              std::shared_ptr<Instruction> &instruct_ptr) {
+  std::list<Position> positions;
+  uint8_t x = getNumber8FromSocket(socket);
+  uint8_t y = getNumber8FromSocket(socket);
+  Position position(x, y);
+  positions.push_back(position);
+  instruct_ptr = std::make_shared<EntangledChessmanInstruction>(client_data,
+                                                                std::move(
+                                                                        positions));
 }
 
 
@@ -173,6 +201,12 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
       break;
     case 's':
       fillSplitInstruction(socket, client_data, instruct_ptr);
+      break;
+    case 'f':
+      fillSameChessmanInstruction(socket, client_data, instruct_ptr);
+      break;
+    case 'g':
+      fillEntangledInstruction(socket, client_data, instruct_ptr);
       break;
   }
 }
@@ -231,6 +265,26 @@ void ServerProtocol::fillPacketWithPossibleSplits(Packet &packet,
 void ServerProtocol::fillPacketWithPossibleMerges(Packet &packet,
                                                   const std::list<Position> &positions) {
   packet.addByte('d');
+  addNumber8ToPacket(packet, positions.size());
+  for (auto &position: positions) {
+    addNumber8ToPacket(packet, position.x());
+    addNumber8ToPacket(packet, position.y());
+  }
+}
+
+void ServerProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
+                                                           const std::list<Position> &positions) {
+  packet.addByte('f');
+  addNumber8ToPacket(packet, positions.size());
+  for (auto &position: positions) {
+    addNumber8ToPacket(packet, position.x());
+    addNumber8ToPacket(packet, position.y());
+  }
+}
+
+void ServerProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                                                const std::list<Position> &positions) {
+  packet.addByte('g');
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());

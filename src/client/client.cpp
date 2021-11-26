@@ -10,6 +10,7 @@
 #include "sdl/event_handler_thread.h"
 #include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
+#include "sdl/lobby_handler_thread.h"
 
 #define FRAME_RATE 60
 
@@ -95,8 +96,13 @@ void Client::execute(const char *host, const char *port,
   SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
   SoundHandler sound_handler(mixer);
-  //sound_handler.playMusic();
+  sound_handler.playMusic();
+  
+  LobbyHandlerThread login_thread;
+  login_thread.start();
   welcomeClientAndAskForNickName();
+  login_thread.setLobbyInactive();
+  login_thread.join();
   Socket socket = Socket::createAConnectedSocket(host, port);
 
   RemoteClientSender sender_thread(socket, send);
@@ -121,7 +127,10 @@ void Client::execute(const char *host, const char *port,
     uint32_t before_render_ticks = SDL_GetTicks();
 
     // Show rendered frame
-    renderer.render(game);
+    //renderer.render(game);
+    if (renderer.trueex()) {
+
+    }
 
     uint32_t after_render_ticks = SDL_GetTicks();
     uint32_t frame_delta = after_render_ticks - before_render_ticks;

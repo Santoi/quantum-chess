@@ -17,15 +17,16 @@ private:
   std::map<uint16_t, ClientHandler> clients;
   std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
   BlockingQueue<Instruction> match_updates_queue;
+  const std::string board_filename;
 
 public:
   //Creates a match, creating the ClientDataRepository and the BlockingQueue<Instruction>. The client's vector
   //is also created and set with an initial capacity of BASE_CLIENTS.
-  Match();
+  Match(std::string board_filename);
 
   //Moves the other match's thread, clients, listening queues and the thread safe queue to the new
-  //match. The new match also copies the number of accepted clients of the other_match.
-  Match(Match &&other_match);
+  //match. The new match also copies the number of accepted clients of the other.
+  Match(Match &&other);
 
   //Adds client to list of clients and nick names repository, and calls the client to start.
   void addClientToMatch(Socket &&client_socket, uint16_t client_id);

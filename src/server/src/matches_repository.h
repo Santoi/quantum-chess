@@ -11,10 +11,11 @@ private:
   uint16_t created_matches;
   std::map<uint16_t, std::unique_ptr<Match>> ptr_matches;
   uint16_t accepted_clients;
+  std::string board_filename;
 
 public:
   //Creates a MatchesRepository, setting the number of created_matches equal to cero.
-  MatchesRepository();
+  MatchesRepository(std::string board_filename);
 
   //Iterates over the matches vector: if any of them is active, a true is returned. If
   //none of them is active, a false is returned.

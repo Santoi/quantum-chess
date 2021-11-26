@@ -1,0 +1,35 @@
+# Loading chessmen of whites
+TA1W
+HB1W
+BC1W
+QD1W
+KE1W
+BF1W
+HG1W
+TH1W
+PA2W
+PB2W
+PC2W
+PD2W
+PE2W
+PF2W
+PG2W
+PH2W
+
+# Loading chessmen of blacks
+TA8B
+HB8B
+BC8B
+QD8B
+KE8B
+BF8B
+HG8B
+TH8B
+PA7B
+PB7B
+PC7B
+PD7B
+PE7B
+PF7B
+PG7B
+PH7B

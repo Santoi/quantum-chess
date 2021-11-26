@@ -9,6 +9,8 @@
 #include <utility>
 #include <algorithm>
 #include <memory>
+#include <sstream>
+#include <fstream>
 
 Board::Board() : chessmen(), board(), next_white(true), coin() {}
 
@@ -232,29 +234,25 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
   return std::unique_ptr<Chessman>(pointer);
 }
 
-void Board::load() {
-  addNewChessman('T', Position(0, 0), true);
-  addNewChessman('H', Position(1, 0), true);
-  addNewChessman('B', Position(2, 0), true);
-  addNewChessman('Q', Position(3, 0), true);
-  addNewChessman('K', Position(4, 0), true);
-  addNewChessman('B', Position(5, 0), true);
-  addNewChessman('H', Position(6, 0), true);
-  addNewChessman('T', Position(7, 0), true);
-  addNewChessman('T', Position(0, 7), false);
-  addNewChessman('H', Position(1, 7), false);
-  addNewChessman('B', Position(2, 7), false);
-  addNewChessman('Q', Position(3, 7), false);
-  addNewChessman('K', Position(4, 7), false);
-  addNewChessman('B', Position(5, 7), false);
-  addNewChessman('H', Position(6, 7), false);
-  addNewChessman('T', Position(7, 7), false);
-
-  for (uint8_t i = 0; i < 8; i++)
-    addNewChessman('P', Position(i, 1), true);
-
-  for (uint8_t i = 0; i < 8; i++)
-    addNewChessman('P', Position(i, 6), false);
+void Board::load(const std::string &filename) {
+  std::ifstream file(filename, std::ios_base::in);
+  std::string line;
+  while (!file.eof() && file.peek() != EOF) {
+    std::getline(file, line);
+    if (line.empty())
+      continue;
+    if (line[0] == LOADER_COMMENT)
+      continue;
+    std::stringstream iss(line);
+    char chessman, color;
+    uint8_t x, y;
+    iss >> chessman >> x >> y >> color;
+    x -= 'A';
+    y = y - '0' - 1;
+    if (color != 'W' && color != 'B')
+      throw std::invalid_argument("invalid color");
+    addNewChessman(chessman, Position(x, y), color == 'W');
+  }
 }
 
 bool Board::flipACoin() {

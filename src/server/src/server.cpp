@@ -6,12 +6,11 @@
 #include <thread>
 
 Server::Server(const char *host, const char *service)
-        : acceptor_socket(
-        std::move(Socket::createAListeningSocket(host, service))) {
+        : acceptor_socket(Socket::createAListeningSocket(host, service)) {
 }
 
-void Server::execute() {
-  MatchesRepository matches;
+void Server::execute(const std::string &filename) {
+  MatchesRepository matches(filename);
   AcceptorThread acceptor_thread(acceptor_socket, matches);
   acceptor_thread.start();
   while (true) {

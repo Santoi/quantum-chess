@@ -6,7 +6,7 @@
 AsciiChess::AsciiChess() : board() {}
 
 void AsciiChess::execute() {
-  board.load();
+  board.load("default.txt");
   draw();
   while (true) {
     try {

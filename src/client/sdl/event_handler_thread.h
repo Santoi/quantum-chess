@@ -3,13 +3,11 @@
 
 #include "../game/game.h"
 #include "../game/board.h"
-#include "../../common/src/thread.h"
+#include "handler_thread.h"
 #include <SDL2/SDL.h>
-#include <atomic>
 
-class EventHandlerThread : public Thread {
+class EventHandlerThread : public HandlerThread {
 private:
-  std::atomic<bool> open;
   Game &game;
   bool split, merge, first_click, second_click;
   PixelCoordinate penultimate_click;

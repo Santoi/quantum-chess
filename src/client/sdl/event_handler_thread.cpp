@@ -3,7 +3,7 @@
 #include <iostream>
 #include <list>
 
-EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
+EventHandlerThread::EventHandlerThread(Game &game) : HandlerThread(true), game(game),
                                                      split(false), merge(false),
                                                      first_click(false) {}
 

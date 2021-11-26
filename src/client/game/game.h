@@ -10,6 +10,7 @@
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/client_data.h"
 #include "../sdl/sound/sound_handler.h"
+#include "../sdl/scene.h"
 #include <list>
 #include <map>
 #include <mutex>
@@ -18,9 +19,8 @@ class Sprite;
 
 class RemoteClientInstruction;
 
-class Game {
+class Game: public Scene {
 private:
-  int scale;
   Board board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
   std::map<const PixelCoordinate, Sprite> sprites;
@@ -33,7 +33,7 @@ public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
        ClientData::Role role_, const SoundHandler &sound_handler);
 
-  void setScale(int scale_);
+  void setScale(int scale_) override;
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
 
@@ -53,7 +53,7 @@ public:
 
   void loadSprite(Sprite &sprite, int x, int y);
 
-  void render();
+  void render() override;
 
   void load(std::vector<ChessmanData> &chessman_data_vector);
 

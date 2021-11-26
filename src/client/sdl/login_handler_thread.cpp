@@ -1,12 +1,12 @@
 #include "login_handler_thread.h"
 
 LoginHandlerThread::LoginHandlerThread(Login& login_)
-                    :active_lobby(true), login(login_) {
+                    :HandlerThread(true), login(login_) {
 }
 
 
 void LoginHandlerThread::run() {
-    while (this->active_lobby) {
+    while (!(login.clientIsConnectedToMatch())) {
         SDL_WaitEvent(&event);
         switch (event.type) {
             case SDL_QUIT:
@@ -17,15 +17,16 @@ void LoginHandlerThread::run() {
                     handleMouseButtonLeft(mouse);
         }
     }
-}
-
-void LoginHandlerThread::setLobbyInactive() {
-    active_lobby = false;
+    open = false;
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     PixelCoordinate pixel(mouse.x, mouse.y);
-    if (!login.pixelIsOnBottom(pixel))
+    if (!login.pixelIsOnAButton(pixel)){
         return;
+    } else {
+        login.pressButtonThatHasPixel(pixel);
+    }
+
 }
 

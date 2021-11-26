@@ -13,10 +13,11 @@
 
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_, const SoundHandler& sound_handler_) :
+           ClientData::Role role_, const SoundHandler &sound_handler_) :
         scale(window.renderer().getMinDimension()),
         board(window.renderer(), "img/stars.jpg", scale, scale),
-        send_queue(send_queue_), mutex(), role(role_), sound_handler(sound_handler_) {}
+        send_queue(send_queue_), mutex(), role(role_),
+        sound_handler(sound_handler_) {}
 
 void Game::loadSprite(Sprite &sprite, int x, int y) {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -88,6 +89,26 @@ void Game::askSplitTiles(PixelCoordinate &coords) {
           std::list<Position>(1, position)));
 }
 
+void Game::askMergeTiles(PixelCoordinate &coords) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position;
+  transformer.pixel2Position(coords, position, scale);
+  send_queue.push(std::make_shared<RemoteClientPossibleMergesInstruction>(
+          std::list<Position>(1, position)));
+}
+
+void Game::askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position1, position2;
+  transformer.pixel2Position(coords1, position1, scale);
+  transformer.pixel2Position(coords2, position2, scale);
+  std::list<Position> positions;
+  positions.push_back(position1);
+  positions.push_back(position2);
+  send_queue.push(std::make_shared<RemoteClientPossibleMergesInstruction>(
+          std::move(positions)));
+}
+
 void Game::entangledTiles(const std::list<Position> &positions) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
@@ -107,6 +128,7 @@ void Game::splitTiles(const std::list<Position> &positions) {
 }
 
 void Game::mergeTiles(const std::list<Position> &positions) {
+  setDefaultBoard();
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.mergeTile(position);
@@ -142,13 +164,13 @@ void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
 }
 
 void Game::playSplitSound() {
-    sound_handler.playSplitSound();
+  sound_handler.playSplitSound();
 }
 
 void Game::playMovementSound() {
-    sound_handler.playMovementSound();
+  sound_handler.playMovementSound();
 }
 
 void Game::playTakenPieceSound() {
-    sound_handler.playTakenPieceSound();
+  sound_handler.playTakenPieceSound();
 }

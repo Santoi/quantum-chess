@@ -103,6 +103,15 @@ std::list<Position> Board::getPossibleMergesOf(const Position &position) {
   return output;
 }
 
+std::list<Position> Board::getPossibleMergesOf(const Position &position1,
+                                               const Position &position2) {
+  std::list<Position> output;
+  Chessman *chessman = getChessmanAt(position1);
+  if (chessman)
+    chessman->calculatePosibleMerges(position1, position2, output);
+  return output;
+}
+
 void Board::addChessmanIn(const Position &position, Chessman *chessman) {
   if (board.count(position))
     throw ChessException("ya hay una pieza alli");
@@ -205,10 +214,6 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
 
 void Board::load() {
   addNewChessman('T', Position(0, 0), true);
-  addNewChessman('T', Position(0, 7), false);
-
-  /*
-  addNewChessman('T', Position(0, 0), true);
   addNewChessman('H', Position(1, 0), true);
   addNewChessman('B', Position(2, 0), true);
   addNewChessman('Q', Position(3, 0), true);
@@ -230,7 +235,6 @@ void Board::load() {
 
   for (uint8_t i = 0; i < 8; i++)
     addNewChessman('P', Position(i, 6), false);
-    */
 }
 
 bool Board::flipACoin() {

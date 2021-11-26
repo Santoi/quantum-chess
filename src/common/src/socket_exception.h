@@ -11,8 +11,9 @@ private:
 public:
   explicit SocketException(std::string msg) noexcept;
 
+/*
   SocketException(const SocketException &other) noexcept = default;
-
+*/
   ~SocketException() noexcept override = default;
 
   const char *what() const noexcept override;

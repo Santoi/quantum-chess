@@ -64,6 +64,11 @@ public:
   void splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
                      PixelCoordinate &to2);
 
+
+  void askMergeTiles(PixelCoordinate &coords);
+
+  void askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2);
+
   void playSplitSound();
 
   void playMovementSound();

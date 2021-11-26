@@ -8,6 +8,7 @@
 #include "instructions/possible_moves_instruction.h"
 #include "instructions/possible_splits_instruction.h"
 #include "instructions/split_instruction.h"
+#include "instructions/possible_merges_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <algorithm>
@@ -126,6 +127,26 @@ void ServerProtocol::fillPossibleSplitsInstruction(Socket &socket,
                                                                      positions));
 }
 
+void ServerProtocol::fillPossibleMergesInstruction(Socket &socket,
+                                                   const ClientData &client_data,
+                                                   std::shared_ptr<Instruction> &instruct_ptr) {
+  std::list<Position> positions;
+  uint8_t amount = getNumber8FromSocket(socket);
+  uint8_t x = getNumber8FromSocket(socket);
+  uint8_t y = getNumber8FromSocket(socket);
+  Position position(x, y);
+  positions.push_back(position);
+  if (amount == 2) {
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
+    positions.push_back(position);
+  }
+  instruct_ptr = std::make_shared<PossibleMergesInstruction>(client_data,
+                                                             std::move(
+                                                                     positions));
+}
+
 
 void
 ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
@@ -146,6 +167,9 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
       break;
     case 'b':
       fillPossibleSplitsInstruction(socket, client_data, instruct_ptr);
+      break;
+    case 'd':
+      fillPossibleMergesInstruction(socket, client_data, instruct_ptr);
       break;
     case 's':
       fillSplitInstruction(socket, client_data, instruct_ptr);
@@ -197,6 +221,16 @@ void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,
 void ServerProtocol::fillPacketWithPossibleSplits(Packet &packet,
                                                   const std::list<Position> &positions) {
   packet.addByte('b');
+  addNumber8ToPacket(packet, positions.size());
+  for (auto &position: positions) {
+    addNumber8ToPacket(packet, position.x());
+    addNumber8ToPacket(packet, position.y());
+  }
+}
+
+void ServerProtocol::fillPacketWithPossibleMerges(Packet &packet,
+                                                  const std::list<Position> &positions) {
+  packet.addByte('d');
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());

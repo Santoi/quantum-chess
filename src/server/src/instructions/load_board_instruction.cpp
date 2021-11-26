@@ -6,7 +6,7 @@
 
 // TODO ver si hacer una clase chessman_data o incluir la de common.
 LoadBoardInstruction::LoadBoardInstruction()
-        : characters(), positions(), colors(), probabilities() {}
+        : positions(), characters(), colors(), probabilities() {}
 
 
 void LoadBoardInstruction::makeActionAndNotifyAllListeningQueues(

@@ -78,6 +78,9 @@ public:
   std::list<Position> getPossibleSplitsOf(const Position &position);
 
   std::list<Position> getPossibleMergesOf(const Position &position);
+
+  std::list<Position>
+  getPossibleMergesOf(const Position &position1, const Position &position2);
 };
 
 

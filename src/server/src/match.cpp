@@ -14,13 +14,13 @@ Match::Match()
           match_updates_queue() {
 }
 
-Match::Match(Match &&other_match)
-        : Thread(std::move(other_match)),
-          clients(std::move(other_match.clients)),
-          listening_queues(std::move(other_match.listening_queues)),
-          match_updates_queue(std::move(other_match.match_updates_queue)),
-          board(std::move(other_match.board)) {
-}
+Match::Match(Match &&other_match) : Thread(std::move(other_match)),
+                                    board(std::move(other_match.board)),
+                                    clients(std::move(other_match.clients)),
+                                    listening_queues(std::move(
+                                            other_match.listening_queues)),
+                                    match_updates_queue(std::move(
+                                            other_match.match_updates_queue)) {}
 
 ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
   ServerProtocol protocol;

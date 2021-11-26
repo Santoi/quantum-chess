@@ -87,8 +87,8 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     if (!first_click) {
       if (split)
         game.askSplitTiles(pixel);
-      else if (merge);
-        //game.askMergeTiles(pixel);
+      else if (merge)
+        game.askMergeTiles(pixel);
       else
         game.askMoveTiles(pixel);
       first_click = true;
@@ -97,8 +97,13 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     }
 
     if (!second_click) {
-      if (split || merge) {
+      if (split) {
         penultimate_click = last_click;
+        last_click = pixel;
+        second_click = true;
+      } else if (merge) {
+        penultimate_click = last_click;
+        game.askMergeTiles(pixel, last_click);
         last_click = pixel;
         second_click = true;
       } else {

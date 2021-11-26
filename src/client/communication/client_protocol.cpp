@@ -104,6 +104,25 @@ void ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
   addNumber8ToPacket(packet, position.y());
 }
 
+void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
+                                                         const Position &position) {
+  packet.addByte('d');
+  addNumber8ToPacket(packet, 1);
+  addNumber8ToPacket(packet, position.x());
+  addNumber8ToPacket(packet, position.y());
+}
+
+void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
+                                                         const Position &position1,
+                                                         const Position &position2) {
+  packet.addByte('d');
+  addNumber8ToPacket(packet, 2);
+  addNumber8ToPacket(packet, position1.x());
+  addNumber8ToPacket(packet, position1.y());
+  addNumber8ToPacket(packet, position2.x());
+  addNumber8ToPacket(packet, position2.y());
+}
+
 void ClientProtocol::sendInstruction(Socket &socket,
                                      std::shared_ptr<RemoteClientInstruction> &instruction) {
   Packet packet;
@@ -190,6 +209,20 @@ void ClientProtocol::fillClientInstructionWithPossibleSplits(Socket &socket,
           std::move(posible_moves));
 }
 
+void ClientProtocol::fillClientInstructionWithPossibleMerges(Socket &socket,
+                                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  uint8_t amount = getNumber8FromSocket(socket);
+  std::list<Position> posible_moves;
+  for (uint8_t i = 0; i < amount; i++) {
+    uint8_t x = getNumber8FromSocket(socket);
+    uint8_t y = getNumber8FromSocket(socket);
+    Position position(x, y);
+    posible_moves.push_back(position);
+  }
+  ptr_instruction = make_unique<RemoteClientPossibleMergesInstruction>(
+          std::move(posible_moves));
+}
+
 
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
@@ -215,6 +248,10 @@ void ClientProtocol::receiveInstruction(Socket &socket,
       break;
     case 'b':
       fillClientInstructionWithPossibleSplits(socket, ptr_instruction);
+      break;
+    case 'd':
+      fillClientInstructionWithPossibleMerges(socket, ptr_instruction);
+      break;
   }
 
 }

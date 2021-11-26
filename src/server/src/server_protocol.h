@@ -68,6 +68,8 @@ public:
   fillPacketWithPossibleMoves(Packet &packet,
                               const std::list<Position> &positions);
 
+  void fillPacketWithPossibleMerges(Packet &packet,
+                                    const std::list<Position> &positions);
 
   void fillPacketWithPossibleSplits(Packet &packet,
                                     const std::list<Position> &positions);
@@ -97,6 +99,11 @@ private:
 
   void
   fillPossibleSplitsInstruction(Socket &socket, const ClientData &client_data,
+                                std::shared_ptr<Instruction> &instruct_ptr);
+
+
+  void
+  fillPossibleMergesInstruction(Socket &socket, const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 };
 

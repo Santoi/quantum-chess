@@ -311,9 +311,6 @@ Chessman::checkIsAValidSplit(const Position &initial, const Position &final) {
   if (!checkFreePath(path, chessman_in_path, false))
     return NON_FREE_PATH;
 
-  if (board.getChessmanAt(final) == this)
-    board.removeChessmanOf(final);
-
   if (board.getChessmanAt(final))
     return SPLIT_TO_OCCUPIED_SQUARE;
 
@@ -386,6 +383,23 @@ void Chessman::calculatePosibleMerges(const Position &initial,
 
   for (auto it = posible_moves.begin(); it != posible_moves.end();) {
     if (checkIsAValidMerge(initial, *it)) {
+      it = posible_moves.erase(it);
+      continue;
+    }
+    ++it;
+  }
+}
+
+// TODO hacer tests de esto.
+void Chessman::calculatePosibleMerges(const Position &initial1,
+                                      const Position &initial2,
+                                      std::list<Position> &posible_moves) {
+  std::list<Position> aux;
+  calculatePosibleMerges(initial1, posible_moves);
+  calculatePosibleMerges(initial2, aux);
+
+  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+    if (std::find(aux.begin(), aux.end(), *it) == aux.end()) {
       it = posible_moves.erase(it);
       continue;
     }
@@ -583,6 +597,8 @@ void Chessman::checkIsInBoardOrFail(const Position &position) {
 
 void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
   switch (status) {
+    case OK:
+      return;
     case CHESSMAN_NOT_IN_POSITION:
       throw ChessException("chessman is not in that position");
     case MOVING_TO_SQUARE_WITH_SAME_PIECE:
@@ -616,6 +632,8 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
       throw ChessException("pawn cannot merge");
   }
 }
+
+
 
 
 

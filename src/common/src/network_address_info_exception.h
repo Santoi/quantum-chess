@@ -11,9 +11,9 @@ private:
 public:
   explicit NetworkAddressInfoException(std::string msg);
 
-  NetworkAddressInfoException(
+/*  NetworkAddressInfoException(
       const NetworkAddressInfoException &other) noexcept = default;
-
+*/
   ~NetworkAddressInfoException() noexcept override = default;
 
   const char *what() const noexcept override;

@@ -1,20 +1,20 @@
 #include "chessman_sprite_repository.h"
-#include "../main_drawer.h"
 
-ChessmanSpriteRepository::ChessmanSpriteRepository(Renderer & renderer): chessmen(), fills() {
+ChessmanSpriteRepository::ChessmanSpriteRepository(Renderer &renderer)
+        : chessmen(), fills() {
   loadFills(renderer);
   loadChessmen(renderer);
 }
 
-Sprite & ChessmanSpriteRepository::getChessman(const std::string & string){
+Sprite &ChessmanSpriteRepository::getChessman(const std::string &string) {
   return chessmen.at(string);
 }
 
-Sprite & ChessmanSpriteRepository::getFill(const std::string & string) {
+Sprite &ChessmanSpriteRepository::getFill(const std::string &string) {
   return fills.at(string);
 }
 
-void ChessmanSpriteRepository::loadFills(Renderer & renderer) {
+void ChessmanSpriteRepository::loadFills(Renderer &renderer) {
   std::map<std::string, std::string> images = {
           {"tb", "img/black_tower_quantum.png"},
           {"tw", "img/white_tower_quantum.png"},
@@ -29,7 +29,7 @@ void ChessmanSpriteRepository::loadFills(Renderer & renderer) {
           {"pb", "img/black_pawn_quantum.png"},
           {"pw", "img/white_pawn_quantum.png"}
   };
-  for (auto & pair: images) {
+  for (auto &pair: images) {
     Sprite fill(renderer, pair.second,
                 renderer.getMinDimension() / 10,
                 renderer.getMinDimension() / 10);
@@ -52,7 +52,7 @@ void ChessmanSpriteRepository::loadChessmen(Renderer &renderer) {
           {"pb", "img/black_pawn.png"},
           {"pw", "img/white_pawn.png"}
   };
-  for (auto & pair: images) {
+  for (auto &pair: images) {
     Sprite chessman(renderer, pair.second,
                     renderer.getMinDimension() / 10,
                     renderer.getMinDimension() / 10);

@@ -153,6 +153,23 @@ public:
   ~RemoteClientPossibleSplitsInstruction() = default;
 };
 
+class RemoteClientPossibleMergesInstruction : public RemoteClientInstruction {
+  std::list<Position> positions;
+
+public:
+  RemoteClientPossibleMergesInstruction() = delete;
+
+  RemoteClientPossibleMergesInstruction(std::list<Position>
+                                        &&positions_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientPossibleMergesInstruction() = default;
+};
+
 class RemoteClientSplitInstruction : public RemoteClientInstruction {
   Position from;
   Position to1;

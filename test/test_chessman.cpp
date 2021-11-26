@@ -738,7 +738,6 @@ TEST(Chessman, MoveRealQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
-  Chessman *bishop = board.getChessmanAt(Position(0, 0));
 
   queen->split(Position(1, 1), Position(3, 3), Position(1, 2));
   EXPECT_THROW(queen->move(Position(3, 3), Position(0, 0)), ChessException);
@@ -749,7 +748,6 @@ TEST(Chessman, MoveFakeQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
-  Chessman *bishop = board.getChessmanAt(Position(0, 0));
 
   queen->split(Position(1, 1), Position(1, 2), Position(3, 3));
   EXPECT_THROW(queen->move(Position(3, 3), Position(0, 0)), ChessException);

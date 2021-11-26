@@ -54,6 +54,13 @@ public:
   void fillPacketWithSplitMessage(Packet &packet, Position &from, Position &to1,
                                   Position &to2);
 
+  void
+  fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position);
+
+  void
+  fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position1,
+                                      const Position &position2);
+
 private:
   //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
   //name and the corresponding message). After the function ends, the ptr_instruction points to this
@@ -80,6 +87,10 @@ private:
 
   void fillClientInstructionWithPossibleSplits(Socket &socket,
                                                std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillClientInstructionWithPossibleMerges(Socket &socket,
+                                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

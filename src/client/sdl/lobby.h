@@ -4,7 +4,7 @@
 #include "pixel_coordinate.h"
 #include "../../common/src/blocking_queue.h"
 
-#include <std::string>
+#include <string>
 
 class Lobby {
 private:

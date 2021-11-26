@@ -103,7 +103,9 @@ void Client::execute(const char *host, const char *port,
   BlockingQueue<std::string> queue;
   Lobby lobby(queue);
   LobbyHandlerThread login_thread(lobby);
-  std::shared_ptr<std::string> string_ptr;
+  login_thread.start();
+
+ // std::shared_ptr<std::string> string_ptr;
   //queue.pop(string_ptr);
   //IP = string_ptr->stoi();
   //queue.pop(string_ptr);
@@ -112,8 +114,6 @@ void Client::execute(const char *host, const char *port,
   //client_nick_name = *string_ptr;
   //queue.pop(string_ptr);
   //MATCH_NUMBER = string_PTR->stoi();
-  login_thread.start();
-
   welcomeClientAndAskForNickName();
   login_thread.setLobbyInactive();
   login_thread.join();

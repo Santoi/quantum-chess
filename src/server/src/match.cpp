@@ -1,4 +1,6 @@
 #include "match.h"
+
+#include <utility>
 #include "client_handler.h"
 #include "quantum_chess/board.h"
 #include "instructions/instruction.h"
@@ -9,18 +11,19 @@
 
 // TODO AVeriguar donde arranca match.
 
-Match::Match()
+Match::Match(std::string board_filename)
         : Thread(), board(), clients(), listening_queues(),
-          match_updates_queue() {
+          match_updates_queue(), board_filename(std::move(board_filename)) {
 }
 
-Match::Match(Match &&other_match) : Thread(std::move(other_match)),
-                                    board(std::move(other_match.board)),
-                                    clients(std::move(other_match.clients)),
-                                    listening_queues(std::move(
-                                            other_match.listening_queues)),
-                                    match_updates_queue(std::move(
-                                            other_match.match_updates_queue)) {}
+Match::Match(Match &&other) : Thread(std::move(other)),
+                              board(std::move(other.board)),
+                              clients(std::move(other.clients)),
+                              listening_queues(std::move(
+                                      other.listening_queues)),
+                              match_updates_queue(std::move(
+                                      other.match_updates_queue)),
+                              board_filename(std::move(other.board_filename)) {}
 
 ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
   ServerProtocol protocol;
@@ -83,7 +86,7 @@ void Match::checkAndNotifyUpdates() {
 }
 
 void Match::run() {
-  board.load();
+  board.load(board_filename);
   try {
     while (true)
       checkAndNotifyUpdates();

@@ -5,9 +5,9 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
-Renderer::Renderer(Window &window): renderer_(window.window(),
-                                             -1,
-                                             SDL_RENDERER_ACCELERATED) {
+Renderer::Renderer(Window &window) : renderer_(window.window(),
+                                               -1,
+                                               SDL_RENDERER_ACCELERATED) {
 }
 
 void Renderer::copy(TextureSprite &sprite, int x, int y) {
@@ -23,6 +23,7 @@ void Renderer::copy(TextureSprite &sprite, int x_src, int y_src, int x_dst,
 }
 
 void Renderer::copy(TextSprite &sprite, int x, int y) {
+  SDL2pp::Rect dest(x, y, sprite.width(), sprite.height());
   renderer_.Copy(sprite.sprite());
 }
 

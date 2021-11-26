@@ -12,7 +12,7 @@ private:
   bool split, merge, move;
   PixelCoordinate last;
   SDL_Event event;
-  SDL_KeyCode keyboard;
+  SDL_Keycode keyboard;
 
 public:
   EventHandler();

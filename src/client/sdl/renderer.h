@@ -24,6 +24,8 @@ public:
   void copy(Sprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
             int width, int height);
   int getMinDimension();
+
+  bool trueex();
 };
 
 

@@ -35,3 +35,7 @@ SDL2pp::Renderer &Renderer::renderer() {
 int Renderer::getMinDimension() {
   return std::min(renderer_.GetOutputWidth(), renderer_.GetOutputHeight());
 }
+
+bool Renderer::trueex() {
+    return true;
+}

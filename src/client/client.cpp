@@ -11,8 +11,8 @@
 #include "sdl/event_handler_thread.h"
 #include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
-#include "sdl/lobby_handler_thread.h"
-#include "sdl/lobby.h"
+#include "sdl/login_handler_thread.h"
+#include "sdl/login.h"
 
 #define FRAME_RATE 60
 
@@ -101,8 +101,8 @@ void Client::execute(const char *host, const char *port,
   sound_handler.playMusic();
   Window window;
   BlockingQueue<std::string> queue;
-  Lobby lobby(queue);
-  LobbyHandlerThread login_thread(lobby);
+  Login login(queue);
+  LoginHandlerThread login_thread(login);
   login_thread.start();
 
  // std::shared_ptr<std::string> string_ptr;
@@ -140,10 +140,7 @@ void Client::execute(const char *host, const char *port,
     uint32_t before_render_ticks = SDL_GetTicks();
 
     // Show rendered frame
-    //renderer.render(game);
-    if (renderer.trueex()) {
-
-    }
+    renderer.render(game);
 
     uint32_t after_render_ticks = SDL_GetTicks();
     uint32_t frame_delta = after_render_ticks - before_render_ticks;

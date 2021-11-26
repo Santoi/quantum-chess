@@ -1,11 +1,11 @@
-#include "lobby_handler_thread.h"
+#include "login_handler_thread.h"
 
-LobbyHandlerThread::LobbyHandlerThread(Lobby& lobby_)
-                    :active_lobby(true), lobby(lobby_) {
+LoginHandlerThread::LoginHandlerThread(Login& login_)
+                    :active_lobby(true), login(login_) {
 }
 
 
-void LobbyHandlerThread::run() {
+void LoginHandlerThread::run() {
     while (this->active_lobby) {
         SDL_WaitEvent(&event);
         switch (event.type) {
@@ -19,13 +19,13 @@ void LobbyHandlerThread::run() {
     }
 }
 
-void LobbyHandlerThread::setLobbyInactive() {
+void LoginHandlerThread::setLobbyInactive() {
     active_lobby = false;
 }
 
-void LobbyHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
+void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     PixelCoordinate pixel(mouse.x, mouse.y);
-    if (!lobby.pixelIsOnBottom(pixel))
+    if (!login.pixelIsOnBottom(pixel))
         return;
 }
 

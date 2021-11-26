@@ -1,21 +1,21 @@
-#ifndef QUANTUM_CHESS_PROJ_LOBBY_H
-#define QUANTUM_CHESS_PROJ_LOBBY_H
+#ifndef QUANTUM_CHESS_PROJ_LOGIN_H
+#define QUANTUM_CHESS_PROJ_LOGIN_H
 
 #include "pixel_coordinate.h"
 #include "../../common/src/blocking_queue.h"
 
 #include <string>
 
-class Lobby {
+class Login {
 private:
     BlockingQueue<std::string>& queue;
 
 public:
-    Lobby() = delete;
+    Login() = delete;
 
-    Lobby(BlockingQueue<std::string>& queue_);
+    Login(BlockingQueue<std::string>& queue_);
 
     bool pixelIsOnBottom(const PixelCoordinate& pixel_);
 };
 
-#endif //QUANTUM_CHESS_PROJ_LOBBY_H
+#endif //QUANTUM_CHESS_PROJ_LOGIN_H

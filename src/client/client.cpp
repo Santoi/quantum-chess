@@ -93,9 +93,9 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 }
 
 
-void doRenderingLoopForSceneWithHandler(Scene* scene, EventHandlerThread& event_handler,
+void doRenderingLoopForSceneWithHandler(Scene* scene, HandlerThread& handler,
                                         Renderer& renderer) {
-    while (event_handler.isOpen()) {
+    while (handler.isOpen()) {
         // Timing: calculate difference between this and previous frame
         // in milliseconds
         uint32_t before_render_ticks = SDL_GetTicks();
@@ -119,30 +119,38 @@ void Client::execute(const char *host, const char *port,
   SoundHandler sound_handler(mixer);
   sound_handler.playMusic();
   Window window;
- // BlockingQueue<std::string> queue;
- // Login login(queue);
-  //LoginHandlerThread login_thread(login);
-  //login_thread.start();
+  Renderer &renderer = window.renderer();
+  Login login(window);
+  LoginHandlerThread login_handler(login);
+  login_handler.start();
+  doRenderingLoopForSceneWithHandler(&login, login_handler, renderer);
 
- // std::shared_ptr<std::string> string_ptr;
-  //queue.pop(string_ptr);
-  //IP = string_ptr->stoi();
-  //queue.pop(string_ptr);
-  //PORT = string_ptr->stoi();
-  //queue.pop(string_ptr);
-  //client_nick_name = *string_ptr;
-  //queue.pop(string_ptr);
-  //MATCH_NUMBER = string_PTR->stoi();
-  welcomeClientAndAskForNickName();
- // login_thread.setLobbyInactive();
-  //login_thread.join();
-  Socket socket = Socket::createAConnectedSocket(host, port);
+  //if we are here the client is connected to a match
+  Socket socket = login.getClientSocket();
+  client_nick_name = login.getClientNickName();
+    /*
+     BlockingQueue<std::string> queue;
+    Login login(queue);
+    LoginHandlerThread login_thread(login);
+    login_thread.start();
+
+    std::shared_ptr<std::string> string_ptr;
+    queue.pop(string_ptr);
+    IP = string_ptr->stoi();
+    queue.pop(string_ptr);
+    PORT = string_ptr->stoi();
+    queue.pop(string_ptr);
+    client_nick_name = *string_ptr;
+    queue.pop(string_ptr);
+    MATCH_NUMBER = string_PTR->stoi();
+    welcomeClientAndAskForNickName();
+     */
+  login_handler.join();
 
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
   setUpClientsDataInServer(socket);
 
-  Renderer &renderer = window.renderer();
   Game game(window, send, role, sound_handler);
 
   ActionThread action_thread(received, game);

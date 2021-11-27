@@ -2,9 +2,11 @@
 #define QUANTUM_CHESS_PROJ_TEXT_ENTRY_H
 
 #include <string>
+#include <mutex>
 
 class TextEntry {
   std::string text;
+  std::mutex mutex;
 
 public:
   TextEntry() = default;

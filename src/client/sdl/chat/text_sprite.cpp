@@ -10,7 +10,8 @@ TextSprite::TextSprite(Renderer &renderer, Font &font_, const std::string &text)
     sprite_(renderer.renderer(), font_.renderText(text, 'b')), font(font_) {}
 
 void TextSprite::render(const std::string &text, int x, int y, char color) {
-  sprite_ = SDL2pp::Texture(renderer.renderer(), font.renderText(text, color));
+  sprite_ = SDL2pp::Texture(renderer.renderer(),
+                            font.renderMonoText(text, color));
   renderer.copy(*this, x, y);
 }
 
@@ -21,7 +22,8 @@ SDL2pp::Texture &TextSprite::sprite() {
 void
 TextSprite::render(const std::string &text, int x, int y, int width, int height,
                    char color) {
-  sprite_ = SDL2pp::Texture(renderer.renderer(), font.renderText(text, color));
+  sprite_ = SDL2pp::Texture(renderer.renderer(),
+                            font.renderMonoText(text, color));
   width_ = width;
   height_ = height;
   renderer.copy(*this, x, y);

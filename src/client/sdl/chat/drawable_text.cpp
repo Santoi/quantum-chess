@@ -5,8 +5,9 @@
 #include <iostream>
 #include <utility>
 
-#define SCALE_FACTOR 30
-#define HEIGHT_SCALE_FACTOR 32
+#define SCALE_FACTOR 10
+#define RENDER_HEIGHT_SCALE_FACTOR 28
+#define HEIGHT_SCALE_FACTOR 14
 
 DrawableText::DrawableText(Renderer &renderer_, Font &font_, std::string text,
                            char color) :
@@ -28,10 +29,13 @@ DrawableText::DrawableText(DrawableText &&other) noexcept:
     color(other.color) {}
 
 void DrawableText::render(int x, int y) {
-  if (!text.empty())
+  if (!text.empty()) {
+    std::cout << font.size() << std::endl;
     sprite.render(text, x, y,
-                  text.size() * renderer.getMinDimension() / SCALE_FACTOR,
-                  renderer.getMinDimension() / SCALE_FACTOR, color);
+                  text.size() * font.size(),
+                  font.size(),
+                  color);
+  }
 }
 
 size_t DrawableText::length() const {
@@ -39,9 +43,9 @@ size_t DrawableText::length() const {
 }
 
 int DrawableText::getTextOutputWidth() const {
-  return text.size() * renderer.getWidth() / SCALE_FACTOR;
+  return text.size() * font.size();
 }
 
 int DrawableText::getTextOutputHeight() const {
-  return renderer.getWidth() / HEIGHT_SCALE_FACTOR;
+  return font.size();
 }

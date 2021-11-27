@@ -19,9 +19,10 @@ private:
 public:
   TextSprite(Renderer &renderer, Font &font_, const std::string &text);
 
-  void render(const std::string &text, int x, int y);
+  void render(const std::string &text, int x, int y, char color);
 
-  void render(const std::string &text, int x, int y, int width, int height);
+  void render(const std::string &text, int x, int y, int width, int height,
+              char color);
 
   SDL2pp::Texture &sprite();
 

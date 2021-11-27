@@ -30,7 +30,6 @@ DrawableText::DrawableText(DrawableText &&other) noexcept:
 
 void DrawableText::render(int x, int y) {
   if (!text.empty()) {
-    std::cout << font.size() << std::endl;
     sprite.render(text, x, y,
                   text.size() * font.size(),
                   font.size(),

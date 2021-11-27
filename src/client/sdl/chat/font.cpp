@@ -11,6 +11,7 @@
 #define FUCHSIA {0xff, 0x00, 0xff}
 #define LIME {0x00, 0xff, 0x00}
 #define PURPLE {0x80, 0x00, 0x80}
+#define TEAL {0x00, 0xff, 0xff}
 
 
 Font::Font(int ptx, int index) : mono_font("fonts/font-mono.ttf",
@@ -22,7 +23,7 @@ Font::Font(int ptx, int index) : mono_font("fonts/font-mono.ttf",
                                      "fonts/font-italic.ttf", ptx,
                                      index) {
   colors = {
-      {'b', BLACK},
+      {'k', BLACK},
       {'w', WHITE},
       {'r', RED},
       {'g', GREEN},
@@ -32,6 +33,8 @@ Font::Font(int ptx, int index) : mono_font("fonts/font-mono.ttf",
       {'f', FUCHSIA},
       {'l', LIME},
       {'p', PURPLE},
+      {'d', GRAY},
+      {'t', TEAL},
   };
 }
 

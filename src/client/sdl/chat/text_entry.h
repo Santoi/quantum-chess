@@ -1,27 +1,27 @@
 #ifndef QUANTUM_CHESS_PROJ_TEXT_ENTRY_H
 #define QUANTUM_CHESS_PROJ_TEXT_ENTRY_H
 
-#include "../renderer.h"
-#include "font.h"
-#include "text_sprite.h"
-#include "text.h"
 #include <string>
 
 class TextEntry {
-  Text text;
+  std::string text;
 
 public:
-  TextEntry(Renderer &renderer_, Font &font_);
+  TextEntry() = default;
+
+  void enableEntry();
+
+  void disableEntry();
 
   // Concatenate string
-  void add(const std::string &text);
+  void concat(const std::string &text_);
 
   // Delete last character
   void backspace();
 
-  void render(int x, int y);
+  std::string &getText();
 
-  ~TextEntry();
+  ~TextEntry() = default;
 };
 
 

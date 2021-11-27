@@ -24,7 +24,7 @@ void Renderer::copy(TextureSprite &sprite, int x_src, int y_src, int x_dst,
 
 void Renderer::copy(TextSprite &sprite, int x, int y) {
   SDL2pp::Rect dest(x, y, sprite.width(), sprite.height());
-  renderer_.Copy(sprite.sprite());
+  renderer_.Copy(sprite.sprite(), SDL2pp::NullOpt, dest);
 }
 
 void Renderer::render(Scene &scene) {
@@ -38,6 +38,14 @@ SDL2pp::Renderer &Renderer::renderer() {
   return renderer_;
 }
 
-int Renderer::getMinDimension() {
+int Renderer::getMinDimension() const {
   return std::min(renderer_.GetOutputWidth(), renderer_.GetOutputHeight());
+}
+
+int Renderer::getWidth() const {
+  return renderer_.GetOutputWidth();
+}
+
+int Renderer::getHeight() const {
+  return renderer_.GetOutputHeight();
 }

@@ -33,7 +33,11 @@ public:
 
   void copy(TextSprite &sprite, int x, int y);
 
-  int getMinDimension();
+  int getMinDimension() const;
+
+  int getWidth() const;
+
+  int getHeight() const;
 };
 
 

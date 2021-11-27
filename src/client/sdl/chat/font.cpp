@@ -14,10 +14,12 @@
 #define TEAL {0x00, 0xff, 0xff}
 
 
-Font::Font(int ptx, int index) : mono_font("fonts/font-mono.ttf",
+Font::Font(int ptx, int index) : regular_font("fonts/font-regular.ttf", ptx,
+                                              index),
+                                 mono_font("fonts/erusfont.pcf",
                                            ptx,
                                            index),
-                                 bold_font("fonts/font-bold.ttf",
+                                 bold_font("fonts/erusfontbold.pcf",
                                            ptx, index),
                                  italic_font(
                                      "fonts/font-italic.ttf", ptx,
@@ -39,6 +41,10 @@ Font::Font(int ptx, int index) : mono_font("fonts/font-mono.ttf",
 }
 
 SDL2pp::Surface Font::renderText(const std::string &text, char color) {
+  return regular_font.RenderText_Solid(text, colors[color]);
+}
+
+SDL2pp::Surface Font::renderMonoText(const std::string &text, char color) {
   return mono_font.RenderText_Solid(text, colors[color]);
 }
 
@@ -48,4 +54,8 @@ SDL2pp::Surface Font::renderBoldText(const std::string &text, char color) {
 
 SDL2pp::Surface Font::renderItalicText(const std::string &text, char color) {
   return italic_font.RenderText_Solid(text, colors[color]);
+}
+
+int Font::size() const {
+  return mono_font.GetHeight();
 }

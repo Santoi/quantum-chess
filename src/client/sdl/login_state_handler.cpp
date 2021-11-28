@@ -13,6 +13,12 @@ void LoginStateHandler::fillWithActiveButtons(std::list<std::reference_wrapper<B
     current_state->fillWithActiveButtons(active_buttons);
 }
 
+void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+                                                        active_text_entries) {
+    current_state->fillWithActiveTextEntryButtons(active_text_entries);
+}
+
+
 void LoginStateHandler::proccessTokens(const std::list<std::string>& tokens) {
     current_state->proccessTokens(tokens);
 }

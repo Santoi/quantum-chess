@@ -12,6 +12,7 @@ private:
     PixelCoordinate last_click;
     SDL_Event event;
     LoginStateHandler& login_state_handler;
+    bool expecting_text_entry;
 
 public:
     LoginHandlerThread() = delete;

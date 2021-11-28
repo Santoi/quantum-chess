@@ -3,11 +3,16 @@
 
 #include "login.h"
 #include "login_state.h"
+
 #include <memory>
 
 class LoginRenderer;
 
 class LoginState;
+
+class Button;
+
+class TextEntryButton;
 
 class LoginStateHandler {
 protected:
@@ -20,6 +25,8 @@ public:
     bool clientIsConnectedToMatch();
 
     void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons);
+
+    void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>& active_text_entries);
 
     void proccessTokens(const std::list<std::string>& tokens);
 

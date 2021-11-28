@@ -3,19 +3,21 @@
 
 #include <string>
 #include <mutex>
+#include <cstdint>
 
 class TextEntry {
+  uint8_t limit;
   std::string text;
   std::mutex mutex;
 
 public:
-  TextEntry() = default;
+  explicit TextEntry(uint8_t limit = UINT8_MAX);
 
   void enableEntry();
 
   void disableEntry();
 
-  // Concatenate string
+  // Concatenate string if length is less than limit
   void concat(const std::string &text_);
 
   // Delete last character

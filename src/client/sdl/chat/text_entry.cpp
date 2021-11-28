@@ -13,6 +13,11 @@ void TextEntry::backspace() {
     text.pop_back();
 }
 
+void TextEntry::clear() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  text.clear();
+}
+
 void TextEntry::enableEntry() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   SDL_StartTextInput();

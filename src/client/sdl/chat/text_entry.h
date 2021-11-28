@@ -21,6 +21,8 @@ public:
   // Delete last character
   void backspace();
 
+  void clear();
+
   std::string &getText();
 
   ~TextEntry() = default;

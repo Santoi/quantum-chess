@@ -122,14 +122,15 @@ void Client::execute(const char *host, const char *port,
   Window window;
   Renderer &renderer = window.renderer();
   LoginRenderer login_renderer(window);
-  Login login(window);
-  LoginHandlerThread login_handler(login);
+
+  LoginState login_state;
+  LoginHandlerThread login_handler(login_state);
   login_handler.start();
   doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
 
   //if we are here the client is connected to a match
-  Socket socket = login.getClientSocket();
-  client_nick_name = login.getClientNickName();
+  Socket socket = login_state.getClientSocket();
+  client_nick_name = login_state.getClientNickName();
     /*
      BlockingQueue<std::string> queue;
     Login login(queue);

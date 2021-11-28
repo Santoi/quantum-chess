@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_HANDLER_THREAD_H
 
 #include "handler_thread.h"
-#include "login.h"
+#include "login_state.h"
 #include "pixel_coordinate.h"
 #include <SDL2/SDL.h>
 #include <atomic>
@@ -11,12 +11,12 @@ class LoginHandlerThread : public HandlerThread {
 private:
     PixelCoordinate last_click;
     SDL_Event event;
-    Login& login;
+    LoginState& login_state;
 
 public:
     LoginHandlerThread() = delete;
 
-    LoginHandlerThread(Login& login_);
+    LoginHandlerThread(LoginState& login_state_);
 
     // Event loop
     void run() override;

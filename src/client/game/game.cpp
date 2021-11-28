@@ -14,16 +14,17 @@
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
            ClientData::Role role_, const SoundHandler &sound_handler_) :
-        scale(window.renderer().getMinDimension()),
-        board(window.renderer(), "img/stars.jpg", scale, scale),
-        send_queue(send_queue_), mutex(), role(role_),
-        sound_handler(sound_handler_) {}
+    scale(window.renderer().getMinDimension()),
+    board(window.renderer(), "img/stars.jpg", scale, scale),
+    send_queue(send_queue_), mutex(), role(role_),
+    sound_handler(sound_handler_) {}
 
-void Game::loadSprite(Sprite &sprite, int x, int y) {
+void Game::loadSprite(TextureSprite &sprite, int x, int y) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   const PixelCoordinate pixel(x, y);
-  sprites.insert(std::pair<const PixelCoordinate, Sprite>(pixel,
-                                                          std::move(sprite)));
+  sprites.insert(std::pair<const PixelCoordinate, TextureSprite>(pixel,
+                                                                 std::move(
+                                                                     sprite)));
 }
 
 void Game::setScale(int scale_) {
@@ -34,7 +35,7 @@ void Game::setScale(int scale_) {
 void Game::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   auto &tiles = board.getTiles();
-  Sprite &background = board.getBackground();
+  TextureSprite &background = board.getBackground();
   auto &chessmen = board.getChessmen();
 
   for (auto &it: tiles) {
@@ -79,7 +80,7 @@ void Game::askMoveTiles(PixelCoordinate &coords) {
   Position position;
   transformer.pixel2Position(coords, position, scale);
   send_queue.push(std::make_shared<RemoteClientPossibleMovesInstruction>(
-          std::list<Position>(1, position)));
+      std::list<Position>(1, position)));
 }
 
 void Game::askSplitTiles(PixelCoordinate &coords) {
@@ -87,7 +88,7 @@ void Game::askSplitTiles(PixelCoordinate &coords) {
   Position position;
   transformer.pixel2Position(coords, position, scale);
   send_queue.push(std::make_shared<RemoteClientPossibleSplitsInstruction>(
-          std::list<Position>(1, position)));
+      std::list<Position>(1, position)));
 }
 
 void Game::askMergeTiles(PixelCoordinate &coords) {
@@ -95,7 +96,7 @@ void Game::askMergeTiles(PixelCoordinate &coords) {
   Position position;
   transformer.pixel2Position(coords, position, scale);
   send_queue.push(std::make_shared<RemoteClientPossibleMergesInstruction>(
-          std::list<Position>(1, position)));
+      std::list<Position>(1, position)));
 }
 
 void Game::askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2) {
@@ -107,7 +108,7 @@ void Game::askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2) {
   positions.push_back(position1);
   positions.push_back(position2);
   send_queue.push(std::make_shared<RemoteClientPossibleMergesInstruction>(
-          std::move(positions)));
+      std::move(positions)));
 }
 
 void
@@ -116,8 +117,8 @@ Game::askEntangledTiles(PixelCoordinate &coords) {
   Position position;
   transformer.pixel2Position(coords, position, scale);
   send_queue.push(
-          std::make_shared<RemoteClientEntangledChessmanInstruction>(
-                  std::list<Position>(1, position)));
+      std::make_shared<RemoteClientEntangledChessmanInstruction>(
+          std::list<Position>(1, position)));
 }
 
 void
@@ -126,8 +127,8 @@ Game::askQuantumTiles(PixelCoordinate &coords) {
   Position position;
   transformer.pixel2Position(coords, position, scale);
   send_queue.push(
-          std::make_shared<RemoteClientSameChessmanInstruction>(
-                  std::list<Position>(1, position)));
+      std::make_shared<RemoteClientSameChessmanInstruction>(
+          std::list<Position>(1, position)));
 }
 
 void Game::entangledTiles(const std::list<Position> &positions) {
@@ -176,7 +177,7 @@ void Game::splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
   transformer.pixel2Position(to1, to1_, scale);
   transformer.pixel2Position(to2, to2_, scale);
   send_queue.push(
-          std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
+      std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
 }
 
 void Game::mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
@@ -189,7 +190,7 @@ void Game::mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
   transformer.pixel2Position(from2, from2_, scale);
   transformer.pixel2Position(to, to_, scale);
   send_queue.push(
-          std::make_shared<RemoteClientMergeInstruction>(from1_, from2_, to_));
+      std::make_shared<RemoteClientMergeInstruction>(from1_, from2_, to_));
 }
 
 void Game::load(std::vector<ChessmanData> &chessman_data_vector) {

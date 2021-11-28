@@ -14,7 +14,7 @@
 #include <map>
 #include <mutex>
 
-class Sprite;
+class TextureSprite;
 
 class RemoteClientInstruction;
 
@@ -23,7 +23,7 @@ private:
   int scale;
   Board board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  std::map<const PixelCoordinate, Sprite> sprites;
+  std::map<const PixelCoordinate, TextureSprite> sprites;
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
@@ -51,7 +51,7 @@ public:
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 
-  void loadSprite(Sprite &sprite, int x, int y);
+  void loadSprite(TextureSprite &sprite, int x, int y);
 
   void render();
 

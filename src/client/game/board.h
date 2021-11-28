@@ -14,6 +14,7 @@
 
 class Board {
 private:
+  Renderer &renderer;
   TextureSprite background;
   std::map<const Position, Chessman> chessmen;
   std::map<const Position, Tile> board;
@@ -22,21 +23,27 @@ private:
 
 public:
   Board(Renderer &renderer_, const std::string &image, int width, int height);
+
   ~Board() = default;
 
   void render();
 
   std::map<const Position, Tile> &getTiles();
-  std::map<const Position, Chessman>& getChessmen();
-  TextureSprite& getBackground();
 
-  void load(std::vector<ChessmanData> & chessman_data_vector);
-  void moveChessman(Position &orig, Position &dest);
+  std::map<const Position, Chessman> &getChessmen();
+
+  TextureSprite &getBackground();
+
+  void load(std::vector<ChessmanData> &chessman_data_vector);
 
   void moveTile(const Position &pos);
+
   void quantumTile(const Position &pos);
+
   void entangledTile(const Position &pos);
+
   void splitTile(const Position &pos);
+
   void mergeTile(const Position &pos);
 
   void setDefault();

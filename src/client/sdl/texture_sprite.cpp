@@ -7,19 +7,13 @@
 
 TextureSprite::TextureSprite(Renderer &renderer, const std::string &file_name,
                              int width,
-                             int height) : Sprite(renderer, width, height),
-                                           sprite_(renderer.renderer(),
-                                                   file_name) {}
-
-SDL2pp::Texture &TextureSprite::sprite() {
-  return sprite_;
-}
+                             int height) : Sprite(renderer, file_name,
+                                                  width, height) {}
 
 void TextureSprite::render(int x_src, int y_src, int x, int y, int width_src,
                            int height_src, int width, int height) {
   width_ = width;
   height_ = height;
-//  renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
   renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
 }
 

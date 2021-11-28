@@ -16,7 +16,7 @@
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
   std::map<uint16_t, std::vector<ClientData>> data = std::move(
-          protocol.receiveMatchesInfo(client_socket));
+      protocol.receiveMatchesInfo(client_socket));
   std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                " quieres entrar." << std::endl;
   std::cout << "Las partidas disponibles son" << std::endl;
@@ -26,20 +26,20 @@ uint16_t Client::getMatchesInfo(Socket &client_socket) {
     std::vector<ClientData> &client_data = it->second;
     for (auto it_match = client_data.begin();
          it_match != client_data.end(); ++it_match) {
-      char role = ' ';
+      char other_cliente_role = ' ';
       switch (it_match->role) {
         case ClientData::ROLE_WHITE:
-          role = 'w';
+          other_cliente_role = 'w';
           break;
         case ClientData::ROLE_BLACK:
-          role = 'b';
+          other_cliente_role = 'b';
           break;
         case ClientData::ROLE_SPECTATOR:
-          role = 'o';
+          other_cliente_role = 'o';
           break;
       }
       std::cout << it_match->name << "#" << it_match->id << "("
-                << role << "), ";
+                << other_cliente_role << "), ";
     }
     std::cout << std::endl;
     last_id = it->first;
@@ -169,8 +169,8 @@ bool Client::readCommand() {
       throw ChessException("posicion invalida");
 
     send.push(std::make_shared<RemoteClientMoveInstruction>(
-            Position((uint8_t) x1 - 'A', (uint8_t) y1),
-            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
+        Position((uint8_t) x1 - 'A', (uint8_t) y1),
+        Position((uint8_t) x2 - 'A', (uint8_t) y2)));
   }
   return false;
 }

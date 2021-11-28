@@ -1,8 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 #define QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 
-#include "renderer.h"
 #include "sprite.h"
+#include "renderer.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <string>
 
@@ -11,9 +11,6 @@
 class Renderer;
 
 class TextureSprite : public Sprite {
-private:
-  SDL2pp::Texture sprite_;
-
 public:
   explicit TextureSprite(Renderer &renderer,
                          const std::string &file_name = DEFAULT_SPRITE,
@@ -22,8 +19,6 @@ public:
   TextureSprite(TextureSprite &&other) = default;
 
   TextureSprite &operator=(TextureSprite &&other) noexcept;
-
-  SDL2pp::Texture &sprite();
 
   // Render the current sprite from (x, y) to (x + width, y + height)
   void render(int x_src, int y_src, int x, int y,

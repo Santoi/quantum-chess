@@ -1,0 +1,10 @@
+#ifndef QUANTUM_CHESS_PROJ_SCENE_H
+#define QUANTUM_CHESS_PROJ_SCENE_H
+
+
+class Scene {
+
+};
+
+
+#endif //QUANTUM_CHESS_PROJ_SCENE_H

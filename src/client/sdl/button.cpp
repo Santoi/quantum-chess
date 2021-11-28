@@ -1,5 +1,6 @@
 #include "button.h"
 
-bool Button::pixelIsOnButton(const PixelCoordinate& pixel_) {
+bool Button::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
     return false;
 }
+

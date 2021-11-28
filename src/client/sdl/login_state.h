@@ -5,6 +5,7 @@
 #include "login_renderer.h"
 #include "button.h"
 #include <atomic>
+#include <list>
 
 class LoginRenderer;
 
@@ -23,6 +24,10 @@ public:
     bool clientIsConnectedToMatch();
 
     void tellRendererWhatToRender(LoginRenderer& login_renderer) const;
+
+    void getActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons);
+
+    void proccessTokens(const std::list<std::string>& tokens);
 
     Socket getClientSocket();
 

@@ -23,4 +23,14 @@ void ChatMessage::render(int x, int y) {
   y_pos += name.getTextOutputHeight();
   x_pos = x;
   message.render(x_pos, y_pos);
+  height = y_pos - y;
+}
+
+ChatMessage::ChatMessage(ChatMessage &&other) noexcept:
+    renderer(other.renderer), font(other.font), name(std::move(other.name)),
+    id(std::move(other.id)),
+    time(std::move(other.time)), message(std::move(other.message)) {}
+
+int ChatMessage::getDrawableHeight() const {
+  return height;
 }

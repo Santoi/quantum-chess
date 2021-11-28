@@ -13,13 +13,18 @@ class ChatMessage {
   DrawableText id;
   DrawableText time;
   DrawableText message;
+  int height = 0;
 
 public:
   ChatMessage(Renderer &renderer, Font &font,
               const std::string &name, const std::string &id,
               const std::string &time, const std::string &message);
 
+  ChatMessage(ChatMessage &&other) noexcept;
+
   void render(int x, int y);
+
+  int getDrawableHeight() const;
 };
 
 

@@ -1,7 +1,6 @@
 #ifndef QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 #define QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 
-#include "login.h"
 #include "login_renderer.h"
 #include "button.h"
 #include <atomic>
@@ -10,28 +9,34 @@
 class LoginRenderer;
 
 class LoginState {
-private:
-    Login login;
-    std::atomic<bool> connected_to_server;
-    std::atomic<bool> connected_to_match;
-    Button connect_button;
-    Button select_ip_text_field;
-    Button select_port_text_field;
+protected:
+    std::list<Button> buttons;
 
 public:
+
     LoginState();
 
-    bool clientIsConnectedToMatch();
+    virtual bool clientIsConnectedToMatch() = 0;
 
-    void tellRendererWhatToRender(LoginRenderer& login_renderer) const;
+    virtual void tellRendererWhatToRender(LoginRenderer& login_renderer) = 0;
 
-    void getActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons);
+    virtual void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) = 0;
 
-    void proccessTokens(const std::list<std::string>& tokens);
+    virtual void proccessTokens(const std::list<std::string>& tokens) = 0;
+};
 
-    Socket getClientSocket();
+class NotConnectedToServerState: public LoginState {
+public:
 
-    std::string getClientNickName();
+    NotConnectedToServerState();
+
+    bool clientIsConnectedToMatch() override;
+
+    void tellRendererWhatToRender(LoginRenderer& login_renderer) override;
+
+    void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) override;
+
+    void proccessTokens(const std::list<std::string>& tokens) override;
 };
 
 

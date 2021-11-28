@@ -13,7 +13,7 @@
 #include "sdl/sound/sound_handler.h"
 #include "sdl/login_handler_thread.h"
 #include "sdl/login_renderer.h"
-#include "sdl/login.h"
+#include "sdl/login_state_handler.h"
 
 #define FRAME_RATE 60
 
@@ -121,16 +121,16 @@ void Client::execute(const char *host, const char *port,
   sound_handler.playMusic();
   Window window;
   Renderer &renderer = window.renderer();
-  LoginState login_state;
-  LoginRenderer login_renderer(login_state, window);
+  LoginStateHandler login_state_handler;
+  LoginRenderer login_renderer(login_state_handler, window);
 
-  LoginHandlerThread login_handler(login_state);
+  LoginHandlerThread login_handler(login_state_handler);
   login_handler.start();
   doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
 
   //if we are here the client is connected to a match
-  Socket socket = login_state.getClientSocket();
-  client_nick_name = login_state.getClientNickName();
+  Socket socket = login_state_handler.getClientSocket();
+  client_nick_name = login_state_handler.getClientNickName();
     /*
      BlockingQueue<std::string> queue;
     Login login(queue);

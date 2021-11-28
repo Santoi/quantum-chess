@@ -3,23 +3,24 @@
 
 #include "scene.h"
 #include "window.h"
-#include "login_state.h"
+#include "login_state_handler.h"
+#include "button.h"
 
-class LoginState;
+class LoginStateHandler;
 
 class LoginRenderer: public Scene {
 private:
-    const LoginState& login_state;
+    LoginStateHandler& login_state_handler;
 
 public:
 
     LoginRenderer() = delete;
 
-    LoginRenderer(const LoginState& login_state_, Window& window);
+    LoginRenderer(LoginStateHandler& login_state_handler_, Window& window);
 
     void render();
 
-    void renderIPAndPortFields();
+    void renderIPAndPortFields(std::list<Button>& buttons);
 
     void setScale(int scale_);
 };

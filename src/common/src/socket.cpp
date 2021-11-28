@@ -1,234 +1,153 @@
 #include "socket.h"
 #include "socket_closed.h"
-#include <errno.h>
-#include <string.h>
+#include "socket_exception.h"
+#include <cerrno>
+#include <cstring>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include <cstdint>
+#include <cstdio>
 #include <iostream>
-#define EXITO 0
+
 #define ERROR -1
 #define MAX_QUEUE 8
-#define SOCKET_NO_DISPONIBLE 0
 #define INVALID_FILE_DESCRIPTOR -1
-#define MAX_MENSAJE 50
-#define MAX_ERROR_MESSAGE 250
 
-
-Socket::Socket()
-        :fd(INVALID_FILE_DESCRIPTOR) {
+Socket::Socket() : fd(INVALID_FILE_DESCRIPTOR) {
 }
 
-Socket::Socket(int fd_valido)
-        :fd(fd_valido) {
+Socket::Socket(int fd_valido) : fd(fd_valido) {
 }
 
-Socket::Socket(Socket&& otro_socket) {
-    this->fd = otro_socket.fd;
-    otro_socket.fd = INVALID_FILE_DESCRIPTOR;
+Socket::Socket(const char *hostname, const char *service) : fd(-1),
+                                                            network(hostname,
+                                                                    service) {}
+
+Socket::Socket(Socket &&other) noexcept {
+  fd = other.fd;
+  other.fd = INVALID_FILE_DESCRIPTOR;
 }
 
-Socket Socket::createAConnectedSocket(const char* host, const char* servicio) {
-    Socket socket_cliente;
-    socket_cliente.inicializarYConectarCliente(host, servicio);
-    return socket_cliente;
+Socket Socket::createAConnectedSocket(const char *host, const char *service) {
+  Socket skt(host, service);
+  skt.connect();
+  return skt;
 }
 
-Socket Socket::createAListeningSocket(const char* host, const char* servicio) {
-    Socket socket_servidor;
-    socket_servidor.inicializarServidorConBindYListen(host, servicio);
-    return socket_servidor;
+Socket Socket::createAListeningSocket(const char *host, const char *service) {
+  Socket skt(host, service);
+  skt.bindAndListen();
+  return skt;
 }
 
-void Socket::inicializarYConectarCliente(const char* host, const char* servicio) {
-    struct addrinfo baseaddr;
-    struct addrinfo* ptraddr;
-    struct addrinfo* ptrAux;
-    memset(&baseaddr, 0, sizeof(struct addrinfo));
-    baseaddr.ai_socktype = SOCK_STREAM;
-    baseaddr.ai_family = AF_UNSPEC; //Ipv4 o Ipv6
-    baseaddr.ai_flags = 0; //Ningún flag ya que es un cliente
-    int aux = getaddrinfo(host, servicio, &baseaddr, &ptraddr);
-    if (aux != EXITO){
-        fprintf(stderr, "Error: %s\n", gai_strerror(aux));
-        throw std::runtime_error("");
+void Socket::connect() {
+  bool connected = false;
+  while (!connected) {
+    shutdownAndClose();
+    const addrinfo *address = open();
+    connected = !::connect(fd, address->ai_addr, address->ai_addrlen);
+  }
+}
+
+void Socket::bindAndListen() {
+  bool bound = false;
+  while (!bound) {
+    shutdownAndClose();
+    const struct addrinfo *address = open();
+    int aux = 1;
+    if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &aux, sizeof(aux)) < 0)
+      throw SocketException("binding failed");
+    bound = !::bind(fd, address->ai_addr, address->ai_addrlen);
+  }
+  if (::listen(fd, MAX_QUEUE))
+    throw SocketException("Error trying to listen for connections");
+}
+
+Socket Socket::accept() const {
+  int new_fd = ::accept(fd, nullptr, nullptr);
+  if (new_fd == INVALID_FILE_DESCRIPTOR) {
+    if (errno == EBADF || errno == EINVAL)
+      throw SocketClosed();
+    throw SocketException("can't accept socket connection");
+  }
+  Socket socket_cliente(new_fd);
+  return socket_cliente;
+}
+
+size_t Socket::send(Packet &packet) const {
+  if (fd == INVALID_FILE_DESCRIPTOR)
+    throw SocketException("uninitialized socket");
+  packet.resetSent();
+  // Mientras que quede algo pendiente de enviar se itera.
+  while (packet.pendingToSentSize() > 0) {
+    // Se envian los datos pendientes.
+    ssize_t bytes_sent = ::send(fd, packet.getPendingToSent(),
+                                packet.pendingToSentSize(), MSG_NOSIGNAL);
+    // Si no se envio nada se lanza excepcion de socket cerrado.
+    if (bytes_sent == 0)
+      throw SocketClosed();
+    if (bytes_sent == -1) {
+      if (errno == EPIPE)
+        throw SocketClosed();
+      throw std::runtime_error("failed to send data");
     }
-    int fdDelServidor = 0;
-    bool conectados = false;
-    ptrAux = ptraddr;
-    while (ptrAux != nullptr && conectados == false){
-        fdDelServidor = socket(ptrAux->ai_family, ptrAux->ai_socktype,
-                               ptrAux->ai_protocol);
-        if (fdDelServidor == ERROR) {
-            fprintf(stderr, "Error: %s\n", strerror(errno));
-        } else {
-            aux = connect(fdDelServidor, ptrAux->ai_addr, ptrAux->ai_addrlen);
-            if (aux == ERROR) {
-                fprintf(stderr, "Error: %s\n", strerror(errno));
-                aux = close(fdDelServidor);
-                if (aux != EXITO)
-                    fprintf(stderr, "Error: %s\n", strerror(errno));
-            } else {
-                conectados = true;
-            }
-        }
-        ptrAux = ptraddr->ai_next;
-    }
-    freeaddrinfo(ptraddr);
-    if (!conectados)
-        throw std::runtime_error("Error: no se pudo conectar el socket cliente.");
-    this->fd = fdDelServidor;
+    // Se contabiliza la cantidad de bytes enviados.
+    packet.addSentAmount(bytes_sent);
+  }
+  // Se devuelve la cantidad de bytes enviados.
+  return packet.sent();
 }
 
-void Socket::inicializarServidorConBindYListen(const char* host, const char* servicio) {
-    struct addrinfo baseaddr;
-    struct addrinfo* ptraddr;
-    struct addrinfo* ptrAux;
-    memset(&baseaddr, 0, sizeof(struct addrinfo));
-    baseaddr.ai_socktype = SOCK_STREAM;
-    baseaddr.ai_family = AF_UNSPEC; //Ipv4 o Ipv6
-    baseaddr.ai_flags = AI_PASSIVE; //Las direcciones dadas podrán usar bind()
-    //y accept()
-    int aux = getaddrinfo(host, servicio, &baseaddr, &ptraddr);
-    if (aux != EXITO){
-        fprintf(stderr, "Error: %s\n", gai_strerror(aux));
-        throw std::runtime_error("");
+size_t Socket::receive(Packet &packet, size_t size) const {
+  if (fd == INVALID_FILE_DESCRIPTOR)
+    throw SocketException("uninitialized socket");
+  // Se crea un buffer para recibir.
+  std::vector<char> buffer(size, 0);
+  packet.reset();
+  while (packet.size() < size) {
+    // Se recibe el tamanio del buffer.
+    ssize_t bytes_recv = recv(fd, buffer.data(), size - packet.size(), 0);
+    // Si no se recibio nada, socket cerrado. Sino error.
+    if (bytes_recv == 0) {
+      throw SocketClosed();
     }
-    int fdServidor = 0;
-    bool socketActivo = false;
-    ptrAux = ptraddr;
-    while (ptrAux != NULL && socketActivo == false){
-        fdServidor = socket(ptrAux->ai_family, ptrAux->ai_socktype,
-                            ptrAux->ai_protocol);
-        if (fdServidor == ERROR) {
-            printf("Error: %s\n", strerror(errno));
-        } else {
-            int val = 1;
-            aux = setsockopt(fdServidor, SOL_SOCKET, SO_REUSEADDR,
-                             &val, sizeof(val));
-            if (aux != EXITO){
-                fprintf(stderr, "Error: %s\n", strerror(errno));
-                aux = close(fdServidor);
-                if (aux != EXITO)
-                    fprintf(stderr, "Error: %s\n", strerror(errno));
-            } else {
-                aux = bind(fdServidor, ptraddr->ai_addr, ptraddr->ai_addrlen);
-                if (aux != EXITO){
-                    fprintf(stderr, "Error: %s\n", strerror(errno));
-                    aux = close(fdServidor);
-                    if (aux != EXITO)
-                        fprintf(stderr, "Error: %s\n", strerror(errno));
-                } else {
-                    socketActivo = true;
-                }
-            }
-        }
-        ptrAux = ptraddr->ai_next;
+    if (bytes_recv == -1) {
+      if (errno == EBADF) {
+        throw SocketClosed();
+      }
+      throw std::runtime_error("failed to receive data");
     }
-    freeaddrinfo(ptraddr);
-    aux = listen(fdServidor, MAX_QUEUE);
-    if (aux != EXITO){
-        fprintf(stderr, "Error: %s\n", strerror(errno));
-        fprintf(stderr, "Error en la función listen\n");
-        aux = close(fdServidor);
-        if (aux != EXITO)
-            fprintf(stderr, "Error: %s\n", strerror(errno));
-        throw std::runtime_error("Error: no se pudo crear el socket servidor.");
-    }
-    this->fd = fdServidor;
-}
-
-Socket Socket::acceptSocket() {
-    int fd = accept(this->fd, nullptr, nullptr);
-    if (fd == ERROR) {
-        if (errno == EBADF || errno == EINVAL)
-            throw SocketClosed();
-        throw CantAcceptClientSocketError();
-    }
-    Socket socket_cliente(fd);
-    return socket_cliente;
-}
-
-size_t Socket::send(Packet & packet) const {
-    if (fd == INVALID_FILE_DESCRIPTOR)
-        throw InvalidSocketError("Error: uninitialized socket");
-    packet.resetSent();
-    // Mientras que quede algo pendiente de enviar se itera.
-    while (packet.pendingToSentSize() > 0) {
-        // Se envian los datos pendientes.
-        ssize_t bytes_sent = ::send(fd, packet.getPendingToSent(),
-                                    packet.pendingToSentSize(), MSG_NOSIGNAL);
-        // Si no se envio nada se lanza excepcion de socket cerrado.
-        if (bytes_sent == 0)
-            throw SocketClosed();
-        if (bytes_sent == -1) {
-            if (errno == EPIPE)
-                throw SocketClosed();
-            throw std::runtime_error("error al enviar datos");
-        }
-        // Se contabiliza la cantida de bytes enviados.
-        packet.addSentAmount(bytes_sent);
-    }
-    // Se devuelve la cantidad de bytes enviados.
-    return packet.sent();
-}
-
-size_t Socket::receive(Packet & packet, size_t size) const {
-    if (fd == INVALID_FILE_DESCRIPTOR)
-        throw InvalidSocketError("Error: uninitialized socket");
-    // Se crea un buffer para recibir.
-    std::vector<char> buffer(size, 0);
-    packet.reset();
-    while (packet.size() < size) {
-        // Se recibe el tamanio del buffer.
-        ssize_t bytes_recv = recv(fd, buffer.data(), size - packet.size(), 0);
-        // Si no se recibio nada, socket cerrado. Sino error.
-        if (bytes_recv == 0) {
-            throw SocketClosed();
-        }
-        if (bytes_recv == -1) {
-            if (errno == EBADF) {
-                throw SocketClosed();
-            }
-            throw std::runtime_error("error al recibir datos");
-        }
-        // Se agregan los bytes recibidos al paquete.
-        packet.addBytes(buffer.data(), bytes_recv);
-    }
-    // Se devuelven los bytes recibidos.
-    return packet.size();
+    // Se agregan los bytes recibidos al paquete.
+    packet.addBytes(buffer.data(), bytes_recv);
+  }
+  // Se devuelven los bytes recibidos.
+  return packet.size();
 }
 
 void Socket::shutdownAndClose() {
-    if (fd != INVALID_FILE_DESCRIPTOR) {
-        shutdown(this->fd, SHUT_RDWR);
-        int aux = close(this->fd);
-        fd = INVALID_FILE_DESCRIPTOR;
-        if (aux != EXITO)
-            fprintf(stderr, "Error: %s\n", strerror(errno));
-    }
+  if (fd != INVALID_FILE_DESCRIPTOR) {
+    ::shutdown(fd, SHUT_RDWR);
+    int aux = ::close(fd);
+    fd = INVALID_FILE_DESCRIPTOR;
+    if (aux == ERROR)
+      throw SocketException("couldn't close socket");
+  }
 }
 
 Socket::~Socket() {
-    shutdownAndClose();
+  shutdownAndClose();
 }
 
-CantAcceptClientSocketError::CantAcceptClientSocketError() noexcept {
-    char str_aux[MAX_ERROR_MESSAGE];
-    this->error_message = strerror_r(errno, str_aux, MAX_ERROR_MESSAGE);
-}
-
-const char* CantAcceptClientSocketError::what() const noexcept {
-    return this->error_message;
-}
-
-InvalidSocketError::InvalidSocketError(const char* mensaje_de_error) noexcept {
-    this->error_message = error_message;
-}
-const char* InvalidSocketError::what()  const noexcept {
-    return this->error_message;
+const struct addrinfo *Socket::open() {
+  const struct addrinfo *address;
+  do {
+    address = network.findAddress();
+    if (address == nullptr)
+      throw SocketException("socket couldn't open");
+    fd = ::socket(address->ai_family, address->ai_socktype,
+                  address->ai_protocol);
+  } while (fd == INVALID_FILE_DESCRIPTOR);
+  return address;
 }

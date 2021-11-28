@@ -1,50 +1,19 @@
 #include "chessman.h"
+#include "../sdl/chessman_sprite_repository.h"
 #include <utility>
 
-Chessman::Chessman(Renderer &renderer, const std::string &chessman,
-                   int probability_): renderer(renderer),
-                   sprite_(renderer, "img/falcon.png",
-                           renderer.getMinDimension() / 10,
-                           renderer.getMinDimension() / 10),
-                   fill(renderer, "img/falcon.png",
-                           renderer.getMinDimension() / 10,
-                           renderer.getMinDimension() / 10),
-                   probability(probability_ / 100.0f) {
-  image = {
-    {"tb", std::make_pair<std::string, std::string>
-      ("img/black_tower_quantum.png", "img/black_tower.png")},
-    {"tw", std::make_pair<std::string, std::string>
-      ("img/white_tower_quantum.png", "img/white_tower.png")},
-    {"kb", std::make_pair<std::string, std::string>
-      ("img/black_knight_quantum.png", "img/black_knight.png")},
-    {"kw", std::make_pair<std::string, std::string>
-      ("img/white_knight_quantum.png", "img/white_knight.png")},
-    {"bb", std::make_pair<std::string, std::string>
-      ("img/black_bishop_quantum.png", "img/black_bishop.png")},
-    {"bw", std::make_pair<std::string, std::string>
-      ("img/white_bishop_quantum.png", "img/white_bishop.png")},
-    {"Kb", std::make_pair<std::string, std::string>
-      ("img/black_king_quantum.png", "img/black_king.png")},
-    {"Kw", std::make_pair<std::string, std::string>
-      ("img/white_king_quantum.png", "img/white_king.png")},
-    {"qb", std::make_pair<std::string, std::string>
-      ("img/black_queen_quantum.png", "img/black_queen.png")},
-    {"qw", std::make_pair<std::string, std::string>
-      ("img/white_queen_quantum.png", "img/white_queen.png")},
-    {"pb", std::make_pair<std::string, std::string>
-      ("img/black_pawn_quantum.png", "img/black_pawn.png")},
-    {"pw", std::make_pair<std::string, std::string>
-      ("img/white_pawn_quantum.png", "img/white_pawn.png")},
-  };
-  fill.loadImage(image[chessman].first, renderer.getMinDimension() / 10,
-                 renderer.getMinDimension() / 10);
-  sprite_.loadImage(image[chessman].second, renderer.getMinDimension() / 10,
-                    renderer.getMinDimension() / 10);
+Chessman::Chessman(Renderer &renderer, ChessmanSpriteRepository & repository,
+                   const ChessmanData &data):
+                   renderer(renderer),
+                   sprite_(repository.getChessman(data.chessman)),
+                   fill(repository.getFill(data.chessman)),
+                   probability(data.probability) {
+
 }
 
 Chessman::Chessman(Chessman &&other) noexcept: renderer(other.renderer),
-                                      sprite_(std::move(other.sprite_)),
-                                      fill(std::move(other.fill)),
+                                      sprite_(other.sprite_),
+                                      fill(other.fill),
                                       image(std::move(other.image)),
                                       probability(other.probability) {}
 

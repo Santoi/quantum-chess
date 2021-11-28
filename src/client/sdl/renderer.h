@@ -7,11 +7,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
-class TextureSprite;
-
-class TextSprite;
-
-class Scene;
+class Sprite;
+class Game;
 
 class Renderer {
 private:
@@ -22,7 +19,7 @@ public:
 
   SDL2pp::Renderer &renderer();
 
-  void render(Scene &scene);
+  void render(Game &game);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)

@@ -1,7 +1,7 @@
 #include "renderer.h"
 #include "window.h"
 #include "texture_sprite.h"
-#include "scene.h"
+#include "../game/game.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
@@ -27,10 +27,10 @@ void Renderer::copy(TextSprite &sprite, int x, int y) {
   renderer_.Copy(sprite.sprite(), SDL2pp::NullOpt, dest);
 }
 
-void Renderer::render(Scene &scene) {
+void Renderer::render(Game &game) {
   renderer_.Clear();
-  scene.setScale(getMinDimension());
-  scene.render();
+  game.setScale(getMinDimension());
+  game.render();
   renderer_.Present();
 }
 

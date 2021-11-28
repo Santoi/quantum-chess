@@ -3,6 +3,7 @@
 
 #include "../sdl/renderer.h"
 #include "../sdl/texture_sprite.h"
+#include "../sdl/tile_sprite_repository.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <map>
 #include <string>
@@ -10,24 +11,17 @@
 class Tile {
 private:
   Renderer &renderer;
-  TextureSprite sprite_;
-  std::map<int, std::string> images;
+  TextureSprite * sprite_;
+  TileSpriteRepository & repository;
+  bool black;
 
 public:
-  typedef enum {
-    TILE_DEFAULT,
-    TILE_MOVE,
-    TILE_ENTANGLED,
-    TILE_QUANTUM,
-    TILE_SPLIT,
-    TILE_MERGE
-  } TileType;
-  void loadTile(TileType type);
+  void loadTile(TileSpriteRepository::TileType type);
 
-  Tile(Renderer &renderer, bool black);
+  Tile(Renderer &renderer, bool black_, TileSpriteRepository & repository);
   Tile(Tile &&other) noexcept;
   Tile(const Tile &other) = delete;
-  Tile& operator=(Tile &&other) noexcept;
+  Tile& operator=(Tile &&other) noexcept = delete;
   void render(int x, int y);
 };
 

@@ -1,3 +1,3 @@
-valgrind --leak-check=full ./build/src/client/src/client localhost 7777
+valgrind --leak-check=full ./build/src/client/client localhost 7777
 
 

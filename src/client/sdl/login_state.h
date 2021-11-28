@@ -4,15 +4,18 @@
 #include "login_renderer.h"
 #include "login.h"
 #include "button.h"
+#include "text_entry_button.h"
 #include <atomic>
 #include <list>
+#include <memory>
 
 class LoginRenderer;
 
 class LoginState {
 protected:
     Login& login;
-    std::list<Button> buttons;
+    std::list<std::unique_ptr<Button>> buttons_ptr;
+    std::list<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
 
 public:
 
@@ -25,6 +28,9 @@ public:
     virtual void tellRendererWhatToRender(LoginRenderer& login_renderer) = 0;
 
     virtual void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) = 0;
+
+    virtual void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+                                                active_text_entries) = 0;
 
     virtual void proccessTokens(const std::list<std::string>& tokens) = 0;
 };
@@ -39,6 +45,9 @@ public:
     void tellRendererWhatToRender(LoginRenderer& login_renderer) override;
 
     void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) override;
+
+    void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+                                        active_text_entries) override;
 
     void proccessTokens(const std::list<std::string>& tokens) override;
 };

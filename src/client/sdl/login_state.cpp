@@ -1,10 +1,12 @@
 #include "login_state.h"
 
-LoginState::LoginState() {
+LoginState::LoginState(Login& login_)
+            :login(login_){
 }
 
 
-NotConnectedToServerState::NotConnectedToServerState() {
+NotConnectedToServerState::NotConnectedToServerState(Login& login_)
+                            :LoginState(login_) {
     Button ipButton;
     buttons.push_back(std::move(ipButton));
     Button portButton;

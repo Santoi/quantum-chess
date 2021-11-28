@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 
 #include "login_renderer.h"
+#include "login.h"
 #include "button.h"
 #include <atomic>
 #include <list>
@@ -10,11 +11,14 @@ class LoginRenderer;
 
 class LoginState {
 protected:
+    Login& login;
     std::list<Button> buttons;
 
 public:
 
-    LoginState();
+    LoginState() = delete;
+
+    LoginState(Login& login_);
 
     virtual bool clientIsConnectedToMatch() = 0;
 
@@ -28,7 +32,7 @@ public:
 class NotConnectedToServerState: public LoginState {
 public:
 
-    NotConnectedToServerState();
+    NotConnectedToServerState(Login& login_);
 
     bool clientIsConnectedToMatch() override;
 

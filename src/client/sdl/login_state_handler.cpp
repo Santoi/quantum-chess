@@ -2,7 +2,7 @@
 #include "../../common/src/unique_ptr.h"
 
 LoginStateHandler::LoginStateHandler()
-                   :current_state(make_unique<NotConnectedToServerState>()){
+                   :login(), current_state(make_unique<NotConnectedToServerState>(login)) {
 }
 
 bool LoginStateHandler::clientIsConnectedToMatch() {

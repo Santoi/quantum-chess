@@ -9,6 +9,8 @@ void LoginRenderer::render() {
 }
 
 void LoginRenderer::renderIPAndPortFields(std::list<Button>& buttons) {
+    // button.setArea(x, y, width, height)
+    //button.render()
     //ip draw here (x, y) with this scale
     //port draw here (x, y) with this scale
     //name draw here (x, y) with this scale

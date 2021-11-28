@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 
 #include "login.h"
-
+#include <atomic>
 
 class LoginState {
 private:

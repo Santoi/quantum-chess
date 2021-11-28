@@ -121,9 +121,9 @@ void Client::execute(const char *host, const char *port,
   sound_handler.playMusic();
   Window window;
   Renderer &renderer = window.renderer();
-  LoginRenderer login_renderer(window);
-
   LoginState login_state;
+  LoginRenderer login_renderer(login_state, window);
+
   LoginHandlerThread login_handler(login_state);
   login_handler.start();
   doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);

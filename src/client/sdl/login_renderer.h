@@ -3,16 +3,17 @@
 
 #include "scene.h"
 #include "window.h"
+#include "login_state.h"
 
 class LoginRenderer: public Scene {
 private:
-
+    const LoginState& login_state;
 
 public:
 
     LoginRenderer() = delete;
 
-    LoginRenderer(Window& window);
+    LoginRenderer(const LoginState& login_state_, Window& window);
 
     void render();
 

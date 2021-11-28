@@ -21,6 +21,8 @@ public:
 
     Login();
 
+    void connectToServer(const std::string& ip, const std::string& port);
+
     Socket getClientSocket();
 
     std::string getClientNickName();

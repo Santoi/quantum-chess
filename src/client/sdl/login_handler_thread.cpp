@@ -32,7 +32,7 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     while (!(it->get().fillTokensIfClicked(pixel, tokens)) && (it != active_buttons.end()))
 
     if (it != active_buttons.end()) {
-        login_state_handler.proccessTokens(tokens);
+        login_state_handler.proccessTokens(std::move(tokens));
     } else {
         std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
         login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);

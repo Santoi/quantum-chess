@@ -12,6 +12,7 @@
 #include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
 #include "sdl/login_handler_thread.h"
+#include "sdl/login_renderer.h"
 #include "sdl/login.h"
 
 #define FRAME_RATE 60
@@ -120,10 +121,11 @@ void Client::execute(const char *host, const char *port,
   sound_handler.playMusic();
   Window window;
   Renderer &renderer = window.renderer();
+  LoginRenderer login_renderer(window);
   Login login(window);
   LoginHandlerThread login_handler(login);
   login_handler.start();
-  doRenderingLoopForSceneWithHandler(&login, login_handler, renderer);
+  doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
 
   //if we are here the client is connected to a match
   Socket socket = login.getClientSocket();

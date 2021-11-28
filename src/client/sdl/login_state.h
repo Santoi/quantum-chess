@@ -21,7 +21,7 @@ public:
 
     LoginState() = delete;
 
-    LoginState(Login& login_);
+    explicit LoginState(Login& login_);
 
     virtual bool clientIsConnectedToMatch() = 0;
 
@@ -32,13 +32,13 @@ public:
     virtual void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                 active_text_entries) = 0;
 
-    virtual void proccessTokens(const std::list<std::string>& tokens) = 0;
+    virtual void proccessTokens(std::list<std::string>&& tokens) = 0;
 };
 
 class NotConnectedToServerState: public LoginState {
 public:
 
-    NotConnectedToServerState(Login& login_);
+    explicit NotConnectedToServerState(Login& login_);
 
     bool clientIsConnectedToMatch() override;
 
@@ -49,7 +49,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                         active_text_entries) override;
 
-    void proccessTokens(const std::list<std::string>& tokens) override;
+    void proccessTokens(std::list<std::string>&& tokens) override;
 };
 
 

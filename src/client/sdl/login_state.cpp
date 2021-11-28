@@ -35,7 +35,13 @@ void NotConnectedToServerState::fillWithActiveTextEntryButtons(std::list<std::re
         active_text_entries.push_back(**it);
 }
 
-void NotConnectedToServerState::proccessTokens(const std::list<std::string>& tokens) {
+void NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
+    std::string ip = tokens.front(); //tokens strings has the same order as how TextEntryButton are in the list
+                                    //(first the ip string, second the port string)
+    tokens.pop_front();
+    std::string port = tokens.front();
+    tokens.pop_front();
+    login.connectToServer(ip, port);
      //pop port token, ip, name...
      //tell login to connect to socket
 }

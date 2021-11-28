@@ -5,8 +5,13 @@ LoginRenderer::LoginRenderer(const LoginState& login_state_, Window& window)
 }
 
 void LoginRenderer::render() {
+    login_state.tellRendererWhatToRender(*this);
+}
+
+void LoginRenderer::renderIPAndPortFields() {
 
 }
+
 
 void LoginRenderer::setScale(int scale_) {
     scale = scale_;

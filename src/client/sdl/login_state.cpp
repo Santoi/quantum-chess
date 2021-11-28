@@ -8,6 +8,12 @@ bool LoginState::clientIsConnectedToMatch() {
     return connected_to_match;
 }
 
+void LoginState::tellRendererWhatToRender(LoginRenderer& login_renderer) const {
+    if (!connected_to_server)
+        login_renderer.renderIPAndPortFields();
+}
+
+
 Socket LoginState::getClientSocket() {
     return std::move(login.getClientSocket());
 }

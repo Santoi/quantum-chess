@@ -31,7 +31,7 @@ private:
 
 public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, const SoundHandler &sound_handler);
+       ClientData::Role role_);
 
   void setScale(int scale_);
 

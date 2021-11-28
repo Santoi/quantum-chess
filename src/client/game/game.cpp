@@ -11,13 +11,12 @@
 #define BOARD_MIN_LIMIT .1
 #define BOARD_MAX_LIMIT .9
 
-Game::Game(Window &window,
-           BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_, const SoundHandler &sound_handler_) :
+Game::Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
+           ClientData::Role role_) :
     scale(window.renderer().getMinDimension()),
     board(window.renderer(), "img/stars.jpg", scale, scale),
     send_queue(send_queue_), mutex(), role(role_),
-    sound_handler(sound_handler_) {}
+    sound_handler(window.sound_handler()) {}
 
 void Game::loadSprite(TextureSprite &sprite, int x, int y) {
   std::lock_guard<std::mutex> lock_guard(mutex);

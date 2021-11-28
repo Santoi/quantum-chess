@@ -92,9 +92,6 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
-  SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-  SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-  SoundHandler sound_handler(mixer);
   //sound_handler.playMusic();
   welcomeClientAndAskForNickName();
   Socket socket = Socket::createAConnectedSocket(host, port);
@@ -105,7 +102,7 @@ void Client::execute(const char *host, const char *port,
 
   Window window;
   Renderer &renderer = window.renderer();
-  Game game(window, send, role, sound_handler);
+  Game game(window, send, role);
 
   ActionThread action_thread(received, game);
   EventHandlerThread event_handler(game);

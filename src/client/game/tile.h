@@ -1,8 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_TILE_H
 #define QUANTUM_CHESS_PROJ_TILE_H
 
-#include "../sdl/sprite.h"
 #include "../sdl/renderer.h"
+#include "../sdl/texture_sprite.h"
 #include "../sdl/tile_sprite_repository.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <map>
@@ -11,7 +11,7 @@
 class Tile {
 private:
   Renderer &renderer;
-  Sprite * sprite_;
+  TextureSprite * sprite_;
   TileSpriteRepository & repository;
   bool black;
 

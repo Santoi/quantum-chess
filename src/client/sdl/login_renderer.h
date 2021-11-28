@@ -5,6 +5,7 @@
 #include "window.h"
 #include "login_state_handler.h"
 #include "button.h"
+#include "text_entry_button.h"
 
 class LoginStateHandler;
 
@@ -20,7 +21,8 @@ public:
 
     void render();
 
-    void renderIPAndPortFields(std::list<Button>& buttons);
+    void renderIPAndPortFields(ConnectButton& connect_button, TextEntryButton& ip_text_entry,
+                               TextEntryButton& port_text_entry);
 
     void setScale(int scale_);
 };

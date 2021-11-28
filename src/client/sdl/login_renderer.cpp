@@ -8,13 +8,11 @@ void LoginRenderer::render() {
     login_state_handler.tellRendererWhatToRender(*this);
 }
 
-void LoginRenderer::renderIPAndPortFields(std::list<Button>& buttons) {
-    // button.setArea(x, y, width, height)
-    //button.render()
-    //ip draw here (x, y) with this scale
-    //port draw here (x, y) with this scale
-    //name draw here (x, y) with this scale
-    //connect draw here (x, y) with this scale
+void LoginRenderer::renderIPAndPortFields(ConnectButton& connect_button, TextEntryButton& ip_text_entry,
+                                          TextEntryButton& port_text_entry) {
+    // connect_button.setArea(x, y, width, height)
+    //connect_button.render()
+    //...
 }
 
 

@@ -6,18 +6,19 @@
 #include "chessman.h"
 #include "../position.h"
 
-class Queen: public Chessman {
+class Queen : public Chessman {
 private:
-    char print() const override;
-    
-public:
-    Queen(const Position & position, bool white_, Board & board_);
-    
-    void calculateMoves(const Position &initial,
-                        std::list<Position> &posible_moves)
-                               const override;
+  char print() const override;
 
-    ~Queen() override = default;
+public:
+  Queen(const Position &position, bool white_, Board &board_,
+        EntanglementLog &entanglement_log_);
+
+  void calculateMoves(const Position &initial,
+                      std::list<Position> &posible_moves)
+  const override;
+
+  ~Queen() override = default;
 };
 
 

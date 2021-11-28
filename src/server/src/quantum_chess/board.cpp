@@ -12,13 +12,10 @@
 #include <sstream>
 #include <fstream>
 
-Board::Board() : chessmen(), board(), next_white(true), coin() {}
+Board::Board() : chessmen(), board(), next_white(true), coin(), log() {}
 
-Board::Board(int seed) : chessmen(), board(), next_white(true), coin(seed) {}
-
-// TODO interfaz cuantica, dejarla a punto.
-
-// TODO testear BOARD.
+Board::Board(int seed)
+        : chessmen(), board(), next_white(true), coin(seed), log() {}
 
 void Board::addNewChessman(char chessman_, Position position_,
                            bool white_) {
@@ -31,7 +28,7 @@ void Board::addNewChessman(char chessman_, Position position_,
   for (size_t i = 0; i < ptr->countPositions(); i++) {
     Position position = Position(ptr->getPosition(i));
     if (board.count(Position(position)))
-      throw ChessException("ya hay una pieza alli");
+      throw ChessException("there is a chessman there already");
     board.insert(std::make_pair(Position(position),
                                 ptr));
   }
@@ -43,7 +40,7 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
     throw ChessException("is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("no hay ninguna pieza ahi");
+    throw ChessException("there is no chessman there");
   if (chessman->isWhite() != player_white)
     throw ChessException("you cannot move a chessman"
                          " of the other player");
@@ -57,7 +54,7 @@ void Board::split(const Position &initial, const Position &pos1,
     throw ChessException("is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("no hay ninguna pieza alli");
+    throw ChessException("there is no chessman there");
   if (chessman->isWhite() != player_white)
     throw ChessException("you cannot move a chessman"
                          " of the other player");
@@ -71,16 +68,14 @@ void Board::merge(const Position &initial1, const Position &initial2,
     throw ChessException("is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
           *chessman_2 = getChessmanAt(initial2);
-  if (!chessman_1)
-    throw ChessException("no hay ninguna pieza alli");
-  if (!chessman_2)
-    throw ChessException("no hay ninguna pieza alli");
+  if (!chessman_1 || !chessman_2)
+    throw ChessException("there is no chessman there");
   if (chessman_1 != chessman_2)
-    throw ChessException("se esta tratando de unir dos piezas distintas");
+    throw ChessException("you re trying to merge two different chessmen");
   if (chessman_1->isWhite() != player_white ||
       chessman_2->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman"
-                         " of the other player");
+    throw ChessException("you cannot move a chessman of the other"
+                         " player");
   chessman_1->merge(initial1, initial2, final);
   next_white = !next_white;
 }
@@ -136,7 +131,7 @@ std::list<Position> Board::getEntangledOf(const Position &position1) {
 
 void Board::addChessmanIn(const Position &position, Chessman *chessman) {
   if (board.count(position))
-    throw ChessException("ya hay una pieza alli");
+    throw ChessException("there is a chessman there already");
   board.insert(std::pair<Position, Chessman *>(Position(position),
                                                chessman));
 }
@@ -149,9 +144,9 @@ void Board::removeChessmanOf(const Position &position) {
 void Board::addChessmanOfIn(const Position &initial, const Position &final) {
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("no hay ninguna pieza ahi");
+    throw ChessException("there isn a chessman there");
   if (board.count(final))
-    throw ChessException("ya hay una pieza alli");
+    throw ChessException("there is a chessman there already");
   board.erase(initial);
   board.insert(std::pair<Position, Chessman *>(final, chessman));
 }
@@ -160,9 +155,9 @@ void Board::addChessmanOfIn(const Position &initial, const Position &pos1,
                             const Position &pos2) {
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("no hay ninguna pieza ahi");
+    throw ChessException("there isn a chessman there");
   if (board.count(pos1) || board.count(pos2))
-    throw ChessException("ya hay una pieza alli");
+    throw ChessException("there is a chessman there already");
   board.erase(initial);
   board.insert(std::pair<Position, Chessman *>(pos1, chessman));
   board.insert(std::pair<Position, Chessman *>(pos2, chessman));
@@ -208,26 +203,26 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
   Chessman *pointer = nullptr;
   switch (chessman_) {
     case 'K':
-      pointer = new King(position_, white_, *this);
+      pointer = new King(position_, white_, *this, log);
       break;
     case 'Q':
-      pointer = new Queen(position_, white_, *this);
+      pointer = new Queen(position_, white_, *this, log);
       break;
     case 'T':
-      pointer = new Tower(position_, white_, *this);
+      pointer = new Tower(position_, white_, *this, log);
       break;
     case 'B':
-      pointer = new Bishop(position_, white_, *this);
+      pointer = new Bishop(position_, white_, *this, log);
       break;
     case 'H':
-      pointer = new Knight(position_, white_, *this);
+      pointer = new Knight(position_, white_, *this, log);
       break;
     case 'P':
-      pointer = new Pawn(position_, white_, *this);
+      pointer = new Pawn(position_, white_, *this, log);
       break;
     default:
-      throw ChessException("esa letra no "
-                           "representa ninguna pieza");
+      throw std::invalid_argument("that character doesnt represent any"
+                                  "chessman");
   }
   if (!pointer)
     throw std::runtime_error("cannot allocate memory for chessman");

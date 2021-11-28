@@ -7,6 +7,7 @@
 #include "position.h"
 #include "chessman/chessman.h"
 #include "pseudo_random_coin.h"
+#include "chessman/entanglement_log.h"
 
 #define LOADER_COMMENT '#'
 
@@ -23,6 +24,7 @@ class Board {
   std::map<const Position, Chessman *> board;
   bool next_white;
   PseudoRandomCoin coin;
+  EntanglementLog log;
 
 
   std::unique_ptr<Chessman>

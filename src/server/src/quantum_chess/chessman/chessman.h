@@ -8,6 +8,7 @@
 #include "../position.h"
 #include "../board.h"
 #include "../quantum_position.h"
+#include "entanglement_log.h"
 
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
@@ -47,6 +48,7 @@ protected:
   std::list<QuantumPosition> positions;
   Board &board;
   bool white;
+  EntanglementLog &entanglement_log;
 
   /* Calcula los casilleros por los que se debe pasar para llegar desde
    * una posicion a otra. No asegura orden, solo que la posicion
@@ -81,10 +83,6 @@ protected:
   bool checkFreePath(const std::vector<Position> &path, std::pair<Position,
           Chessman *> &chessman_in_path, bool final_same_color_free) const;
 
-  std::list<QuantumPosition *>
-  searchEntangledWithAllPositionsExceptWith(const QuantumPosition &
-  filtered_qp);
-
   bool chessmanIsAlreadyEntangled(Chessman *chessman);
 
   void checkIsInBoardOrFail(const Position &position);
@@ -93,8 +91,6 @@ protected:
                 Chessman &other, const Position &other_position);
 
   void measureOthers(QuantumPosition &quantum_position);
-
-  bool entangledPositionAppearsMoreThanOnce(QuantumPosition *position);
 
   virtual
   MoveValidationStatus checkIsAValidMove(const Position &initial,
@@ -110,9 +106,12 @@ protected:
   virtual void calculateMoves(const Position &initial,
                               std::list<Position> &posible_moves) const = 0;
 
+  void moveValidationExceptionThrower(MoveValidationStatus status);
+
 public:
   // Constructor, se le pasa posicion, color y referencia al tablero.
-  Chessman(const Position &position_, bool white_, Board &board_);
+  Chessman(const Position &position_, bool white_, Board &board_,
+           EntanglementLog &entanglement_log_);
 
   // Mueve la pieza desde una posicion a otra, valida el movimiento.
   virtual void move(const Position &initial, const Position &final);
@@ -146,7 +145,6 @@ public:
   // TODO despues hacer privada.
   void measure(const Position &position);
 
-  void moveValidationExceptionThrower(MoveValidationStatus status);
 
   virtual void calculatePosibleMoves(const Position &initial,
                                      std::list<Position> &posible_moves);
@@ -164,7 +162,7 @@ public:
   // Metodo que devuelve la letra que representa a la pieza.
   virtual char print() const = 0;
 
-  void getAllPositions(std::list<Position> &output);
+  void getAllPositions(std::list<Position> &output) const;
 
   void getEntangledPositions(std::list<Position> &output);
 };

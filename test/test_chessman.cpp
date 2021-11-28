@@ -1156,7 +1156,7 @@ TEST(Chessman, DoubleEntangleWithFakeThenMeasureOneOfOthers) {
   EXPECT_EQ(queen->countPositions(), 1);
 }
 
-TEST(Chessman, DoubleEntangleSamePiecesEntangleWithFakeMeasurenInitialFake) {
+TEST(Chessman, DoubleEntangleSamePieceFail) {
   Board board(0);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);

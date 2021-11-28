@@ -43,11 +43,11 @@ void RemoteClientExitMessageInstruction::makeAction(Game &game) {
             << std::endl;
 }
 
-RemoteClientLoadMessageInstruction::RemoteClientLoadMessageInstruction(
+RemoteClientLoadBoardInstruction::RemoteClientLoadBoardInstruction(
         std::vector<ChessmanData> &&chessman_data_vector_) :
         chessman_data_vector(std::move(chessman_data_vector_)) {}
 
-void RemoteClientLoadMessageInstruction::makeAction(Game &game) {
+void RemoteClientLoadBoardInstruction::makeAction(Game &game) {
   game.load(chessman_data_vector);
 }
 

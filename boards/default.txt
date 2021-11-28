@@ -1,4 +1,4 @@
-# Loading chessmen of whites
+# White chessmen
 TA1W
 HB1W
 BC1W
@@ -7,6 +7,7 @@ KE1W
 BF1W
 HG1W
 TH1W
+
 PA2W
 PB2W
 PC2W
@@ -16,7 +17,7 @@ PF2W
 PG2W
 PH2W
 
-# Loading chessmen of blacks
+# Black chessmen
 TA8B
 HB8B
 BC8B
@@ -25,6 +26,7 @@ KE8B
 BF8B
 HG8B
 TH8B
+
 PA7B
 PB7B
 PC7B

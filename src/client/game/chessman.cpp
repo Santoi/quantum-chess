@@ -2,22 +2,20 @@
 #include "../sdl/chessman_sprite_repository.h"
 #include <utility>
 
-Chessman::Chessman(Renderer &renderer, ChessmanSpriteRepository & repository,
-                   const ChessmanData &data):
-                   renderer(renderer),
-                   sprite_(repository.getChessman(data.chessman)),
-                   fill(repository.getFill(data.chessman)),
-                   probability(data.probability) {
-
-}
+Chessman::Chessman(Renderer &renderer, ChessmanSpriteRepository &repository,
+                   const ChessmanData &data) :
+        renderer(renderer),
+        sprite_(repository.getChessman(data.chessman)),
+        fill(repository.getFill(data.chessman)),
+        probability(data.probability) {}
 
 Chessman::Chessman(Chessman &&other) noexcept: renderer(other.renderer),
-                                      sprite_(other.sprite_),
-                                      fill(other.fill),
-                                      image(std::move(other.image)),
-                                      probability(other.probability) {}
+                                               sprite_(other.sprite_),
+                                               fill(other.fill),
+                                               image(std::move(other.image)),
+                                               probability(other.probability) {}
 
-Chessman& Chessman::operator=(Chessman &&other) noexcept {
+Chessman &Chessman::operator=(Chessman &&other) noexcept {
   renderer = std::move(other.renderer);
   sprite_ = std::move(other.sprite_);
   image = std::move(other.image);

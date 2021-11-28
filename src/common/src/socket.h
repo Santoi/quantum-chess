@@ -27,8 +27,7 @@ public:
   template<typename T, typename... Args>
   friend std::unique_ptr<T> make_unique(Args&&... args);
 
-  static void createAConnectedSocketPointedByUniquePointer(std::unique_ptr<Socket>& socket_ptr,
-                                                           const char* host, const char* service);
+  static void createAConnectedSocket(std::unique_ptr<Socket>& socket_ptr, const char* host, const char* service);
 
   //Creates a server socket using the host and service provided. A bind and a listen is applied to
   //the new socket, leaving it on a valid state for accepting client sockets. The server socket is

@@ -37,10 +37,8 @@ Socket Socket::createAConnectedSocket(const char *host, const char *service) {
   return skt;
 }
 
-void Socket::createAConnectedSocketPointedByUniquePointer(std::unique_ptr<Socket>& socket_ptr,
-                                                         const char* host, const char* service) {
+void Socket::createAConnectedSocket(std::unique_ptr<Socket>& socket_ptr, const char* host, const char* service) {
     socket_ptr = make_unique<Socket>(host, service);
-
 }
 
 Socket Socket::createAListeningSocket(const char *host, const char *service) {

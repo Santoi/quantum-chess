@@ -22,3 +22,9 @@ bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate& pixel) {
 void TextEntryButton::disableTextEntry() {
     expecting_text = false;
 }
+
+std::string TextEntryButton::getText() const {
+    //get string from text entry
+    std::string current_text;
+    return current_text;
+}

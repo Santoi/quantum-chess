@@ -24,6 +24,8 @@ public:
 
     bool enableTextEntryIfClicked(const PixelCoordinate& pixel);
 
+    std::string getText() const;
+
     void disableTextEntry();
 };
 

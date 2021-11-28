@@ -3,6 +3,7 @@
 
 #include "login.h"
 #include "login_renderer.h"
+#include "button.h"
 #include <atomic>
 
 class LoginRenderer;
@@ -12,6 +13,9 @@ private:
     Login login;
     std::atomic<bool> connected_to_server;
     std::atomic<bool> connected_to_match;
+    Button connect_button;
+    Button select_ip_text_field;
+    Button select_port_text_field;
 
 public:
     LoginState();

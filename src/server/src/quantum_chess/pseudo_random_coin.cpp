@@ -1,14 +1,16 @@
 #include "pseudo_random_coin.h"
 #include <ctime>
+#include <iostream>
 
-// TODO ver que usar. Usar algun mixer.
-// TODO ver la c++ 11 library. IMPORTANTE!!
-// TODO mutex?
-PseudoRandomCoin::PseudoRandomCoin(): engine(time(nullptr)) {}
+PseudoRandomCoin::PseudoRandomCoin() : engine(clock() * time(nullptr)),
+                                       random(true) {}
 
-PseudoRandomCoin::PseudoRandomCoin(uint seed): engine(seed) {}
+PseudoRandomCoin::PseudoRandomCoin(bool random_) : engine(), random(random_) {
+}
 
 bool PseudoRandomCoin::flip() {
-    uint number = engine();
-    return number < (std::minstd_rand::max() - std::minstd_rand::min()) / 2;
+  if (!random)
+    return true;
+  uint64_t number = engine();
+  return number % 2;
 }

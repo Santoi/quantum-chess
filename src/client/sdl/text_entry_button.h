@@ -2,10 +2,12 @@
 #define QUANTUM_CHESS_PROJ_TEXT_ENTRY_BUTTON_H
 
 #include "pixel_coordinate.h"
+#include <string>
 
 class TextEntryButton {
 private:
     //has a text entry field
+    const std::string button_name;
     int x;
     int y;
     int width;
@@ -14,9 +16,11 @@ private:
 
 public:
 
-    TextEntryButton();
+    TextEntryButton() = delete;
 
-    void setAreaAndPosition(int x, int y, int height, int width);
+    TextEntryButton(const std::string& button_name_);
+
+    void setAreaAndPosition(int x_, int y_, int height_, int width_);
 
     bool enableTextEntryIfClicked(const PixelCoordinate& pixel);
 

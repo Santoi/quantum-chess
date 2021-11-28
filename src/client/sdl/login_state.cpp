@@ -8,9 +8,9 @@ LoginState::LoginState(Login& login_)
 
 NotConnectedToServerState::NotConnectedToServerState(Login& login_)
                             :LoginState(login_) {
-    std::unique_ptr<TextEntryButton> ip_ptr = make_unique<TextEntryButton>();
+    std::unique_ptr<TextEntryButton> ip_ptr = make_unique<TextEntryButton>("IP");
     text_entry_buttons_ptr.push_back(std::move(ip_ptr));
-    std::unique_ptr<TextEntryButton> port_ptr = make_unique<TextEntryButton>();
+    std::unique_ptr<TextEntryButton> port_ptr = make_unique<TextEntryButton>("Port");
     text_entry_buttons_ptr.push_back(std::move(port_ptr));
     std::unique_ptr<Button> button_ptr = make_unique<ConnectButton>(text_entry_buttons_ptr);
     buttons_ptr.push_back(std::move(button_ptr));

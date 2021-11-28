@@ -1,7 +1,7 @@
 #include "text_entry_button.h"
 
-TextEntryButton::TextEntryButton()
-                :x(0), y(0), width(0), height(0), expecting_text(false) {
+TextEntryButton::TextEntryButton(const std::string& button_name_)
+                :button_name(button_name_), x(0), y(0), width(0), height(0), expecting_text(false) {
 }
 
 void TextEntryButton::setAreaAndPosition(int x_, int y_, int height_, int width_) {

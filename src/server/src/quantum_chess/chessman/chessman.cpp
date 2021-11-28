@@ -288,8 +288,8 @@ Chessman::checkIsAValidMerge(const Position &initial1, const Position &final) {
 }
 
 // TODO posible moves to list
-void Chessman::calculatePosibleMoves(const Position &initial,
-                                     std::list<Position> &posible_moves) {
+void Chessman::calculatePossibleMoves(const Position &initial,
+                                      std::list<Position> &posible_moves) {
   calculateMoves(initial, posible_moves);
 
   for (auto it = posible_moves.begin(); it != posible_moves.end();) {
@@ -301,8 +301,8 @@ void Chessman::calculatePosibleMoves(const Position &initial,
   }
 }
 
-void Chessman::calculatePosibleSplits(const Position &initial,
-                                      std::list<Position> &posible_moves) {
+void Chessman::calculatePossibleSplits(const Position &initial,
+                                       std::list<Position> &posible_moves) {
   calculateMoves(initial, posible_moves);
 
   for (auto it = posible_moves.begin(); it != posible_moves.end();) {
@@ -314,8 +314,8 @@ void Chessman::calculatePosibleSplits(const Position &initial,
   }
 }
 
-void Chessman::calculatePosibleMerges(const Position &initial,
-                                      std::list<Position> &posible_moves) {
+void Chessman::calculatePossibleMerges(const Position &initial,
+                                       std::list<Position> &posible_moves) {
   if (getProbability(initial) == 1)
     return;
 
@@ -332,12 +332,12 @@ void Chessman::calculatePosibleMerges(const Position &initial,
 }
 
 // TODO hacer tests de esto.
-void Chessman::calculatePosibleMerges(const Position &initial1,
-                                      const Position &initial2,
-                                      std::list<Position> &posible_moves) {
+void Chessman::calculatePossibleMerges(const Position &initial1,
+                                       const Position &initial2,
+                                       std::list<Position> &posible_moves) {
   std::list<Position> aux;
-  calculatePosibleMerges(initial1, posible_moves);
-  calculatePosibleMerges(initial2, aux);
+  calculatePossibleMerges(initial1, posible_moves);
+  calculatePossibleMerges(initial2, aux);
 
   for (auto it = posible_moves.begin(); it != posible_moves.end();) {
     if (std::find(aux.begin(), aux.end(), *it) == aux.end()) {

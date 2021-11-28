@@ -24,11 +24,11 @@ public:
 
   ~Pawn() override = default;
 
-  void calculatePosibleSplits(const Position &initial,
-                              std::list<Position> &posible_moves) override;
+  void calculatePossibleSplits(const Position &initial,
+                               std::list<Position> &posible_moves) override;
 
-  void calculatePosibleMerges(const Position &initial,
-                              std::list<Position> &posible_moves) override;
+  void calculatePossibleMerges(const Position &initial,
+                               std::list<Position> &posible_moves) override;
 
   MoveValidationStatus
   checkIsAValidMove(const Position &initial, const Position &final) override;

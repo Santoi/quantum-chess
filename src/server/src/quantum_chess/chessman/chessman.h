@@ -87,9 +87,6 @@ protected:
 
   void checkIsInBoardOrFail(const Position &position);
 
-  void entangle(const Position &initial, const Position &final,
-                Chessman &other, const Position &other_position);
-
   void measureOthers(QuantumPosition &quantum_position);
 
   virtual
@@ -108,6 +105,9 @@ protected:
 
   void moveValidationExceptionThrower(MoveValidationStatus status);
 
+  void entangle(const Position &initial, const Position &final,
+                Chessman &other, const Position &other_position);
+
 public:
   // Constructor, se le pasa posicion, color y referencia al tablero.
   Chessman(const Position &position_, bool white_, Board &board_,
@@ -116,8 +116,8 @@ public:
   // Mueve la pieza desde una posicion a otra, valida el movimiento.
   virtual void move(const Position &initial, const Position &final);
 
-  void split(const Position &initial, const Position &final1,
-             const Position &final2);
+  virtual void split(const Position &initial, const Position &final1,
+                     const Position &final2);
 
   void merge(const Position &initial1, const Position &initial2,
              const Position &final);
@@ -146,18 +146,18 @@ public:
   void measure(const Position &position);
 
 
-  virtual void calculatePosibleMoves(const Position &initial,
-                                     std::list<Position> &posible_moves);
-
-  virtual void calculatePosibleSplits(const Position &initial,
+  virtual void calculatePossibleMoves(const Position &initial,
                                       std::list<Position> &posible_moves);
 
-  virtual void calculatePosibleMerges(const Position &initial,
-                                      std::list<Position> &posible_moves);
+  virtual void calculatePossibleSplits(const Position &initial,
+                                       std::list<Position> &posible_moves);
+
+  virtual void calculatePossibleMerges(const Position &initial,
+                                       std::list<Position> &posible_moves);
 
   void
-  calculatePosibleMerges(const Position &initial1, const Position &initial2,
-                         std::list<Position> &posible_moves);
+  calculatePossibleMerges(const Position &initial1, const Position &initial2,
+                          std::list<Position> &posible_moves);
 
   // Metodo que devuelve la letra que representa a la pieza.
   virtual char print() const = 0;

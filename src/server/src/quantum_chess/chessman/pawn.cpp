@@ -40,13 +40,13 @@ char Pawn::print() const {
 }
 
 // TODO validate.
-void Pawn::calculatePosibleMerges(const Position &initial,
-                                  std::list<Position> &posible_moves) {
+void Pawn::calculatePossibleMerges(const Position &initial,
+                                   std::list<Position> &posible_moves) {
   posible_moves = std::list<Position>();
 }
 
-void Pawn::calculatePosibleSplits(const Position &initial,
-                                  std::list<Position> &posible_moves) {
+void Pawn::calculatePossibleSplits(const Position &initial,
+                                   std::list<Position> &posible_moves) {
   posible_moves = std::list<Position>();
 }
 

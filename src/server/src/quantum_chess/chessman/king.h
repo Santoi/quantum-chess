@@ -8,7 +8,20 @@
 
 class King : public Chessman {
 private:
+  bool first_move;
+  uint8_t first_line;
+
   char print() const override;
+
+  void longCastling(
+          const std::_List_iterator<QuantumPosition> &position_to_castle);
+
+  void shortCastling(
+          const std::_List_iterator<QuantumPosition> &position_to_castle);
+
+  bool checkLongCastling() const;
+
+  bool checkShortCastling() const;
 
 public:
   King(const Position &position, bool white_, Board &board_,
@@ -18,7 +31,18 @@ public:
                       std::list<Position> &posible_moves)
   const override;
 
+  void move(const Position &initial, const Position &final) override;
+
   ~King() override = default;
+
+  void
+  split(const Position &initial, const Position &final1,
+        const Position &final2) override;
+
+  void splitWithCastling(const Position &final1, const Position &final2);
+
+  void calculatePossibleSplits(const Position &initial,
+                               std::list<Position> &posible_moves) override;
 };
 
 

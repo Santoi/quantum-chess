@@ -33,7 +33,7 @@ class Board {
 public:
   Board();
 
-  explicit Board(int seed);
+  explicit Board(bool random);
 
   /* Mueve la pieza en la posicion inicial a la final, validando
    * el movimiento. */

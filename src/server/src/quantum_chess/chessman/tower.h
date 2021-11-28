@@ -8,7 +8,11 @@
 
 class Tower : public Chessman {
 private:
+  bool first_move;
+
   char print() const override;
+
+  friend class King;
 
 public:
   Tower(const Position &position, bool white_, Board &board_,
@@ -18,7 +22,15 @@ public:
                       std::list<Position> &posible_moves)
   const override;
 
+  void move(const Position &initial, const Position &final) override;
+
   ~Tower() override = default;
+
+  bool notMovedYet();
+
+  void
+  split(const Position &initial, const Position &final1,
+        const Position &final2) override;
 };
 
 

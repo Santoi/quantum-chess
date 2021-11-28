@@ -7,10 +7,6 @@
 #include "instructions/exit_instruction.h"
 #include "instructions/load_board_instruction.h"
 
-#define MATCH_ID -1
-
-// TODO AVeriguar donde arranca match.
-
 Match::Match(std::string board_filename)
         : Thread(), board(), clients(), listening_queues(),
           match_updates_queue(), board_filename(std::move(board_filename)) {

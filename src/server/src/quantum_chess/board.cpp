@@ -14,8 +14,8 @@
 
 Board::Board() : chessmen(), board(), next_white(true), coin(), log() {}
 
-Board::Board(int seed)
-        : chessmen(), board(), next_white(true), coin(seed), log() {}
+Board::Board(bool random)
+        : chessmen(), board(), next_white(true), coin(random), log() {}
 
 void Board::addNewChessman(char chessman_, Position position_,
                            bool white_) {
@@ -84,7 +84,7 @@ std::list<Position> Board::getPossibleMovesOf(const Position &position) {
   std::list<Position> output;
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
-    chessman->calculatePosibleMoves(position, output);
+    chessman->calculatePossibleMoves(position, output);
   return output;
 }
 
@@ -92,7 +92,7 @@ std::list<Position> Board::getPossibleSplitsOf(const Position &position) {
   std::list<Position> output;
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
-    chessman->calculatePosibleSplits(position, output);
+    chessman->calculatePossibleSplits(position, output);
   return output;
 }
 
@@ -100,7 +100,7 @@ std::list<Position> Board::getPossibleMergesOf(const Position &position) {
   std::list<Position> output;
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
-    chessman->calculatePosibleMerges(position, output);
+    chessman->calculatePossibleMerges(position, output);
   return output;
 }
 
@@ -109,7 +109,7 @@ std::list<Position> Board::getPossibleMergesOf(const Position &position1,
   std::list<Position> output;
   Chessman *chessman = getChessmanAt(position1);
   if (chessman)
-    chessman->calculatePosibleMerges(position1, position2, output);
+    chessman->calculatePossibleMerges(position1, position2, output);
   return output;
 }
 

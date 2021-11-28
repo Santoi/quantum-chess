@@ -10,7 +10,7 @@ class Tower : public Chessman {
 private:
   bool first_move;
 
-  char print() const override;
+  char charId() const override;
 
   friend class King;
 

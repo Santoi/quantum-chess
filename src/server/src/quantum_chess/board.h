@@ -25,6 +25,7 @@ class Board {
   bool next_white;
   PseudoRandomCoin coin;
   EntanglementLog log;
+  bool finished;
 
 
   std::unique_ptr<Chessman>
@@ -89,6 +90,8 @@ public:
   std::list<Position> getPositionsOf(const Position &position1);
 
   std::list<Position> getEntangledOf(const Position &position1);
+
+  void endGame();
 };
 
 

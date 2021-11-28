@@ -46,7 +46,7 @@ const {
   }
 }
 
-char Queen::print() const {
+char Queen::charId() const {
   return 'Q';
 }
 

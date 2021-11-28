@@ -44,8 +44,11 @@ void Chessman::move(const Position &initial, const Position &final) {
   }
   // Measure solved from here.
   // If there is final chessman, then is removed of the board.
-  if (final_chessman)
+  if (final_chessman) {
+    if (final_chessman->charId() == 'K')
+      board.endGame();
     board.removeChessmanOf(final);
+  }
 
 
   // TODO hacer lo de mezclar con una funcion split.
@@ -471,9 +474,9 @@ void Chessman::calculateDiagonalPath(const Position &initial,
 
 std::ostream &operator<<(std::ostream &os, const Chessman &chessman) {
   if (chessman.white)
-    os << GREEN << chessman.print() << RESET;
+    os << GREEN << chessman.charId() << RESET;
   else
-    os << RED << chessman.print() << RESET;
+    os << RED << chessman.charId() << RESET;
   return os;
 }
 

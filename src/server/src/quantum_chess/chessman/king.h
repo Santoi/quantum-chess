@@ -11,7 +11,7 @@ private:
   bool first_move;
   uint8_t first_line;
 
-  char print() const override;
+  char charId() const override;
 
   void longCastling(
           const std::_List_iterator<QuantumPosition> &position_to_castle);

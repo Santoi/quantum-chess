@@ -28,7 +28,7 @@ const {
   }
 }
 
-char Tower::print() const {
+char Tower::charId() const {
   return 'T';
 }
 

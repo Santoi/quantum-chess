@@ -34,7 +34,7 @@ void Knight::calculatePath(const Position &initial, const Position &final,
   path.push_back(final);
 }
 
-char Knight::print() const {
+char Knight::charId() const {
   return 'H';
 }
 

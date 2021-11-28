@@ -35,7 +35,7 @@ void Pawn::move(const Position &initial, const Position &final) {
   first_move = false;
 }
 
-char Pawn::print() const {
+char Pawn::charId() const {
   return 'P';
 }
 

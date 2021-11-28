@@ -10,7 +10,7 @@ class Pawn : public Chessman {
 private:
   bool first_move;
 
-  char print() const override;
+  char charId() const override;
 
 public:
   Pawn(const Position &position, bool white_, Board &board_,

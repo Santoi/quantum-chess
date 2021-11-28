@@ -160,7 +160,7 @@ public:
                           std::list<Position> &posible_moves);
 
   // Metodo que devuelve la letra que representa a la pieza.
-  virtual char print() const = 0;
+  virtual char charId() const = 0;
 
   void getAllPositions(std::list<Position> &output) const;
 

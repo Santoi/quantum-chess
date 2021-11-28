@@ -52,7 +52,7 @@ void King::calculatePossibleSplits(const Position &initial,
   }
 }
 
-char King::print() const {
+char King::charId() const {
   return 'K';
 }
 
@@ -233,7 +233,7 @@ bool King::checkShortCastling() const {
       board.getChessmanAt(Position(6, first_line)))
     return false;
 
-  if (supposed_tower->print() == 'T') {
+  if (supposed_tower->charId() == 'T') {
     auto *tower = (Tower *) supposed_tower;
     if (tower->isWhite() == white && tower->notMovedYet())
       return true;
@@ -253,7 +253,7 @@ bool King::checkLongCastling() const {
   if (next_to_tower && !next_to_tower->isQuantum())
     return false;
 
-  if (supposed_tower->print() == 'T') {
+  if (supposed_tower->charId() == 'T') {
     auto *tower = (Tower *) supposed_tower;
     if (tower->isWhite() == white && tower->notMovedYet())
       return true;

@@ -31,7 +31,7 @@ const {
   }
 }
 
-char Bishop::print() const {
+char Bishop::charId() const {
   return 'B';
 }
 

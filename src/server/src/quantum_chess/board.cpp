@@ -12,10 +12,13 @@
 #include <sstream>
 #include <fstream>
 
-Board::Board() : chessmen(), board(), next_white(true), coin(), log() {}
+Board::Board()
+        : chessmen(), board(), next_white(true), coin(), log(),
+          finished(false) {}
 
 Board::Board(bool random)
-        : chessmen(), board(), next_white(true), coin(random), log() {}
+        : chessmen(), board(), next_white(true), coin(random), log(),
+          finished(false) {}
 
 void Board::addNewChessman(char chessman_, Position position_,
                            bool white_) {
@@ -36,6 +39,8 @@ void Board::addNewChessman(char chessman_, Position position_,
 
 void
 Board::move(const Position &initial, const Position &final, bool player_white) {
+  if (finished)
+    throw ChessException("game has ended");
   if (player_white != next_white)
     throw ChessException("is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
@@ -50,6 +55,8 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
 
 void Board::split(const Position &initial, const Position &pos1,
                   const Position &pos2, bool player_white) {
+  if (finished)
+    throw ChessException("game has ended");
   if (player_white != next_white)
     throw ChessException("is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
@@ -64,6 +71,8 @@ void Board::split(const Position &initial, const Position &pos1,
 
 void Board::merge(const Position &initial1, const Position &initial2,
                   const Position &final, bool player_white) {
+  if (finished)
+    throw ChessException("game has ended");
   if (player_white != next_white)
     throw ChessException("is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
@@ -190,7 +199,7 @@ Board::loadVectors(std::vector<char> &characters_, std::vector<bool> &colors_,
   positions_.reserve(board.size());
   probabilities.reserve(board.size());
   for (auto it = board.begin(); it != board.end(); ++it) {
-    characters_.push_back(it->second->print());
+    characters_.push_back(it->second->charId());
     positions_.push_back(it->first);
     colors_.push_back(it->second->isWhite());
     probabilities.push_back(it->second->getProbability(it->first));
@@ -252,4 +261,8 @@ void Board::load(const std::string &filename) {
 
 bool Board::flipACoin() {
   return coin.flip();
+}
+
+void Board::endGame() {
+  finished = true;
 }

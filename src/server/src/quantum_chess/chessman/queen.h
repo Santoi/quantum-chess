@@ -8,7 +8,7 @@
 
 class Queen : public Chessman {
 private:
-  char print() const override;
+  char charId() const override;
 
 public:
   Queen(const Position &position, bool white_, Board &board_,

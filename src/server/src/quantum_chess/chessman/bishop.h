@@ -8,7 +8,7 @@
 
 class Bishop : public Chessman {
 private:
-  char print() const override;
+  char charId() const override;
 
 public:
   Bishop(const Position &position, bool white_, Board &board_,

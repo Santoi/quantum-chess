@@ -27,17 +27,17 @@ The first 3 parameters are simply the method declaration, split into 3 parts.
 The 4th parameter accepts a closed list of qualifiers, which affect the
 generated method:
 
-*   **`const`** - Makes the mocked method a `const` method. Required if
-    overriding a `const` method.
-*   **`override`** - Marks the method with `override`. Recommended if overriding
-    a `virtual` method.
-*   **`noexcept`** - Marks the method with `noexcept`. Required if overriding a
-    `noexcept` method.
-*   **`Calltype(...)`** - Sets the call type for the method (e.g. to
-    `STDMETHODCALLTYPE`), useful in Windows.
-*   **`ref(...)`** - Marks the method with the reference qualification
-    specified. Required if overriding a method that has reference
-    qualifications. Eg `ref(&)` or `ref(&&)`.
+* **`const`** - Makes the mocked method a `const` method. Required if overriding
+  a `const` method.
+* **`override`** - Marks the method with `override`. Recommended if overriding
+  a `virtual` method.
+* **`noexcept`** - Marks the method with `noexcept`. Required if overriding a
+  `noexcept` method.
+* **`Calltype(...)`** - Sets the call type for the method (e.g. to
+  `STDMETHODCALLTYPE`), useful in Windows.
+* **`ref(...)`** - Marks the method with the reference qualification specified.
+  Required if overriding a method that has reference qualifications. Eg `ref(&)`
+  or `ref(&&)`.
 
 ### Dealing with unprotected commas
 
@@ -45,6 +45,7 @@ Unprotected commas, i.e. commas which are not surrounded by parentheses, prevent
 `MOCK_METHOD` from parsing its arguments correctly:
 
 {: .bad}
+
 ```cpp
 class MockFoo {
  public:
@@ -56,6 +57,7 @@ class MockFoo {
 Solution 1 - wrap with parentheses:
 
 {: .good}
+
 ```cpp
 class MockFoo {
  public:
@@ -70,6 +72,7 @@ invalid C++. `MOCK_METHOD` removes the parentheses.
 Solution 2 - define an alias:
 
 {: .good}
+
 ```cpp
 class MockFoo {
  public:
@@ -288,20 +291,20 @@ recipe for [mocking non-virtual methods](#MockingNonVirtualMethods).
 ### Old-Style `MOCK_METHODn` Macros
 
 Before the generic `MOCK_METHOD` macro
-[was introduced in 2018](https://github.com/google/googletest/commit/c5f08bf91944ce1b19bcf414fa1760e69d20afc2),
-mocks where created using a family of macros collectively called `MOCK_METHODn`.
-These macros are still supported, though migration to the new `MOCK_METHOD` is
-recommended.
+[was introduced in 2018](https://github.com/google/googletest/commit/c5f08bf91944ce1b19bcf414fa1760e69d20afc2)
+, mocks where created using a family of macros collectively
+called `MOCK_METHODn`. These macros are still supported, though migration to the
+new `MOCK_METHOD` is recommended.
 
 The macros in the `MOCK_METHODn` family differ from `MOCK_METHOD`:
 
-*   The general structure is `MOCK_METHODn(MethodName, ReturnType(Args))`,
-    instead of `MOCK_METHOD(ReturnType, MethodName, (Args))`.
-*   The number `n` must equal the number of arguments.
-*   When mocking a const method, one must use `MOCK_CONST_METHODn`.
-*   When mocking a class template, the macro name must be suffixed with `_T`.
-*   In order to specify the call type, the macro name must be suffixed with
-    `_WITH_CALLTYPE`, and the call type is the first macro argument.
+* The general structure is `MOCK_METHODn(MethodName, ReturnType(Args))`, instead
+  of `MOCK_METHOD(ReturnType, MethodName, (Args))`.
+* The number `n` must equal the number of arguments.
+* When mocking a const method, one must use `MOCK_CONST_METHODn`.
+* When mocking a class template, the macro name must be suffixed with `_T`.
+* In order to specify the call type, the macro name must be suffixed with
+  `_WITH_CALLTYPE`, and the call type is the first macro argument.
 
 Old macros and their new equivalents:
 
@@ -392,7 +395,7 @@ Old macros and their new equivalents:
 If a mock method has no `EXPECT_CALL` spec but is called, we say that it's an
 "uninteresting call", and the default action (which can be specified using
 `ON_CALL()`) of the method will be taken. Currently, an uninteresting call will
-also by default cause gMock to print a warning. (In the future, we might remove
+also by default cause gMock to charId a warning. (In the future, we might remove
 this warning by default.)
 
 However, sometimes you may want to ignore these uninteresting calls, and
@@ -455,8 +458,8 @@ TEST(...) {
 }
 ```
 
-{: .callout .note}
-NOTE: `NiceMock` and `StrictMock` only affects *uninteresting* calls (calls of
+{: .callout .note} NOTE: `NiceMock` and `StrictMock` only affects *
+uninteresting* calls (calls of
 *methods* with no expectations); they do not affect *unexpected* calls (calls of
 methods with expectations, but they don't match). See
 [Understanding Uninteresting vs Unexpected Calls](#uninteresting-vs-unexpected).
@@ -464,15 +467,15 @@ methods with expectations, but they don't match). See
 There are some caveats though (sadly they are side effects of C++'s
 limitations):
 
-1.  `NiceMock<MockFoo>` and `StrictMock<MockFoo>` only work for mock methods
-    defined using the `MOCK_METHOD` macro **directly** in the `MockFoo` class.
-    If a mock method is defined in a **base class** of `MockFoo`, the "nice" or
-    "strict" modifier may not affect it, depending on the compiler. In
-    particular, nesting `NiceMock` and `StrictMock` (e.g.
-    `NiceMock<StrictMock<MockFoo> >`) is **not** supported.
-2.  `NiceMock<MockFoo>` and `StrictMock<MockFoo>` may not work correctly if the
-    destructor of `MockFoo` is not virtual. We would like to fix this, but it
-    requires cleaning up existing tests.
+1. `NiceMock<MockFoo>` and `StrictMock<MockFoo>` only work for mock methods
+   defined using the `MOCK_METHOD` macro **directly** in the `MockFoo` class. If
+   a mock method is defined in a **base class** of `MockFoo`, the "nice" or
+   "strict" modifier may not affect it, depending on the compiler. In
+   particular, nesting `NiceMock` and `StrictMock` (e.g.
+   `NiceMock<StrictMock<MockFoo> >`) is **not** supported.
+2. `NiceMock<MockFoo>` and `StrictMock<MockFoo>` may not work correctly if the
+   destructor of `MockFoo` is not virtual. We would like to fix this, but it
+   requires cleaning up existing tests.
 
 Finally, you should be **very cautious** about when to use naggy or strict
 mocks, as they tend to make tests more brittle and harder to maintain. When you
@@ -583,36 +586,35 @@ your code is doing.
 
 This technique incurs some overhead:
 
-*   You pay the cost of virtual function calls (usually not a problem).
-*   There is more abstraction for the programmers to learn.
+* You pay the cost of virtual function calls (usually not a problem).
+* There is more abstraction for the programmers to learn.
 
 However, it can also bring significant benefits in addition to better
 testability:
 
-*   `Concrete`'s API may not fit your problem domain very well, as you may not
-    be the only client it tries to serve. By designing your own interface, you
-    have a chance to tailor it to your need - you may add higher-level
-    functionalities, rename stuff, etc instead of just trimming the class. This
-    allows you to write your code (user of the interface) in a more natural way,
-    which means it will be more readable, more maintainable, and you'll be more
-    productive.
-*   If `Concrete`'s implementation ever has to change, you don't have to rewrite
-    everywhere it is used. Instead, you can absorb the change in your
-    implementation of the interface, and your other code and tests will be
-    insulated from this change.
+* `Concrete`'s API may not fit your problem domain very well, as you may not be
+  the only client it tries to serve. By designing your own interface, you have a
+  chance to tailor it to your need - you may add higher-level functionalities,
+  rename stuff, etc instead of just trimming the class. This allows you to write
+  your code (user of the interface) in a more natural way, which means it will
+  be more readable, more maintainable, and you'll be more productive.
+* If `Concrete`'s implementation ever has to change, you don't have to rewrite
+  everywhere it is used. Instead, you can absorb the change in your
+  implementation of the interface, and your other code and tests will be
+  insulated from this change.
 
 Some people worry that if everyone is practicing this technique, they will end
 up writing lots of redundant code. This concern is totally understandable.
 However, there are two reasons why it may not be the case:
 
-*   Different projects may need to use `Concrete` in different ways, so the best
-    interfaces for them will be different. Therefore, each of them will have its
-    own domain-specific interface on top of `Concrete`, and they will not be the
-    same code.
-*   If enough projects want to use the same interface, they can always share it,
-    just like they have been sharing `Concrete`. You can check in the interface
-    and the adaptor somewhere near `Concrete` (perhaps in a `contrib`
-    sub-directory) and let many projects use it.
+* Different projects may need to use `Concrete` in different ways, so the best
+  interfaces for them will be different. Therefore, each of them will have its
+  own domain-specific interface on top of `Concrete`, and they will not be the
+  same code.
+* If enough projects want to use the same interface, they can always share it,
+  just like they have been sharing `Concrete`. You can check in the interface
+  and the adaptor somewhere near `Concrete` (perhaps in a `contrib`
+  sub-directory) and let many projects use it.
 
 You need to weigh the pros and cons carefully for your particular problem, but
 I'd like to assure you that the Java community has been practicing this for a
@@ -702,28 +704,28 @@ TEST(AbcTest, Xyz) {
 
 **Some tips:**
 
-*   If you want, you can still override the default action by providing your own
-    `ON_CALL()` or using `.WillOnce()` / `.WillRepeatedly()` in `EXPECT_CALL()`.
-*   In `DelegateToFake()`, you only need to delegate the methods whose fake
-    implementation you intend to use.
+* If you want, you can still override the default action by providing your own
+  `ON_CALL()` or using `.WillOnce()` / `.WillRepeatedly()` in `EXPECT_CALL()`.
+* In `DelegateToFake()`, you only need to delegate the methods whose fake
+  implementation you intend to use.
 
-*   The general technique discussed here works for overloaded methods, but
-    you'll need to tell the compiler which version you mean. To disambiguate a
-    mock function (the one you specify inside the parentheses of `ON_CALL()`),
-    use [this technique](#SelectOverload); to disambiguate a fake function (the
-    one you place inside `Invoke()`), use a `static_cast` to specify the
-    function's type. For instance, if class `Foo` has methods `char DoThis(int
-    n)` and `bool DoThis(double x) const`, and you want to invoke the latter,
-    you need to write `Invoke(&fake_, static_cast<bool (FakeFoo::*)(double)
-    const>(&FakeFoo::DoThis))` instead of `Invoke(&fake_, &FakeFoo::DoThis)`
-    (The strange-looking thing inside the angled brackets of `static_cast` is
-    the type of a function pointer to the second `DoThis()` method.).
+* The general technique discussed here works for overloaded methods, but you'll
+  need to tell the compiler which version you mean. To disambiguate a mock
+  function (the one you specify inside the parentheses of `ON_CALL()`),
+  use [this technique](#SelectOverload); to disambiguate a fake function (the
+  one you place inside `Invoke()`), use a `static_cast` to specify the
+  function's type. For instance, if class `Foo` has methods `char DoThis(int n)`
+  and `bool DoThis(double x) const`, and you want to invoke the latter, you need
+  to write `Invoke(&fake_, static_cast<bool (FakeFoo::*)(double)
+  const>(&FakeFoo::DoThis))` instead of `Invoke(&fake_, &FakeFoo::DoThis)`
+  (The strange-looking thing inside the angled brackets of `static_cast` is the
+  type of a function pointer to the second `DoThis()` method.).
 
-*   Having to mix a mock and a fake is often a sign of something gone wrong.
-    Perhaps you haven't got used to the interaction-based way of testing yet. Or
-    perhaps your interface is taking on too many roles and should be split up.
-    Therefore, **don't abuse this**. We would only recommend to do it as an
-    intermediate step when you are refactoring your code.
+* Having to mix a mock and a fake is often a sign of something gone wrong.
+  Perhaps you haven't got used to the interaction-based way of testing yet. Or
+  perhaps your interface is taking on too many roles and should be split up.
+  Therefore, **don't abuse this**. We would only recommend to do it as an
+  intermediate step when you are refactoring your code.
 
 Regarding the tip on mixing a mock and a fake, here's an example on why it may
 be a bad sign: Suppose you have a class `System` for low-level system
@@ -928,13 +930,13 @@ To support this need, gMock gives you the `SafeMatcherCast<T>(m)` function. It
 casts a matcher `m` to type `Matcher<T>`. To ensure safety, gMock checks that
 (let `U` be the type `m` accepts :
 
-1.  Type `T` can be *implicitly* cast to type `U`;
-2.  When both `T` and `U` are built-in arithmetic types (`bool`, integers, and
-    floating-point numbers), the conversion from `T` to `U` is not lossy (in
-    other words, any value representable by `T` can also be represented by `U`);
-    and
-3.  When `U` is a reference, `T` must also be a reference (as the underlying
-    matcher may be interested in the address of the `U` value).
+1. Type `T` can be *implicitly* cast to type `U`;
+2. When both `T` and `U` are built-in arithmetic types (`bool`, integers, and
+   floating-point numbers), the conversion from `T` to `U` is not lossy (in
+   other words, any value representable by `T` can also be represented by `U`);
+   and
+3. When `U` is a reference, `T` must also be a reference (as the underlying
+   matcher may be interested in the address of the `U` value).
 
 The code won't compile if any of these conditions isn't met.
 
@@ -1064,8 +1066,9 @@ using ::testing::Lt;
 says that the first argument of `InRange()` must not be 0, and must be less than
 the second argument.
 
-The expression inside `With()` must be a matcher of type `Matcher<std::tuple<A1,
-..., An>>`, where `A1`, ..., `An` are the types of the function arguments.
+The expression inside `With()` must be a matcher of
+type `Matcher<std::tuple<A1, ..., An>>`, where `A1`, ..., `An` are the types of
+the function arguments.
 
 You can also write `AllArgs(m)` instead of `m` inside `.With()`. The two forms
 are equivalent, but `.With(AllArgs(Lt()))` is more readable than `.With(Lt())`.
@@ -1218,7 +1221,7 @@ For example:
 | Expression                   | Description                              |
 | :--------------------------- | :--------------------------------------- |
 | `Field(&Foo::number, Ge(3))` | Matches `x` where `x.number >= 3`.       |
-| `Property(&Foo::name,  StartsWith("John "))` | Matches `x` where `x.name()` starts with  `"John "`. |
+| `Property(&Foo::name, StartsWith("John "))` | Matches `x` where `x.name()` starts with  `"John "`. |
 
 Note that in `Property(&Foo::baz, ...)`, method `baz()` must take no argument
 and be declared as `const`. Don't use `Property()` against member functions that
@@ -1431,18 +1434,17 @@ using testing::Pair;
 
 **Tips:**
 
-*   `ElementsAre*()` can be used to match *any* container that implements the
-    STL iterator pattern (i.e. it has a `const_iterator` type and supports
-    `begin()/end()`), not just the ones defined in STL. It will even work with
-    container types yet to be written - as long as they follows the above
-    pattern.
-*   You can use nested `ElementsAre*()` to match nested (multi-dimensional)
-    containers.
-*   If the container is passed by pointer instead of by reference, just write
-    `Pointee(ElementsAre*(...))`.
-*   The order of elements *matters* for `ElementsAre*()`. If you are using it
-    with containers whose element order are undefined (e.g. `hash_map`) you
-    should use `WhenSorted` around `ElementsAre`.
+* `ElementsAre*()` can be used to match *any* container that implements the STL
+  iterator pattern (i.e. it has a `const_iterator` type and supports
+  `begin()/end()`), not just the ones defined in STL. It will even work with
+  container types yet to be written - as long as they follows the above pattern.
+* You can use nested `ElementsAre*()` to match nested (multi-dimensional)
+  containers.
+* If the container is passed by pointer instead of by reference, just write
+  `Pointee(ElementsAre*(...))`.
+* The order of elements *matters* for `ElementsAre*()`. If you are using it with
+  containers whose element order are undefined (e.g. `hash_map`) you should
+  use `WhenSorted` around `ElementsAre`.
 
 ### Sharing Matchers
 
@@ -1467,11 +1469,10 @@ using ::testing::Matcher;
 
 ### Matchers must have no side-effects {#PureMatchers}
 
-{: .callout .warning}
-WARNING: gMock does not guarantee when or how many times a matcher will be
-invoked. Therefore, all matchers must be *purely functional*: they cannot have
-any side effects, and the match result must not depend on anything other than
-the matcher's parameters and the value being matched.
+{: .callout .warning} WARNING: gMock does not guarantee when or how many times a
+matcher will be invoked. Therefore, all matchers must be *purely functional*:
+they cannot have any side effects, and the match result must not depend on
+anything other than the matcher's parameters and the value being matched.
 
 This requirement must be satisfied no matter how a matcher is defined (e.g., if
 it is one of the standard matchers, or a custom matcher). In particular, a
@@ -1580,8 +1581,8 @@ A call `x.Y(...)` is **uninteresting** if there's *not even a single*
 `x.Y()` method at all, as evident in that the test doesn't care to say anything
 about it.
 
-A call `x.Y(...)` is **unexpected** if there are *some* `EXPECT_CALL(x,
-Y(...))`s set, but none of them matches the call. Put another way, the test is
+A call `x.Y(...)` is **unexpected** if there are *some* `EXPECT_CALL(x, Y(...))`
+s set, but none of them matches the call. Put another way, the test is
 interested in the `x.Y()` method (therefore it explicitly sets some
 `EXPECT_CALL` to verify how it's called); however, the verification fails as the
 test doesn't expect this particular call to happen.
@@ -1781,8 +1782,8 @@ using ::testing::Sequence;
       .InSequence(s2);
 ```
 
-as soon as either #2 or #3 is matched, #1 will retire. If a warning `"File too
-large."` is logged after this, it will be an error.
+as soon as either #2 or #3 is matched, #1 will retire. If a
+warning `"File too large."` is logged after this, it will be an error.
 
 Note that an expectation doesn't retire automatically when it's saturated. For
 example,
@@ -1794,9 +1795,9 @@ using ::testing::_;
   EXPECT_CALL(log, Log(WARNING, _, "File too large."));     // #2
 ```
 
-says that there will be exactly one warning with the message `"File too
-large."`. If the second warning contains this message too, #2 will match again
-and result in an upper-bound-violated error.
+says that there will be exactly one warning with the message `"File too large."`
+. If the second warning contains this message too, #2 will match again and
+result in an upper-bound-violated error.
 
 If this is not what you want, you can ask an expectation to retire as soon as it
 becomes saturated:
@@ -2214,20 +2215,20 @@ mock function, as long as it's safe to do so - nice, huh?
 
 Note that:
 
-*   The action takes ownership of the callback and will delete it when the
-    action itself is destructed.
-*   If the type of a callback is derived from a base callback type `C`, you need
-    to implicitly cast it to `C` to resolve the overloading, e.g.
+* The action takes ownership of the callback and will delete it when the action
+  itself is destructed.
+* If the type of a callback is derived from a base callback type `C`, you need
+  to implicitly cast it to `C` to resolve the overloading, e.g.
 
-    ```cpp
-    using ::testing::Invoke;
-    ...
-      ResultCallback<bool>* is_ok = ...;
-      ... Invoke(is_ok) ...;  // This works.
+  ```cpp
+  using ::testing::Invoke;
+  ...
+    ResultCallback<bool>* is_ok = ...;
+    ... Invoke(is_ok) ...;  // This works.
 
-      BlockingClosure* done = new BlockingClosure;
-      ... Invoke(implicit_cast<Closure*>(done)) ...;  // The cast is necessary.
-    ```
+    BlockingClosure* done = new BlockingClosure;
+    ... Invoke(implicit_cast<Closure*>(done)) ...;  // The cast is necessary.
+  ```
 
 ### Using Functions with Extra Info as Actions
 
@@ -2300,21 +2301,21 @@ bool Job2(int n, char c) { ... }
 
 Note that:
 
-*   The action takes ownership of the callback and will delete it when the
-    action itself is destructed.
-*   If the type of a callback is derived from a base callback type `C`, you need
-    to implicitly cast it to `C` to resolve the overloading, e.g.
+* The action takes ownership of the callback and will delete it when the action
+  itself is destructed.
+* If the type of a callback is derived from a base callback type `C`, you need
+  to implicitly cast it to `C` to resolve the overloading, e.g.
 
-    ```cpp
-    using ::testing::InvokeWithoutArgs;
-    ...
-      ResultCallback<bool>* is_ok = ...;
-      ... InvokeWithoutArgs(is_ok) ...;  // This works.
+  ```cpp
+  using ::testing::InvokeWithoutArgs;
+  ...
+    ResultCallback<bool>* is_ok = ...;
+    ... InvokeWithoutArgs(is_ok) ...;  // This works.
 
-      BlockingClosure* done = ...;
-      ... InvokeWithoutArgs(implicit_cast<Closure*>(done)) ...;
-      // The cast is necessary.
-    ```
+    BlockingClosure* done = ...;
+    ... InvokeWithoutArgs(implicit_cast<Closure*>(done)) ...;
+    // The cast is necessary.
+  ```
 
 ### Invoking an Argument of the Mock Function
 
@@ -2341,8 +2342,8 @@ using ::testing::_;
       // second argument DoThis() receives.
 ```
 
-{: .callout .note}
-NOTE: The section below is legacy documentation from before C++ had lambdas:
+{: .callout .note} NOTE: The section below is legacy documentation from before
+C++ had lambdas:
 
 Arghh, you need to refer to a mock function argument but C++ has no lambda
 (yet), so you have to define your own action. :-( Or do you really?
@@ -2517,25 +2518,25 @@ using ::testing::WithArgs;
 
 For better readability, gMock also gives you:
 
-*   `WithoutArgs(action)` when the inner `action` takes *no* argument, and
-*   `WithArg<N>(action)` (no `s` after `Arg`) when the inner `action` takes
-    *one* argument.
+* `WithoutArgs(action)` when the inner `action` takes *no* argument, and
+* `WithArg<N>(action)` (no `s` after `Arg`) when the inner `action` takes
+  *one* argument.
 
 As you may have realized, `InvokeWithoutArgs(...)` is just syntactic sugar for
 `WithoutArgs(Invoke(...))`.
 
 Here are more tips:
 
-*   The inner action used in `WithArgs` and friends does not have to be
-    `Invoke()` -- it can be anything.
-*   You can repeat an argument in the argument list if necessary, e.g.
-    `WithArgs<2, 3, 3, 5>(...)`.
-*   You can change the order of the arguments, e.g. `WithArgs<3, 2, 1>(...)`.
-*   The types of the selected arguments do *not* have to match the signature of
-    the inner action exactly. It works as long as they can be implicitly
-    converted to the corresponding arguments of the inner action. For example,
-    if the 4-th argument of the mock function is an `int` and `my_action` takes
-    a `double`, `WithArg<4>(my_action)` will work.
+* The inner action used in `WithArgs` and friends does not have to be
+  `Invoke()` -- it can be anything.
+* You can repeat an argument in the argument list if necessary, e.g.
+  `WithArgs<2, 3, 3, 5>(...)`.
+* You can change the order of the arguments, e.g. `WithArgs<3, 2, 1>(...)`.
+* The types of the selected arguments do *not* have to match the signature of
+  the inner action exactly. It works as long as they can be implicitly converted
+  to the corresponding arguments of the inner action. For example, if the 4-th
+  argument of the mock function is an `int` and `my_action` takes a `double`
+  , `WithArg<4>(my_action)` will work.
 
 ### Ignoring Arguments in Action Functions
 
@@ -2686,11 +2687,11 @@ additional action to notify the `Notification` object. Now we can just call
 asynchronous call to finish. After that, our test suite is complete and we can
 safely exit.
 
-{: .callout .note}
-Note: this example has a downside: namely, if the expectation is not satisfied,
-our test will run forever. It will eventually time-out and fail, but it will
-take longer and be slightly harder to debug. To alleviate this problem, you can
-use `WaitForNotificationWithTimeout(ms)` instead of `WaitForNotification()`.
+{: .callout .note} Note: this example has a downside: namely, if the expectation
+is not satisfied, our test will run forever. It will eventually time-out and
+fail, but it will take longer and be slightly harder to debug. To alleviate this
+problem, you can use `WaitForNotificationWithTimeout(ms)` instead
+of `WaitForNotification()`.
 
 ## Misc Recipes on Using gMock
 
@@ -2787,11 +2788,11 @@ If you just need to return a pre-defined move-only value, you can use the
 Note that `ByMove()` is essential here - if you drop it, the code won’t compile.
 
 Quiz time! What do you think will happen if a `Return(ByMove(...))` action is
-performed more than once (e.g. you write `...
-.WillRepeatedly(Return(ByMove(...)));`)? Come think of it, after the first time
-the action runs, the source value will be consumed (since it’s a move-only
-value), so the next time around, there’s no value to move from -- you’ll get a
-run-time error that `Return(ByMove(...))` can only be run once.
+performed more than once (e.g. you
+write `... .WillRepeatedly(Return(ByMove(...)));`)? Come think of it, after the
+first time the action runs, the source value will be consumed (since it’s a
+move-only value), so the next time around, there’s no value to move from --
+you’ll get a run-time error that `Return(ByMove(...))` can only be run once.
 
 If you need your mock method to do more than just moving a pre-defined value,
 remember that you can always use a lambda or a callable object, which can do
@@ -3085,23 +3086,23 @@ pound on it from more than one thread. gMock works for this purpose too.
 
 Remember the steps for using a mock:
 
-1.  Create a mock object `foo`.
-2.  Set its default actions and expectations using `ON_CALL()` and
-    `EXPECT_CALL()`.
-3.  The code under test calls methods of `foo`.
-4.  Optionally, verify and reset the mock.
-5.  Destroy the mock yourself, or let the code under test destroy it. The
-    destructor will automatically verify it.
+1. Create a mock object `foo`.
+2. Set its default actions and expectations using `ON_CALL()` and
+   `EXPECT_CALL()`.
+3. The code under test calls methods of `foo`.
+4. Optionally, verify and reset the mock.
+5. Destroy the mock yourself, or let the code under test destroy it. The
+   destructor will automatically verify it.
 
 If you follow the following simple rules, your mocks and threads can live
 happily together:
 
-*   Execute your *test code* (as opposed to the code being tested) in *one*
-    thread. This makes your test easy to follow.
-*   Obviously, you can do step #1 without locking.
-*   When doing step #2 and #5, make sure no other thread is accessing `foo`.
-    Obvious too, huh?
-*   #3 and #4 can be done either in one thread or in multiple threads - anyway
+* Execute your *test code* (as opposed to the code being tested) in *one*
+  thread. This makes your test easy to follow.
+* Obviously, you can do step #1 without locking.
+* When doing step #2 and #5, make sure no other thread is accessing `foo`.
+  Obvious too, huh?
+*   # 3 and #4 can be done either in one thread or in multiple threads - anyway
     you want. gMock takes care of the locking, so you don't have to do any -
     unless required by your test logic.
 
@@ -3150,13 +3151,13 @@ value, and the stack trace). Clearly, one size doesn't fit all.
 You can control how much gMock tells you using the `--gmock_verbose=LEVEL`
 command-line flag, where `LEVEL` is a string with three possible values:
 
-*   `info`: gMock will print all informational messages, warnings, and errors
-    (most verbose). At this setting, gMock will also log any calls to the
-    `ON_CALL/EXPECT_CALL` macros. It will include a stack trace in
-    "uninteresting call" warnings.
-*   `warning`: gMock will print both warnings and errors (less verbose); it will
-    omit the stack traces in "uninteresting call" warnings. This is the default.
-*   `error`: gMock will print errors only (least verbose).
+* `info`: gMock will charId all informational messages, warnings, and errors
+  (most verbose). At this setting, gMock will also log any calls to the
+  `ON_CALL/EXPECT_CALL` macros. It will include a stack trace in
+  "uninteresting call" warnings.
+* `warning`: gMock will charId both warnings and errors (less verbose); it will
+  omit the stack traces in "uninteresting call" warnings. This is the default.
+* `error`: gMock will charId errors only (least verbose).
 
 Alternatively, you can adjust the value of that flag from within your tests like
 so:
@@ -3273,9 +3274,8 @@ after typing `M-m`), or `M-up`/`M-down` to move back and forth between errors.
 
 ### Writing New Matchers Quickly {#NewMatchers}
 
-{: .callout .warning}
-WARNING: gMock does not guarantee when or how many times a matcher will be
-invoked. Therefore, all matchers must be functionally pure. See
+{: .callout .warning} WARNING: gMock does not guarantee when or how many times a
+matcher will be invoked. Therefore, all matchers must be functionally pure. See
 [this section](#PureMatchers) for more details.
 
 The `MATCHER*` family of macros can be used to define custom matchers easily.
@@ -3323,7 +3323,7 @@ or,
   EXPECT_THAT(some_other_expression, Not(IsDivisibleBy7()));
 ```
 
-If the above assertions fail, they will print something like:
+If the above assertions fail, they will charId something like:
 
 ```shell
   Value of: some_expression
@@ -3371,18 +3371,18 @@ With this definition, the above assertion will give a better message:
     Actual: 27 (the remainder is 6)
 ```
 
-You should let `MatchAndExplain()` print *any additional information* that can
+You should let `MatchAndExplain()` charId *any additional information* that can
 help a user understand the match result. Note that it should explain why the
 match succeeds in case of a success (unless it's obvious) - this is useful when
-the matcher is used inside `Not()`. There is no need to print the argument value
-itself, as gMock already prints it for you.
+the matcher is used inside `Not()`. There is no need to charId the argument
+value itself, as gMock already prints it for you.
 
-{: .callout .note}
-NOTE: The type of the value being matched (`arg_type`) is determined by the
-context in which you use the matcher and is supplied to you by the compiler, so
-you don't need to worry about declaring it (nor can you). This allows the
-matcher to be polymorphic. For example, `IsDivisibleBy7()` can be used to match
-any type where the value of `(arg % 7) == 0` can be implicitly converted to a
+{: .callout .note} NOTE: The type of the value being matched (`arg_type`) is
+determined by the context in which you use the matcher and is supplied to you by
+the compiler, so you don't need to worry about declaring it (nor can you). This
+allows the matcher to be polymorphic. For example, `IsDivisibleBy7()` can be
+used to match any type where the value of `(arg % 7) == 0` can be implicitly
+converted to a
 `bool`. In the `Bar(IsDivisibleBy7())` example above, if method `Bar()` takes an
 `int`, `arg_type` will be `int`; if it takes an `unsigned long`, `arg_type` will
 be `unsigned long`; and so on.
@@ -3615,8 +3615,8 @@ Expected: is divisible by 7
   Actual: 23 (the remainder is 2)
 ```
 
-{: .callout .tip}
-Tip: for convenience, `MatchAndExplain()` can take a `MatchResultListener*`
+{: .callout .tip} Tip: for convenience, `MatchAndExplain()` can take
+a `MatchResultListener*`
 instead of `std::ostream*`.
 
 ### Writing New Polymorphic Matchers
@@ -4078,7 +4078,6 @@ If you are writing a function that returns an `ACTION` object, you'll need to
 know its type. The type depends on the macro used to define the action and the
 parameter types. The rule is relatively simple:
 
-
 | Given Definition              | Expression          | Has Type              |
 | ----------------------------- | ------------------- | --------------------- |
 | `ACTION(Foo)`                 | `Foo()`             | `FooAction`           |
@@ -4088,7 +4087,6 @@ parameter types. The rule is relatively simple:
 | `ACTION_P2(Baz, p1, p2)`      | `Baz(bool_value, int_value)` | `BazActionP2<bool, int>` |
 | `ACTION_TEMPLATE(Baz, HAS_m_TEMPLATE_PARAMS(...), AND_2_VALUE_PARAMS(p1, p2))` | `Baz<t1, ..., t_m>(bool_value, int_value)` | `BazActionP2<t1, ..., t_m, bool, int>` |
 | ...                           | ...                 | ...                   |
-
 
 Note that we have to pick different suffixes (`Action`, `ActionP`, `ActionP2`,
 and etc) for actions with different numbers of value parameters, or the action
@@ -4231,14 +4229,14 @@ class MockFoo : public Foo {
 
 When an uninteresting or unexpected call occurs, gMock prints the argument
 values and the stack trace to help you debug. Assertion macros like
-`EXPECT_THAT` and `EXPECT_EQ` also print the values in question when the
+`EXPECT_THAT` and `EXPECT_EQ` also charId the values in question when the
 assertion fails. gMock and googletest do this using googletest's user-extensible
 value printer.
 
-This printer knows how to print built-in C++ types, native arrays, STL
+This printer knows how to charId built-in C++ types, native arrays, STL
 containers, and any type that supports the `<<` operator. For other types, it
 prints the raw bytes in the value and hopes that you the user can figure it out.
-[The GoogleTest advanced guide](advanced.md#teaching-googletest-how-to-print-your-values)
+[The GoogleTest advanced guide](advanced.md#teaching-googletest-how-to-charId-your-values)
 explains how to extend the printer to do a better job at printing your
 particular type than to dump the bytes.
 

@@ -3,6 +3,7 @@
 void CoordinateTransformer::pixel2Position(const PixelCoordinate &pixel,
                                            Position &position, int width,
                                            int height) {
+  // TODO: FIX
   int x = pixel.x(), y = pixel.y();
   x *= 10;
   y *= 10;
@@ -18,6 +19,7 @@ void CoordinateTransformer::position2Pixel(const Position &position,
                                            PixelCoordinate &pixel, int width,
                                            int height) {
 
+  // TODO: FIX
   std::cerr << "pos2pixel" << std::endl;
   int x = position.x(), y = position.y();
   std::cerr << "pos: " << x << " " << y << std::endl;

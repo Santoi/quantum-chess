@@ -107,7 +107,7 @@ void Client::execute(const char *host, const char *port,
   Scene scene(window, game.getBoard());
 
   ActionThread action_thread(received, game);
-  EventHandlerThread event_handler(game);
+  EventHandlerThread event_handler(window, game);
 
   receiver_thread.start();
   sender_thread.start();

@@ -160,12 +160,17 @@ void ClientProtocol::fillChatInstruction(Socket &socket,
                                          std::shared_ptr<RemoteClientInstruction> &
                                          ptr_instruction) {
   std::string nick_name;
+  uint16_t client_id;
   std::string message;
-  this->getMessageFromSocket(socket, nick_name);
-  this->getMessageFromSocket(socket, message);
-  ptr_instruction = make_unique<RemoteClientChatInstruction>(nick_name,
-                                                             message);
-
+  std::string timestamp;
+  client_id = getNumber16FromSocket(socket);
+  getMessageFromSocket(socket, nick_name);
+  getMessageFromSocket(socket, timestamp);
+  getMessageFromSocket(socket, message);
+  ptr_instruction = make_unique<RemoteClientChatInstruction>(client_id,
+                                                             nick_name,
+                                                             message,
+                                                             timestamp);
 }
 
 void ClientProtocol::fillExitInstruction(Socket &socket,

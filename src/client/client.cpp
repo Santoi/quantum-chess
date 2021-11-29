@@ -159,8 +159,8 @@ bool Client::readCommand() {
       iss >> temp_message;
       message += temp_message + " ";
     }
-    send.push(std::make_shared<RemoteClientChatInstruction>(client_nick_name,
-                                                            message));
+    send.push(std::make_shared<RemoteClientChatInstruction>(
+            message));
 
   }
 

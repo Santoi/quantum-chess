@@ -30,6 +30,7 @@ void EventHandlerThread::run() {
           handleMouseButtonLeft(mouse);
         else if (mouse.button == SDL_BUTTON_RIGHT)
           handleMouseButtonRight(mouse);
+        break;
     }
   }
 }

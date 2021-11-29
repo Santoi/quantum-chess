@@ -3,27 +3,28 @@
 #include "../position.h"
 #include "../game/game.h"
 #include <iostream>
-
-
-RemoteClientInstruction::RemoteClientInstruction(
-        const std::string &instructor_nick_name)
-        : instructor_nick_name(instructor_nick_name) {
-}
+#include <utility>
 
 void RemoteClientInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                                ClientProtocol &protocol) {
 
 }
 
+RemoteClientChatInstruction::RemoteClientChatInstruction(std::string message_) :
+        client_id(0), nickname(), message(message_), timestamp() {}
 
-RemoteClientChatInstruction::RemoteClientChatInstruction(
-        const std::string &nick_name,
-        const std::string &message)
-        : RemoteClientInstruction(nick_name), message(message) {
+
+RemoteClientChatInstruction::RemoteClientChatInstruction(uint16_t client_id,
+                                                         std::string nick_name,
+                                                         std::string message,
+                                                         std::string timestamp)
+        : client_id(client_id), nickname(std::move(nick_name)),
+          message(std::move(message)),
+          timestamp(std::move(timestamp)) {
 }
 
 void RemoteClientChatInstruction::makeAction(Game &game) {
-  std::cout << this->instructor_nick_name << " envia: " << this->message
+  std::cout << nickname << " envia: " << this->message
             << std::endl;
 }
 
@@ -33,13 +34,14 @@ RemoteClientChatInstruction::fillPacketWithInstructionsToSend(Packet &packet,
   protocol.fillPacketWithChatMessage(packet, message);
 }
 
+// TODO hacer como los del chat
 RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(
         const std::string &nick_name)
-        : RemoteClientInstruction(nick_name) {
+        : nickname(nick_name) {
 }
 
 void RemoteClientExitMessageInstruction::makeAction(Game &game) {
-  std::cout << this->instructor_nick_name << " se fue de la partida."
+  std::cout << nickname << " se fue de la partida."
             << std::endl;
 }
 
@@ -218,3 +220,5 @@ void RemoteClientLogInstruction::makeAction(Game &game) {
 void
 RemoteClientLogInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                              ClientProtocol &protocol) {}
+
+

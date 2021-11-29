@@ -234,11 +234,14 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
 }
 
 void ServerProtocol::fillPacketWithChatInfo(Packet &packet,
-                                            const std::string &nick_name,
-                                            const std::string &message) {
+                                            const ClientData &client_data,
+                                            const std::string &message,
+                                            const std::string &timestamp) {
   packet.addByte(CHAT_PREFIX);
-  this->addStringAndItsLengthToPacket(packet, nick_name);
-  this->addStringAndItsLengthToPacket(packet, message);
+  changeNumberToBigEndianAndAddToPacket(packet, client_data.id);
+  addStringAndItsLengthToPacket(packet, client_data.name);
+  addStringAndItsLengthToPacket(packet, timestamp);
+  addStringAndItsLengthToPacket(packet, message);
 }
 
 void ServerProtocol::fillPacketWithExceptionInfo(Packet &packet,

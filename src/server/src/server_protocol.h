@@ -60,8 +60,10 @@ public:
   //Following the protocol, it fills the given packet with the chat message information. This
   //method is called by the ChatInstruction class that has the nick name and message to be
   //passed as parameters.
-  void fillPacketWithChatInfo(Packet &packet, const std::string &nick_name,
-                              const std::string &message);
+  void fillPacketWithChatInfo(Packet &packet,
+                              const ClientData &client_data,
+                              const std::string &message,
+                              const std::string &timestamp);
 
   //Following the protocol, it fills the given packet with the exit message information. This
   //method is called by the ExitInstruction class that has the nick name of the person leaving

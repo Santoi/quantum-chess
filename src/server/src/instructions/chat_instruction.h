@@ -9,6 +9,9 @@ private:
   const ClientData &instructor_data;
   std::string message;
 
+
+  std::string getTimeStamp();
+
 public:
   ChatInstruction() = delete;
 
@@ -28,6 +31,8 @@ public:
                                    const ClientData &client_receiver_data) override;
 
   ~ChatInstruction() = default;
+
+
 };
 
 

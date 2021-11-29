@@ -22,18 +22,12 @@ class ClientProtocol;
 class ChessmanData;
 
 class RemoteClientInstruction {
-protected:
-  const std::string instructor_nick_name;
-
 public:
   RemoteClientInstruction() = default;
 
-  //A RemoteClientInstruction is created, saving the instructor's nick name received in the
-  //function parameter.
-  RemoteClientInstruction(const std::string &instructor_nick_name);
-
   virtual void
-  fillPacketWithInstructionsToSend(Packet &packet, ClientProtocol &protocol);
+  fillPacketWithInstructionsToSend(Packet &packet,
+                                   ClientProtocol &protocol);
 
   //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
   virtual void makeAction(Game &game) = 0;
@@ -44,15 +38,22 @@ public:
 
 class RemoteClientChatInstruction : public RemoteClientInstruction {
 private:
+  const uint16_t client_id;
+  const std::string nickname;
   const std::string message;
+  const std::string timestamp;
 
 public:
   RemoteClientChatInstruction() = delete;
 
   //Creates a RemoteClientChatInstruction saving the nick_name and message passed as function
   //parameters.
-  RemoteClientChatInstruction(const std::string &nick_name,
-                              const std::string &message);
+  RemoteClientChatInstruction(uint16_t client_id,
+                              std::string nick_name,
+                              std::string message,
+                              std::string timestamp);
+
+  RemoteClientChatInstruction(std::string message_);
 
   //Prints to stdout "instructor_nick_name sends message"
   void makeAction(Game &game) override;
@@ -64,6 +65,8 @@ public:
 };
 
 class RemoteClientExitMessageInstruction : public RemoteClientInstruction {
+  const std::string nickname;
+
 public:
   RemoteClientExitMessageInstruction() = delete;
 

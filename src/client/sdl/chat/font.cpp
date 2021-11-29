@@ -14,16 +14,17 @@
 #define TEAL {0x00, 0xff, 0xff}
 
 
-Font::Font(int ptx, int index) : regular_font("fonts/font-regular.ttf", ptx,
-                                              index),
-                                 mono_font("fonts/erusfont.pcf",
-                                           ptx,
-                                           index),
-                                 bold_font("fonts/erusfontbold.pcf",
-                                           ptx, index),
-                                 italic_font(
-                                     "fonts/font-italic.ttf", ptx,
-                                     index) {
+Font::Font(int ptx, int index)
+    : ttf(), regular_font("fonts/font-regular.ttf", ptx,
+                          index),
+      mono_font("fonts/erusfont.pcf",
+                ptx,
+                index),
+      bold_font("fonts/erusfontbold.pcf",
+                ptx, index),
+      italic_font(
+          "fonts/font-italic.ttf", ptx,
+          index) {
   colors = {
       {'k', BLACK},
       {'w', WHITE},

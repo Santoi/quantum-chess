@@ -25,3 +25,11 @@ Renderer &Window::renderer() {
 SoundHandler &Window::sound_handler() {
   return sound_handler_;
 }
+
+int Window::getWidth() const {
+  return window_.GetDrawableWidth();
+}
+
+int Window::getHeight() const {
+  return window_.GetDrawableHeight();
+}

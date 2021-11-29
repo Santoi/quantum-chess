@@ -20,6 +20,10 @@ public:
   Renderer &renderer();
 
   SoundHandler &sound_handler();
+
+  int getWidth() const;
+
+  int getHeight() const;
 };
 
 

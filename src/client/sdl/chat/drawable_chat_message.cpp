@@ -1,8 +1,10 @@
-#include "chat_message.h"
+#include "drawable_chat_message.h"
 
-ChatMessage::ChatMessage(Renderer &renderer, Font &font,
-                         const std::string &name, const std::string &id,
-                         const std::string &time, const std::string &message) :
+DrawableChatMessage::DrawableChatMessage(Renderer &renderer, Font &font,
+                                         const std::string &name,
+                                         const std::string &id,
+                                         const std::string &time,
+                                         const std::string &message) :
     renderer(renderer),
     font(font),
     name(renderer, font, name, 'w'),
@@ -10,7 +12,7 @@ ChatMessage::ChatMessage(Renderer &renderer, Font &font,
     time(renderer, font, time, 'd'),
     message(renderer, font, message, 'w') {}
 
-void ChatMessage::render(int x, int y) {
+void DrawableChatMessage::render(int x, int y) {
   int x_pos = x, y_pos = y;
   name.render(x_pos, y_pos);
   x_pos += name.getDrawableWidth();
@@ -26,11 +28,11 @@ void ChatMessage::render(int x, int y) {
   height = y_pos - y;
 }
 
-ChatMessage::ChatMessage(ChatMessage &&other) noexcept:
+DrawableChatMessage::DrawableChatMessage(DrawableChatMessage &&other) noexcept:
     renderer(other.renderer), font(other.font), name(std::move(other.name)),
     id(std::move(other.id)),
     time(std::move(other.time)), message(std::move(other.message)) {}
 
-int ChatMessage::getDrawableHeight() const {
+int DrawableChatMessage::getDrawableHeight() const {
   return height;
 }

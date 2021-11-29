@@ -4,7 +4,7 @@
 #include <list>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game)
-    : window(window), open(true), game(game),
+    : window(window), open(true), game(game), text_entry(29),
       split(false), merge(false),
       first_click(false) {}
 
@@ -17,18 +17,22 @@ void EventHandlerThread::run() {
         return;
       case SDL_WINDOWEVENT:
         handleWindowChange(event.window);
+      case SDL_TEXTINPUT:
+        handleTextInput(event.text.text);
+        break;
       case SDL_KEYDOWN:
         handleKeyDown();
         break;
       case SDL_KEYUP:
         handleKeyUp();
         break;
-      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
           handleMouseButtonLeft(mouse);
         else if (mouse.button == SDL_BUTTON_RIGHT)
           handleMouseButtonRight(mouse);
+        break;
     }
   }
 }
@@ -57,6 +61,16 @@ void EventHandlerThread::handleKeyDown() {
       split = false;
       break;
     }
+    case SDLK_BACKSPACE: {
+      if (text_entry.isEnabled())
+        text_entry.backspace();
+      break;
+    }
+    case SDLK_RETURN: {
+      if (text_entry.isEnabled()) {
+        // TODO MATI: send to server
+      }
+    }
   }
 }
 
@@ -78,8 +92,11 @@ void EventHandlerThread::handleKeyUp() {
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
-    if (!game.isPixelInBoard(pixel))
+    if (!game.isPixelInBoard(pixel)) {
+      text_entry.enableEntry();
       return;
+    }
+    text_entry.disableEntry();
 
     std::list<Position> coords;
     for (size_t i = 0; i < 8; i++) {
@@ -138,6 +155,10 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
 
 void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
   PixelCoordinate pixel(mouse.x, mouse.y);
+  if (!game.isPixelInBoard(pixel)) {
+    text_entry.disableEntry();
+    return;
+  }
   // board is set default here because is needed to color the two at the same
   // time.
   game.setDefaultBoard();
@@ -150,4 +171,8 @@ void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
     window.setMaxHeight(window_event.data1 / window.getMinRatio());
   }
   // TODO: fix fullscreen
+}
+
+void EventHandlerThread::handleTextInput(const std::string &text) {
+  text_entry.concat(text);
 }

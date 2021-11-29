@@ -4,6 +4,7 @@
 #include "../game/game.h"
 #include "../game/board.h"
 #include "../../common/src/thread.h"
+#include "chat/text_entry.h"
 #include <SDL2/SDL.h>
 #include <atomic>
 
@@ -12,6 +13,7 @@ private:
   Window &window;
   std::atomic<bool> open;
   Game &game;
+  TextEntry text_entry; // TODO MATI: replace with chat class
   bool split, merge, first_click, second_click;
   PixelCoordinate penultimate_click;
   PixelCoordinate last_click;
@@ -26,6 +28,8 @@ private:
   void handleMouseButtonRight(SDL_MouseButtonEvent &mouse);
 
   void handleWindowChange(SDL_WindowEvent &window_event);
+
+  void handleTextInput(const std::string &text);
 
 public:
   explicit EventHandlerThread(Window &window, Game &game);

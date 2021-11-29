@@ -243,4 +243,25 @@ public:
   ~RemoteClientEntangledChessmanInstruction() = default;
 };
 
+#define SPLIT_SOUND 0
+#define MERGE_SOUND 1
+#define CAPTURE_SOUND 2
+
+class RemoteClientSoundInstruction
+        : public RemoteClientInstruction {
+  uint8_t sound;
+
+public:
+  RemoteClientSoundInstruction() = delete;
+
+  RemoteClientSoundInstruction(uint8_t sound_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientSoundInstruction() = default;
+};
+
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

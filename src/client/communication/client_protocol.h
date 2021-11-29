@@ -8,6 +8,20 @@
 #include "../../common/src/client_data.h"
 #include <memory>
 
+#define POSSIBLE_MOVES_PREFIX 'a'
+#define CHAT_PREFIX 'c'
+#define LOAD_BOARD_PREFIX 'l'
+#define EXIT_PREFIX 'e'
+#define SHORT_LOG_PREFIX 'x'
+#define POSSIBLE_SPLITS_PREFIX 'b'
+#define POSSIBLE_MERGES_PREFIX 'd'
+#define SAME_CHESSMAN_PREFIX 'f'
+#define ENTANGLED_CHESSMEN_PREFIX 'g'
+#define MERGE_PREFIX 'h'
+#define SPLIT_PREFIX 's'
+#define MOVE_PREFIX 'm'
+#define SOUND_PREFIX 'i'
+
 class RemoteClientInstruction;
 
 class ClientProtocol : public Protocol {
@@ -75,37 +89,40 @@ private:
   //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
   //name and the corresponding message). After the function ends, the ptr_instruction points to this
   //new ChatInstruction.
-  void fillClientInstructionWithChat(Socket &socket,
-                                     std::shared_ptr<RemoteClientInstruction> &
-                                     ptr_instruction);
+  void fillChatInstruction(Socket &socket,
+                           std::shared_ptr<RemoteClientInstruction> &
+                           ptr_instruction);
 
   //Gets necessary information to create the RemoteClientExitMessageInstruction (the instructor's nick
   //name, this is, the person that left the match). After the function ends, the ptr_instruction
   //points to this new ExitInstruction.
-  void fillClientInstructionWithExitMessage(Socket &socket,
-                                            std::shared_ptr<RemoteClientInstruction> &
-                                            ptr_instruction);
+  void fillExitInstruction(Socket &socket,
+                           std::shared_ptr<RemoteClientInstruction> &
+                           ptr_instruction);
 
-  void fillClientInstructionWithLoadBoard(Socket &socket,
-                                          std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+  void fillLoadBoardInstruction(Socket &socket,
+                                std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-  void fillClientInstructionWithException(Socket &socket,
-                                          std::shared_ptr<RemoteClientInstruction> &sharedPtr);
+  void fillShortLogInstruction(Socket &socket,
+                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-  void fillClientInstructionWithPossibleMoves(Socket &socket,
-                                              std::shared_ptr<RemoteClientInstruction> &sharedPtr);
+  void fillPossibleMovesInstruction(Socket &socket,
+                                    std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-  void fillClientInstructionWithPossibleSplits(Socket &socket,
-                                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+  void fillPossibleSplitsInstruction(Socket &socket,
+                                     std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-  void fillClientInstructionWithPossibleMerges(Socket &socket,
-                                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+  void fillPossibleMergesInstruction(Socket &socket,
+                                     std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-  void fillClientInstructionWithSameChessman(Socket &socket,
-                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+  void fillSameChessmanInstruction(Socket &socket,
+                                   std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
-  void fillClientInstructionWithEntangledChessman(Socket &socket,
-                                                  std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+  void fillEntangledChessmanInstruction(Socket &socket,
+                                        std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillSoundInstruction(Socket &socket,
+                            std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

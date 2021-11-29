@@ -5,9 +5,9 @@
 SoundHandler::SoundHandler(SDL2pp::Mixer &mixer)
         : mixer(mixer), music("sound/music.wav") {
   chunks.reserve(NUMBER_OF_DIFFERENT_CHUNKS);
-  chunks.push_back(SDL2pp::Chunk("sound/low.wav"));
-  chunks.push_back(SDL2pp::Chunk("sound/high.wav"));
-  chunks.push_back(SDL2pp::Chunk("sound/medium.wav"));
+  chunks.push_back(SDL2pp::Chunk("sound/split.wav"));
+  chunks.push_back(SDL2pp::Chunk("sound/merge.wav"));
+  chunks.push_back(SDL2pp::Chunk("sound/capture.wav"));
   chunks.push_back(SDL2pp::Chunk("sound/beat.wav"));
 }
 
@@ -23,11 +23,11 @@ void SoundHandler::playSplitSound() const {
   mixer.PlayChannel(-1, chunks[0]);
 }
 
-void SoundHandler::playMovementSound() const {
+void SoundHandler::playMergeSound() const {
   mixer.PlayChannel(-1, chunks[1]);
 }
 
-void SoundHandler::playTakenPieceSound() const {
+void SoundHandler::playCaptureSound() const {
   mixer.PlayChannel(-1, chunks[2]);
 }
 

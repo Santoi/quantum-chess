@@ -2,6 +2,7 @@
 #include "load_board_instruction.h"
 #include "../../../common/src/chess_exception.h"
 #include "chess_exception_instruction.h"
+#include "sound_instruction.h"
 
 MovementInstruction::MovementInstruction(const ClientData &instructor_data,
                                          const Position &initial_,

@@ -2,6 +2,7 @@
 #include "load_board_instruction.h"
 #include "../../../common/src/chess_exception.h"
 #include "chess_exception_instruction.h"
+#include "sound_instruction.h"
 
 MergeInstruction::MergeInstruction(const ClientData &instructor_data,
                                    const Position &from1_,
@@ -29,6 +30,10 @@ void MergeInstruction::makeActionAndNotifyAllListeningQueues(
   LoadBoardInstruction instruction;
   match_updates_queue.push(
           std::make_shared<LoadBoardInstruction>(instruction));
+  auto this_instr_ptr = std::make_shared<SoundInstruction>(
+          MERGE_SOUND);
+  for (auto it = listening_queues.begin(); it != listening_queues.end(); ++it)
+    it->second.push(this_instr_ptr);
 }
 
 void

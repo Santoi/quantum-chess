@@ -8,29 +8,28 @@
 
 class SoundHandler {
 private:
-    SDL2pp::Mixer& mixer;
-    SDL2pp::Music music;
-    std::vector<SDL2pp::Chunk> chunks;
+  SDL2pp::Mixer &mixer;
+  SDL2pp::Music music;
+  std::vector<SDL2pp::Chunk> chunks;
 
 public:
-    SoundHandler() = delete;
+  SoundHandler() = delete;
 
-    explicit SoundHandler(SDL2pp::Mixer& mixer);
+  explicit SoundHandler(SDL2pp::Mixer &mixer);
 
-    void playMusic() const;
+  void playMusic() const;
 
-    void stopMusic() const;
+  void stopMusic() const;
 
-    void playSplitSound() const;
+  void playSplitSound() const;
 
-    void playMovementSound() const;
+  void playMergeSound() const;
 
-    void playTakenPieceSound() const;
+  void playCaptureSound() const;
 
-    void playNewClientSound() const;
+  void playNewClientSound() const;
 
 };
-
 
 
 #endif //QUANTUM_CHESS_PROJ_SOUNDHANDLER_H

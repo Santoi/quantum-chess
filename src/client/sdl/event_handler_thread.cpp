@@ -64,7 +64,7 @@ void EventHandlerThread::handleKeyDown() {
 }
 
 void EventHandlerThread::handleKeyUp() {
-  //game.playTakenPieceSound();
+  //game.playCaptureSound();
   switch (event.key.keysym.sym) {
     case SDLK_LSHIFT: {
       if (!first_click)

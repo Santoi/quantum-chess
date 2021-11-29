@@ -72,9 +72,9 @@ public:
 
   void playSplitSound();
 
-  void playMovementSound();
+  void playMergeSound();
 
-  void playTakenPieceSound();
+  void playCaptureSound();
 
   void askEntangledTiles(PixelCoordinate &coords);
 

@@ -181,3 +181,25 @@ RemoteClientEntangledChessmanInstruction::fillPacketWithInstructionsToSend(
   protocol.fillPacketWithEntangledChessmanInstruction(packet,
                                                       *positions.begin());
 }
+
+RemoteClientSoundInstruction::RemoteClientSoundInstruction(uint8_t sound_) :
+        sound(sound_) {}
+
+void RemoteClientSoundInstruction::makeAction(Game &game) {
+  switch (sound) {
+    case SPLIT_SOUND:
+      game.playSplitSound();
+      break;
+    case MERGE_SOUND:
+      game.playMergeSound();
+      break;
+    case CAPTURE_SOUND:
+      game.playCaptureSound();
+      break;
+  }
+}
+
+void
+RemoteClientSoundInstruction::fillPacketWithInstructionsToSend(
+        Packet &packet,
+        ClientProtocol &protocol) {}

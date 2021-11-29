@@ -17,6 +17,8 @@
 #include <arpa/inet.h>
 #include <algorithm>
 
+#define POSSIBLE_MOVES_PREFIX 'a'
+
 void ServerProtocol::sendMatchesInfo(Socket &socket,
                                      const std::map<uint16_t, std::unique_ptr<Match>> &matches) {
   Packet packet;
@@ -201,31 +203,31 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
   char action = packet.getByte();
 
   switch (action) {
-    case 'c':
+    case CHAT_PREFIX:
       fillChatInstructions(socket, client_data, instruct_ptr);
       break;
-    case 'm':
+    case MOVE_PREFIX:
       fillMovementInstructions(socket, client_data, instruct_ptr);
       break;
-    case 'a':
+    case POSSIBLE_MOVES_PREFIX:
       fillPossibleMovesInstruction(socket, client_data, instruct_ptr);
       break;
-    case 'b':
+    case POSSIBLE_SPLITS_PREFIX:
       fillPossibleSplitsInstruction(socket, client_data, instruct_ptr);
       break;
-    case 'd':
+    case POSSIBLE_MERGES_PREFIX:
       fillPossibleMergesInstruction(socket, client_data, instruct_ptr);
       break;
-    case 's':
+    case SPLIT_PREFIX:
       fillSplitInstruction(socket, client_data, instruct_ptr);
       break;
-    case 'f':
+    case SAME_CHESSMAN_PREFIX:
       fillSameChessmanInstruction(socket, client_data, instruct_ptr);
       break;
-    case 'g':
+    case ENTANGLED_CHESSMEN_PREFIX:
       fillEntangledInstruction(socket, client_data, instruct_ptr);
       break;
-    case 'h':
+    case MERGE_PREFIX:
       fillMergeInstruction(socket, client_data, instruct_ptr);
       break;
   }
@@ -234,14 +236,14 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
 void ServerProtocol::fillPacketWithChatInfo(Packet &packet,
                                             const std::string &nick_name,
                                             const std::string &message) {
-  packet.addByte('c');
+  packet.addByte(CHAT_PREFIX);
   this->addStringAndItsLengthToPacket(packet, nick_name);
   this->addStringAndItsLengthToPacket(packet, message);
 }
 
 void ServerProtocol::fillPacketWithExceptionInfo(Packet &packet,
                                                  const std::string &message) {
-  packet.addByte('x');
+  packet.addByte(SHORT_LOG_PREFIX);
   this->addStringAndItsLengthToPacket(packet, message);
 }
 
@@ -250,7 +252,7 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
                                                  const std::vector<bool> &colors,
                                                  const std::vector<Position> &positions,
                                                  const std::vector<double> &probabilities) {
-  packet.addByte('l');
+  packet.addByte(LOAD_BOARD_PREFIX);
   packet.addByte(characters.size());
   for (uint16_t i = 0; i < characters.size(); i++) {
     packet.addByte(characters[i]);
@@ -264,7 +266,7 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
 
 void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,
                                                  const std::list<Position> &positions) {
-  packet.addByte('a');
+  packet.addByte(POSSIBLE_MOVES_PREFIX);
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());
@@ -274,7 +276,7 @@ void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,
 
 void ServerProtocol::fillPacketWithPossibleSplits(Packet &packet,
                                                   const std::list<Position> &positions) {
-  packet.addByte('b');
+  packet.addByte(POSSIBLE_SPLITS_PREFIX);
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());
@@ -284,7 +286,7 @@ void ServerProtocol::fillPacketWithPossibleSplits(Packet &packet,
 
 void ServerProtocol::fillPacketWithPossibleMerges(Packet &packet,
                                                   const std::list<Position> &positions) {
-  packet.addByte('d');
+  packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());
@@ -294,7 +296,7 @@ void ServerProtocol::fillPacketWithPossibleMerges(Packet &packet,
 
 void ServerProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
                                                            const std::list<Position> &positions) {
-  packet.addByte('f');
+  packet.addByte(SAME_CHESSMAN_PREFIX);
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());
@@ -304,7 +306,7 @@ void ServerProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
 
 void ServerProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
                                                                 const std::list<Position> &positions) {
-  packet.addByte('g');
+  packet.addByte(ENTANGLED_CHESSMEN_PREFIX);
   addNumber8ToPacket(packet, positions.size());
   for (auto &position: positions) {
     addNumber8ToPacket(packet, position.x());
@@ -322,8 +324,13 @@ void ServerProtocol::sendPacketWithUpdates(Socket &socket,
 
 void ServerProtocol::fillPacketWithExitInfo(Packet &packet,
                                             const std::string &nick_name) {
-  packet.addByte('e');
+  packet.addByte(EXIT_PREFIX);
   this->addStringAndItsLengthToPacket(packet, nick_name);
+}
+
+void ServerProtocol::fillPacketWithSoundInfo(Packet &packet, uint8_t sound) {
+  packet.addByte(SOUND_PREFIX);
+  addNumber8ToPacket(packet, sound);
 }
 
 

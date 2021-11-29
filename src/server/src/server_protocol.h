@@ -10,6 +10,20 @@
 #include "../../common/src/protocol.h"
 #include "../../common/src/client_data.h"
 
+#define POSSIBLE_MOVES_PREFIX 'a'
+#define CHAT_PREFIX 'c'
+#define LOAD_BOARD_PREFIX 'l'
+#define EXIT_PREFIX 'e'
+#define SHORT_LOG_PREFIX 'x'
+#define POSSIBLE_SPLITS_PREFIX 'b'
+#define POSSIBLE_MERGES_PREFIX 'd'
+#define SAME_CHESSMAN_PREFIX 'f'
+#define ENTANGLED_CHESSMEN_PREFIX 'g'
+#define MERGE_PREFIX 'h'
+#define SPLIT_PREFIX 's'
+#define MOVE_PREFIX 'm'
+#define SOUND_PREFIX 'i'
+
 class Instruction;
 
 class Match;
@@ -85,6 +99,8 @@ public:
 
   void fillPacketWithEntangledChessmanInstruction(Packet &packet,
                                                   const std::list<Position> &positions);
+
+  void fillPacketWithSoundInfo(Packet &packet, uint8_t sound);
 
 private:
   //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.

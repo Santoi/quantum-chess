@@ -35,6 +35,13 @@ bool operator<(const Position &a, const Position &b) {
          ((a.x_ == b.x_) && (a.y_ < b.y_));
 }
 
+std::string Position::print() const {
+  std::string out;
+  out.push_back(x_ + 'A');
+  out.push_back(y_ + '1');
+  return out;
+}
+
 std::ostream &operator<<(std::ostream &os, const Position &position) {
   os << "(" << (uint) position.x_ << ", " << (uint) position.y_ << ")";
   return os;

@@ -199,14 +199,15 @@ void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
   board.load(chessman_data_vector);
 }
 
+// Runs in action thread.
 void Game::playSplitSound() {
   sound_handler.playSplitSound();
 }
 
-void Game::playMovementSound() {
-  sound_handler.playMovementSound();
+void Game::playMergeSound() {
+  sound_handler.playMergeSound();
 }
 
-void Game::playTakenPieceSound() {
-  sound_handler.playTakenPieceSound();
+void Game::playCaptureSound() {
+  sound_handler.playCaptureSound();
 }

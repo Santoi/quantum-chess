@@ -3,14 +3,9 @@
 void CoordinateTransformer::pixel2Position(const PixelCoordinate &pixel,
                                            Position &position, int width,
                                            int height) {
-  // TODO: FIX
   int x = pixel.x(), y = pixel.y();
-  x *= 10;
-  y *= 10;
-  x /= height;
-  y /= -height;
-  x -= (width * 10) / (2 * height) - 4;
-  y += 8;
+  x = (x - (width / 2.0 - 4.0 * height / 10.0)) / (height / 10.0);
+  y = y / (height / 10.0) + 8;
   Position pos(x, y);
   position = pos;
 }
@@ -19,17 +14,9 @@ void CoordinateTransformer::position2Pixel(const Position &position,
                                            PixelCoordinate &pixel, int width,
                                            int height) {
 
-  // TODO: FIX
-  std::cerr << "pos2pixel" << std::endl;
   int x = position.x(), y = position.y();
-  std::cerr << "pos: " << x << " " << y << std::endl;
-  x += (width * 10) / (2 * height) - 4;
-  y -= 8;
-  x *= height;
-  y *= -height;
-  x /= 10;
-  y /= 10;
-  std::cerr << "pixel: " << x << " " << y << std::endl;
+  x = height / 10 * x + width / 2 - 4 * height / 10;
+  y = (8 - y) * height / 10;
   PixelCoordinate pc(x, y);
   pixel = pc;
 }

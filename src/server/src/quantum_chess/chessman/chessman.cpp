@@ -50,8 +50,6 @@ void Chessman::move(const Position &initial, const Position &final) {
     board.removeChessmanOf(final);
   }
 
-
-  // TODO hacer lo de mezclar con una funcion split.
   // If there is a chessman in path then entangle.
   if (chessman_in_path.second) {
     entangle(initial, final, *chessman_in_path.second,
@@ -88,8 +86,7 @@ void Chessman::split(const Position &initial, const Position &final1,
   bool coin = board.flipACoin();
   new_real = coin ? final1 : final2;
   new_fake = !coin ? final1 : final2;
-
-  // TODO esto podria meterse en un metodo y mandarse igual que en move.
+  
   auto initial_qp_it = std::find(positions.begin(), positions.end(), initial);
   double old_prob = initial_qp_it->getProb();
   // Entangled list is copied and then moved.

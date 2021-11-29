@@ -5,7 +5,11 @@
 
 EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
                                                      split(false), merge(false),
-                                                     first_click(false) {}
+                                                     first_click(false),
+                                                     second_click(false),
+                                                     penultimate_click(0, 0),
+                                                     last_click(0, 0),
+                                                     event() {}
 
 void EventHandlerThread::run() {
   // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
@@ -76,7 +80,6 @@ void EventHandlerThread::handleKeyUp() {
 }
 
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
-  //game.playMovementSound();
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (!game.isPixelInBoard(pixel))

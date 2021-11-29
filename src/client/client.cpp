@@ -133,8 +133,8 @@ void Client::execute(const char *host, const char *port,
 
   received.close();
   send.close();
-  socket.shutdownAndClose();
   receiver_thread.notifySocketClosed();
+  socket.shutdownAndClose();
   action_thread.join();
   event_handler.join();
   sender_thread.join();

@@ -3,18 +3,20 @@
 #include <iostream>
 #include <list>
 
-EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
-                                                     split(false), merge(false),
-                                                     first_click(false) {}
+EventHandlerThread::EventHandlerThread(Window &window, Game &game)
+    : window(window), open(true), game(game),
+      split(false), merge(false),
+      first_click(false) {}
 
 void EventHandlerThread::run() {
-  // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (true) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
         open = false;
         return;
+      case SDL_WINDOWEVENT:
+        handleWindowChange(event.window);
       case SDL_KEYDOWN:
         handleKeyDown();
         break;
@@ -36,7 +38,6 @@ bool EventHandlerThread::isOpen() {
 }
 
 void EventHandlerThread::handleKeyDown() {
-  //game.playSplitSound();
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
       game.setDefaultBoard();
@@ -60,7 +61,6 @@ void EventHandlerThread::handleKeyDown() {
 }
 
 void EventHandlerThread::handleKeyUp() {
-  //game.playTakenPieceSound();
   switch (event.key.keysym.sym) {
     case SDLK_LSHIFT: {
       if (!first_click)
@@ -76,7 +76,6 @@ void EventHandlerThread::handleKeyUp() {
 }
 
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
-  //game.playMovementSound();
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (!game.isPixelInBoard(pixel))
@@ -117,23 +116,20 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
-    if (second_click) {
-      if (split) {
-        game.splitChessman(penultimate_click, last_click, pixel);
-        game.setDefaultBoard();
-        first_click = false;
-        second_click = false;
-        split = false;
-      }
-      if (merge) {
-        game.mergeChessman(penultimate_click, last_click, pixel);
-        game.setDefaultBoard();
-        first_click = false;
-        second_click = false;
-        merge = false;
-      }
+    if (split) {
+      game.splitChessman(penultimate_click, last_click, pixel);
+      game.setDefaultBoard();
+      first_click = false;
+      second_click = false;
+      split = false;
     }
-
+    if (merge) {
+      game.mergeChessman(penultimate_click, last_click, pixel);
+      game.setDefaultBoard();
+      first_click = false;
+      second_click = false;
+      merge = false;
+    }
   }
   catch (const ChessException &e) {
     std::cerr << e.what() << std::endl;
@@ -147,4 +143,11 @@ void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
   game.setDefaultBoard();
   game.askEntangledTiles(pixel);
   game.askQuantumTiles(pixel);
+}
+
+void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
+  if (window_event.event == SDL_WINDOWEVENT_RESIZED) {
+    window.setMaxHeight(window_event.data1 / window.getMinRatio());
+  }
+  // TODO: fix fullscreen
 }

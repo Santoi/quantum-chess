@@ -9,6 +9,7 @@
 
 class EventHandlerThread : public Thread {
 private:
+  Window &window;
   std::atomic<bool> open;
   Game &game;
   bool split, merge, first_click, second_click;
@@ -22,15 +23,17 @@ private:
 
   void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
 
+  void handleMouseButtonRight(SDL_MouseButtonEvent &mouse);
+
+  void handleWindowChange(SDL_WindowEvent &window_event);
+
 public:
-  explicit EventHandlerThread(Game &game);
+  explicit EventHandlerThread(Window &window, Game &game);
 
   // Event loop
   void run() override;
 
   bool isOpen();
-
-  void handleMouseButtonRight(SDL_MouseButtonEvent &mouse);
 };
 
 

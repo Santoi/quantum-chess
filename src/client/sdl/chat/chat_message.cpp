@@ -13,14 +13,14 @@ ChatMessage::ChatMessage(Renderer &renderer, Font &font,
 void ChatMessage::render(int x, int y) {
   int x_pos = x, y_pos = y;
   name.render(x_pos, y_pos);
-  x_pos += name.getTextOutputWidth();
+  x_pos += name.getDrawableWidth();
   id.render(x_pos, y_pos);
-  x_pos += id.getTextOutputWidth();
+  x_pos += id.getDrawableWidth();
   DrawableText colon(renderer, font, ": ");
   colon.render(x_pos, y_pos);
-  x_pos += colon.getTextOutputWidth();
+  x_pos += colon.getDrawableWidth();
   time.render(x_pos, y_pos);
-  y_pos += name.getTextOutputHeight();
+  y_pos += name.getDrawableHeight();
   x_pos = x;
   message.render(x_pos, y_pos);
   height = y_pos - y;

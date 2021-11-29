@@ -1,10 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_CHAT_MESSAGE_H
 #define QUANTUM_CHESS_PROJ_CHAT_MESSAGE_H
 
-#include "../renderer.h"
-#include "font.h"
 #include "drawable_text.h"
+#include "font.h"
 #include <string>
+
+class Renderer;
 
 class ChatMessage {
   Renderer &renderer;

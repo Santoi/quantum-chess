@@ -238,9 +238,9 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
   return std::unique_ptr<Chessman>(pointer);
 }
 
-void Board::load(const std::string &filename) {
-  std::ifstream file(filename, std::ios_base::in);
+void Board::load(std::ifstream &file) {
   std::string line;
+  file.seekg(0);
   while (!file.eof() && file.peek() != EOF) {
     std::getline(file, line);
     if (line.empty())

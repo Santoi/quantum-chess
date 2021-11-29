@@ -7,9 +7,9 @@
 #include "instructions/exit_instruction.h"
 #include "instructions/load_board_instruction.h"
 
-Match::Match(std::string board_filename)
+Match::Match(std::ifstream &file_)
         : Thread(), board(), clients(), listening_queues(),
-          match_updates_queue(), board_filename(std::move(board_filename)) {
+          match_updates_queue(), file(file_) {
 }
 
 Match::Match(Match &&other) : Thread(std::move(other)),
@@ -19,7 +19,7 @@ Match::Match(Match &&other) : Thread(std::move(other)),
                                       other.listening_queues)),
                               match_updates_queue(std::move(
                                       other.match_updates_queue)),
-                              board_filename(std::move(other.board_filename)) {}
+                              file(other.file) {}
 
 ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
   ServerProtocol protocol;
@@ -82,7 +82,7 @@ void Match::checkAndNotifyUpdates() {
 }
 
 void Match::run() {
-  board.load(board_filename);
+  board.load(file);
   try {
     while (true)
       checkAndNotifyUpdates();

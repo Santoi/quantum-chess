@@ -56,7 +56,7 @@ public:
   void addChessmanOfIn(const Position &initial, const Position &final);
 
   // Carga el tablero con las posiciones iniciales del ajedrez.
-  void load(const std::string &filename);
+  void load(std::ifstream &file);
 
   // Devuelve true si el siguiente turno es de las blancas.
   bool isNextWhite() const;

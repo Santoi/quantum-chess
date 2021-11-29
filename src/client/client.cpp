@@ -13,6 +13,7 @@
 #include <sstream>
 
 #define FRAME_RATE 60
+#define FONT_SIZE 10
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
@@ -103,8 +104,9 @@ void Client::execute(const char *host, const char *port,
 
   Window window;
   Renderer &renderer = window.renderer();
+  Font font(FONT_SIZE);
   Game game(window, send, role);
-  Scene scene(window, game.getBoard());
+  Scene scene(window, game.getBoard(), font);
 
   ActionThread action_thread(received, game);
   EventHandlerThread event_handler(window, game);

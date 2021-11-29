@@ -31,7 +31,7 @@ public:
                       std::list<Position> &posible_moves)
   const override;
 
-  void move(const Position &initial, const Position &final) override;
+  bool move(const Position &initial, const Position &final) override;
 
   ~King() override = default;
 

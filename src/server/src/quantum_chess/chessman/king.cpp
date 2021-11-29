@@ -56,7 +56,8 @@ char King::charId() const {
   return 'K';
 }
 
-void King::move(const Position &initial, const Position &final) {
+bool King::move(const Position &initial, const Position &final) {
+  bool capture = false;
   // See is movement is a castling.
   if (initial == Position(4, first_line) && final == Position(2, first_line)) {
     if (!checkLongCastling())
@@ -68,9 +69,10 @@ void King::move(const Position &initial, const Position &final) {
       throw ChessException("cant to that castling");
     shortCastling(positions.begin());
   } else {
-    Chessman::move(initial, final);
+    capture = Chessman::move(initial, final);
   }
   first_move = false;
+  return capture;
 }
 
 void King::split(const Position &initial, const Position &final1,

@@ -30,9 +30,10 @@ void Pawn::calculateMoves(const Position &initial,
     posible_moves.push_back(Position(initial.x(), j));
 }
 
-void Pawn::move(const Position &initial, const Position &final) {
-  Chessman::move(initial, final);
+bool Pawn::move(const Position &initial, const Position &final) {
+  bool capture = Chessman::move(initial, final);
   first_move = false;
+  return capture;
 }
 
 char Pawn::charId() const {

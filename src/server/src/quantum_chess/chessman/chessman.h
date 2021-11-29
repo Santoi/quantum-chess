@@ -114,7 +114,7 @@ public:
            EntanglementLog &entanglement_log_);
 
   // Mueve la pieza desde una posicion a otra, valida el movimiento.
-  virtual void move(const Position &initial, const Position &final);
+  virtual bool move(const Position &initial, const Position &final);
 
   virtual void split(const Position &initial, const Position &final1,
                      const Position &final2);

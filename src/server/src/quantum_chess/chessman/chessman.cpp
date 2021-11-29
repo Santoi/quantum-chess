@@ -13,7 +13,8 @@ Chessman::Chessman(const Position &position_, bool white_, Board &board_,
         board(board_), white(white_), entanglement_log(entanglement_log_) {}
 
 
-void Chessman::move(const Position &initial, const Position &final) {
+bool Chessman::move(const Position &initial, const Position &final) {
+  bool capture = false;
   // Check if can be moved.
   std::vector<Position> path;
   std::list<Position> posible_moves;
@@ -40,7 +41,7 @@ void Chessman::move(const Position &initial, const Position &final) {
     if (positions.front() != initial ||
         (final_chessman->getPosition() == final
          && final_chessman->white == white))
-      return;
+      return false;
   }
   // Measure solved from here.
   // If there is final chessman, then is removed of the board.
@@ -48,6 +49,7 @@ void Chessman::move(const Position &initial, const Position &final) {
     if (final_chessman->charId() == 'K')
       board.endGame();
     board.removeChessmanOf(final);
+    capture = true;
   }
 
   // If there is a chessman in path then entangle.
@@ -61,6 +63,7 @@ void Chessman::move(const Position &initial, const Position &final) {
     initial_qp_it->setPosition(final);
     board.addChessmanOfIn(initial, final);
   }
+  return capture;
 }
 
 void Chessman::split(const Position &initial, const Position &final1,
@@ -86,7 +89,7 @@ void Chessman::split(const Position &initial, const Position &final1,
   bool coin = board.flipACoin();
   new_real = coin ? final1 : final2;
   new_fake = !coin ? final1 : final2;
-  
+
   auto initial_qp_it = std::find(positions.begin(), positions.end(), initial);
   double old_prob = initial_qp_it->getProb();
   // Entangled list is copied and then moved.

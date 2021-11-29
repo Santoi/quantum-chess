@@ -32,9 +32,10 @@ char Tower::charId() const {
   return 'T';
 }
 
-void Tower::move(const Position &initial, const Position &final) {
-  Chessman::move(initial, final);
+bool Tower::move(const Position &initial, const Position &final) {
+  bool capture = Chessman::move(initial, final);
   first_move = false;
+  return capture;
 }
 
 bool Tower::notMovedYet() {

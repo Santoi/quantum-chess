@@ -1,5 +1,5 @@
 #include "tile_sprite_repository.h"
-#include "../game/tile.h"
+#include "../game/drawable_tile.h"
 
 TileSpriteRepository::TileSpriteRepository(Renderer &renderer) : white_tiles(),
                                                                  black_tiles() {

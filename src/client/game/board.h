@@ -3,8 +3,8 @@
 
 #include "../sdl/renderer.h"
 #include "../sdl/texture_sprite.h"
-#include "chessman.h"
-#include "tile.h"
+#include "drawable_chessman.h"
+#include "drawable_tile.h"
 #include "../position.h"
 #include "../communication/chessman_data.h"
 #include <map>
@@ -16,8 +16,8 @@ class Board {
 private:
   Renderer &renderer;
   TextureSprite background;
-  std::map<const Position, Chessman> chessmen;
-  std::map<const Position, Tile> board;
+  std::map<const Position, DrawableChessman> chessmen;
+  std::map<const Position, DrawableTile> board;
   ChessmanSpriteRepository chessman_repository;
   TileSpriteRepository tile_repository;
 
@@ -28,9 +28,9 @@ public:
 
   void render();
 
-  std::map<const Position, Tile> &getTiles();
+  std::map<const Position, DrawableTile> &getTiles();
 
-  std::map<const Position, Chessman> &getChessmen();
+  std::map<const Position, DrawableChessman> &getChessmen();
 
   TextureSprite &getBackground();
 

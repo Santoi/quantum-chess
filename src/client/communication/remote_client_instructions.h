@@ -17,6 +17,8 @@ class ClientProtocol;
 
 class ChessmanData;
 
+class Game;
+
 class RemoteClientInstruction {
 protected:
   const std::string instructor_nick_name;
@@ -80,7 +82,7 @@ public:
   RemoteClientLoadMessageInstruction() = delete;
 
   RemoteClientLoadMessageInstruction(
-          std::vector<ChessmanData> &&chessman_data_vector_);
+      std::vector<ChessmanData> &&chessman_data_vector_);
 
   void makeAction(Game &game);
 
@@ -179,7 +181,7 @@ public:
   RemoteClientSplitInstruction() = delete;
 
   RemoteClientSplitInstruction(
-          const Position &from, const Position &to1, const Position &to2);
+      const Position &from, const Position &to1, const Position &to2);
 
   void makeAction(Game &game);
 
@@ -198,7 +200,7 @@ public:
   RemoteClientMergeInstruction() = delete;
 
   RemoteClientMergeInstruction(
-          const Position &from1_, const Position &from2_, const Position &to_);
+      const Position &from1_, const Position &from2_, const Position &to_);
 
   void makeAction(Game &game);
 
@@ -226,7 +228,7 @@ public:
 };
 
 class RemoteClientEntangledChessmanInstruction
-        : public RemoteClientInstruction {
+    : public RemoteClientInstruction {
   std::list<Position> positions;
 
 public:

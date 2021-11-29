@@ -21,6 +21,11 @@ bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list
     return false;
 }
 
+void ConnectButton::render() {
+
+}
+
+
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
     return false;
 }

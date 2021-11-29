@@ -20,6 +20,8 @@ public:
 
     virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
 
+    virtual void render() = 0;
+
     void setAreaAndPosition(int x, int y, int height, int width);
 };
 
@@ -33,6 +35,8 @@ public:
     explicit ConnectButton(const std::list<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr);
 
     bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens);
+
+    void render();
 
 };
 

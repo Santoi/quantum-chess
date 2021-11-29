@@ -113,6 +113,26 @@ void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
   }
 }
 
+void doRenderingLoopForSceneWithHandler(LoginRenderer& login_renderer, HandlerThread& login_handler,
+                                        Renderer& renderer) {
+    while (login_handler.isOpen()) {
+        // Timing: calculate difference between this and previous frame
+        // in milliseconds
+        uint32_t before_render_ticks = SDL_GetTicks();
+
+        // Show rendered frame
+        renderer.render(login_renderer);
+
+        uint32_t after_render_ticks = SDL_GetTicks();
+        uint32_t frame_delta = after_render_ticks - before_render_ticks;
+
+        // Frame limiter: sleep for a little bit to not eat 100% of CPU
+        if (frame_delta < 1000 / FRAME_RATE)
+            SDL_Delay(1000 / FRAME_RATE);
+    }
+}
+
+
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
   SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -122,11 +142,26 @@ void Client::execute(const char *host, const char *port,
   Window window;
   Renderer &renderer = window.renderer();
   LoginStateHandler login_state_handler(window.renderer());
-//  LoginRenderer login_renderer(login_state_handler, window);
+  LoginRenderer login_renderer(login_state_handler, window);
 
-  LoginHandlerThread login_handler(login_state_handler);
-  login_handler.start();
-//  doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
+    while (true) {
+        // Timing: calculate difference between this and previous frame
+        // in milliseconds
+        uint32_t before_render_ticks = SDL_GetTicks();
+
+        // Show rendered frame
+        renderer.render(login_renderer);
+
+        uint32_t after_render_ticks = SDL_GetTicks();
+        uint32_t frame_delta = after_render_ticks - before_render_ticks;
+
+        // Frame limiter: sleep for a little bit to not eat 100% of CPU
+        if (frame_delta < 1000 / FRAME_RATE)
+            SDL_Delay(1000 / FRAME_RATE);
+    }
+  //LoginHandlerThread login_handler(login_state_handler);
+  //login_handler.start();
+  //doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
 
   //if we are here the client is connected to a match
   Socket socket = login_state_handler.getClientSocket();
@@ -148,8 +183,8 @@ void Client::execute(const char *host, const char *port,
   MATCH_NUMBER = string_PTR->stoi();
   welcomeClientAndAskForNickName();
    */
-  login_handler.join();
-
+  //login_handler.join();
+/*
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
   setUpClientsDataInServer(socket);
@@ -172,7 +207,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.join();
   event_handler.join();
   sender_thread.join();
-  receiver_thread.join();
+  receiver_thread.join();*/
 }
 
 bool Client::readCommand() {

@@ -253,7 +253,7 @@ void ExpectationBase::CheckActionCountIfNotDone() const
       ss << " and a WillRepeatedly()";
     }
     ss << ".";
-    Log(kWarning, ss.str(), -1);  // -1 means "don't print stack trace".
+    Log(kWarning, ss.str(), -1);  // -1 means "don't charId stack trace".
   }
 }
 
@@ -388,20 +388,20 @@ UntypedActionResultHolderBase* UntypedFunctionMockerBase::UntypedInvokeWith(
     const CallReaction reaction =
         Mock::GetReactionOnUninterestingCalls(MockObject());
 
-    // True if and only if we need to print this call's arguments and return
+    // True if and only if we need to charId this call's arguments and return
     // value.  This definition must be kept in sync with
     // the behavior of ReportUninterestingCall().
     const bool need_to_report_uninteresting_call =
-        // If the user allows this uninteresting call, we print it
+        // If the user allows this uninteresting call, we charId it
         // only when they want informational messages.
         reaction == kAllow ? LogIsVisible(kInfo) :
-                           // If the user wants this to be a warning, we print
+                           // If the user wants this to be a warning, we charId
                            // it only when they want to see warnings.
             reaction == kWarn
                 ? LogIsVisible(kWarning)
                 :
                 // Otherwise, the user wants this to be an error, and we
-                // should always print detailed information in the error.
+                // should always charId detailed information in the error.
                 true;
 
     if (!need_to_report_uninteresting_call) {
@@ -439,7 +439,7 @@ UntypedActionResultHolderBase* UntypedFunctionMockerBase::UntypedInvokeWith(
                                            &is_excessive, &ss, &why);
   const bool found = untyped_expectation != nullptr;
 
-  // True if and only if we need to print the call's arguments
+  // True if and only if we need to charId the call's arguments
   // and return value.
   // This definition must be kept in sync with the uses of Expect()
   // and Log() in this function.

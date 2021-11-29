@@ -94,7 +94,7 @@ bool IsEven(int n) {
 }
 ```
 
-the failed assertion `EXPECT_TRUE(IsEven(Fib(4)))` will print:
+the failed assertion `EXPECT_TRUE(IsEven(Fib(4)))` will charId:
 
 ```none
 Value of: IsEven(Fib(4))
@@ -124,7 +124,7 @@ testing::AssertionResult IsEven(int n) {
 }
 ```
 
-Then the statement `EXPECT_FALSE(IsEven(Fib(6)))` will print
+Then the statement `EXPECT_FALSE(IsEven(Fib(6)))` will charId
 
 ```none
   Value of: IsEven(Fib(6))
@@ -202,9 +202,10 @@ You can call the function
 
 to assert that types `T1` and `T2` are the same. The function does nothing if
 the assertion is satisfied. If the types are different, the function call will
-fail to compile, the compiler error message will say that `T1 and T2 are not the
-same type` and most likely (depending on the compiler) show you the actual
-values of `T1` and `T2`. This is mainly useful inside template code.
+fail to compile, the compiler error message will say
+that `T1 and T2 are not the same type` and most likely (depending on the
+compiler) show you the actual values of `T1` and `T2`. This is mainly useful
+inside template code.
 
 **Caveat**: When used inside a member function of a class template or a function
 template, `StaticAssertTypeEq<T1, T2>()` is effective only if the function is
@@ -239,8 +240,9 @@ a method of the test fixture class. The one constraint is that assertions that
 generate a fatal failure (`FAIL*` and `ASSERT_*`) can only be used in
 void-returning functions. This is a consequence of Google's not using
 exceptions. By placing it in a non-void function you'll get a confusing compile
-error like `"error: void value not ignored as it ought to be"` or `"cannot
-initialize return object of type 'bool' with an rvalue of type 'void'"` or
+error like `"error: void value not ignored as it ought to be"`
+or `"cannot initialize return object of type 'bool' with an rvalue of type 'void'"`
+or
 `"error: no viable conversion from 'void' to 'string'"`.
 
 If you need to use fatal assertions in a function that returns non-void, one
@@ -253,16 +255,15 @@ any assertion inside of it.
 If changing the function's type is not an option, you should just use assertions
 that generate non-fatal failures, such as `ADD_FAILURE*` and `EXPECT_*`.
 
-{: .callout .note}
-NOTE: Constructors and destructors are not considered void-returning functions,
-according to the C++ language specification, and so you may not use fatal
-assertions in them; you'll get a compilation error if you try. Instead, either
-call `abort` and crash the entire test executable, or put the fatal assertion in
-a `SetUp`/`TearDown` function; see
+{: .callout .note} NOTE: Constructors and destructors are not considered
+void-returning functions, according to the C++ language specification, and so
+you may not use fatal assertions in them; you'll get a compilation error if you
+try. Instead, either call `abort` and crash the entire test executable, or put
+the fatal assertion in a `SetUp`/`TearDown` function; see
 [constructor/destructor vs. `SetUp`/`TearDown`](faq.md#CtorVsSetUp)
 
-{: .callout .warning}
-WARNING: A fatal assertion in a helper function (private void-returning method)
+{: .callout .warning} WARNING: A fatal assertion in a helper function (private
+void-returning method)
 called from a constructor or destructor does not terminate the current test, as
 your intuition might suggest: it merely returns from the constructor or
 destructor early, possibly leaving your object in a partially-constructed or
@@ -306,7 +307,7 @@ As with assertion macros, you can stream a custom message into `GTEST_SKIP()`.
 When a test assertion such as `EXPECT_EQ` fails, googletest prints the argument
 values to help you debug. It does this using a user-extensible value printer.
 
-This printer knows how to print built-in C++ types, native arrays, STL
+This printer knows how to charId built-in C++ types, native arrays, STL
 containers, and any type that supports the `<<` operator. For other types, it
 prints the raw bytes in the value and hopes that you the user can figure it out.
 
@@ -319,11 +320,11 @@ do that, define `<<` for your type:
 
 namespace foo {
 
-class Bar {  // We want googletest to be able to print instances of this.
+class Bar {  // We want googletest to be able to charId instances of this.
 ...
   // Create a free inline friend function.
   friend std::ostream& operator<<(std::ostream& os, const Bar& bar) {
-    return os << bar.DebugString();  // whatever needed to print bar to os
+    return os << bar.DebugString();  // whatever needed to charId bar to os
   }
 };
 
@@ -331,7 +332,7 @@ class Bar {  // We want googletest to be able to print instances of this.
 // << operator is defined in the SAME namespace that defines Bar.  C++'s look-up
 // rules rely on that.
 std::ostream& operator<<(std::ostream& os, const Bar& bar) {
-  return os << bar.DebugString();  // whatever needed to print bar to os
+  return os << bar.DebugString();  // whatever needed to charId bar to os
 }
 
 }  // namespace foo
@@ -350,7 +351,7 @@ namespace foo {
 class Bar {
   ...
   friend void PrintTo(const Bar& bar, std::ostream* os) {
-    *os << bar.DebugString();  // whatever needed to print bar to os
+    *os << bar.DebugString();  // whatever needed to charId bar to os
   }
 };
 
@@ -358,7 +359,7 @@ class Bar {
 // is defined in the SAME namespace that defines Bar.  C++'s look-up rules rely
 // on that.
 void PrintTo(const Bar& bar, std::ostream* os) {
-  *os << bar.DebugString();  // whatever needed to print bar to os
+  *os << bar.DebugString();  // whatever needed to charId bar to os
 }
 
 }  // namespace foo
@@ -369,8 +370,8 @@ googletest is concerned. This allows you to customize how the value appears in
 googletest's output without affecting code that relies on the behavior of its
 `<<` operator.
 
-If you want to print a value `x` using googletest's value printer yourself, just
-call `::testing::PrintToString(x)`, which returns an `std::string`:
+If you want to charId a value `x` using googletest's value printer yourself,
+just call `::testing::PrintToString(x)`, which returns an `std::string`:
 
 ```c++
 vector<pair<Bar, int> > bar_ints = GetBarIntVector();
@@ -431,21 +432,21 @@ TEST(MyDeathTest, KillProcess) {
 
 verifies that:
 
-*   calling `Foo(5)` causes the process to die with the given error message,
-*   calling `NormalExit()` causes the process to print `"Success"` to stderr and
-    exit with exit code 0, and
-*   calling `KillProcess()` kills the process with signal `SIGKILL`.
+* calling `Foo(5)` causes the process to die with the given error message,
+* calling `NormalExit()` causes the process to charId `"Success"` to stderr and
+  exit with exit code 0, and
+* calling `KillProcess()` kills the process with signal `SIGKILL`.
 
 The test function body may contain other assertions and statements as well, if
 necessary.
 
 Note that a death test only cares about three things:
 
-1.  does `statement` abort or exit the process?
-2.  (in the case of `ASSERT_EXIT` and `EXPECT_EXIT`) does the exit status
-    satisfy `predicate`? Or (in the case of `ASSERT_DEATH` and `EXPECT_DEATH`)
-    is the exit status non-zero? And
-3.  does the stderr output match `matcher`?
+1. does `statement` abort or exit the process?
+2. (in the case of `ASSERT_EXIT` and `EXPECT_EXIT`) does the exit status
+   satisfy `predicate`? Or (in the case of `ASSERT_DEATH` and `EXPECT_DEATH`)
+   is the exit status non-zero? And
+3. does the stderr output match `matcher`?
 
 In particular, if `statement` generates an `ASSERT_*` or `EXPECT_*` failure, it
 will **not** cause the death test to fail, as googletest assertions don't abort
@@ -453,8 +454,8 @@ the process.
 
 ### Death Test Naming
 
-{: .callout .important}
-IMPORTANT: We strongly recommend you to follow the convention of naming your
+{: .callout .important} IMPORTANT: We strongly recommend you to follow the
+convention of naming your
 **test suite** (not test) `*DeathTest` when it contains a death test, as
 demonstrated in the above example. The
 [Death Tests And Threads](#death-tests-and-threads) section below explains why.
@@ -482,7 +483,8 @@ TEST_F(FooDeathTest, DoesThat) {
 On POSIX systems (e.g. Linux, Cygwin, and Mac), googletest uses the
 [POSIX extended regular expression](http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap09.html#tag_09_04)
 syntax. To learn about this syntax, you may want to read this
-[Wikipedia entry](http://en.wikipedia.org/wiki/Regular_expression#POSIX_Extended_Regular_Expressions).
+[Wikipedia entry](http://en.wikipedia.org/wiki/Regular_expression#POSIX_Extended_Regular_Expressions)
+.
 
 On Windows, googletest uses its own simple regular expression implementation. It
 lacks many features. For example, we don't support union (`"x|y"`), grouping
@@ -536,13 +538,12 @@ it may be difficult or impossible to clean them up.
 
 googletest has three features intended to raise awareness of threading issues.
 
-1.  A warning is emitted if multiple threads are running when a death test is
-    encountered.
-2.  Test suites with a name ending in "DeathTest" are run before all other
-    tests.
-3.  It uses `clone()` instead of `fork()` to spawn the child process on Linux
-    (`clone()` is not available on Cygwin and Mac), as `fork()` is more likely
-    to cause the child to hang when the parent process has multiple threads.
+1. A warning is emitted if multiple threads are running when a death test is
+   encountered.
+2. Test suites with a name ending in "DeathTest" are run before all other tests.
+3. It uses `clone()` instead of `fork()` to spawn the child process on Linux
+   (`clone()` is not available on Cygwin and Mac), as `fork()` is more likely to
+   cause the child to hang when the parent process has multiple threads.
 
 It's perfectly fine to create threads inside a death test statement; they are
 executed in a separate process and cannot affect the parent.
@@ -597,9 +598,9 @@ in the parent process. In particular, if you release memory in a death test,
 your program will fail the heap check as the parent process will never see the
 memory reclaimed. To solve this problem, you can
 
-1.  try not to free memory in a death test;
-2.  free the memory again in the parent process; or
-3.  do not use the heap checker in your program.
+1. try not to free memory in a death test;
+2. free the memory again in the parent process; or
+3. do not use the heap checker in your program.
 
 Due to an implementation detail, you cannot place multiple death test assertions
 on the same line; otherwise, compilation will fail with an unobvious error
@@ -611,9 +612,8 @@ handlers registered with `pthread_atfork(3)`.
 
 ## Using Assertions in Sub-routines
 
-{: .callout .note}
-Note: If you want to put a series of test assertions in a subroutine to check
-for a complex condition, consider using
+{: .callout .note} Note: If you want to put a series of test assertions in a
+subroutine to check for a complex condition, consider using
 [a custom GMock matcher](gmock_cook_book.md#NewMatchers) instead. This lets you
 provide a more readable error message in case of failure and avoid all of the
 issues described below.
@@ -682,19 +682,19 @@ tedious.)
 
 Some tips on using `SCOPED_TRACE`:
 
-1.  With a suitable message, it's often enough to use `SCOPED_TRACE` at the
-    beginning of a sub-routine, instead of at each call site.
-2.  When calling sub-routines inside a loop, make the loop iterator part of the
-    message in `SCOPED_TRACE` such that you can know which iteration the failure
-    is from.
-3.  Sometimes the line number of the trace point is enough for identifying the
-    particular invocation of a sub-routine. In this case, you don't have to
-    choose a unique message for `SCOPED_TRACE`. You can simply use `""`.
-4.  You can use `SCOPED_TRACE` in an inner scope when there is one in the outer
-    scope. In this case, all active trace points will be included in the failure
-    messages, in reverse order they are encountered.
-5.  The trace dump is clickable in Emacs - hit `return` on a line number and
-    you'll be taken to that line in the source file!
+1. With a suitable message, it's often enough to use `SCOPED_TRACE` at the
+   beginning of a sub-routine, instead of at each call site.
+2. When calling sub-routines inside a loop, make the loop iterator part of the
+   message in `SCOPED_TRACE` such that you can know which iteration the failure
+   is from.
+3. Sometimes the line number of the trace point is enough for identifying the
+   particular invocation of a sub-routine. In this case, you don't have to
+   choose a unique message for `SCOPED_TRACE`. You can simply use `""`.
+4. You can use `SCOPED_TRACE` in an inner scope when there is one in the outer
+   scope. In this case, all active trace points will be included in the failure
+   messages, in reverse order they are encountered.
+5. The trace dump is clickable in Emacs - hit `return` on a line number and
+   you'll be taken to that line in the source file!
 
 ### Propagating Fatal Failures
 
@@ -843,18 +843,18 @@ will output XML like this:
 {: .callout .note}
 > NOTE:
 >
-> *   `RecordProperty()` is a static member of the `Test` class. Therefore it
->     needs to be prefixed with `::testing::Test::` if used outside of the
->     `TEST` body and the test fixture class.
-> *   *`key`* must be a valid XML attribute name, and cannot conflict with the
->     ones already used by googletest (`name`, `status`, `time`, `classname`,
->     `type_param`, and `value_param`).
-> *   Calling `RecordProperty()` outside of the lifespan of a test is allowed.
->     If it's called outside of a test but between a test suite's
->     `SetUpTestSuite()` and `TearDownTestSuite()` methods, it will be
->     attributed to the XML element for the test suite. If it's called outside
->     of all test suites (e.g. in a test environment), it will be attributed to
->     the top-level XML element.
+> * `RecordProperty()` is a static member of the `Test` class. Therefore it
+    > needs to be prefixed with `::testing::Test::` if used outside of the
+    > `TEST` body and the test fixture class.
+> * *`key`* must be a valid XML attribute name, and cannot conflict with the
+    > ones already used by googletest (`name`, `status`, `time`, `classname`,
+    > `type_param`, and `value_param`).
+> * Calling `RecordProperty()` outside of the lifespan of a test is allowed.
+    > If it's called outside of a test but between a test suite's
+    > `SetUpTestSuite()` and `TearDownTestSuite()` methods, it will be
+    > attributed to the XML element for the test suite. If it's called outside
+    > of all test suites (e.g. in a test environment), it will be attributed to
+    > the top-level XML element.
 
 ## Sharing Resources Between Tests in the Same Test Suite
 
@@ -867,14 +867,14 @@ If the tests don't change the resource, there's no harm in their sharing a
 single resource copy. So, in addition to per-test set-up/tear-down, googletest
 also supports per-test-suite set-up/tear-down. To use it:
 
-1.  In your test fixture class (say `FooTest` ), declare as `static` some member
-    variables to hold the shared resources.
-2.  Outside your test fixture class (typically just below it), define those
-    member variables, optionally giving them initial values.
-3.  In the same test fixture class, define a `static void SetUpTestSuite()`
-    function (remember not to spell it as **`SetupTestSuite`** with a small
-    `u`!) to set up the shared resources and a `static void TearDownTestSuite()`
-    function to tear them down.
+1. In your test fixture class (say `FooTest` ), declare as `static` some member
+   variables to hold the shared resources.
+2. Outside your test fixture class (typically just below it), define those
+   member variables, optionally giving them initial values.
+3. In the same test fixture class, define a `static void SetUpTestSuite()`
+   function (remember not to spell it as **`SetupTestSuite`** with a small
+   `u`!) to set up the shared resources and a `static void TearDownTestSuite()`
+   function to tear them down.
 
 That's it! googletest automatically calls `SetUpTestSuite()` before running the
 *first test* in the `FooTest` test suite (i.e. before creating the first
@@ -937,9 +937,9 @@ TEST_F(FooTest, Test2) {
 }
 ```
 
-{: .callout .note}
-NOTE: Though the above code declares `SetUpTestSuite()` protected, it may
-sometimes be necessary to declare it public, such as when using it with
+{: .callout .note} NOTE: Though the above code declares `SetUpTestSuite()`
+protected, it may sometimes be necessary to declare it public, such as when
+using it with
 `TEST_P`.
 
 ## Global Set-Up and Tear-Down
@@ -1006,13 +1006,13 @@ in which global variables from different translation units are initialized).
 parameters without writing multiple copies of the same test. This is useful in a
 number of situations, for example:
 
-*   You have a piece of code whose behavior is affected by one or more
-    command-line flags. You want to make sure your code performs correctly for
-    various values of those flags.
-*   You want to test different implementations of an OO interface.
-*   You want to test your code over various inputs (a.k.a. data-driven testing).
-    This feature is easy to abuse, so please exercise your good sense when doing
-    it!
+* You have a piece of code whose behavior is affected by one or more
+  command-line flags. You want to make sure your code performs correctly for
+  various values of those flags.
+* You want to test different implementations of an OO interface.
+* You want to test your code over various inputs (a.k.a. data-driven testing).
+  This feature is easy to abuse, so please exercise your good sense when doing
+  it!
 
 ### How to Write Value-Parameterized Tests
 
@@ -1025,8 +1025,8 @@ and `testing::WithParamInterface<T>`. `T` can be any copyable type. If it's a
 raw pointer, you are responsible for managing the lifespan of the pointed
 values.
 
-{: .callout .note}
-NOTE: If your test fixture defines `SetUpTestSuite()` or `TearDownTestSuite()`
+{: .callout .note} NOTE: If your test fixture defines `SetUpTestSuite()`
+or `TearDownTestSuite()`
 they must be declared **public** rather than **protected** in order to use
 `TEST_P`.
 
@@ -1081,9 +1081,8 @@ INSTANTIATE_TEST_SUITE_P(MeenyMinyMoe,
                          testing::Values("meeny", "miny", "moe"));
 ```
 
-{: .callout .note}
-NOTE: The code above must be placed at global or namespace scope, not at
-function scope.
+{: .callout .note} NOTE: The code above must be placed at global or namespace
+scope, not at function scope.
 
 The first argument to `INSTANTIATE_TEST_SUITE_P` is a unique name for the
 instantiation of the test suite. The next argument is the name of the test
@@ -1095,12 +1094,12 @@ instances of the pattern, the instantiation name is added as a prefix to the
 actual test suite name. Remember to pick unique prefixes for different
 instantiations. The tests from the instantiation above will have these names:
 
-*   `MeenyMinyMoe/FooTest.DoesBlah/0` for `"meeny"`
-*   `MeenyMinyMoe/FooTest.DoesBlah/1` for `"miny"`
-*   `MeenyMinyMoe/FooTest.DoesBlah/2` for `"moe"`
-*   `MeenyMinyMoe/FooTest.HasBlahBlah/0` for `"meeny"`
-*   `MeenyMinyMoe/FooTest.HasBlahBlah/1` for `"miny"`
-*   `MeenyMinyMoe/FooTest.HasBlahBlah/2` for `"moe"`
+* `MeenyMinyMoe/FooTest.DoesBlah/0` for `"meeny"`
+* `MeenyMinyMoe/FooTest.DoesBlah/1` for `"miny"`
+* `MeenyMinyMoe/FooTest.DoesBlah/2` for `"moe"`
+* `MeenyMinyMoe/FooTest.HasBlahBlah/0` for `"meeny"`
+* `MeenyMinyMoe/FooTest.HasBlahBlah/1` for `"miny"`
+* `MeenyMinyMoe/FooTest.HasBlahBlah/2` for `"moe"`
 
 You can use these names in [`--gtest_filter`](#running-a-subset-of-the-tests).
 
@@ -1115,10 +1114,10 @@ INSTANTIATE_TEST_SUITE_P(Pets, FooTest, testing::ValuesIn(pets));
 
 The tests from the instantiation above will have these names:
 
-*   `Pets/FooTest.DoesBlah/0` for `"cat"`
-*   `Pets/FooTest.DoesBlah/1` for `"dog"`
-*   `Pets/FooTest.HasBlahBlah/0` for `"cat"`
-*   `Pets/FooTest.HasBlahBlah/1` for `"dog"`
+* `Pets/FooTest.DoesBlah/0` for `"cat"`
+* `Pets/FooTest.DoesBlah/1` for `"dog"`
+* `Pets/FooTest.HasBlahBlah/0` for `"cat"`
+* `Pets/FooTest.HasBlahBlah/1` for `"dog"`
 
 Please note that `INSTANTIATE_TEST_SUITE_P` will instantiate *all* tests in the
 given test suite, whether their definitions come before or *after* the
@@ -1138,6 +1137,7 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FooTest);
 You can see [sample7_unittest.cc] and [sample8_unittest.cc] for more examples.
 
 [sample7_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample7_unittest.cc "Parameterized Test example"
+
 [sample8_unittest.cc]: https://github.com/google/googletest/blob/master/googletest/samples/sample8_unittest.cc "Parameterized Test example with multiple parameters"
 
 ### Creating Value-Parameterized Abstract Tests
@@ -1153,11 +1153,11 @@ get all the interface-conformance tests for free.
 
 To define abstract tests, you should organize your code like this:
 
-1.  Put the definition of the parameterized test fixture class (e.g. `FooTest`)
-    in a header file, say `foo_param_test.h`. Think of this as *declaring* your
-    abstract tests.
-2.  Put the `TEST_P` definitions in `foo_param_test.cc`, which includes
-    `foo_param_test.h`. Think of this as *implementing* your abstract tests.
+1. Put the definition of the parameterized test fixture class (e.g. `FooTest`)
+   in a header file, say `foo_param_test.h`. Think of this as *declaring* your
+   abstract tests.
+2. Put the `TEST_P` definitions in `foo_param_test.cc`, which includes
+   `foo_param_test.h`. Think of this as *implementing* your abstract tests.
 
 Once they are defined, you can instantiate them by including `foo_param_test.h`,
 invoking `INSTANTIATE_TEST_SUITE_P()`, and depending on the library target that
@@ -1175,9 +1175,8 @@ the test parameters. The function should accept one argument of type
 returns the value of `testing::PrintToString(GetParam())`. It does not work for
 `std::string` or C strings.
 
-{: .callout .note}
-NOTE: test names must be non-empty, unique, and may only contain ASCII
-alphanumeric characters. In particular, they
+{: .callout .note} NOTE: test names must be non-empty, unique, and may only
+contain ASCII alphanumeric characters. In particular, they
 [should not contain underscores](faq.md#why-should-test-suite-names-and-test-names-not-contain-underscore)
 
 ```c++
@@ -1382,102 +1381,100 @@ class in the original class.
 If you absolutely have to test non-public interface code though, you can. There
 are two cases to consider:
 
-*   Static functions ( *not* the same as static member functions!) or unnamed
-    namespaces, and
-*   Private or protected class members
+* Static functions ( *not* the same as static member functions!) or unnamed
+  namespaces, and
+* Private or protected class members
 
 To test them, we use the following special techniques:
 
-*   Both static functions and definitions/declarations in an unnamed namespace
-    are only visible within the same translation unit. To test them, you can
-    `#include` the entire `.cc` file being tested in your `*_test.cc` file.
-    (#including `.cc` files is not a good way to reuse code - you should not do
-    this in production code!)
+* Both static functions and definitions/declarations in an unnamed namespace are
+  only visible within the same translation unit. To test them, you can
+  `#include` the entire `.cc` file being tested in your `*_test.cc` file.
+  (#including `.cc` files is not a good way to reuse code - you should not do
+  this in production code!)
 
-    However, a better approach is to move the private code into the
-    `foo::internal` namespace, where `foo` is the namespace your project
-    normally uses, and put the private declarations in a `*-internal.h` file.
-    Your production `.cc` files and your tests are allowed to include this
-    internal header, but your clients are not. This way, you can fully test your
-    internal implementation without leaking it to your clients.
+  However, a better approach is to move the private code into the
+  `foo::internal` namespace, where `foo` is the namespace your project normally
+  uses, and put the private declarations in a `*-internal.h` file. Your
+  production `.cc` files and your tests are allowed to include this internal
+  header, but your clients are not. This way, you can fully test your internal
+  implementation without leaking it to your clients.
 
-*   Private class members are only accessible from within the class or by
-    friends. To access a class' private members, you can declare your test
-    fixture as a friend to the class and define accessors in your fixture. Tests
-    using the fixture can then access the private members of your production
-    class via the accessors in the fixture. Note that even though your fixture
-    is a friend to your production class, your tests are not automatically
-    friends to it, as they are technically defined in sub-classes of the
-    fixture.
+* Private class members are only accessible from within the class or by friends.
+  To access a class' private members, you can declare your test fixture as a
+  friend to the class and define accessors in your fixture. Tests using the
+  fixture can then access the private members of your production class via the
+  accessors in the fixture. Note that even though your fixture is a friend to
+  your production class, your tests are not automatically friends to it, as they
+  are technically defined in sub-classes of the fixture.
 
-    Another way to test private members is to refactor them into an
-    implementation class, which is then declared in a `*-internal.h` file. Your
-    clients aren't allowed to include this header but your tests can. Such is
-    called the
-    [Pimpl](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/the-c-pimpl-r1794/)
-    (Private Implementation) idiom.
+  Another way to test private members is to refactor them into an implementation
+  class, which is then declared in a `*-internal.h` file. Your clients aren't
+  allowed to include this header but your tests can. Such is called the
+  [Pimpl](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/the-c-pimpl-r1794/)
+  (Private Implementation) idiom.
 
-    Or, you can declare an individual test as a friend of your class by adding
-    this line in the class body:
+  Or, you can declare an individual test as a friend of your class by adding
+  this line in the class body:
 
-    ```c++
-        FRIEND_TEST(TestSuiteName, TestName);
-    ```
+  ```c++
+      FRIEND_TEST(TestSuiteName, TestName);
+  ```
 
-    For example,
+  For example,
 
-    ```c++
-    // foo.h
-    class Foo {
-      ...
-     private:
-      FRIEND_TEST(FooTest, BarReturnsZeroOnNull);
-
-      int Bar(void* x);
-    };
-
-    // foo_test.cc
+  ```c++
+  // foo.h
+  class Foo {
     ...
-    TEST(FooTest, BarReturnsZeroOnNull) {
-      Foo foo;
-      EXPECT_EQ(foo.Bar(NULL), 0);  // Uses Foo's private member Bar().
-    }
-    ```
+   private:
+    FRIEND_TEST(FooTest, BarReturnsZeroOnNull);
 
-    Pay special attention when your class is defined in a namespace. If you want
-    your test fixtures and tests to be friends of your class, then they must be
-    defined in the exact same namespace (no anonymous or inline namespaces).
+    int Bar(void* x);
+  };
 
-    For example, if the code to be tested looks like:
+  // foo_test.cc
+  ...
+  TEST(FooTest, BarReturnsZeroOnNull) {
+    Foo foo;
+    EXPECT_EQ(foo.Bar(NULL), 0);  // Uses Foo's private member Bar().
+  }
+  ```
 
-    ```c++
-    namespace my_namespace {
+  Pay special attention when your class is defined in a namespace. If you want
+  your test fixtures and tests to be friends of your class, then they must be
+  defined in the exact same namespace (no anonymous or inline namespaces).
 
-    class Foo {
-      friend class FooTest;
-      FRIEND_TEST(FooTest, Bar);
-      FRIEND_TEST(FooTest, Baz);
-      ... definition of the class Foo ...
-    };
+  For example, if the code to be tested looks like:
 
-    }  // namespace my_namespace
-    ```
+  ```c++
+  namespace my_namespace {
 
-    Your test code should be something like:
+  class Foo {
+    friend class FooTest;
+    FRIEND_TEST(FooTest, Bar);
+    FRIEND_TEST(FooTest, Baz);
+    ... definition of the class Foo ...
+  };
 
-    ```c++
-    namespace my_namespace {
+  }  // namespace my_namespace
+  ```
 
-    class FooTest : public testing::Test {
-     protected:
-      ...
-    };
+  Your test code should be something like:
 
-    TEST_F(FooTest, Bar) { ... }
-    TEST_F(FooTest, Baz) { ... }
+  ```c++
+  namespace my_namespace {
 
-    }  // namespace my_namespace
-    ```
+  class FooTest : public testing::Test {
+   protected:
+    ...
+  };
+
+  TEST_F(FooTest, Bar) { ... }
+  TEST_F(FooTest, Baz) { ... }
+
+  }  // namespace my_namespace
+  ```
 
 ## "Catching" Failures
 
@@ -1489,8 +1486,8 @@ In frameworks that report a failure by throwing an exception, you could catch
 the exception and assert on it. But googletest doesn't use exceptions, so how do
 we test that a piece of code generates an expected failure?
 
-`"gtest/gtest-spi.h"` contains some constructs to do this.
-After #including this header, you can use
+`"gtest/gtest-spi.h"` contains some constructs to do this. After #including this
+header, you can use
 
 ```c++
   EXPECT_FATAL_FAILURE(statement, substring);
@@ -1515,18 +1512,18 @@ well, use one of the following macros instead:
   EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substring);
 ```
 
-{: .callout .note}
-NOTE: Assertions from multiple threads are currently not supported on Windows.
+{: .callout .note} NOTE: Assertions from multiple threads are currently not
+supported on Windows.
 
 For technical reasons, there are some caveats:
 
-1.  You cannot stream a failure message to either macro.
+1. You cannot stream a failure message to either macro.
 
-2.  `statement` in `EXPECT_FATAL_FAILURE{_ON_ALL_THREADS}()` cannot reference
-    local non-static variables or non-static members of `this` object.
+2. `statement` in `EXPECT_FATAL_FAILURE{_ON_ALL_THREADS}()` cannot reference
+   local non-static variables or non-static members of `this` object.
 
-3.  `statement` in `EXPECT_FATAL_FAILURE{_ON_ALL_THREADS}()` cannot return a
-    value.
+3. `statement` in `EXPECT_FATAL_FAILURE{_ON_ALL_THREADS}()` cannot return a
+   value.
 
 ## Registering tests programmatically
 
@@ -1652,11 +1649,11 @@ to override the methods it cares about.
 When an event is fired, its context is passed to the handler function as an
 argument. The following argument types are used:
 
-*   UnitTest reflects the state of the entire test program,
-*   TestSuite has information about a test suite, which can contain one or more
-    tests,
-*   TestInfo contains the state of a test, and
-*   TestPartResult represents the result of a test assertion.
+* UnitTest reflects the state of the entire test program,
+* TestSuite has information about a test suite, which can contain one or more
+  tests,
+* TestInfo contains the state of a test, and
+* TestPartResult represents the result of a test assertion.
 
 An event handler function can examine the argument it receives to find out
 interesting information about the event and the test program's state.
@@ -1738,10 +1735,10 @@ listeners added earlier.
 You may use failure-raising macros (`EXPECT_*()`, `ASSERT_*()`, `FAIL()`, etc)
 when processing an event. There are some restrictions:
 
-1.  You cannot generate any failure in `OnTestPartResult()` (otherwise it will
-    cause `OnTestPartResult()` to be called recursively).
-2.  A listener that handles `OnTestPartResult()` is not allowed to generate any
-    failure.
+1. You cannot generate any failure in `OnTestPartResult()` (otherwise it will
+   cause `OnTestPartResult()` to be called recursively).
+2. A listener that handles `OnTestPartResult()` is not allowed to generate any
+   failure.
 
 When you add listeners to the listener list, you should put listeners that
 handle `OnTestPartResult()` *before* listeners that can generate failures. This
@@ -1805,19 +1802,19 @@ written as `'-NegativePatterns'`.
 
 For example:
 
-*   `./foo_test` Has no flag, and thus runs all its tests.
-*   `./foo_test --gtest_filter=*` Also runs everything, due to the single
-    match-everything `*` value.
-*   `./foo_test --gtest_filter=FooTest.*` Runs everything in test suite
-    `FooTest` .
-*   `./foo_test --gtest_filter=*Null*:*Constructor*` Runs any test whose full
-    name contains either `"Null"` or `"Constructor"` .
-*   `./foo_test --gtest_filter=-*DeathTest.*` Runs all non-death tests.
-*   `./foo_test --gtest_filter=FooTest.*-FooTest.Bar` Runs everything in test
-    suite `FooTest` except `FooTest.Bar`.
-*   `./foo_test --gtest_filter=FooTest.*:BarTest.*-FooTest.Bar:BarTest.Foo` Runs
-    everything in test suite `FooTest` except `FooTest.Bar` and everything in
-    test suite `BarTest` except `BarTest.Foo`.
+* `./foo_test` Has no flag, and thus runs all its tests.
+* `./foo_test --gtest_filter=*` Also runs everything, due to the single
+  match-everything `*` value.
+* `./foo_test --gtest_filter=FooTest.*` Runs everything in test suite
+  `FooTest` .
+* `./foo_test --gtest_filter=*Null*:*Constructor*` Runs any test whose full name
+  contains either `"Null"` or `"Constructor"` .
+* `./foo_test --gtest_filter=-*DeathTest.*` Runs all non-death tests.
+* `./foo_test --gtest_filter=FooTest.*-FooTest.Bar` Runs everything in test
+  suite `FooTest` except `FooTest.Bar`.
+* `./foo_test --gtest_filter=FooTest.*:BarTest.*-FooTest.Bar:BarTest.Foo` Runs
+  everything in test suite `FooTest` except `FooTest.Bar` and everything in test
+  suite `BarTest` except `BarTest.Foo`.
 
 #### Stop test execution upon first failure
 
@@ -1851,15 +1848,14 @@ class DISABLED_BarTest : public testing::Test { ... };
 TEST_F(DISABLED_BarTest, DoesXyz) { ... }
 ```
 
-{: .callout .note}
-NOTE: This feature should only be used for temporary pain-relief. You still have
-to fix the disabled tests at a later date. As a reminder, googletest will print
-a banner warning you if a test program contains any disabled tests.
+{: .callout .note} NOTE: This feature should only be used for temporary
+pain-relief. You still have to fix the disabled tests at a later date. As a
+reminder, googletest will charId a banner warning you if a test program contains
+any disabled tests.
 
-{: .callout .tip}
-TIP: You can easily count the number of disabled tests you have using
-`grep`. This number can be used as a metric for
-improving your test quality.
+{: .callout .tip} TIP: You can easily count the number of disabled tests you
+have using
+`grep`. This number can be used as a metric for improving your test quality.
 
 #### Temporarily Enabling Disabled Tests
 
@@ -2008,9 +2004,9 @@ apply to googletest tests, as shown here:
 </testsuites>
 ```
 
-*   The root `<testsuites>` element corresponds to the entire test program.
-*   `<testsuite>` elements correspond to googletest test suites.
-*   `<testcase>` elements correspond to googletest test functions.
+* The root `<testsuites>` element corresponds to the entire test program.
+* `<testsuite>` elements correspond to googletest test suites.
+* `<testcase>` elements correspond to googletest test functions.
 
 For instance, the following program
 
@@ -2042,18 +2038,17 @@ could generate this report:
 
 Things to note:
 
-*   The `tests` attribute of a `<testsuites>` or `<testsuite>` element tells how
-    many test functions the googletest program or test suite contains, while the
-    `failures` attribute tells how many of them failed.
+* The `tests` attribute of a `<testsuites>` or `<testsuite>` element tells how
+  many test functions the googletest program or test suite contains, while the
+  `failures` attribute tells how many of them failed.
 
-*   The `time` attribute expresses the duration of the test, test suite, or
-    entire test program in seconds.
+* The `time` attribute expresses the duration of the test, test suite, or entire
+  test program in seconds.
 
-*   The `timestamp` attribute records the local date and time of the test
-    execution.
+* The `timestamp` attribute records the local date and time of the test
+  execution.
 
-*   Each `<failure>` element corresponds to a single failed googletest
-    assertion.
+* Each `<failure>` element corresponds to a single failed googletest assertion.
 
 #### Generating a JSON Report
 
@@ -2252,8 +2247,8 @@ could generate this report:
 }
 ```
 
-{: .callout .important}
-IMPORTANT: The exact format of the JSON document is subject to change.
+{: .callout .important} IMPORTANT: The exact format of the JSON document is
+subject to change.
 
 ### Controlling How Failures Are Reported
 
@@ -2296,7 +2291,8 @@ running the tests.
 ### Sanitizer Integration
 
 The
-[Undefined Behavior Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html),
+[Undefined Behavior Sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
+,
 [Address Sanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer),
 and
 [Thread Sanitizer](https://github.com/google/sanitizers/wiki/ThreadSanitizerCppManual)

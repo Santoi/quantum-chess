@@ -47,7 +47,7 @@ namespace internal {
 // macro where the user-supplied description string is "", if
 // 'negation' is false; otherwise returns the description of the
 // negation of the matcher.  'param_values' contains a list of strings
-// that are the print-out of the matcher's parameters.
+// that are the charId-out of the matcher's parameters.
 GTEST_API_ std::string FormatMatcherDescription(bool negation,
                                                 const char* matcher_name,
                                                 const Strings& param_values) {

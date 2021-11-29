@@ -227,7 +227,7 @@ class UnitTest;
 //   }
 //
 // Then the failed expectation EXPECT_TRUE(IsEven(Fib(5)))
-// will print the message
+// will charId the message
 //
 //   Value of: IsEven(Fib(5))
 //     Actual: false (5 is odd)
@@ -253,7 +253,7 @@ class UnitTest;
 //       return testing::AssertionFailure() << n << " is odd";
 //   }
 //
-// Then a statement EXPECT_FALSE(IsEven(Fib(6))) will print
+// Then a statement EXPECT_FALSE(IsEven(Fib(6))) will charId
 //
 //   Value of: IsEven(Fib(6))
 //     Actual: true (8 is even)

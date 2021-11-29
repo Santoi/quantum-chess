@@ -1,6 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_GAME_H
 #define QUANTUM_CHESS_PROJ_GAME_H
 
+#include <vector>
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
 #include "../sdl/window.h"

@@ -4,13 +4,17 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <fstream>
 
 Server::Server(const char *host, const char *service)
         : acceptor_socket(Socket::createAListeningSocket(host, service)) {
 }
 
 void Server::execute(const std::string &filename) {
-  MatchesRepository matches(filename);
+  std::ifstream file(filename);
+  if (!file.is_open())
+    throw std::invalid_argument("file doesnt exist");
+  MatchesRepository matches(file);
   AcceptorThread acceptor_thread(acceptor_socket, matches);
   acceptor_thread.start();
   while (true) {

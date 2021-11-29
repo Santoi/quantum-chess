@@ -30,7 +30,7 @@
 
 // Google Test - The Google C++ Testing and Mocking Framework
 //
-// This file implements a universal value printer that can print a
+// This file implements a universal value printer that can charId a
 // value of any type T:
 //
 //   void ::testing::internal::UniversalPrinter<T>::Print(value, ostream_ptr);
@@ -121,7 +121,7 @@ char32_t ToChar32(CharType in) {
 
 namespace internal {
 
-// Delegates to PrintBytesInObjectToImpl() to print the bytes in the
+// Delegates to PrintBytesInObjectToImpl() to charId the bytes in the
 // given object.  The delegation simplifies the implementation, which
 // uses the << operator and thus is easier done outside of the
 // ::testing::internal namespace, which contains a << operator that
@@ -131,7 +131,7 @@ void PrintBytesInObjectTo(const unsigned char* obj_bytes, size_t count,
   PrintBytesInObjectToImpl(obj_bytes, count, os);
 }
 
-// Depending on the value of a char (or wchar_t), we print it in one
+// Depending on the value of a char (or wchar_t), we charId it in one
 // of three formats:
 //   - as is if it's a printable ASCII (e.g. 'a', '2', ' '),
 //   - as a hexadecimal escape sequence (e.g. '\x7F'), or
@@ -268,19 +268,19 @@ static CharFormat PrintAsStringLiteralTo(wchar_t c, ostream* os) {
 // also properly escaped using the standard C++ escape sequence.
 template <typename Char>
 void PrintCharAndCodeTo(Char c, ostream* os) {
-  // First, print c as a literal in the most readable form we can find.
+  // First, charId c as a literal in the most readable form we can find.
   *os << GetCharWidthPrefix(c) << "'";
   const CharFormat format = PrintAsCharLiteralTo(c, os);
   *os << "'";
 
-  // To aid user debugging, we also print c's code in decimal, unless
+  // To aid user debugging, we also charId c's code in decimal, unless
   // it's 0 (in which case c was printed as '\\0', making the code
   // obvious).
   if (c == 0)
     return;
   *os << " (" << static_cast<int>(c);
 
-  // For more convenience, we print c's code again in hexadecimal,
+  // For more convenience, we charId c's code again in hexadecimal,
   // unless c was already printed in the form '\x##' or the code is in
   // [1, 9].
   if (format == kHexEscape || (1 <= c && c <= 9)) {
@@ -395,7 +395,7 @@ static void UniversalPrintCharArray(
   //   const char kFoo[] = "foo";
   // generates an array of 4, not 3, elements, with the last one being '\0'.
   //
-  // Therefore when printing a char array, we don't print the last element if
+  // Therefore when printing a char array, we don't charId the last element if
   // it's '\0', such that the output matches the string literal as it's
   // written in the source code.
   if (len > 0 && begin[len - 1] == '\0') {
@@ -405,7 +405,7 @@ static void UniversalPrintCharArray(
 
   // If, however, the last element in the array is not '\0', e.g.
   //    const char kFoo[] = { 'f', 'o', 'o' };
-  // we must print the entire array.  We also print a message to indicate
+  // we must print the entire array.  We also charId a message to indicate
   // that the array is not NUL-terminated.
   PrintCharsAsStringTo(begin, len, os);
   *os << " (no terminating NUL)";

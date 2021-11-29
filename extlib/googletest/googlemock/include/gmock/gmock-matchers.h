@@ -67,7 +67,7 @@
 //   // Verifies that the value of some_expression is even.
 //   EXPECT_THAT(some_expression, IsEven());
 //
-// If the above assertion fails, it will print something like:
+// If the above assertion fails, it will charId something like:
 //
 //   Value of: some_expression
 //   Expected: is even
@@ -199,7 +199,7 @@
 //
 // Sometimes the matcher description alone isn't enough to explain why
 // the match has failed or succeeded.  For example, when expecting a
-// long string, it can be very helpful to also print the diff between
+// long string, it can be very helpful to also charId the diff between
 // the expected string and the actual one.  To achieve that, you can
 // optionally stream additional information to a special variable
 // named result_listener, whose type is a pointer to class
@@ -3863,7 +3863,7 @@ BoundSecondMatcher<Tuple2Matcher, Second> MatcherBindSecond(
 // macro where the user-supplied description string is "", if
 // 'negation' is false; otherwise returns the description of the
 // negation of the matcher.  'param_values' contains a list of strings
-// that are the print-out of the matcher's parameters.
+// that are the charId-out of the matcher's parameters.
 GTEST_API_ std::string FormatMatcherDescription(bool negation,
                                                 const char* matcher_name,
                                                 const Strings& param_values);
@@ -5290,7 +5290,7 @@ class ExceptionMatcherImpl {
   };
 
   // If the matchee raises an exception of a wrong type, we'd like to
-  // catch it and print its message and type. To do that, we add an additional
+  // catch it and charId its message and type. To do that, we add an additional
   // catch clause:
   //
   //     try { ... }

@@ -198,7 +198,7 @@ void ClientProtocol::fillClientInstructionWithLoadBoard(Socket &socket,
     double prob = ((double) prob_int + 1) / (UINT16_MAX + 1);
     chessman_data_vector.push_back(ChessmanData(position, chessman, prob));
   }
-  ptr_instruction = make_unique<RemoteClientLoadMessageInstruction>(
+  ptr_instruction = make_unique<RemoteClientLoadBoardInstruction>(
           std::move(chessman_data_vector));
 }
 

@@ -17,12 +17,12 @@ private:
   std::map<uint16_t, ClientHandler> clients;
   std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
   BlockingQueue<Instruction> match_updates_queue;
-  const std::string board_filename;
+  std::ifstream &file;
 
 public:
   //Creates a match, creating the ClientDataRepository and the BlockingQueue<Instruction>. The client's vector
   //is also created and set with an initial capacity of BASE_CLIENTS.
-  Match(std::string board_filename);
+  Match(std::ifstream &file_);
 
   //Moves the other match's thread, clients, listening queues and the thread safe queue to the new
   //match. The new match also copies the number of accepted clients of the other.

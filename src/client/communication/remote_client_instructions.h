@@ -73,18 +73,18 @@ public:
   ~RemoteClientExitMessageInstruction() = default;
 };
 
-class RemoteClientLoadMessageInstruction : public RemoteClientInstruction {
+class RemoteClientLoadBoardInstruction : public RemoteClientInstruction {
   std::vector<ChessmanData> chessman_data_vector;
 
 public:
-  RemoteClientLoadMessageInstruction() = delete;
+  RemoteClientLoadBoardInstruction() = delete;
 
-  RemoteClientLoadMessageInstruction(
+  RemoteClientLoadBoardInstruction(
           std::vector<ChessmanData> &&chessman_data_vector_);
 
   void makeAction(Game &game);
 
-  ~RemoteClientLoadMessageInstruction() = default;
+  ~RemoteClientLoadBoardInstruction() = default;
 };
 
 class RemoteClientMoveInstruction : public RemoteClientInstruction {

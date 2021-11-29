@@ -29,7 +29,7 @@ void RemoteClientSender::run() {
 
 RemoteClientReceiver::RemoteClientReceiver(Socket &client_socket,
                                            BlockingQueue<RemoteClientInstruction> &queue_)
-        : client_socket(client_socket), queue(queue_) {}
+        : client_socket(client_socket), queue(queue_), socket_closed(false) {}
 
 void RemoteClientReceiver::receiveMessage() {
   std::shared_ptr<RemoteClientInstruction> ptr_instruction;
@@ -44,6 +44,11 @@ void RemoteClientReceiver::run() {
       this->receiveMessage();
   }
   catch (const SocketClosed &e) {
-    std::cerr << "Error: se perdio conexion con el server" << std::endl;
+    if (!socket_closed)
+      std::cerr << "Error: se perdio conexion con el server" << std::endl;
   }
+}
+
+void RemoteClientReceiver::notifySocketClosed() {
+  socket_closed = true;
 }

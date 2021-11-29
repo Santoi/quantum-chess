@@ -12,13 +12,10 @@
 #include "instructions/same_chessman_instruction.h"
 #include "instructions/entangled_chessman_instruction.h"
 #include "instructions/merge_instruction.h"
+#include "../../common/src/socket_closed.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <algorithm>
-
-#define ONE_BYTE 1
-#define TWO_BYTES 2
-
 
 void ServerProtocol::sendMatchesInfo(Socket &socket,
                                      const std::map<uint16_t, std::unique_ptr<Match>> &matches) {
@@ -198,7 +195,9 @@ void
 ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
                                  std::shared_ptr<Instruction> &instruct_ptr) {
   Packet packet;
-  socket.receive(packet, ONE_BYTE);
+  socket.receive(packet, 1);
+  if (packet.size() != 1)
+    throw SocketClosed();
   char action = packet.getByte();
 
   switch (action) {

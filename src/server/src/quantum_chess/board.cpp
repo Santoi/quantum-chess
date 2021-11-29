@@ -1,5 +1,5 @@
 #include "board.h"
-#include "chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 #include "chessman/king.h"
 #include "chessman/queen.h"
 #include "chessman/tower.h"

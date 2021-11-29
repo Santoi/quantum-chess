@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include "chessman.h"
-#include "../chess_exception.h"
+#include "../../../../common/src/chess_exception.h"
 
 Chessman::Chessman(const Position &position_, bool white_, Board &board_,
                    EntanglementLog &entanglement_log_) :

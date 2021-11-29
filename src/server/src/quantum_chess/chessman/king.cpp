@@ -3,7 +3,7 @@
 #include "king.h"
 #include "tower.h"
 #include <algorithm>
-#include "../chess_exception.h"
+#include "../../../../common/src/chess_exception.h"
 
 King::King(const Position &position, bool white_, Board &board_,
            EntanglementLog &entanglement_log_) :

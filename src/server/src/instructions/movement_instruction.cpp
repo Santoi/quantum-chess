@@ -1,6 +1,6 @@
 #include "movement_instruction.h"
 #include "load_board_instruction.h"
-#include "../quantum_chess/chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 #include "chess_exception_instruction.h"
 
 MovementInstruction::MovementInstruction(const ClientData &instructor_data,

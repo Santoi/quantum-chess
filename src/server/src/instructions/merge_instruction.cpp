@@ -1,6 +1,6 @@
 #include "merge_instruction.h"
 #include "load_board_instruction.h"
-#include "../quantum_chess/chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 #include "chess_exception_instruction.h"
 
 MergeInstruction::MergeInstruction(const ClientData &instructor_data,

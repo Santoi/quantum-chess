@@ -7,9 +7,7 @@
 #include "client_protocol.h"
 #include "../../common/src/client_data.h"
 #include "chessman_data.h"
-
-#define ONE_BYTE 1
-#define TWO_BYTES 2
+#include "../../common/src/socket_closed.h"
 
 std::map<uint16_t, std::vector<ClientData>>
 ClientProtocol::receiveMatchesInfo(Socket &socket) {
@@ -283,7 +281,9 @@ void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
                                         ptr_instruction) {
   Packet packet;
-  socket.receive(packet, ONE_BYTE);
+  socket.receive(packet, 1);
+  if (packet.size() != 1)
+    throw SocketClosed();
   char action = packet.getByte();
   switch (action) {
     case 'c':

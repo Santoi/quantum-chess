@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <list>
 #include "quantum_position.h"
-#include "chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 #include "chessman/chessman.h"
 
 QuantumPosition::QuantumPosition(uint8_t x, uint8_t y, double prob_,

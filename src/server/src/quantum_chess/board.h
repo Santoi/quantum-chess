@@ -38,7 +38,7 @@ public:
 
   /* Mueve la pieza en la posicion inicial a la final, validando
    * el movimiento. */
-  void move(const Position &initial, const Position &final, bool player_white);
+  bool move(const Position &initial, const Position &final, bool player_white);
 
   void split(const Position &initial, const Position &pos1,
              const Position &pos2, bool player_white);

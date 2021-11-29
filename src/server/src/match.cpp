@@ -93,7 +93,26 @@ void Match::run() {
       client.second.join();
     }
   }
+}
 
+void Match::runCatchingExceptions() {
+  try {
+    run();
+  }
+  catch (const std::exception &e) {
+    for (auto &client: clients) {
+      client.second.stop();
+      client.second.join();
+    }
+    std::cerr << "Error:" << e.what() << std::endl;
+  }
+  catch (...) {
+    for (auto &client: clients) {
+      client.second.stop();
+      client.second.join();
+    }
+    std::cerr << "Unknown error" << std::endl;
+  }
 }
 
 bool Match::hasActiveClients() const {

@@ -1,11 +1,11 @@
 #include "position.h"
-#include "game/chess_exception.h"
+#include "../common/src/chess_exception.h"
 #include <iostream>
 #include <cstdint>
 
-Position::Position(): x_(0), y_(0) {}
+Position::Position() : x_(0), y_(0) {}
 
-Position::Position(uint8_t x, uint8_t y): x_(x), y_(y) {
+Position::Position(uint8_t x, uint8_t y) : x_(x), y_(y) {
   if (x > BOUND || y > BOUND)
     throw ChessException("Invalid position");
 }
@@ -31,7 +31,7 @@ bool operator<(const Position &a, const Position &b) {
          ((a.x_ == b.x_) && (a.y_ < b.y_));
 }
 
-std::ostream & operator<<(std::ostream & os, const Position & position){
+std::ostream &operator<<(std::ostream &os, const Position &position) {
   os << "(" << (uint) position.x_ << ", " << (uint) position.y_ << ")";
   return os;
 }

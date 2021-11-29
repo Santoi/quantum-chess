@@ -46,7 +46,6 @@ public:
 
   void deleteClientWithId(uint16_t client_id);
 
-
   Board &getBoard();
 
 protected:
@@ -64,6 +63,8 @@ private:
   ClientData askClientData(Socket &socket, uint16_t client_id);
 
   std::list<ClientData::Role> getAvailableRoles();
+
+  void runCatchingExceptions() override;
 };
 
 

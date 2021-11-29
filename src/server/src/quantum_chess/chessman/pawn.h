@@ -16,7 +16,7 @@ public:
   Pawn(const Position &position, bool white_, Board &board_,
        EntanglementLog &entanglement_log_);
 
-  void move(const Position &initial, const Position &final) override;
+  bool move(const Position &initial, const Position &final) override;
 
   void calculateMoves(const Position &initial,
                       std::list<Position> &posible_moves)

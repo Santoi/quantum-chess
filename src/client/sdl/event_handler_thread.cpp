@@ -1,14 +1,17 @@
 #include "event_handler_thread.h"
-#include "../game/chess_exception.h"
+#include "../../common/src/chess_exception.h"
 #include <iostream>
 #include <list>
 
 EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
                                                      split(false), merge(false),
-                                                     first_click(false) {}
+                                                     first_click(false),
+                                                     second_click(false),
+                                                     penultimate_click(0, 0),
+                                                     last_click(0, 0),
+                                                     event() {}
 
 void EventHandlerThread::run() {
-  // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (true) {
     SDL_WaitEvent(&event);
     switch (event.type) {
@@ -36,7 +39,6 @@ bool EventHandlerThread::isOpen() {
 }
 
 void EventHandlerThread::handleKeyDown() {
-  //game.playSplitSound();
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
       game.setDefaultBoard();
@@ -56,11 +58,17 @@ void EventHandlerThread::handleKeyDown() {
       split = false;
       break;
     }
+    case SDLK_n: {
+      game.toggleSounds();
+      break;
+    }
+    case SDLK_m: {
+      game.toggleMusic();
+    }
   }
 }
 
 void EventHandlerThread::handleKeyUp() {
-  //game.playTakenPieceSound();
   switch (event.key.keysym.sym) {
     case SDLK_LSHIFT: {
       if (!first_click)
@@ -76,7 +84,6 @@ void EventHandlerThread::handleKeyUp() {
 }
 
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
-  //game.playMovementSound();
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (!game.isPixelInBoard(pixel))

@@ -7,9 +7,7 @@
 #include "client_protocol.h"
 #include "../../common/src/client_data.h"
 #include "chessman_data.h"
-
-#define ONE_BYTE 1
-#define TWO_BYTES 2
+#include "../../common/src/socket_closed.h"
 
 std::map<uint16_t, std::vector<ClientData>>
 ClientProtocol::receiveMatchesInfo(Socket &socket) {
@@ -64,14 +62,14 @@ void ClientProtocol::sendChosenRole(Socket &socket, ClientData::Role role) {
 
 void ClientProtocol::fillPacketWithChatMessage(Packet &packet,
                                                const std::string &message) {
-  packet.addByte('c');
+  packet.addByte(CHAT_PREFIX);
   addStringAndItsLengthToPacket(packet, message);
 }
 
 void
 ClientProtocol::fillPacketWithMoveMessage(Packet &packet, Position &initial,
                                           Position &final) {
-  packet.addByte('m');
+  packet.addByte(MOVE_PREFIX);
   packet.addByte(initial.x());
   packet.addByte(initial.y());
   packet.addByte(final.x());
@@ -81,7 +79,7 @@ ClientProtocol::fillPacketWithMoveMessage(Packet &packet, Position &initial,
 void
 ClientProtocol::fillPacketWithSplitMessage(Packet &packet, Position &from,
                                            Position &to1, Position &to2) {
-  packet.addByte('s');
+  packet.addByte(SPLIT_PREFIX);
   packet.addByte(from.x());
   packet.addByte(from.y());
   packet.addByte(to1.x());
@@ -94,7 +92,7 @@ void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
                                                 const Position &from1,
                                                 const Position &from2,
                                                 const Position &to) {
-  packet.addByte('h');
+  packet.addByte(MERGE_PREFIX);
   packet.addByte(from1.x());
   packet.addByte(from1.y());
   packet.addByte(from2.x());
@@ -105,21 +103,21 @@ void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
 
 void ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
                                                         const Position &position) {
-  packet.addByte('a');
+  packet.addByte(POSSIBLE_MOVES_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
 void ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
                                                          const Position &position) {
-  packet.addByte('b');
+  packet.addByte(POSSIBLE_SPLITS_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
 void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
                                                          const Position &position) {
-  packet.addByte('d');
+  packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 1);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
@@ -128,7 +126,7 @@ void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
 void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
                                                          const Position &position1,
                                                          const Position &position2) {
-  packet.addByte('d');
+  packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 2);
   addNumber8ToPacket(packet, position1.x());
   addNumber8ToPacket(packet, position1.y());
@@ -138,14 +136,14 @@ void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
 
 void ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
                                                            Position &position) {
-  packet.addByte('f');
+  packet.addByte(SAME_CHESSMAN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
 void ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
                                                                 Position &position) {
-  packet.addByte('g');
+  packet.addByte(ENTANGLED_CHESSMEN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
@@ -158,9 +156,9 @@ void ClientProtocol::sendInstruction(Socket &socket,
   socket.send(packet);
 }
 
-void ClientProtocol::fillClientInstructionWithChat(Socket &socket,
-                                                   std::shared_ptr<RemoteClientInstruction> &
-                                                   ptr_instruction) {
+void ClientProtocol::fillChatInstruction(Socket &socket,
+                                         std::shared_ptr<RemoteClientInstruction> &
+                                         ptr_instruction) {
   std::string nick_name;
   std::string message;
   this->getMessageFromSocket(socket, nick_name);
@@ -170,17 +168,17 @@ void ClientProtocol::fillClientInstructionWithChat(Socket &socket,
 
 }
 
-void ClientProtocol::fillClientInstructionWithExitMessage(Socket &socket,
-                                                          std::shared_ptr<RemoteClientInstruction> &
-                                                          ptr_instruction) {
+void ClientProtocol::fillExitInstruction(Socket &socket,
+                                         std::shared_ptr<RemoteClientInstruction> &
+                                         ptr_instruction) {
   std::string nick_name;
   this->getMessageFromSocket(socket, nick_name);
   ptr_instruction = make_unique<RemoteClientExitMessageInstruction>(nick_name);
 }
 
-void ClientProtocol::fillClientInstructionWithLoadBoard(Socket &socket,
-                                                        std::shared_ptr<RemoteClientInstruction> &
-                                                        ptr_instruction) {
+void ClientProtocol::fillLoadBoardInstruction(Socket &socket,
+                                              std::shared_ptr<RemoteClientInstruction> &
+                                              ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::vector<ChessmanData> chessman_data_vector;
   chessman_data_vector.reserve(amount);
@@ -202,15 +200,15 @@ void ClientProtocol::fillClientInstructionWithLoadBoard(Socket &socket,
           std::move(chessman_data_vector));
 }
 
-void ClientProtocol::fillClientInstructionWithException(Socket &socket,
-                                                        std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::fillShortLogInstruction(Socket &socket,
+                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
   std::string message;
   this->getMessageFromSocket(socket, message);
   ptr_instruction = make_unique<RemoteClientExceptionInstruction>(message);
 }
 
-void ClientProtocol::fillClientInstructionWithPossibleMoves(Socket &socket,
-                                                            std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::fillPossibleMovesInstruction(Socket &socket,
+                                                  std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -223,8 +221,8 @@ void ClientProtocol::fillClientInstructionWithPossibleMoves(Socket &socket,
           std::move(posible_moves));
 }
 
-void ClientProtocol::fillClientInstructionWithPossibleSplits(Socket &socket,
-                                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::fillPossibleSplitsInstruction(Socket &socket,
+                                                   std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -237,8 +235,8 @@ void ClientProtocol::fillClientInstructionWithPossibleSplits(Socket &socket,
           std::move(posible_moves));
 }
 
-void ClientProtocol::fillClientInstructionWithPossibleMerges(Socket &socket,
-                                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
+                                                   std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -251,8 +249,8 @@ void ClientProtocol::fillClientInstructionWithPossibleMerges(Socket &socket,
           std::move(posible_moves));
 }
 
-void ClientProtocol::fillClientInstructionWithSameChessman(Socket &socket,
-                                                           std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::fillSameChessmanInstruction(Socket &socket,
+                                                 std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -265,8 +263,8 @@ void ClientProtocol::fillClientInstructionWithSameChessman(Socket &socket,
           std::move(posible_moves));
 }
 
-void ClientProtocol::fillClientInstructionWithEntangledChessman(Socket &socket,
-                                                                std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::fillEntangledChessmanInstruction(Socket &socket,
+                                                      std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -279,43 +277,55 @@ void ClientProtocol::fillClientInstructionWithEntangledChessman(Socket &socket,
           std::move(posible_moves));
 }
 
+void ClientProtocol::fillSoundInstruction(Socket &socket,
+                                          std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  uint8_t sound = getNumber8FromSocket(socket);
+  ptr_instruction = std::make_shared<RemoteClientSoundInstruction>(sound);
+}
+
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
                                         ptr_instruction) {
   Packet packet;
-  socket.receive(packet, ONE_BYTE);
+  socket.receive(packet, 1);
+  if (packet.size() != 1)
+    throw SocketClosed();
   char action = packet.getByte();
   switch (action) {
-    case 'c':
-      this->fillClientInstructionWithChat(socket, ptr_instruction);
+    case CHAT_PREFIX:
+      fillChatInstruction(socket, ptr_instruction);
       break;
-    case 'l':
-      this->fillClientInstructionWithLoadBoard(socket, ptr_instruction);
+    case LOAD_BOARD_PREFIX:
+      fillLoadBoardInstruction(socket, ptr_instruction);
       break;
-    case 'e':
-      this->fillClientInstructionWithExitMessage(socket, ptr_instruction);
+    case EXIT_PREFIX:
+      fillExitInstruction(socket, ptr_instruction);
       break;
-    case 'x':
-      fillClientInstructionWithException(socket, ptr_instruction);
+    case SHORT_LOG_PREFIX:
+      fillShortLogInstruction(socket, ptr_instruction);
       break;
-    case 'a':
-      fillClientInstructionWithPossibleMoves(socket, ptr_instruction);
+    case POSSIBLE_MOVES_PREFIX:
+      fillPossibleMovesInstruction(socket, ptr_instruction);
       break;
-    case 'b':
-      fillClientInstructionWithPossibleSplits(socket, ptr_instruction);
+    case POSSIBLE_SPLITS_PREFIX:
+      fillPossibleSplitsInstruction(socket, ptr_instruction);
       break;
-    case 'd':
-      fillClientInstructionWithPossibleMerges(socket, ptr_instruction);
+    case POSSIBLE_MERGES_PREFIX:
+      fillPossibleMergesInstruction(socket, ptr_instruction);
       break;
-    case 'f':
-      fillClientInstructionWithSameChessman(socket, ptr_instruction);
+    case SAME_CHESSMAN_PREFIX:
+      fillSameChessmanInstruction(socket, ptr_instruction);
       break;
-    case 'g':
-      fillClientInstructionWithEntangledChessman(socket, ptr_instruction);
+    case ENTANGLED_CHESSMEN_PREFIX:
+      fillEntangledChessmanInstruction(socket, ptr_instruction);
+      break;
+    case SOUND_PREFIX:
+      fillSoundInstruction(socket, ptr_instruction);
       break;
   }
 
 }
+
 
 
 

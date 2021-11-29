@@ -28,11 +28,11 @@ private:
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
-  const SoundHandler &sound_handler;
+  SoundHandler &sound_handler;
 
 public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, const SoundHandler &sound_handler);
+       ClientData::Role role_, SoundHandler &sound_handler_);
 
   void setScale(int scale_);
 
@@ -72,9 +72,9 @@ public:
 
   void playSplitSound();
 
-  void playMovementSound();
+  void playMergeSound();
 
-  void playTakenPieceSound();
+  void playCaptureSound();
 
   void askEntangledTiles(PixelCoordinate &coords);
 
@@ -82,6 +82,10 @@ public:
 
   void mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
                      PixelCoordinate &to);
+
+  void toggleSounds();
+
+  void toggleMusic();
 };
 
 

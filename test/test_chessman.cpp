@@ -6,10 +6,9 @@
 #include "../src/server/src/quantum_chess/chessman/tower.h"
 #include "../src/server/src/quantum_chess/chessman/bishop.h"
 #include "../src/server/src/quantum_chess/chessman/king.h"
-#include "../src/server/src/quantum_chess/chess_exception.h"
+#include "../src/common/src/chess_exception.h"
 
 
-// TODO test capture.
 TEST(Chessman, MoveFromANonExistingPosition) {
   Board board;
   board.addNewChessman('T', Position(0, 1), true);

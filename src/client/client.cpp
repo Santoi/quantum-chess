@@ -4,7 +4,7 @@
 #include "position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
-#include "../server/src/quantum_chess/chess_exception.h"
+#include "../common/src/chess_exception.h"
 #include "../common/src/client_data.h"
 #include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
@@ -15,8 +15,8 @@
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
-  std::map<uint16_t, std::vector<ClientData>> data = std::move(
-      protocol.receiveMatchesInfo(client_socket));
+  std::map<uint16_t, std::vector<ClientData>> data =
+          protocol.receiveMatchesInfo(client_socket);
   std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                " quieres entrar." << std::endl;
   std::cout << "Las partidas disponibles son" << std::endl;
@@ -114,6 +114,8 @@ void Client::execute(const char *host, const char *port,
   sender_thread.start();
   action_thread.start();
   event_handler.start();
+  // comment if you dont want to go crazy while debugging.
+  sound_handler.playMusic();
 
   while (event_handler.isOpen()) {
     // Timing: calculate difference between this and previous frame
@@ -133,6 +135,7 @@ void Client::execute(const char *host, const char *port,
 
   received.close();
   send.close();
+  receiver_thread.notifySocketClosed();
   socket.shutdownAndClose();
   action_thread.join();
   event_handler.join();
@@ -169,8 +172,8 @@ bool Client::readCommand() {
       throw ChessException("posicion invalida");
 
     send.push(std::make_shared<RemoteClientMoveInstruction>(
-        Position((uint8_t) x1 - 'A', (uint8_t) y1),
-        Position((uint8_t) x2 - 'A', (uint8_t) y2)));
+            Position((uint8_t) x1 - 'A', (uint8_t) y1),
+            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
   }
   return false;
 }

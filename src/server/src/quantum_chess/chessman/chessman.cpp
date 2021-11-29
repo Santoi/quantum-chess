@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include "chessman.h"
-#include "../chess_exception.h"
+#include "../../../../common/src/chess_exception.h"
 
 Chessman::Chessman(const Position &position_, bool white_, Board &board_,
                    EntanglementLog &entanglement_log_) :
@@ -13,7 +13,8 @@ Chessman::Chessman(const Position &position_, bool white_, Board &board_,
         board(board_), white(white_), entanglement_log(entanglement_log_) {}
 
 
-void Chessman::move(const Position &initial, const Position &final) {
+bool Chessman::move(const Position &initial, const Position &final) {
+  bool capture = false;
   // Check if can be moved.
   std::vector<Position> path;
   std::list<Position> posible_moves;
@@ -40,7 +41,7 @@ void Chessman::move(const Position &initial, const Position &final) {
     if (positions.front() != initial ||
         (final_chessman->getPosition() == final
          && final_chessman->white == white))
-      return;
+      return false;
   }
   // Measure solved from here.
   // If there is final chessman, then is removed of the board.
@@ -48,10 +49,9 @@ void Chessman::move(const Position &initial, const Position &final) {
     if (final_chessman->charId() == 'K')
       board.endGame();
     board.removeChessmanOf(final);
+    capture = true;
   }
 
-
-  // TODO hacer lo de mezclar con una funcion split.
   // If there is a chessman in path then entangle.
   if (chessman_in_path.second) {
     entangle(initial, final, *chessman_in_path.second,
@@ -63,6 +63,7 @@ void Chessman::move(const Position &initial, const Position &final) {
     initial_qp_it->setPosition(final);
     board.addChessmanOfIn(initial, final);
   }
+  return capture;
 }
 
 void Chessman::split(const Position &initial, const Position &final1,
@@ -89,7 +90,6 @@ void Chessman::split(const Position &initial, const Position &final1,
   new_real = coin ? final1 : final2;
   new_fake = !coin ? final1 : final2;
 
-  // TODO esto podria meterse en un metodo y mandarse igual que en move.
   auto initial_qp_it = std::find(positions.begin(), positions.end(), initial);
   double old_prob = initial_qp_it->getProb();
   // Entangled list is copied and then moved.

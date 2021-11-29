@@ -111,7 +111,7 @@ size_t Socket::receive(Packet &packet, size_t size) const {
     ssize_t bytes_recv = recv(fd, buffer.data(), size - packet.size(), 0);
     // Si no se recibio nada, socket cerrado. Sino error.
     if (bytes_recv == 0) {
-      throw SocketClosed();
+      return packet.size();
     }
     if (bytes_recv == -1) {
       if (errno == EBADF) {

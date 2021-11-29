@@ -1,5 +1,5 @@
 #include "board.h"
-#include "chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 #include "chessman/king.h"
 #include "chessman/queen.h"
 #include "chessman/tower.h"
@@ -37,7 +37,7 @@ void Board::addNewChessman(char chessman_, Position position_,
   }
 }
 
-void
+bool
 Board::move(const Position &initial, const Position &final, bool player_white) {
   if (finished)
     throw ChessException("game has ended");
@@ -49,8 +49,9 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
   if (chessman->isWhite() != player_white)
     throw ChessException("you cannot move a chessman"
                          " of the other player");
-  chessman->move(initial, final);
+  bool capture = chessman->move(initial, final);
   next_white = !next_white;
+  return capture;
 }
 
 void Board::split(const Position &initial, const Position &pos1,
@@ -194,6 +195,7 @@ Board::loadVectors(std::vector<char> &characters_, std::vector<bool> &colors_,
                    std::vector<Position> &positions_,
                    std::vector<double> &probabilities) {
   // TODO hacerlo un paquete solo.
+
   characters_.reserve(board.size());
   colors_.reserve(board.size());
   positions_.reserve(board.size());

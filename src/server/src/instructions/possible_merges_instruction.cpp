@@ -1,6 +1,6 @@
 #include "possible_merges_instruction.h"
 #include "chess_exception_instruction.h"
-#include "../quantum_chess/chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 
 PossibleMergesInstruction::PossibleMergesInstruction(
         const ClientData &inst_data,

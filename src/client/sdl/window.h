@@ -4,6 +4,8 @@
 #include "renderer.h"
 #include "sound/sound_handler.h"
 #include <SDL2pp/SDL2pp.hh>
+#include <mutex>
+
 
 class Window {
 private:
@@ -12,6 +14,7 @@ private:
   SDL2pp::Window window_;
   Renderer renderer_;
   SoundHandler sound_handler_;
+
 public:
   Window();
 
@@ -24,6 +27,11 @@ public:
   int getWidth() const;
 
   int getHeight() const;
+
+  double getMinRatio() const;
+
+  void setMaxHeight(int height);
+
 };
 
 

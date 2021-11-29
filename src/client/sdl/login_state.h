@@ -38,7 +38,7 @@ public:
 class NotConnectedToServerState: public LoginState {
 public:
 
-    explicit NotConnectedToServerState(Login& login_);
+    NotConnectedToServerState(Login& login_, Renderer& renderer_);
 
     bool clientIsConnectedToMatch() override;
 

@@ -121,7 +121,7 @@ void Client::execute(const char *host, const char *port,
   sound_handler.playMusic();
   Window window;
   Renderer &renderer = window.renderer();
-  LoginStateHandler login_state_handler;
+  LoginStateHandler login_state_handler(window.renderer());
 //  LoginRenderer login_renderer(login_state_handler, window);
 
   LoginHandlerThread login_handler(login_state_handler);

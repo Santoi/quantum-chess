@@ -1,8 +1,9 @@
 #include "login_state_handler.h"
 #include "../../common/src/unique_ptr.h"
 
-LoginStateHandler::LoginStateHandler()
-                   :login(), current_state(make_unique<NotConnectedToServerState>(login)) {
+LoginStateHandler::LoginStateHandler(Renderer& renderer_)
+                    :login(), renderer(renderer_),
+                     current_state(make_unique<NotConnectedToServerState>(login, renderer)) {
 }
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
@@ -33,9 +34,9 @@ void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) 
 
 
 Socket LoginStateHandler::getClientSocket() {
-    return std::move(login.getClientSocket());
+    return login.getClientSocket();
 }
 
 std::string LoginStateHandler::getClientNickName() {
-    return std::move(login.getClientNickName());
+    return login.getClientNickName();
 }

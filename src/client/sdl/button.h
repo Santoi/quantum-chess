@@ -7,22 +7,29 @@
 #include <string>
 #include <memory>
 
+class Renderer;
+
 class Button {
 private:
     int x;
     int y;
     int height;
     int width;
+    Renderer& renderer;
 
 public:
 
-    Button() = default;
+    Button() = delete;
+
+    explicit Button(Renderer& renderer_);
 
     virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
 
     virtual void render() = 0;
 
     void setAreaAndPosition(int x, int y, int height, int width);
+
+    ~Button() = default;
 };
 
 class ConnectButton: public Button {
@@ -32,12 +39,13 @@ private:
 public:
     ConnectButton() = delete;
 
-    explicit ConnectButton(const std::list<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr);
+    explicit ConnectButton(Renderer& renderer_, const std::list<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr);
 
     bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens);
 
     void render();
 
+    ~ConnectButton() = default;
 };
 
 class PickMatchButton: public Button {

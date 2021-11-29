@@ -3,7 +3,7 @@
 
 #include "login.h"
 #include "login_state.h"
-
+#include "renderer.h"
 #include <memory>
 
 class LoginRenderer;
@@ -17,10 +17,13 @@ class TextEntryButton;
 class LoginStateHandler {
 protected:
     Login login;
+    Renderer& renderer;
     std::unique_ptr<LoginState> current_state;
 
 public:
-    LoginStateHandler();
+    LoginStateHandler() = delete;
+
+    explicit LoginStateHandler(Renderer& renderer_);
 
     bool clientIsConnectedToMatch();
 

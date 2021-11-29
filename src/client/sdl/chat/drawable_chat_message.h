@@ -21,6 +21,8 @@ public:
                       const std::string &name, const std::string &id,
                       const std::string &time, const std::string &message);
 
+  // TODO MATI: constructor con Chat::StructChat
+
   DrawableChatMessage(DrawableChatMessage &&other) noexcept;
 
   void render(int x, int y);

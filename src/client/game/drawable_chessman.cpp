@@ -7,9 +7,7 @@ DrawableChessman::DrawableChessman(Renderer &renderer, ChessmanSpriteRepository 
     renderer(renderer),
     sprite_(repository.getChessman(data.chessman)),
     fill(repository.getFill(data.chessman)),
-    probability(data.probability) {
-
-}
+    probability(data.probability) {}
 
 DrawableChessman::DrawableChessman(DrawableChessman &&other) noexcept: renderer(other.renderer),
                                                                        sprite_(other.sprite_),

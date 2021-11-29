@@ -21,6 +21,13 @@ void Renderer::copy(Sprite &sprite, int x_src, int y_src, int x_dst,
   renderer_.Copy(sprite.sprite(), src, dest);
 }
 
+void Renderer::render(LoginRenderer& login_renderer) {
+    renderer_.Clear();
+    login_renderer.setScale(getMinDimension());
+    game.render();
+    renderer_.Present();
+}
+
 void Renderer::render(Game &game) {
   renderer_.Clear();
   game.setScale(getMinDimension());

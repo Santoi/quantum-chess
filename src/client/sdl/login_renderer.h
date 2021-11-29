@@ -19,6 +19,8 @@ public:
 
   LoginRenderer(LoginStateHandler &login_state_handler_, Window &window);
 
+  void setScale(const int& scale_);
+
   void render();
 
   void renderIPAndPortFields(ConnectButton &connect_button,

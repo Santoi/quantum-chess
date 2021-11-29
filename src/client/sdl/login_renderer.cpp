@@ -6,6 +6,11 @@ LoginRenderer::LoginRenderer(LoginStateHandler& login_state_handler_,
       login_state_handler(login_state_handler_) {
 }
 
+void LoginRenderer::setScale(const int& scale_) {
+    scale = scale_;
+}
+
+
 void LoginRenderer::render() {
   login_state_handler.tellRendererWhatToRender(*this);
 }

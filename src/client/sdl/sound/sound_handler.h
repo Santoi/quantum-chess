@@ -15,6 +15,7 @@ private:
   std::mutex mutex;
   bool playing_music;
   bool playing_sounds;
+  bool music_started;
 
 public:
   SoundHandler() = delete;
@@ -23,7 +24,7 @@ public:
 
   void playMusic();
 
-  void stopMusic();
+  void pauseMusic();
 
   void playSplitSound() const;
 
@@ -34,6 +35,10 @@ public:
   void toggleMusic();
 
   void toggleSounds();
+
+  void resumeMusic();
+
+  void stopMusic();
 };
 
 

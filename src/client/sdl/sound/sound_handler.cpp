@@ -6,27 +6,44 @@
 
 SoundHandler::SoundHandler(SDL2pp::Mixer &mixer)
         : mixer(mixer), music("sound/music.mp3"), mutex(),
-          playing_music(false), playing_sounds(true) {
+          playing_music(false), playing_sounds(true), music_started(false) {
   chunks.reserve(NUMBER_OF_DIFFERENT_CHUNKS);
-  chunks.push_back(SDL2pp::Chunk("sound/split.wav"));
-  chunks.push_back(SDL2pp::Chunk("sound/merge.wav"));
-  chunks.push_back(SDL2pp::Chunk("sound/capture.wav"));
+  chunks.emplace_back(SDL2pp::Chunk("sound/split.wav"));
+  chunks.emplace_back(SDL2pp::Chunk("sound/merge.wav"));
+  chunks.emplace_back(SDL2pp::Chunk("sound/capture.wav"));
 }
 
 void SoundHandler::toggleMusic() {
   if (playing_music)
-    stopMusic();
-  else
+    pauseMusic();
+  else if (!music_started)
     playMusic();
+  else
+    resumeMusic();
   playing_music = !playing_music;
 }
 
 void SoundHandler::playMusic() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   mixer.PlayMusic(music);
+  music_started = true;
+  playing_music = true;
 }
 
 void SoundHandler::stopMusic() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  mixer.PauseMusic();
+  music_started = false;
+  playing_music = false;
+}
+
+void SoundHandler::resumeMusic() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  mixer.ResumeMusic();
+}
+
+void SoundHandler::pauseMusic() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   mixer.PauseMusic();
 }
 

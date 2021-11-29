@@ -9,17 +9,16 @@ class Sprite;
 
 class Game;
 
-class Scene;
-
 class Renderer {
 private:
   SDL2pp::Renderer renderer_;
 
 public:
   explicit Renderer(SDL2pp::Window &window);
-  SDL2pp::Renderer& renderer();
 
-  void render(Scene* scene);
+  SDL2pp::Renderer &renderer();
+
+  void render(Game &game);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)

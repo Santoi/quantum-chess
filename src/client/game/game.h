@@ -10,7 +10,6 @@
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/client_data.h"
 #include "../sdl/sound/sound_handler.h"
-#include "../sdl/scene.h"
 #include <list>
 #include <map>
 #include <mutex>
@@ -19,7 +18,7 @@ class Sprite;
 
 class RemoteClientInstruction;
 
-class Game: public Scene {
+class Game {
 private:
   int scale;
   Board board;

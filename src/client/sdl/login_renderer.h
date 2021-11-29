@@ -1,7 +1,6 @@
 #ifndef QUANTUM_CHESS_PROJ_LOGIN_RENDERER_H
 #define QUANTUM_CHESS_PROJ_LOGIN_RENDERER_H
 
-#include "scene.h"
 #include "window.h"
 #include "login_state_handler.h"
 #include "button.h"
@@ -9,22 +8,24 @@
 
 class LoginStateHandler;
 
-class LoginRenderer: public Scene {
+class LoginRenderer {
 private:
-    LoginStateHandler& login_state_handler;
+  int scale;
+  LoginStateHandler &login_state_handler;
 
 public:
 
-    LoginRenderer() = delete;
+  LoginRenderer() = delete;
 
-    LoginRenderer(LoginStateHandler& login_state_handler_, Window& window);
+  LoginRenderer(LoginStateHandler &login_state_handler_, Window &window);
 
-    void render();
+  void render();
 
-    void renderIPAndPortFields(ConnectButton& connect_button, TextEntryButton& ip_text_entry,
-                               TextEntryButton& port_text_entry);
+  void renderIPAndPortFields(ConnectButton &connect_button,
+                             TextEntryButton &ip_text_entry,
+                             TextEntryButton &port_text_entry);
 
-    void setScale(int scale_);
+  void setScale(int scale_);
 };
 
 

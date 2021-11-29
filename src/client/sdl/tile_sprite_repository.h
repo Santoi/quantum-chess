@@ -2,31 +2,31 @@
 #define QUANTUM_CHESS_PROJ_TILE_SPRITE_REPOSITORY_H
 
 #include <map>
-#include "sprite.h"
+#include "texture_sprite.h"
 
 class TileSpriteRepository {
 public:
-    typedef enum {
-        TILE_DEFAULT,
-        TILE_MOVE,
-        TILE_ENTANGLED,
-        TILE_QUANTUM,
-        TILE_SPLIT,
-        TILE_MERGE
-    } TileType;
+  typedef enum {
+    TILE_DEFAULT,
+    TILE_MOVE,
+    TILE_ENTANGLED,
+    TILE_QUANTUM,
+    TILE_SPLIT,
+    TILE_MERGE
+  } TileType;
 
 private:
-    std::map<TileType, Sprite> white_tiles;
-    std::map<TileType , Sprite> black_tiles;
+  std::map<TileType, TextureSprite> white_tiles;
+  std::map<TileType, TextureSprite> black_tiles;
 
-    void loadWhite(Renderer & renderer);
+  void loadWhite(Renderer &renderer);
 
-    void loadBlack(Renderer & renderer);
+  void loadBlack(Renderer &renderer);
 
 public:
-    explicit TileSpriteRepository(Renderer & renderer);
+  explicit TileSpriteRepository(Renderer &renderer);
 
-    Sprite &getTile(TileType type, bool black);
+  TextureSprite &getTile(TileType type, bool black);
 };
 
 

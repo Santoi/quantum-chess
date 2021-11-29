@@ -6,6 +6,9 @@
 #include <algorithm>
 
 class Sprite;
+
+class Game;
+
 class Scene;
 
 class Renderer {
@@ -21,11 +24,15 @@ public:
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)
   void copy(Sprite &sprite, int x, int y);
+
   void copy(Sprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
             int width, int height);
-  int getMinDimension();
 
-  bool trueex();
+  int getMinDimension() const;
+
+  int getWidth() const;
+
+  int getHeight() const;
 };
 
 

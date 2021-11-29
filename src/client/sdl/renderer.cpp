@@ -4,9 +4,9 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
-Renderer::Renderer(SDL2pp::Window &window): renderer_(window,
-                                             -1,
-                                             SDL_RENDERER_ACCELERATED) {
+Renderer::Renderer(SDL2pp::Window &window) : renderer_(window,
+                                                       -1,
+                                                       SDL_RENDERER_ACCELERATED) {
 }
 
 void Renderer::copy(Sprite &sprite, int x, int y) {
@@ -32,10 +32,14 @@ SDL2pp::Renderer &Renderer::renderer() {
   return renderer_;
 }
 
-int Renderer::getMinDimension() {
+int Renderer::getMinDimension() const {
   return std::min(renderer_.GetOutputWidth(), renderer_.GetOutputHeight());
 }
 
-bool Renderer::trueex() {
-    return true;
+int Renderer::getWidth() const {
+  return renderer_.GetOutputWidth();
+}
+
+int Renderer::getHeight() const {
+  return renderer_.GetOutputHeight();
 }

@@ -11,6 +11,7 @@
 #include "instructions/possible_merges_instruction.h"
 #include "instructions/same_chessman_instruction.h"
 #include "instructions/entangled_chessman_instruction.h"
+#include "instructions/merge_instruction.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <algorithm>
@@ -101,6 +102,23 @@ void ServerProtocol::fillSplitInstruction(Socket &socket,
   instruct_ptr = std::make_shared<SplitInstruction>(client_data, initial,
                                                     final1,
                                                     final2);
+}
+
+void ServerProtocol::fillMergeInstruction(Socket &socket,
+                                          const ClientData &client_data,
+                                          std::shared_ptr<Instruction> &instruct_ptr) {
+  uint8_t i1x = getNumber8FromSocket(socket);
+  uint8_t i1y = getNumber8FromSocket(socket);
+  uint8_t i2x = getNumber8FromSocket(socket);
+  uint8_t i2y = getNumber8FromSocket(socket);
+  uint8_t fx = getNumber8FromSocket(socket);
+  uint8_t fy = getNumber8FromSocket(socket);
+  Position initial1(i1x, i1y);
+  Position initial2(i2x, i2y);
+  Position final(fx, fy);
+  instruct_ptr = std::make_shared<MergeInstruction>(client_data, initial1,
+                                                    initial2,
+                                                    final);
 }
 
 void ServerProtocol::fillPossibleMovesInstruction(Socket &socket,
@@ -207,6 +225,9 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
       break;
     case 'g':
       fillEntangledInstruction(socket, client_data, instruct_ptr);
+      break;
+    case 'h':
+      fillMergeInstruction(socket, client_data, instruct_ptr);
       break;
   }
 }

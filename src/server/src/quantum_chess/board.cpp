@@ -9,6 +9,8 @@
 #include <utility>
 #include <algorithm>
 #include <memory>
+#include <sstream>
+#include <fstream>
 
 Board::Board() : chessmen(), board(), next_white(true), coin() {}
 
@@ -64,7 +66,9 @@ void Board::split(const Position &initial, const Position &pos1,
 }
 
 void Board::merge(const Position &initial1, const Position &initial2,
-                  const Position &final) {
+                  const Position &final, bool player_white) {
+  if (player_white != next_white)
+    throw ChessException("is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
           *chessman_2 = getChessmanAt(initial2);
   if (!chessman_1)
@@ -73,8 +77,10 @@ void Board::merge(const Position &initial1, const Position &initial2,
     throw ChessException("no hay ninguna pieza alli");
   if (chessman_1 != chessman_2)
     throw ChessException("se esta tratando de unir dos piezas distintas");
-  if (chessman_1->isWhite() != next_white)
-    throw ChessException("no es tu turno");
+  if (chessman_1->isWhite() != player_white ||
+      chessman_2->isWhite() != player_white)
+    throw ChessException("you cannot move a chessman"
+                         " of the other player");
   chessman_1->merge(initial1, initial2, final);
   next_white = !next_white;
 }
@@ -228,29 +234,25 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
   return std::unique_ptr<Chessman>(pointer);
 }
 
-void Board::load() {
-  addNewChessman('T', Position(0, 0), true);
-  addNewChessman('H', Position(1, 0), true);
-  addNewChessman('B', Position(2, 0), true);
-  addNewChessman('Q', Position(3, 0), true);
-  addNewChessman('K', Position(4, 0), true);
-  addNewChessman('B', Position(5, 0), true);
-  addNewChessman('H', Position(6, 0), true);
-  addNewChessman('T', Position(7, 0), true);
-  addNewChessman('T', Position(0, 7), false);
-  addNewChessman('H', Position(1, 7), false);
-  addNewChessman('B', Position(2, 7), false);
-  addNewChessman('Q', Position(3, 7), false);
-  addNewChessman('K', Position(4, 7), false);
-  addNewChessman('B', Position(5, 7), false);
-  addNewChessman('H', Position(6, 7), false);
-  addNewChessman('T', Position(7, 7), false);
-
-  for (uint8_t i = 0; i < 8; i++)
-    addNewChessman('P', Position(i, 1), true);
-
-  for (uint8_t i = 0; i < 8; i++)
-    addNewChessman('P', Position(i, 6), false);
+void Board::load(const std::string &filename) {
+  std::ifstream file(filename, std::ios_base::in);
+  std::string line;
+  while (!file.eof() && file.peek() != EOF) {
+    std::getline(file, line);
+    if (line.empty())
+      continue;
+    if (line[0] == LOADER_COMMENT)
+      continue;
+    std::stringstream iss(line);
+    char chessman, color;
+    uint8_t x, y;
+    iss >> chessman >> x >> y >> color;
+    x -= 'A';
+    y = y - '0' - 1;
+    if (color != 'W' && color != 'B')
+      throw std::invalid_argument("invalid color");
+    addNewChessman(chessman, Position(x, y), color == 'W');
+  }
 }
 
 bool Board::flipACoin() {

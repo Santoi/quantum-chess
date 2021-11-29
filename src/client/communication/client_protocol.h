@@ -68,6 +68,9 @@ public:
   fillPacketWithEntangledChessmanInstruction(Packet &packet,
                                              Position &position);
 
+  void fillPacketWithMergeMessage(Packet &packet, const Position &from1,
+                                  const Position &from2, const Position &to);
+
 private:
   //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
   //name and the corresponding message). After the function ends, the ptr_instruction points to this

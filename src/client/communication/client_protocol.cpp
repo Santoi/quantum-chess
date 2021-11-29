@@ -90,6 +90,19 @@ ClientProtocol::fillPacketWithSplitMessage(Packet &packet, Position &from,
   packet.addByte(to2.y());
 }
 
+void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
+                                                const Position &from1,
+                                                const Position &from2,
+                                                const Position &to) {
+  packet.addByte('h');
+  packet.addByte(from1.x());
+  packet.addByte(from1.y());
+  packet.addByte(from2.x());
+  packet.addByte(from2.y());
+  packet.addByte(to.x());
+  packet.addByte(to.y());
+}
+
 void ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
                                                         const Position &position) {
   packet.addByte('a');
@@ -136,6 +149,7 @@ void ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
+
 
 void ClientProtocol::sendInstruction(Socket &socket,
                                      std::shared_ptr<RemoteClientInstruction> &instruction) {
@@ -302,11 +316,3 @@ void ClientProtocol::receiveInstruction(Socket &socket,
   }
 
 }
-
-
-
-
-
-
-
-

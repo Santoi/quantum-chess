@@ -21,9 +21,10 @@ class RemoteClientInstruction;
 
 class Game: public Scene {
 private:
+  int scale;
   Board board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  std::map<const PixelCoordinate, Sprite> sprites;
+  std::map<const PixelCoordinate, TextureSprite> sprites;
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
@@ -33,7 +34,7 @@ public:
   Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
        ClientData::Role role_, const SoundHandler &sound_handler);
 
-  void setScale(int scale_) override;
+  void setScale(int scale_);
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
 
@@ -51,9 +52,9 @@ public:
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 
-  void loadSprite(Sprite &sprite, int x, int y);
+  void loadSprite(TextureSprite &sprite, int x, int y);
 
-  void render() override;
+  void render();
 
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
@@ -78,6 +79,9 @@ public:
   void askEntangledTiles(PixelCoordinate &coords);
 
   void askQuantumTiles(PixelCoordinate &coords);
+
+  void mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
+                     PixelCoordinate &to);
 };
 
 

@@ -48,10 +48,12 @@ void EventHandlerThread::handleKeyDown() {
     }
     case SDLK_LSHIFT: {
       split = true;
+      merge = false;
       break;
     }
     case SDLK_LCTRL: {
       merge = true;
+      split = false;
       break;
     }
   }
@@ -123,7 +125,13 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
         second_click = false;
         split = false;
       }
-      //merge.
+      if (merge) {
+        game.mergeChessman(penultimate_click, last_click, pixel);
+        game.setDefaultBoard();
+        first_click = false;
+        second_click = false;
+        merge = false;
+      }
     }
 
   }

@@ -118,7 +118,6 @@ void
 RemoteClientPossibleMergesInstruction::fillPacketWithInstructionsToSend(
         Packet &packet,
         ClientProtocol &protocol) {
-  std::cout << positions.size() << std::endl;
   if (positions.size() == 1)
     protocol.fillPacketWithPossibleMergesMessage(packet, *positions.begin());
   else if (positions.size() == 2)
@@ -137,6 +136,18 @@ void
 RemoteClientSplitInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                                ClientProtocol &protocol) {
   protocol.fillPacketWithSplitMessage(packet, from, to1, to2);
+}
+
+RemoteClientMergeInstruction::RemoteClientMergeInstruction(
+        const Position &from1_, const Position &from2_, const Position &to_)
+        : from1(from1_), from2(from2_), to(to_) {}
+
+void RemoteClientMergeInstruction::makeAction(Game &game) {}
+
+void
+RemoteClientMergeInstruction::fillPacketWithInstructionsToSend(Packet &packet,
+                                                               ClientProtocol &protocol) {
+  protocol.fillPacketWithMergeMessage(packet, from1, from2, to);
 }
 
 

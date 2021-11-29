@@ -191,6 +191,25 @@ public:
   ~RemoteClientSplitInstruction() = default;
 };
 
+class RemoteClientMergeInstruction : public RemoteClientInstruction {
+  Position from1;
+  Position from2;
+  Position to;
+
+public:
+  RemoteClientMergeInstruction() = delete;
+
+  RemoteClientMergeInstruction(
+          const Position &from1_, const Position &from2_, const Position &to_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientMergeInstruction() = default;
+};
+
 class RemoteClientSameChessmanInstruction : public RemoteClientInstruction {
   std::list<Position> positions;
 

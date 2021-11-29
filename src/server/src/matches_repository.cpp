@@ -3,12 +3,13 @@
 #include <algorithm>
 #include "../../common/src/unique_ptr.h"
 
-MatchesRepository::MatchesRepository()
-        : created_matches(0), ptr_matches(), accepted_clients(0) {
+MatchesRepository::MatchesRepository(std::string board_filename)
+        : created_matches(0), ptr_matches(), accepted_clients(0),
+          board_filename(std::move(board_filename)) {
 }
 
 uint16_t MatchesRepository::createNewMatch() {
-  std::unique_ptr<Match> new_match_ptr = make_unique<Match>();
+  std::unique_ptr<Match> new_match_ptr = make_unique<Match>(board_filename);
   ptr_matches.insert(
           std::make_pair(created_matches, std::move(new_match_ptr)));
   ptr_matches[this->created_matches]->start();

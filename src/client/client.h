@@ -1,6 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_CLIENT_H
 #define QUANTUM_CHESS_PROJ_CLIENT_H
 
+#include "game/game.h"
 #include "communication/remote_clients_threads.h"
 #include "../common/src/socket.h"
 #include "../common/src/blocking_queue.h"

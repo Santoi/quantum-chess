@@ -5,8 +5,16 @@
 
 int main(int argc, char *argv[]) {
   try {
+    if (argc < 2)
+      throw std::invalid_argument("must indicate port");
+    std::string board_filename;
+    if (argc < 3)
+      board_filename = "default.txt";
+    else
+      board_filename = argv[2];
+    board_filename = "boards/" + board_filename;
     Server server(nullptr, argv[1]);
-    server.execute();
+    server.execute(board_filename);
   }
   catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;

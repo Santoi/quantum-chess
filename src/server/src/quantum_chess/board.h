@@ -8,6 +8,8 @@
 #include "chessman/chessman.h"
 #include "pseudo_random_coin.h"
 
+#define LOADER_COMMENT '#'
+
 class Chessman;
 
 class ChessmanContainer;
@@ -51,7 +53,7 @@ public:
   void addChessmanOfIn(const Position &initial, const Position &final);
 
   // Carga el tablero con las posiciones iniciales del ajedrez.
-  void load();
+  void load(const std::string &filename);
 
   // Devuelve true si el siguiente turno es de las blancas.
   bool isNextWhite() const;
@@ -64,7 +66,7 @@ public:
   void addChessmanIn(const Position &position, Chessman *chessman);
 
   void merge(const Position &initial1, const Position &initial2,
-             const Position &final);
+             const Position &final, bool player_white);
 
   bool isThere(Chessman *chessman);
 

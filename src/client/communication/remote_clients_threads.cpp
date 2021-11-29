@@ -45,7 +45,7 @@ void RemoteClientReceiver::run() {
   }
   catch (const SocketClosed &e) {
     if (!socket_closed)
-      std::cerr << "Error: se perdio conexion con el server" << std::endl;
+      std::cerr << "Error: connection with server lost" << std::endl;
   }
 }
 

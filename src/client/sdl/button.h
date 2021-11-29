@@ -3,19 +3,17 @@
 
 #include "pixel_coordinate.h"
 #include "text_entry_button.h"
+#include "drawable_button.h"
 #include <list>
 #include <string>
 #include <memory>
+
 
 class Renderer;
 
 class Button {
 private:
-    int x;
-    int y;
-    int height;
-    int width;
-    Renderer& renderer;
+    DrawableButton drawable;
 
 public:
 
@@ -25,11 +23,9 @@ public:
 
     virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
 
-    virtual void render() = 0;
+    void render();
 
     void setAreaAndPosition(int x, int y, int height, int width);
-
-    ~Button() = default;
 };
 
 class ConnectButton: public Button {
@@ -41,9 +37,7 @@ public:
 
     explicit ConnectButton(Renderer& renderer_, const std::list<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr);
 
-    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens);
-
-    void render();
+    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
 
     ~ConnectButton() = default;
 };

@@ -38,3 +38,8 @@ std::string &TextEntry::getText() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return text;
 }
+
+bool TextEntry::isEnabled() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return SDL_IsTextInputActive();
+}

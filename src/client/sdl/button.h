@@ -19,7 +19,8 @@ public:
 
     Button() = delete;
 
-    explicit Button(Renderer& renderer_);
+    Button(Renderer& renderer_, const std::string& not_pressed_file_name,
+           const std::string& pressed_file_name);
 
     virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
 
@@ -46,7 +47,7 @@ class PickMatchButton: public Button {
 
 public:
 
-    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens);
+    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
 
 };
 

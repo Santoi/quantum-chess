@@ -11,6 +11,10 @@
 #include "chessman_data.h"
 #include "../game/game.h"
 
+#define SPLIT_SOUND 0
+#define MERGE_SOUND 1
+#define CAPTURE_SOUND 2
+
 // TODO diferenciar las que llegan de las que se van.
 
 class ClientProtocol;
@@ -243,10 +247,6 @@ public:
   ~RemoteClientEntangledChessmanInstruction() = default;
 };
 
-#define SPLIT_SOUND 0
-#define MERGE_SOUND 1
-#define CAPTURE_SOUND 2
-
 class RemoteClientSoundInstruction
         : public RemoteClientInstruction {
   uint8_t sound;
@@ -262,6 +262,23 @@ public:
                                         ClientProtocol &protocol) override;
 
   ~RemoteClientSoundInstruction() = default;
+};
+
+class RemoteClientLogInstruction
+        : public RemoteClientInstruction {
+  std::list<std::string> log;
+
+public:
+  RemoteClientLogInstruction() = delete;
+
+  RemoteClientLogInstruction(std::list<std::string> &&log_);
+
+  void makeAction(Game &game);
+
+  void fillPacketWithInstructionsToSend(Packet &packet,
+                                        ClientProtocol &protocol) override;
+
+  ~RemoteClientLogInstruction() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

@@ -314,6 +314,15 @@ void ServerProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
   }
 }
 
+void ServerProtocol::fillPacketLogInstruction(Packet &packet,
+                                              std::list<std::string> &log) {
+  packet.addByte(LOG_PREFIX);
+  changeNumberToBigEndianAndAddToPacket(packet, log.size());
+  for (auto &entry: log) {
+    addStringAndItsLengthToPacket(packet, entry);
+  }
+}
+
 void ServerProtocol::sendPacketWithUpdates(Socket &socket,
                                            std::shared_ptr<Instruction> &instruct_ptr,
                                            const ClientData &client_data) {
@@ -332,6 +341,8 @@ void ServerProtocol::fillPacketWithSoundInfo(Packet &packet, uint8_t sound) {
   packet.addByte(SOUND_PREFIX);
   addNumber8ToPacket(packet, sound);
 }
+
+
 
 
 

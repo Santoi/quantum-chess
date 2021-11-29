@@ -23,6 +23,7 @@
 #define SPLIT_PREFIX 's'
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
+#define LOG_PREFIX 'j'
 
 class Instruction;
 
@@ -101,6 +102,9 @@ public:
                                                   const std::list<Position> &positions);
 
   void fillPacketWithSoundInfo(Packet &packet, uint8_t sound);
+
+  void fillPacketLogInstruction(Packet &packet,
+                                std::list<std::string> &log);
 
 private:
   //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.

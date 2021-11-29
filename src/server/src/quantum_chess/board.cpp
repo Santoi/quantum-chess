@@ -13,11 +13,12 @@
 #include <fstream>
 
 Board::Board()
-        : chessmen(), board(), next_white(true), coin(), log(),
+        : chessmen(), board(), next_white(true), coin(), entanglement_log(),
           finished(false) {}
 
 Board::Board(bool random)
-        : chessmen(), board(), next_white(true), coin(random), log(),
+        : chessmen(), board(), next_white(true), coin(random),
+          entanglement_log(),
           finished(false) {}
 
 void Board::addNewChessman(char chessman_, Position position_,
@@ -214,22 +215,22 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
   Chessman *pointer = nullptr;
   switch (chessman_) {
     case 'K':
-      pointer = new King(position_, white_, *this, log);
+      pointer = new King(position_, white_, *this, entanglement_log);
       break;
     case 'Q':
-      pointer = new Queen(position_, white_, *this, log);
+      pointer = new Queen(position_, white_, *this, entanglement_log);
       break;
     case 'T':
-      pointer = new Tower(position_, white_, *this, log);
+      pointer = new Tower(position_, white_, *this, entanglement_log);
       break;
     case 'B':
-      pointer = new Bishop(position_, white_, *this, log);
+      pointer = new Bishop(position_, white_, *this, entanglement_log);
       break;
     case 'H':
-      pointer = new Knight(position_, white_, *this, log);
+      pointer = new Knight(position_, white_, *this, entanglement_log);
       break;
     case 'P':
-      pointer = new Pawn(position_, white_, *this, log);
+      pointer = new Pawn(position_, white_, *this, entanglement_log);
       break;
     default:
       throw std::invalid_argument("that character doesnt represent any"
@@ -267,4 +268,15 @@ bool Board::flipACoin() {
 
 void Board::endGame() {
   finished = true;
+}
+
+void Board::pushToLog(std::string string) {
+  chess_log.push(std::move(string));
+}
+
+void Board::popLog(std::list<std::string> &popped) {
+  while (!chess_log.empty()) {
+    popped.push_back(std::move(chess_log.top()));
+    chess_log.pop();
+  }
 }

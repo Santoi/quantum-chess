@@ -283,6 +283,20 @@ void ClientProtocol::fillSoundInstruction(Socket &socket,
   ptr_instruction = std::make_shared<RemoteClientSoundInstruction>(sound);
 }
 
+
+void ClientProtocol::fillLogInstruction(Socket &socket,
+                                        std::shared_ptr<RemoteClientInstruction> &ptr) {
+  std::cout << "hola" << std::endl;
+  std::list<std::string> log;
+  uint16_t amount = getNumber16FromSocket(socket);
+  for (uint16_t i = 0; i < amount; i++) {
+    std::string message;
+    getMessageFromSocket(socket, message);
+    log.push_back(std::move(message));
+  }
+  ptr = std::make_shared<RemoteClientLogInstruction>(std::move(log));
+}
+
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
                                         ptr_instruction) {
@@ -322,9 +336,12 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case SOUND_PREFIX:
       fillSoundInstruction(socket, ptr_instruction);
       break;
+    case LOG_PREFIX:
+      fillLogInstruction(socket, ptr_instruction);
+      break;
   }
-
 }
+
 
 
 

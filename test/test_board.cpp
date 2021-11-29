@@ -10,7 +10,6 @@ TEST(Board, FiftyFiftyWithSameObject) {
     mean += board.flipACoin();
   }
   mean /= runs;
-  std::cout << mean << std::endl;
   EXPECT_TRUE(mean > 0.49 && mean < 0.51);
 }
 

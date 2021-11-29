@@ -115,7 +115,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.start();
   event_handler.start();
   // comment if you dont want to go crazy while debugging.
-  sound_handler.playMusic();
+  //sound_handler.playMusic();
 
   while (event_handler.isOpen()) {
     // Timing: calculate difference between this and previous frame

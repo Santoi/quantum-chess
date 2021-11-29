@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <stack>
 #include <memory>
 #include "position.h"
 #include "chessman/chessman.h"
@@ -24,8 +25,9 @@ class Board {
   std::map<const Position, Chessman *> board;
   bool next_white;
   PseudoRandomCoin coin;
-  EntanglementLog log;
+  EntanglementLog entanglement_log;
   bool finished;
+  std::stack<std::string> chess_log;
 
 
   std::unique_ptr<Chessman>
@@ -92,6 +94,10 @@ public:
   std::list<Position> getEntangledOf(const Position &position1);
 
   void endGame();
+
+  void pushToLog(std::string);
+
+  void popLog(std::list<std::string> &popped);
 };
 
 

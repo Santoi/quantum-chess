@@ -203,3 +203,18 @@ void
 RemoteClientSoundInstruction::fillPacketWithInstructionsToSend(
         Packet &packet,
         ClientProtocol &protocol) {}
+
+RemoteClientLogInstruction::RemoteClientLogInstruction(
+        std::list<std::string> &&log_)
+        : log(std::move(log_)) {
+}
+
+void RemoteClientLogInstruction::makeAction(Game &game) {
+  for (auto &entry: log) {
+    std::cout << entry << std::endl;
+  }
+}
+
+void
+RemoteClientLogInstruction::fillPacketWithInstructionsToSend(Packet &packet,
+                                                             ClientProtocol &protocol) {}

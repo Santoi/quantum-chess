@@ -94,23 +94,23 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 }
 
 
-void doRenderingLoopForSceneWithHandler(Scene* scene, HandlerThread& handler,
-                                        Renderer& renderer) {
-    while (handler.isOpen()) {
-        // Timing: calculate difference between this and previous frame
-        // in milliseconds
-        uint32_t before_render_ticks = SDL_GetTicks();
+void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
+                                        Renderer &renderer) {
+  while (handler.isOpen()) {
+    // Timing: calculate difference between this and previous frame
+    // in milliseconds
+    uint32_t before_render_ticks = SDL_GetTicks();
 
-        // Show rendered frame
-        renderer.render(scene);
+    // Show rendered frame
+    renderer.render(game);
 
-        uint32_t after_render_ticks = SDL_GetTicks();
-        uint32_t frame_delta = after_render_ticks - before_render_ticks;
+    uint32_t after_render_ticks = SDL_GetTicks();
+    uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
-        // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        if (frame_delta < 1000 / FRAME_RATE)
-            SDL_Delay(1000 / FRAME_RATE);
-    }
+    // Frame limiter: sleep for a little bit to not eat 100% of CPU
+    if (frame_delta < 1000 / FRAME_RATE)
+      SDL_Delay(1000 / FRAME_RATE);
+  }
 }
 
 void Client::execute(const char *host, const char *port,
@@ -122,32 +122,32 @@ void Client::execute(const char *host, const char *port,
   Window window;
   Renderer &renderer = window.renderer();
   LoginStateHandler login_state_handler;
-  LoginRenderer login_renderer(login_state_handler, window);
+//  LoginRenderer login_renderer(login_state_handler, window);
 
   LoginHandlerThread login_handler(login_state_handler);
   login_handler.start();
-  doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
+//  doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
 
   //if we are here the client is connected to a match
   Socket socket = login_state_handler.getClientSocket();
   client_nick_name = login_state_handler.getClientNickName();
-    /*
-     BlockingQueue<std::string> queue;
-    Login login(queue);
-    LoginHandlerThread login_thread(login);
-    login_thread.start();
+  /*
+   BlockingQueue<std::string> queue;
+  Login login(queue);
+  LoginHandlerThread login_thread(login);
+  login_thread.start();
 
-    std::shared_ptr<std::string> string_ptr;
-    queue.pop(string_ptr);
-    IP = string_ptr->stoi();
-    queue.pop(string_ptr);
-    PORT = string_ptr->stoi();
-    queue.pop(string_ptr);
-    client_nick_name = *string_ptr;
-    queue.pop(string_ptr);
-    MATCH_NUMBER = string_PTR->stoi();
-    welcomeClientAndAskForNickName();
-     */
+  std::shared_ptr<std::string> string_ptr;
+  queue.pop(string_ptr);
+  IP = string_ptr->stoi();
+  queue.pop(string_ptr);
+  PORT = string_ptr->stoi();
+  queue.pop(string_ptr);
+  client_nick_name = *string_ptr;
+  queue.pop(string_ptr);
+  MATCH_NUMBER = string_PTR->stoi();
+  welcomeClientAndAskForNickName();
+   */
   login_handler.join();
 
   RemoteClientSender sender_thread(socket, send);
@@ -164,7 +164,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.start();
   event_handler.start();
 
-  doRenderingLoopForSceneWithHandler(&game, event_handler, renderer);
+  doRenderingLoopForSceneWithHandler(game, event_handler, renderer);
 
   received.close();
   send.close();

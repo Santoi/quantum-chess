@@ -1,12 +1,16 @@
 #ifndef QUANTUM_CHESS_PROJ_DRAWABLE_BUTTON_H
 #define QUANTUM_CHESS_PROJ_DRAWABLE_BUTTON_H
 
+#include "texture_sprite.h"
+#include <vector>
 
 class Renderer;
 
 class DrawableButton {
 private:
     Renderer& renderer;
+    std::vector<TextureSprite> sprites;
+    bool is_pressed;
     int x;
     int y;
     int height;
@@ -16,7 +20,8 @@ public:
 
     DrawableButton() = delete;
 
-    explicit DrawableButton(Renderer& renderer_);
+    DrawableButton(Renderer& renderer_, const std::string& not_pressed_file_name,
+                   const std::string& pressed_file_name);
 
     void render();
 

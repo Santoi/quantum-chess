@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_CHESSMAN_H
 
 #include "../sdl/renderer.h"
-#include "../sdl/sprite.h"
+#include "../sdl/texture_sprite.h"
 #include "../communication/chessman_data.h"
 #include "../sdl/chessman_sprite_repository.h"
 #include <map>
@@ -13,9 +13,8 @@ class Renderer;
 class Chessman {
 private:
   Renderer &renderer;
-  Sprite & sprite_;
-  Sprite & fill;
-  std::map<std::string, std::pair<std::string, std::string>> image;
+  TextureSprite & sprite_;
+  TextureSprite & fill;
   double probability;
 
 public:

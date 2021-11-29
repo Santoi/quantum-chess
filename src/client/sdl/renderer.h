@@ -6,6 +6,7 @@
 #include <algorithm>
 
 class Sprite;
+
 class Game;
 
 class Renderer {
@@ -14,16 +15,23 @@ private:
 
 public:
   explicit Renderer(SDL2pp::Window &window);
-  SDL2pp::Renderer& renderer();
+
+  SDL2pp::Renderer &renderer();
 
   void render(Game &game);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)
   void copy(Sprite &sprite, int x, int y);
+
   void copy(Sprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
             int width, int height);
-  int getMinDimension();
+
+  int getMinDimension() const;
+
+  int getWidth() const;
+
+  int getHeight() const;
 };
 
 

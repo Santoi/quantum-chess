@@ -5,21 +5,25 @@
 #include <vector>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
+#include <mutex>
 
 class SoundHandler {
 private:
   SDL2pp::Mixer &mixer;
   SDL2pp::Music music;
   std::vector<SDL2pp::Chunk> chunks;
+  std::mutex mutex;
+  bool playing_music;
+  bool playing_sounds;
 
 public:
   SoundHandler() = delete;
 
   explicit SoundHandler(SDL2pp::Mixer &mixer);
 
-  void playMusic() const;
+  void playMusic();
 
-  void stopMusic() const;
+  void stopMusic();
 
   void playSplitSound() const;
 
@@ -27,8 +31,9 @@ public:
 
   void playCaptureSound() const;
 
-  void playNewClientSound() const;
+  void toggleMusic();
 
+  void toggleSounds();
 };
 
 

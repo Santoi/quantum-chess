@@ -13,7 +13,7 @@
 
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_, const SoundHandler &sound_handler_) :
+           ClientData::Role role_, SoundHandler &sound_handler_) :
         scale(window.renderer().getMinDimension()),
         board(window.renderer(), "img/stars.jpg", scale, scale),
         send_queue(send_queue_), mutex(), role(role_),
@@ -201,13 +201,26 @@ void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
 
 // Runs in action thread.
 void Game::playSplitSound() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   sound_handler.playSplitSound();
 }
 
 void Game::playMergeSound() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   sound_handler.playMergeSound();
 }
 
 void Game::playCaptureSound() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   sound_handler.playCaptureSound();
+}
+
+void Game::toggleSounds() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  sound_handler.toggleSounds();
+}
+
+// Todo aca esta bien?
+void Game::toggleMusic() {
+  sound_handler.toggleMusic();
 }

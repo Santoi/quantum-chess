@@ -12,7 +12,6 @@ EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
                                                      event() {}
 
 void EventHandlerThread::run() {
-  // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
   while (true) {
     SDL_WaitEvent(&event);
     switch (event.type) {
@@ -40,7 +39,6 @@ bool EventHandlerThread::isOpen() {
 }
 
 void EventHandlerThread::handleKeyDown() {
-  //game.playSplitSound();
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
       game.setDefaultBoard();
@@ -60,11 +58,17 @@ void EventHandlerThread::handleKeyDown() {
       split = false;
       break;
     }
+    case SDLK_n: {
+      game.toggleSounds();
+      break;
+    }
+    case SDLK_m: {
+      game.toggleMusic();
+    }
   }
 }
 
 void EventHandlerThread::handleKeyUp() {
-  //game.playCaptureSound();
   switch (event.key.keysym.sym) {
     case SDLK_LSHIFT: {
       if (!first_click)

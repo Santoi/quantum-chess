@@ -258,7 +258,10 @@ void Board::load(std::ifstream &file) {
     y = y - '0' - 1;
     if (color != 'W' && color != 'B')
       throw std::invalid_argument("invalid color");
-    addNewChessman(chessman, Position(x, y), color == 'W');
+    Position position(x, y);
+    if (getChessmanAt(position))
+      throw std::invalid_argument("position occupied twice loading file");
+    addNewChessman(chessman, position, color == 'W');
   }
 }
 

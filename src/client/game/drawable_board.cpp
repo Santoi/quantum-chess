@@ -11,18 +11,18 @@
 
 DrawableBoard::DrawableBoard(Window &window, const std::string &image,
                              int width, int height, Font &font) :
-    renderer(window.renderer()),
-    background(window.renderer(), image, width, height),
-    chessmen(), board(), positions(),
-    chessman_repository(renderer),
-    tile_repository(renderer),
-    text_repository(renderer, font),
-    current(false),
-    current_tile(std::make_pair<Position, DrawableTile>(Position(),
-                                                        DrawableTile(
-                                                            renderer,
-                                                            true,
-                                                            tile_repository))) {
+        renderer(window.renderer()),
+        background(window.renderer(), image, width, height),
+        chessmen(), board(), positions(),
+        chessman_repository(renderer),
+        tile_repository(renderer),
+        text_repository(renderer, font),
+        current(false),
+        current_tile(std::make_pair<Position, DrawableTile>(Position(),
+                                                            DrawableTile(
+                                                                    renderer,
+                                                                    true,
+                                                                    tile_repository))) {
   background.setBlendMode(SDL_BLENDMODE_BLEND);
   background.setAlpha(BACKGROUND_TRANSPARENCY);
   current_tile.second.loadTile(TileSpriteRepository::TILE_SELECTED);
@@ -37,15 +37,16 @@ DrawableBoard::DrawableBoard(Window &window, const std::string &image,
     Position row(-1, i);
     Position column(i, -1);
     positions.insert(
-        std::pair<const Position, DrawableText>(row, std::move(numbers)));
+            std::pair<const Position, DrawableText>(row, std::move(numbers)));
     positions.insert(
-        std::pair<const Position, DrawableText>(column, std::move(letters)));
+            std::pair<const Position, DrawableText>(column,
+                                                    std::move(letters)));
     for (size_t j = 0; j < 8; j++) {
       const Position position(i, j);
       DrawableTile tile(renderer, position.isEven(), tile_repository);
       board.insert(std::pair<const Position, DrawableTile>(position,
                                                            std::move(
-                                                               tile)));
+                                                                   tile)));
     }
   }
 }
@@ -67,8 +68,8 @@ void DrawableBoard::load(std::vector<ChessmanData> &chessman_data_vector) {
   for (auto &chessman_data: chessman_data_vector) {
     DrawableChessman chessman(renderer, chessman_repository, chessman_data);
     chessmen.insert(std::pair<const Position, DrawableChessman>
-                        (chessman_data.position,
-                         std::move(chessman)));
+                            (chessman_data.position,
+                             std::move(chessman)));
   }
 }
 
@@ -105,13 +106,11 @@ void DrawableBoard::mergeTile(const Position &pos) {
 void DrawableBoard::currentTile(const Position &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_tile.first = pos;
-  std::cout << "true" << std::endl;
   current = true;
 }
 
 void DrawableBoard::setDefault() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  std::cout << "false" << std::endl;
   current = false;
   for (auto &it: board) {
     it.second.loadTile(TileSpriteRepository::TILE_DEFAULT);

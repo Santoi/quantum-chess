@@ -14,7 +14,7 @@ class Scene {
 private:
   Window &window;
   Font &font;
-  Board &chess;
+  DrawableBoard &chess;
   DrawableContainer<DrawableChatMessage> chat;
   DrawableContainer<DrawableText> log;
   DrawableContainer<DrawableText> error_log;
@@ -26,7 +26,7 @@ private:
 
 
 public:
-  Scene(Window &window, Board &board, Font &font);
+  Scene(Window &window, DrawableBoard &board, Font &font);
 
   void render();
 

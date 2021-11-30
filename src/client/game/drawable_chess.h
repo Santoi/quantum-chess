@@ -4,13 +4,13 @@
 
 #include "../sdl/coordinate_transformer.h"
 
-class Board;
+class DrawableBoard;
 
 class DrawableChess {
-  Board &board;
+  DrawableBoard &board;
 
 public:
-  explicit DrawableChess(Board &board);
+  explicit DrawableChess(DrawableBoard &board);
 
   void render(CoordinateTransformer &transformer, int width,
               int height);

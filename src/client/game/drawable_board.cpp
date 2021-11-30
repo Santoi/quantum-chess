@@ -1,4 +1,4 @@
-#include "board.h"
+#include "drawable_board.h"
 #include "../communication/client_protocol.h"
 #include "../communication/chessman_data.h"
 #include "drawable_tile.h"
@@ -9,13 +9,18 @@
 
 #define BACKGROUND_TRANSPARENCY 0.4
 
-Board::Board(Window &window, const std::string &image,
-             int width, int height) : renderer(window.renderer()),
-                                      background(window.renderer(), image,
-                                                 width,
-                                                 height),
-                                      chessman_repository(renderer),
-                                      tile_repository(renderer) {
+DrawableBoard::DrawableBoard(Window &window, const std::string &image,
+                             int width, int height) : renderer(
+    window.renderer()),
+                                                      background(
+                                                          window.renderer(),
+                                                          image,
+                                                          width,
+                                                          height),
+                                                      chessman_repository(
+                                                          renderer),
+                                                      tile_repository(
+                                                          renderer) {
   background.setBlendMode(SDL_BLENDMODE_BLEND);
   background.setAlpha(BACKGROUND_TRANSPARENCY);
   for (size_t i = 0; i < 8; i++) {
@@ -24,13 +29,13 @@ Board::Board(Window &window, const std::string &image,
       DrawableTile tile(renderer, position.isEven(), tile_repository);
       board.insert(std::move(std::pair<const Position, DrawableTile>(position,
                                                                      std::move(
-                                                                             tile))));
+                                                                         tile))));
     }
   }
 }
 
 // TODO borrar
-void Board::render() {
+void DrawableBoard::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &it: board) {
     it.second.render(it.first.x(), it.first.y());
@@ -40,71 +45,71 @@ void Board::render() {
   }
 }
 
-void Board::load(std::vector<ChessmanData> &chessman_data_vector) {
+void DrawableBoard::load(std::vector<ChessmanData> &chessman_data_vector) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   chessmen.clear();
   for (auto &chessman_data: chessman_data_vector) {
     DrawableChessman chessman(renderer, chessman_repository, chessman_data);
     chessmen.insert(std::pair<const Position, DrawableChessman>
-                            (chessman_data.position,
-                             std::move(chessman)));
+                        (chessman_data.position,
+                         std::move(chessman)));
   }
 }
 
-void Board::moveTile(const Position &pos) {
+void DrawableBoard::moveTile(const Position &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_MOVE);
 }
 
-void Board::quantumTile(const Position &pos) {
+void DrawableBoard::quantumTile(const Position &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_QUANTUM);
 }
 
-void Board::entangledTile(const Position &pos) {
+void DrawableBoard::entangledTile(const Position &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_ENTANGLED);
 }
 
-void Board::splitTile(const Position &pos) {
+void DrawableBoard::splitTile(const Position &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_SPLIT);
 }
 
-void Board::mergeTile(const Position &pos) {
+void DrawableBoard::mergeTile(const Position &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_MERGE);
 }
 
-void Board::setDefault() {
+void DrawableBoard::setDefault() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &it: board) {
     it.second.loadTile(TileSpriteRepository::TILE_DEFAULT);
   }
 }
 
-std::map<const Position, DrawableTile> Board::getTiles() {
+std::map<const Position, DrawableTile> DrawableBoard::getTiles() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return board;
 }
 
-std::map<const Position, DrawableChessman> Board::getChessmen() {
+std::map<const Position, DrawableChessman> DrawableBoard::getChessmen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return chessmen;
 }
 
-TextureSprite &Board::getBackground() {
+TextureSprite &DrawableBoard::getBackground() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return background;
 }
 
-void Board::render(CoordinateTransformer &transformer, int width,
-                   int height) {
+void DrawableBoard::render(CoordinateTransformer &transformer, int width,
+                           int height) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &tile: board) {
     PixelCoordinate pixel(0, 0);

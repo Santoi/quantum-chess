@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_EVENT_HANDLER_THREAD_H
 
 #include "../game/game.h"
-#include "../game/board.h"
+#include "../game/drawable_board.h"
 #include "../../common/src/thread.h"
 #include "chat/text_entry.h"
 #include <SDL2/SDL.h>

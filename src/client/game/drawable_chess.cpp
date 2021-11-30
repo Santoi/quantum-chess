@@ -1,8 +1,8 @@
 #include "drawable_chess.h"
 #include "../sdl/pixel_coordinate.h"
-#include "board.h"
+#include "drawable_board.h"
 
-DrawableChess::DrawableChess(Board &board) : board(board) {}
+DrawableChess::DrawableChess(DrawableBoard &board) : board(board) {}
 
 void DrawableChess::render(CoordinateTransformer &transformer, int width,
                            int height) {

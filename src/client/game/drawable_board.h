@@ -1,5 +1,5 @@
-#ifndef QUANTUM_CHESS_PROJ_BOARD_H
-#define QUANTUM_CHESS_PROJ_BOARD_H
+#ifndef QUANTUM_CHESS_PROJ_DRAWABLE_BOARD_H
+#define QUANTUM_CHESS_PROJ_DRAWABLE_BOARD_H
 
 #include "drawable_chessman.h"
 #include "drawable_tile.h"
@@ -17,7 +17,7 @@
 
 class Renderer;
 
-class Board {
+class DrawableBoard {
 private:
   Renderer &renderer;
   TextureSprite background;
@@ -28,9 +28,10 @@ private:
   std::mutex mutex;
 
 public:
-  Board(Window &window, const std::string &image, int width, int height);
+  DrawableBoard(Window &window, const std::string &image, int width,
+                int height);
 
-  ~Board() = default;
+  ~DrawableBoard() = default;
 
   void render();
 
@@ -58,4 +59,4 @@ public:
 };
 
 
-#endif //QUANTUM_CHESS_PROJ_BOARD_H
+#endif //QUANTUM_CHESS_PROJ_DRAWABLE_BOARD_H

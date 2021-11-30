@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_GAME_H
 
 #include <vector>
-#include "board.h"
+#include "drawable_board.h"
 #include "../sdl/window.h"
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
@@ -22,7 +22,7 @@ class RemoteClientInstruction;
 class Game {
 private:
   int x_scale, y_scale;
-  Board board;
+  DrawableBoard board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
   CoordinateTransformer transformer;
   std::mutex mutex;
@@ -35,7 +35,7 @@ public:
 
   void setScale(int x_scale_, int y_scale_);
 
-  Board &getBoard();
+  DrawableBoard &getBoard();
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
 

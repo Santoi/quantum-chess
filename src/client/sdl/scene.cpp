@@ -3,7 +3,7 @@
 #include <utility>
 #include "window.h"
 #include "../sdl/chessman_sprite_repository.h"
-#include "../game/board.h"
+#include "../game/drawable_board.h"
 
 
 #define MAX_CHAT_MESSAGES 9
@@ -15,13 +15,13 @@
 #define MAX_CHAT_WIDTH 400
 #define CHAT_WIDTH 250
 
-Scene::Scene(Window &window, Board &board, Font &font)
-        : window(window), font(font), chess(board),
-          chat(MAX_CHAT_MESSAGES),
-          log(MAX_LOG_MESSAGES), error_log(
-                MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
-          current_message(1), mutex(),
-          text_repository(window.renderer(), font) {}
+Scene::Scene(Window &window, DrawableBoard &board, Font &font)
+    : window(window), font(font), chess(board),
+      chat(MAX_CHAT_MESSAGES),
+      log(MAX_LOG_MESSAGES), error_log(
+        MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
+      current_message(1), mutex(),
+      text_repository(window.renderer(), font) {}
 
 void Scene::addChatMessage(const std::string &nickname, const std::string &id,
                            const std::string &timestamp,

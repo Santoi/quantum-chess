@@ -74,4 +74,22 @@ donde:
 * ```POS_Y``` es la posicion en y, número de 1 a 8.
 * ```COLOR``` es un caracter que representa el color de la pieza, ```W``` para blancas y ```B``` para negras.
 
-Las lineas en blanco son ignoradas y se pueden insertar comentarios utilizando ```#``` como primer caracter de la linea.
+Las lineas en blanco son ignoradas y se pueden insertar comentarios utilizando ```#``` como primer caracter de la linea. Todos los caracteres deben ser ingresados en mayúsculas.
+
+Por ejemplo, si se carga un archivo como se muestra a continuación, se obtiene el siguiente tablero.
+
+    # White chessmen
+    TA1W
+    KE1W
+    PA2W
+    PG5W
+
+    # Black chessmen
+    KE7B
+    QC3B
+    BF1B
+
+
+<p align=center>
+    <img src="docs/images/example_file.png" alt="Tablero cargado con archivo"/>
+</p>

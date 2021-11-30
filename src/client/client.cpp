@@ -15,11 +15,12 @@
 
 #define FRAME_RATE 60
 #define FONT_SIZE 10
+#define MAX_CHAR_ENTRY 29
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
   std::map<uint16_t, std::vector<ClientData>> data =
-          protocol.receiveMatchesInfo(client_socket);
+      protocol.receiveMatchesInfo(client_socket);
   std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                " quieres entrar." << std::endl;
   std::cout << "Las partidas disponibles son" << std::endl;
@@ -110,9 +111,10 @@ void Client::execute(const char *host, const char *port,
   Scene scene(window, game.getBoard(), font);
   Chat chat(send, scene);
   ChessLog chess_log(scene);
+  TextEntry text_entry(MAX_CHAR_ENTRY);
 
   ActionThread action_thread(received, game, chat, chess_log);
-  EventHandlerThread event_handler(window, game, chat);
+  EventHandlerThread event_handler(window, game, chat, text_entry);
 
   receiver_thread.start();
   sender_thread.start();
@@ -128,6 +130,9 @@ void Client::execute(const char *host, const char *port,
 
     // Update chess dimensions to game
     game.setScale(scene.getChessWidth(), scene.getChessHeight());
+
+    // Get current message
+    scene.addCurrentMessage(text_entry.getText());
 
     // Show rendered frame
     renderer.render(scene);
@@ -166,7 +171,7 @@ bool Client::readCommand() {
       message += temp_message + " ";
     }
     send.push(std::make_shared<RemoteClientChatInstruction>(
-            message));
+        message));
 
   }
 
@@ -178,8 +183,8 @@ bool Client::readCommand() {
       throw ChessException("posicion invalida");
 
     send.push(std::make_shared<RemoteClientMoveInstruction>(
-            Position((uint8_t) x1 - 'A', (uint8_t) y1),
-            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
+        Position((uint8_t) x1 - 'A', (uint8_t) y1),
+        Position((uint8_t) x2 - 'A', (uint8_t) y2)));
   }
   return false;
 }

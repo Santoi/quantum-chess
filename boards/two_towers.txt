@@ -1,0 +1,6 @@
+# Only two towers, one of each team
+TA1W
+TA8B
+
+
+

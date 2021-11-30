@@ -33,6 +33,8 @@ public:
 
     void proccessTokens(std::list<std::string>&& tokens);
 
+    void setScale(const int& scale_);
+
     void tellRendererWhatToRender(LoginRenderer& login_renderer);
 
     Socket getClientSocket();

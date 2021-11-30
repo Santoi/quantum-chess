@@ -7,7 +7,7 @@ LoginRenderer::LoginRenderer(LoginStateHandler& login_state_handler_,
 }
 
 void LoginRenderer::setScale(const int& scale_) {
-    scale = scale_;
+    login_state_handler.setScale(scale_);
 }
 
 
@@ -22,8 +22,3 @@ void LoginRenderer::renderIPAndPortFields(ConnectButton& connect_button,
    connect_button.render();
   //...
 }
-
-void LoginRenderer::setScale(int scale_) {
-  scale = scale_;
-}
-

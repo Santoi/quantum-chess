@@ -2,12 +2,17 @@
 
 Button::Button(Renderer& renderer_, const std::string& not_pressed_file_name,
                const std::string& pressed_file_name)
-        :drawable(renderer_, not_pressed_file_name, pressed_file_name) {
+        :drawable(renderer_, not_pressed_file_name, pressed_file_name), scale(0) {
 }
 
 void Button::render() {
     drawable.render();
 }
+
+void Button::setScale(const int& scale_) {
+    scale = scale_;
+}
+
 
 void Button::setAreaAndPosition(int x_, int y_, int height_, int width_) {
     drawable.setAreaAndPosition(x_, y_, height_, width_);

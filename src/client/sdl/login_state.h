@@ -29,6 +29,8 @@ public:
 
     virtual void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) = 0;
 
+    void setScale(const int& scale_);
+
     virtual void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                 active_text_entries) = 0;
 

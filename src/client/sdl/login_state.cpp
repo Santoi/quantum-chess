@@ -5,6 +5,13 @@ LoginState::LoginState(Login& login_)
             :login(login_){
 }
 
+void LoginState::setScale(const int& scale_) {
+    for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); it++)
+        (*it)->setScale(scale_);
+    for (auto it = text_entry_buttons_ptr.begin(); it != text_entry_buttons_ptr.end(); it++)
+        (*it)->setScale(scale_);
+}
+
 
 NotConnectedToServerState::NotConnectedToServerState(Login& login_, Renderer& renderer_)
                             :LoginState(login_) {

@@ -14,6 +14,7 @@ class Renderer;
 class Button {
 private:
     DrawableButton drawable;
+    int scale;
 
 public:
 
@@ -23,6 +24,8 @@ public:
            const std::string& pressed_file_name);
 
     virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
+
+    void setScale(const int& scale_);
 
     void render();
 

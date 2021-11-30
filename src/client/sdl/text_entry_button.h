@@ -13,6 +13,7 @@ private:
     int width;
     int height;
     bool expecting_text;
+    int scale;
 
 public:
 
@@ -21,6 +22,8 @@ public:
     TextEntryButton(const std::string& button_name_);
 
     void setAreaAndPosition(int x_, int y_, int height_, int width_);
+
+    void setScale(const int& scale_);
 
     bool enableTextEntryIfClicked(const PixelCoordinate& pixel);
 

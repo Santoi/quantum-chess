@@ -110,6 +110,7 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (!game.isPixelInBoard(pixel)) {
+      // TODO notify user
       text_entry.enableEntry();
       return;
     }
@@ -123,7 +124,8 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       Position pos(0, i);
       coords.push_back(pos);
     }
-    if (!first_click) {
+    if (!first_click) { // actually, if this is the first click
+      game.currentTile(pixel);
       if (split)
         game.askSplitTiles(pixel);
       else if (merge)
@@ -135,7 +137,7 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
-    if (!second_click) {
+    if (!second_click) { // actually, if this is the second click
       if (split) {
         penultimate_click = last_click;
         last_click = pixel;
@@ -153,6 +155,7 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
+    // third click
     if (split) {
       game.splitChessman(penultimate_click, last_click, pixel);
       game.setDefaultBoard();

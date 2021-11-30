@@ -579,6 +579,8 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
       throw ChessException("pawn cannot split");
     case PAWN_CANT_MERGE:
       throw ChessException("pawn cannot merge");
+    case PAWN_CANT_EAT_LIKE_THAT:
+      throw ChessException("pawn cannot eat like that");
   }
 }
 

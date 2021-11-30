@@ -2,6 +2,7 @@
 #include <string>
 #include <utility>
 #include "pawn.h"
+#include "../../../../common/src/chess_exception.h"
 
 Pawn::Pawn(const Position &position, bool white_, Board &board_,
            EntanglementLog &entanglement_log_) :
@@ -57,6 +58,9 @@ Pawn::checkIsAValidMove(const Position &initial, const Position &final) {
           Chessman::checkIsAValidMove(initial, final);
   if (status)
     return status;
+  if (final.x() == initial.x() && board.getChessmanAt(final) &&
+      board.getChessmanAt(final)->isWhite() != white)
+    return PAWN_CANT_EAT_LIKE_THAT;
   std::vector<Position> path;
   std::pair<Position, Chessman *> chessman_in_path;
   calculatePath(initial, final, path);

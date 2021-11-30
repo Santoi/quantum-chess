@@ -20,5 +20,6 @@ void LoginRenderer::renderIPAndPortFields(Button& connect_button,
                                           TextEntryButton& port_text_entry) {
    connect_button.setAreaAndPosition(50, 50, scale*0.1, scale*0.3);
    connect_button.render();
-   //...
+   ip_text_entry.setAreaAndPosition(10, 10, scale*0.1, scale*0.8);
+   ip_text_entry.render();
 }

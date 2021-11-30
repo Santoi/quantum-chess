@@ -1,7 +1,8 @@
 #include "text_entry_button.h"
 
-TextEntryButton::TextEntryButton(const std::string& button_name_)
-                :button_name(button_name_), x(0), y(0), width(0), height(0), expecting_text(false) {
+TextEntryButton::TextEntryButton(Renderer& renderer_, const std::string& button_name_)
+                :button_name(button_name_), texture(renderer_, "img/buttons/White_text_field.png"),
+                 x(0), y(0), width(0), height(0), expecting_text(false) {
 }
 
 void TextEntryButton::setAreaAndPosition(int x_, int y_, int height_, int width_) {
@@ -9,6 +10,10 @@ void TextEntryButton::setAreaAndPosition(int x_, int y_, int height_, int width_
     y = y_;
     height = height_;
     width = width_;
+}
+
+void TextEntryButton::render() {
+    texture.render(x, y, width, height);
 }
 
 bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate& pixel) {

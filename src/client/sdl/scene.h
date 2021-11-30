@@ -3,21 +3,23 @@
 
 #include "../game/drawable_chess.h"
 #include "chat/drawable_container.h"
-#include "chat/chat_message.h"
+#include "chat/drawable_chat_message.h"
 
 class Window;
 
 class Scene {
 private:
   Window &window;
+  Font &font;
   DrawableChess chess;
-  DrawableContainer<ChatMessage> chat;
+  DrawableContainer<DrawableChatMessage> chat;
   DrawableContainer<DrawableText> log;
   DrawableContainer<DrawableText> error_log;
+  DrawableContainer<DrawableText> current_message;
   CoordinateTransformer transformer;
 
 public:
-  Scene(Window &window, Board &board);
+  Scene(Window &window, Board &board, Font &font);
 
   void render();
 

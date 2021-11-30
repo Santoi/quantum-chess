@@ -6,6 +6,8 @@ Chat::Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
         : send_queue(send_queue_), scene(scene) {}
 
 void Chat::sendMessage(const std::string &message) {
+  if (message.empty())
+    return;
   auto instruction = std::make_shared<RemoteClientChatInstruction>(message);
   send_queue.push(instruction);
 }

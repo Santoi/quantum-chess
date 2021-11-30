@@ -13,7 +13,7 @@
 
 #define MIN_CHAT_WIDTH 200
 #define MAX_CHAT_WIDTH 400
-#define CHAT_WIDTH 250
+#define CHAT_WIDTH 300
 
 Scene::Scene(Window &window, DrawableBoard &board, Font &font)
     : window(window), font(font), chess(board),

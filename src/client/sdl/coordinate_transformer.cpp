@@ -3,10 +3,9 @@
 void CoordinateTransformer::pixel2Position(const PixelCoordinate &pixel,
                                            Position &position, int width,
                                            int height) {
-  // TODO SANTI ACA PARCHEE PARA QUE ANDE. FIJATE SI LO PODES MEJORAR ?
-  int x = pixel.x(), y = pixel.y();
-  x = (x - (width / 2.0 - 4.0 * height / 10.0)) / (height / 10.0);
-  y = (y / (height / 10.0) - 8) * (-1) + 1;
+  // TODO emprolijar
+  int x = (pixel.x() - (width / 2.0 - 4.0 * height / 10.0)) / (height / 10.0);
+  int y = (pixel.y() / (height / 10.0) - 8) * (-1) + 1;
   Position pos(x, y);
   position = pos;
 }
@@ -14,10 +13,8 @@ void CoordinateTransformer::pixel2Position(const PixelCoordinate &pixel,
 void CoordinateTransformer::position2Pixel(const Position &position,
                                            PixelCoordinate &pixel, int width,
                                            int height) {
-
-  int x = position.x(), y = position.y();
-  x = height / 10 * x + width / 2 - 4 * height / 10;
-  y = (8 - y) * height / 10;
+  int x = height / 10 * position.x() + width / 2 - 4 * height / 10;
+  int y = (8 - position.y()) * height / 10;
   PixelCoordinate pc(x, y);
   pixel = pc;
 }

@@ -8,9 +8,9 @@ LoginState::LoginState(Login& login_)
 NotConnectedToServerState::NotConnectedToServerState(Login& login_, Renderer& renderer_)
                             :LoginState(login_) {
     text_entry_buttons_ptr.reserve(2);
-    std::unique_ptr<TextEntryButton> ip_ptr = make_unique<TextEntryButton>(renderer_, "IP");
+    std::unique_ptr<TextEntryButton> ip_ptr = make_unique<TextEntryButton>(renderer_, "img/buttons/ip_text.png");
     text_entry_buttons_ptr.push_back(std::move(ip_ptr));
-    std::unique_ptr<TextEntryButton> port_ptr = make_unique<TextEntryButton>(renderer_, "Port");
+    std::unique_ptr<TextEntryButton> port_ptr = make_unique<TextEntryButton>(renderer_, "img/buttons/port_text.png");
     text_entry_buttons_ptr.push_back(std::move(port_ptr));
     buttons_ptr.reserve(1);
     std::unique_ptr<Button> button_ptr = make_unique<ConnectButton>(renderer_, text_entry_buttons_ptr);
@@ -37,13 +37,16 @@ void NotConnectedToServerState::fillWithActiveTextEntryButtons(std::list<std::re
         active_text_entries.push_back(**it);
 }
 
-void NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
+int NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
     std::string ip = tokens.front(); //tokens strings has the same order as how TextEntryButton are in the list
                                     //(first the ip string, second the port string)
     tokens.pop_front();
+    std::cout << ip << std::endl;
     std::string port = tokens.front();
     tokens.pop_front();
+    std::cout << port << std::endl;
     login.connectToServer(ip, port);
+    return 1;
      //pop port token, ip, name...
      //tell login to connect to socket
 }
@@ -69,6 +72,6 @@ void NotConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::ref
 
 }
 
-void NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
-
+int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
+    return 2;
 }

@@ -1,10 +1,12 @@
 #include "login.h"
+#include <iostream>
 
 Login::Login()
         :client_socket_ptr(nullptr) {
 }
 
 void Login::connectToServer(const std::string& ip_, const std::string& port_) {
+    std::cout << "estamos en login!" << std::endl;
     const char* ip = ip_.c_str();
     const char* port = port_.c_str();
     Socket::createAConnectedSocket(client_socket_ptr, ip, port);

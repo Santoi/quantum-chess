@@ -3,7 +3,9 @@
 #include <mutex>
 #include <cstdint>
 
-TextEntry::TextEntry(uint8_t limit) : limit(limit) {}
+TextEntry::TextEntry(uint8_t limit) : limit(limit) {
+    text.reserve(limit);
+}
 
 void TextEntry::concat(const std::string &text_) {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -34,7 +36,7 @@ void TextEntry::disableEntry() {
   SDL_StopTextInput();
 }
 
-std::string &TextEntry::getText() {
+std::string TextEntry::getText() const {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return text;
 }

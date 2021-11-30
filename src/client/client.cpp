@@ -144,6 +144,8 @@ void Client::execute(const char *host, const char *port,
   LoginStateHandler login_state_handler(window.renderer());
   LoginRenderer login_renderer(login_state_handler, window);
   LoginHandlerThread login_handler(login_state_handler);
+
+
   login_handler.start();
   doRenderingLoopForSceneWithHandler(login_renderer, login_handler, renderer);
     while (login_handler.isOpen()) {

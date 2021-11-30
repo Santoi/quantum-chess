@@ -14,6 +14,11 @@ void LoginHandlerThread::run() {
         switch (event.type) {
             case SDL_QUIT:
                 return;
+            case SDL_TEXTINPUT:
+                if (expecting_text_entry)
+                    handleTextInput(event.text.text);
+                    //std::cout << event.text.text << std::endl;
+                //                text_entry.concat(event.text.text);
             case SDL_MOUSEBUTTONDOWN:
                 SDL_MouseButtonEvent mouse = event.button;
                 if (mouse.button == SDL_BUTTON_LEFT)
@@ -21,6 +26,13 @@ void LoginHandlerThread::run() {
         }
     }
     open = false;
+}
+
+void LoginHandlerThread::handleTextInput(const std::string& new_text) {
+    std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
+    login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
+    for (auto it = active_text_entries.begin(); it != active_text_entries.end(); it++)
+        it->get().concatIfEnabled(new_text);
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
@@ -35,22 +47,23 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
         it++;
     }
     if (it != active_buttons.end()) {
-        login_state_handler.proccessTokens(tokens);
-    } else {
+        login_state_handler.proccessTokens(std::move(tokens));
+    } else { //first disable all text entries
         std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
         login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
+        for (auto it2 = active_text_entries.begin(); it2 != active_text_entries.end(); it2++)
+            it2->get().disableTextEntry();
+        //enable text entry if pressed
         auto it2 = active_text_entries.begin();
         while (it2 != active_text_entries.end()) {
             if (it2->get().enableTextEntryIfClicked(pixel))
                 break;
             it2++;
         }
-        if (it2 != active_text_entries.end()) {
+        if (it2 != active_text_entries.end())
             expecting_text_entry = true;
-        } else { //click to nowhere in the screen, disable all text entries
-           for (it2 = active_text_entries.begin(); it2 != active_text_entries.end(); it2++)
-                it2->get().disableTextEntry();
-        }
+        else
+            expecting_text_entry = false;
     }
 }
 

@@ -4,20 +4,18 @@
 #include "pixel_coordinate.h"
 #include "texture_sprite.h"
 #include "renderer.h"
+#include "chat/text_entry.h"
+#include "drawable_text_entry_button.h"
 #include <string>
+#include <mutex>
 
 class TextEntryButton {
 private:
-    //has a text entry field
-    const std::string button_name;
-    TextureSprite text_texture;
-    TextureSprite name_texture;
-    int x;
-    int y;
-    int width;
-    int height;
-    bool expecting_text;
-    int scale;
+    TextEntry text_entry;
+    DrawableTextEntryButton drawable_text_button;
+    mutable std::mutex mutex;
+    bool expecting_text_entry;
+    std::string input_text;
 
 public:
 
@@ -30,6 +28,8 @@ public:
     bool enableTextEntryIfClicked(const PixelCoordinate& pixel);
 
     void render();
+
+    void concatIfEnabled(const std::string &text_);
 
     std::string getText() const;
 

@@ -25,6 +25,9 @@ public:
     ~LoginHandlerThread() = default;
 
 private:
+
+    void handleTextInput(const std::string& input);
+
     void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
 };
 

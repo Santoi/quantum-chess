@@ -39,6 +39,7 @@ Socket Socket::createAConnectedSocket(const char *host, const char *service) {
 
 void Socket::createAConnectedSocket(std::unique_ptr<Socket>& socket_ptr, const char* host, const char* service) {
     socket_ptr = make_unique<Socket>(host, service);
+    socket_ptr->connect();
 }
 
 Socket Socket::createAListeningSocket(const char *host, const char *service) {

@@ -33,7 +33,7 @@ public:
 
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>& active_text_entries);
 
-    void proccessTokens(std::list<std::string>& tokens);
+    void proccessTokens(std::list<std::string>&& tokens);
 
     void tellRendererWhatToRender(LoginRenderer& login_renderer);
 

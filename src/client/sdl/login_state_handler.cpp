@@ -1,5 +1,6 @@
 #include "login_state_handler.h"
 #include "../../common/src/unique_ptr.h"
+#include "../../common/src/network_address_info_exception.h"
 
 LoginStateHandler::LoginStateHandler(Renderer& renderer_)
                     :login(), renderer(renderer_),
@@ -23,15 +24,21 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_
 }
 
 
-void LoginStateHandler::proccessTokens(std::list<std::string>& tokens) {
+void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
     std::lock_guard<std::mutex> lock_guard(mutex);
-    current_state.reset();
-    current_state = make_unique<NotConnectedToMatchState>(login, renderer);
-    //try {
-     //   current_state->proccessTokens(std::move(tokens));
-    //} catch (...) {
-     //   //TODO handlear catchear excepción si es que, por ejemplo, se intenta conectar a una ip y puerto no válido
-   // }
+   // current_state.reset();
+    //current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+    try {
+        int aux = current_state->proccessTokens(std::move(tokens));
+        current_state.reset();
+        if (aux == 1)
+            current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+        //else if (aux == 2
+    } catch (const NetworkAddressInfoException& error) {
+        error.what();
+        std::cout << "estamos en error" << std::endl;
+    } catch (...) {
+    }
 }
 
 void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) {

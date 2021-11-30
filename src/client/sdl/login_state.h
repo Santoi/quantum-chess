@@ -32,7 +32,7 @@ public:
     virtual void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                 active_text_entries) = 0;
 
-    virtual void proccessTokens(std::list<std::string>&& tokens) = 0;
+    virtual int proccessTokens(std::list<std::string>&& tokens) = 0;
 
     ~LoginState() = default;
 };
@@ -51,7 +51,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                         active_text_entries) override;
 
-    void proccessTokens(std::list<std::string>&& tokens) override;
+    int proccessTokens(std::list<std::string>&& tokens) override;
 
     ~NotConnectedToServerState() = default;
 };
@@ -70,7 +70,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
     active_text_entries) override;
 
-    void proccessTokens(std::list<std::string>&& tokens) override;
+    int proccessTokens(std::list<std::string>&& tokens) override;
 
     ~NotConnectedToMatchState() = default;
 };

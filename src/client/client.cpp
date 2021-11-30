@@ -108,7 +108,7 @@ void Client::execute(const char *host, const char *port) {
   Window window;
   Renderer &renderer = window.renderer();
   Font font(FONT_SIZE);
-  Game game(window, send, role);
+  Game game(window, send, role, font);
   Scene scene(window, game.getBoard(), font);
   Chat chat(send, scene);
   ChessLog chess_log(scene);

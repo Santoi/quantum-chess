@@ -4,11 +4,11 @@
 #include <list>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
-                                       Chat &chat_)
-        : window(window), open(true), game(game), text_entry(29),
-          split(false), merge(false),
-          first_click(false), second_click(false), penultimate_click(),
-          last_click(), chat(chat_) {}
+                                       Chat &chat_, TextEntry &text_entry)
+    : window(window), open(true), game(game), text_entry(text_entry),
+      split(false), merge(false),
+      first_click(false), second_click(false), penultimate_click(),
+      last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
   while (true) {
@@ -21,11 +21,9 @@ void EventHandlerThread::run() {
         handleWindowChange(event.window);
         break;
       case SDL_TEXTINPUT:
-        std::cerr << "entre a text_input" << std::endl;
         handleTextInput(event.text.text);
         break;
       case SDL_KEYDOWN:
-        std::cerr << "entre a key down" << std::endl;
         handleKeyDown();
         break;
       case SDL_KEYUP:

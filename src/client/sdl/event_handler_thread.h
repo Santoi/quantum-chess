@@ -13,7 +13,7 @@ private:
   Window &window;
   std::atomic<bool> open;
   Game &game;
-  TextEntry text_entry; // TODO MATI: replace with chat class
+  TextEntry &text_entry;
   bool split, merge, first_click, second_click;
   PixelCoordinate penultimate_click;
   PixelCoordinate last_click;
@@ -34,7 +34,7 @@ private:
 
 public:
   explicit EventHandlerThread(Window &window, Game &game,
-                              Chat &chat_);
+                              Chat &chat_, TextEntry &text_entry);
 
   // Event loop
   void run() override;

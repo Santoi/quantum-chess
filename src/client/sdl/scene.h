@@ -35,9 +35,11 @@ public:
   void addChatMessage(const std::string &nickname, const std::string &id,
                       const std::string &timestamp, const std::string &message);
 
-  void addLogMessage(const std::string text);
+  void addLogMessage(std::string text);
 
-  void addErrorLogMessage(const std::string text);
+  void addErrorLogMessage(std::string text);
+
+  void addCurrentMessage(std::string text);
 };
 
 

@@ -1,4 +1,6 @@
 #include "scene.h"
+
+#include <utility>
 #include "window.h"
 
 #define MAX_CHAT_MESSAGES 5
@@ -7,13 +9,13 @@
 
 #define MIN_CHAT_WIDTH 200
 #define MAX_CHAT_WIDTH 400
-#define CHAT_WIDTH 200
+#define CHAT_WIDTH 250
 
 Scene::Scene(Window &window, Board &board, Font &font)
-        : window(window), font(font), chess(board),
-          chat(MAX_CHAT_MESSAGES),
-          log(MAX_LOG_MESSAGES), error_log(
-                MAX_ERROR_LOG_MESSAGES), current_message(1), mutex() {}
+    : window(window), font(font), chess(board),
+      chat(MAX_CHAT_MESSAGES),
+      log(MAX_LOG_MESSAGES), error_log(
+        MAX_ERROR_LOG_MESSAGES), current_message(1), mutex() {}
 
 void Scene::addChatMessage(const std::string &nickname, const std::string &id,
                            const std::string &timestamp,
@@ -24,38 +26,34 @@ void Scene::addChatMessage(const std::string &nickname, const std::string &id,
   chat.addDrawable(std::move(msg));
 }
 
-void Scene::addLogMessage(const std::string text) {
+void Scene::addLogMessage(std::string text) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  DrawableText msg(window.renderer(), font, text);
+  DrawableText msg(window.renderer(), font, std::move(text));
   log.addDrawable(std::move(msg));
 }
 
-void Scene::addErrorLogMessage(const std::string text) {
+void Scene::addErrorLogMessage(std::string text) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  DrawableText msg(window.renderer(), font, text);
+  DrawableText msg(window.renderer(), font, std::move(text));
   error_log.addDrawable(std::move(msg));
+}
+
+void Scene::addCurrentMessage(std::string text) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  DrawableText msg(window.renderer(), font, std::move(text));
+  current_message.addDrawable(std::move(msg));
 }
 
 void Scene::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   int width = window.getWidth(), height = window.getHeight();
-  float total_messages = MAX_CHAT_MESSAGES +
-                         MAX_LOG_MESSAGES +
-                         MAX_ERROR_LOG_MESSAGES +
-                         1; // +1 bc of current message
 
   chess.render(transformer, width - CHAT_WIDTH, height);
 
   error_log.render(width - CHAT_WIDTH, 0);
-  log.render(width - CHAT_WIDTH,
-             height *
-             ((MAX_ERROR_LOG_MESSAGES + MAX_LOG_MESSAGES) / total_messages));
-  chat.render(width - CHAT_WIDTH,
-              height *
-              ((MAX_ERROR_LOG_MESSAGES + MAX_LOG_MESSAGES + MAX_CHAT_MESSAGES) /
-               total_messages));
-  current_message.render(width - CHAT_WIDTH,
-                         height * (total_messages - 1) / total_messages);
+  log.render(width - CHAT_WIDTH, height / 2 - font.size() * 5);
+  chat.render(width - CHAT_WIDTH, height - font.size() * 5);
+  current_message.render(width - CHAT_WIDTH, height - font.size());
 }
 
 int Scene::getChatWidth() const {

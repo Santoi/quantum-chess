@@ -6,7 +6,7 @@
 
 class ChatInstruction : public Instruction {
 private:
-  const ClientData &instructor_data;
+  const ClientData instructor_data;
   std::string message;
 
 

@@ -6,6 +6,7 @@
 #include "instructions/instruction.h"
 #include "instructions/exit_instruction.h"
 #include "instructions/load_board_instruction.h"
+#include "instructions/chat_instruction.h"
 
 Match::Match(std::ifstream &file_)
         : Thread(), board(), clients(), listening_queues(),
@@ -33,8 +34,8 @@ ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
   return client_data;
 }
 
-void Match::addClientWithIdToListOfClients(Socket &&client_socket,
-                                           ClientData &client_data) {
+void Match::addClientToListOfClients(Socket &&client_socket,
+                                     ClientData &client_data) {
   BlockingQueue<Instruction> new_listening_queue;
   uint16_t client_id = client_data.id;
   listening_queues.insert(
@@ -48,8 +49,11 @@ void Match::addClientWithIdToListOfClients(Socket &&client_socket,
 
 void Match::addClientToMatch(Socket &&client_socket, uint16_t client_id) {
   ClientData client_data = askClientData(client_socket, client_id);
-  this->addClientWithIdToListOfClients(std::move(client_socket), client_data);
+  this->addClientToListOfClients(std::move(client_socket), client_data);
   this->clients.at(client_id).start();
+  std::shared_ptr<Instruction> chat_instruction = std::make_shared<ChatInstruction>(
+          client_data, "has joined");
+  match_updates_queue.push(chat_instruction);
   LoadBoardInstruction instruction;
   match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
 }

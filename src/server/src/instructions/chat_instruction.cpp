@@ -10,6 +10,7 @@ ChatInstruction::ChatInstruction(const ClientData &instructor_data_,
 void ChatInstruction::makeActionAndNotifyAllListeningQueues(
         std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
+  std::cout << "llegue" << std::endl;
   std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(
           instructor_data, std::move(this->message));
 

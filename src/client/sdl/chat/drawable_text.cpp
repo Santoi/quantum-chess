@@ -11,20 +11,20 @@
 
 DrawableText::DrawableText(TextSpriteRepository &text_sprite_repository_,
                            std::string text, char color) :
-        text_sprite_repository(text_sprite_repository_),
-        text(std::move(text)),
-        color(color) {}
+    text_sprite_repository(text_sprite_repository_),
+    text(std::move(text)),
+    color(color) {}
 
 DrawableText::DrawableText(DrawableText &&other) noexcept:
-        text_sprite_repository(other.text_sprite_repository),
-        text(std::move(other.text)),
-        color(other.color) {
+    text_sprite_repository(other.text_sprite_repository),
+    text(std::move(other.text)),
+    color(other.color) {
 }
 
 void DrawableText::render(int x, int y) {
   if (!text.empty()) {
     for (auto c: text) {
-      Sprite &sprite = text_sprite_repository.getChar(c);
+      Sprite &sprite = text_sprite_repository.getChar(c, color);
       sprite.render(x, y);
       x += sprite.width();
     }

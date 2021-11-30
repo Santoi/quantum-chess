@@ -5,6 +5,7 @@
 #include <SDL2pp/SDLTTF.hh>
 #include <string>
 #include <map>
+#include <list>
 
 class Font {
   SDL2pp::SDLTTF ttf;
@@ -26,6 +27,8 @@ public:
   SDL2pp::Surface renderItalicText(const std::string &text, char color = 'w');
 
   int size() const;
+
+  std::list<char> getColors() const;
 };
 
 

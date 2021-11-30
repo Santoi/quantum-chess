@@ -7,15 +7,15 @@
 #include "../sprite.h"
 
 class TextSpriteRepository {
-  std::map<char, Sprite> chars;
+  std::map<char, std::map<char, Sprite>> color_chars;
   Font &font;
 
 public:
   TextSpriteRepository(Renderer &renderer, Font &font);
 
-  void loadChars(Renderer &renderer);
+  void loadChars(Renderer &renderer, const std::list<char> &colors);
 
-  Sprite &getChar(char c);
+  Sprite &getChar(char character, char color);
 
   int getSpriteSize() const;
 };

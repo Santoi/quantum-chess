@@ -60,3 +60,11 @@ SDL2pp::Surface Font::renderItalicText(const std::string &text, char color) {
 int Font::size() const {
   return mono_font.GetHeight();
 }
+
+std::list<char> Font::getColors() const {
+  std::list<char> color_list;
+  for (auto color: colors) {
+    color_list.push_back(color.first);
+  }
+  return color_list;
+}

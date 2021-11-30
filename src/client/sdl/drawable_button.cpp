@@ -30,6 +30,6 @@ void DrawableButton::setAreaAndPosition(int x_, int y_, int height_, int width_)
 }
 
 bool DrawableButton::pixelIsOnButton(const PixelCoordinate &pixel_) {
-    return (pixel_.x() > (unsigned)(scale * x) && pixel_.x() < (unsigned)(scale * (x + width)) &&
-    pixel_.y() > (unsigned)(scale * y) && pixel_.y() < (unsigned)(scale * (y + height)));
+    return (pixel_.x() > (unsigned)(x) && pixel_.x() < (unsigned)(x + width) &&
+    pixel_.y() > (unsigned)(y) && pixel_.y() < (unsigned)(y + height));
 }

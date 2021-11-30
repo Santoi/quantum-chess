@@ -7,20 +7,24 @@ LoginStateHandler::LoginStateHandler(Renderer& renderer_)
 }
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
+    std::lock_guard<std::mutex> lock_guard(mutex);
     return current_state->clientIsConnectedToMatch();
 }
 
 void LoginStateHandler::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {
+    std::lock_guard<std::mutex> lock_guard(mutex);
     current_state->fillWithActiveButtons(active_buttons);
 }
 
 void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                         active_text_entries) {
+    std::lock_guard<std::mutex> lock_guard(mutex);
     current_state->fillWithActiveTextEntryButtons(active_text_entries);
 }
 
 
-void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
+void LoginStateHandler::proccessTokens(std::list<std::string>& tokens) {
+    std::lock_guard<std::mutex> lock_guard(mutex);
     current_state = make_unique<NotConnectedToMatchState>(login, renderer);
     //try {
      //   current_state->proccessTokens(std::move(tokens));
@@ -30,11 +34,13 @@ void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
 }
 
 void LoginStateHandler::setScale(const int& scale_) {
+    std::lock_guard<std::mutex> lock_guard(mutex);
     current_state->setScale(scale_);
 }
 
 
 void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) {
+    std::lock_guard<std::mutex> lock_guard(mutex);
     current_state->tellRendererWhatToRender(login_renderer);
 }
 

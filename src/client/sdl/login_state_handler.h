@@ -5,6 +5,7 @@
 #include "login_state.h"
 #include "renderer.h"
 #include <memory>
+#include <mutex>
 
 class LoginRenderer;
 
@@ -18,6 +19,7 @@ class LoginStateHandler {
 protected:
     Login login;
     Renderer& renderer;
+    std::mutex mutex;
     std::unique_ptr<LoginState> current_state;
 
 public:
@@ -31,7 +33,7 @@ public:
 
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>& active_text_entries);
 
-    void proccessTokens(std::list<std::string>&& tokens);
+    void proccessTokens(std::list<std::string>& tokens);
 
     void setScale(const int& scale_);
 

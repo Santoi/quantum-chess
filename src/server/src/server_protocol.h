@@ -14,7 +14,7 @@
 #define CHAT_PREFIX 'c'
 #define LOAD_BOARD_PREFIX 'l'
 #define EXIT_PREFIX 'e'
-#define SHORT_LOG_PREFIX 'x'
+#define EXCEPTION_PREFIX 'x'
 #define POSSIBLE_SPLITS_PREFIX 'b'
 #define POSSIBLE_MERGES_PREFIX 'd'
 #define SAME_CHESSMAN_PREFIX 'f'
@@ -23,6 +23,7 @@
 #define SPLIT_PREFIX 's'
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
+#define LOG_PREFIX 'j'
 
 class Instruction;
 
@@ -59,8 +60,10 @@ public:
   //Following the protocol, it fills the given packet with the chat message information. This
   //method is called by the ChatInstruction class that has the nick name and message to be
   //passed as parameters.
-  void fillPacketWithChatInfo(Packet &packet, const std::string &nick_name,
-                              const std::string &message);
+  void fillPacketWithChatInfo(Packet &packet,
+                              const ClientData &client_data,
+                              const std::string &message,
+                              const std::string &timestamp);
 
   //Following the protocol, it fills the given packet with the exit message information. This
   //method is called by the ExitInstruction class that has the nick name of the person leaving
@@ -74,7 +77,8 @@ public:
                               const std::vector<char> &characters,
                               const std::vector<bool> &colors,
                               const std::vector<Position> &positions,
-                              const std::vector<double> &probabilities);
+                              const std::vector<double> &probabilities,
+                              bool white);
 
   ~ServerProtocol() = default;
 
@@ -101,6 +105,9 @@ public:
                                                   const std::list<Position> &positions);
 
   void fillPacketWithSoundInfo(Packet &packet, uint8_t sound);
+
+  void fillPacketLogInstruction(Packet &packet,
+                                std::list<std::string> &log);
 
 private:
   //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.

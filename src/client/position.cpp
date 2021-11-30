@@ -3,18 +3,20 @@
 #include <iostream>
 #include <cstdint>
 
+#define BOUND 7
+
 Position::Position() : x_(0), y_(0) {}
 
-Position::Position(uint8_t x, uint8_t y) : x_(x), y_(y) {
+Position::Position(int8_t x, int8_t y) : x_(x), y_(y) {
   if (x > BOUND || y > BOUND)
     throw ChessException("Invalid position");
 }
 
-uint8_t Position::x() const {
+int8_t Position::x() const {
   return x_;
 }
 
-uint8_t Position::y() const {
+int8_t Position::y() const {
   return y_;
 }
 

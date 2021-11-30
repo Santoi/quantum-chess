@@ -160,12 +160,17 @@ void ClientProtocol::fillChatInstruction(Socket &socket,
                                          std::shared_ptr<RemoteClientInstruction> &
                                          ptr_instruction) {
   std::string nick_name;
+  uint16_t client_id;
   std::string message;
-  this->getMessageFromSocket(socket, nick_name);
-  this->getMessageFromSocket(socket, message);
-  ptr_instruction = make_unique<RemoteClientChatInstruction>(nick_name,
-                                                             message);
-
+  std::string timestamp;
+  client_id = getNumber16FromSocket(socket);
+  getMessageFromSocket(socket, nick_name);
+  getMessageFromSocket(socket, timestamp);
+  getMessageFromSocket(socket, message);
+  ptr_instruction = make_unique<RemoteClientChatInstruction>(client_id,
+                                                             nick_name,
+                                                             message,
+                                                             timestamp);
 }
 
 void ClientProtocol::fillExitInstruction(Socket &socket,
@@ -196,8 +201,9 @@ void ClientProtocol::fillLoadBoardInstruction(Socket &socket,
     double prob = ((double) prob_int + 1) / (UINT16_MAX + 1);
     chessman_data_vector.push_back(ChessmanData(position, chessman, prob));
   }
+  bool white = getNumber8FromSocket(socket);
   ptr_instruction = make_unique<RemoteClientLoadBoardInstruction>(
-          std::move(chessman_data_vector));
+          std::move(chessman_data_vector), white);
 }
 
 void ClientProtocol::fillShortLogInstruction(Socket &socket,
@@ -283,6 +289,19 @@ void ClientProtocol::fillSoundInstruction(Socket &socket,
   ptr_instruction = std::make_shared<RemoteClientSoundInstruction>(sound);
 }
 
+
+void ClientProtocol::fillLogInstruction(Socket &socket,
+                                        std::shared_ptr<RemoteClientInstruction> &ptr) {
+  std::list<std::string> log;
+  uint16_t amount = getNumber16FromSocket(socket);
+  for (uint16_t i = 0; i < amount; i++) {
+    std::string message;
+    getMessageFromSocket(socket, message);
+    log.push_back(std::move(message));
+  }
+  ptr = std::make_shared<RemoteClientLogInstruction>(std::move(log));
+}
+
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
                                         ptr_instruction) {
@@ -301,7 +320,7 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case EXIT_PREFIX:
       fillExitInstruction(socket, ptr_instruction);
       break;
-    case SHORT_LOG_PREFIX:
+    case EXCEPTION_PREFIX:
       fillShortLogInstruction(socket, ptr_instruction);
       break;
     case POSSIBLE_MOVES_PREFIX:
@@ -322,9 +341,12 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case SOUND_PREFIX:
       fillSoundInstruction(socket, ptr_instruction);
       break;
+    case LOG_PREFIX:
+      fillLogInstruction(socket, ptr_instruction);
+      break;
   }
-
 }
+
 
 
 

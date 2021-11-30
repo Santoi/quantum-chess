@@ -12,7 +12,8 @@ public:
     TILE_ENTANGLED,
     TILE_QUANTUM,
     TILE_SPLIT,
-    TILE_MERGE
+    TILE_MERGE,
+    TILE_SELECTED,
   } TileType;
 
 private:

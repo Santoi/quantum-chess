@@ -57,7 +57,7 @@ public:
   bool areEntangled(const Chessman &chessman1, const Chessman &chessman2);
 
   void getEntangledOf(const Chessman &chessman,
-                      std::list<const Chessman *> positions);
+                      std::list<const Chessman *> &positions);
 };
 
 

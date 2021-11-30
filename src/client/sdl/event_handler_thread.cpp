@@ -1,15 +1,15 @@
 #include "event_handler_thread.h"
 #include "../../common/src/chess_exception.h"
+#include "../game/chat.h"
 #include <iostream>
 #include <list>
 
-EventHandlerThread::EventHandlerThread(Game &game) : open(true), game(game),
-                                                     split(false), merge(false),
-                                                     first_click(false),
-                                                     second_click(false),
-                                                     penultimate_click(0, 0),
-                                                     last_click(0, 0),
-                                                     event() {}
+EventHandlerThread::EventHandlerThread(Window &window, Game &game,
+                                       Chat &chat_, TextEntry &text_entry)
+    : window(window), open(true), game(game), text_entry(text_entry),
+      split(false), merge(false),
+      first_click(false), second_click(false), penultimate_click(),
+      last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
   while (true) {
@@ -18,18 +18,25 @@ void EventHandlerThread::run() {
       case SDL_QUIT:
         open = false;
         return;
+      case SDL_WINDOWEVENT:
+        handleWindowChange(event.window);
+        break;
+      case SDL_TEXTINPUT:
+        handleTextInput(event.text.text);
+        break;
       case SDL_KEYDOWN:
         handleKeyDown();
         break;
       case SDL_KEYUP:
         handleKeyUp();
         break;
-      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
           handleMouseButtonLeft(mouse);
         else if (mouse.button == SDL_BUTTON_RIGHT)
           handleMouseButtonRight(mouse);
+        break;
     }
   }
 }
@@ -41,6 +48,7 @@ bool EventHandlerThread::isOpen() {
 void EventHandlerThread::handleKeyDown() {
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
+      text_entry.disableEntry();
       game.setDefaultBoard();
       first_click = false;
       second_click = false;
@@ -59,11 +67,26 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_n: {
-      game.toggleSounds();
+      if (!text_entry.isEnabled())
+        game.toggleSounds();
       break;
     }
     case SDLK_m: {
-      game.toggleMusic();
+      if (!text_entry.isEnabled())
+        game.toggleMusic();
+      break;
+    }
+    case SDLK_BACKSPACE: {
+      if (text_entry.isEnabled())
+        text_entry.backspace();
+      break;
+    }
+    case SDLK_RETURN: {
+      if (text_entry.isEnabled()) {
+        chat.sendMessage(text_entry.getText());
+        text_entry.clear();
+      }
+      break;
     }
   }
 }
@@ -86,15 +109,23 @@ void EventHandlerThread::handleKeyUp() {
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
-    if (!game.isPixelInBoard(pixel))
+    if (!game.isPixelInBoard(pixel)) {
+      // TODO notify user
+      text_entry.enableEntry();
       return;
+    }
+    if (text_entry.isEnabled()) {
+      text_entry.disableEntry();
+      return;
+    }
 
     std::list<Position> coords;
     for (size_t i = 0; i < 8; i++) {
       Position pos(0, i);
       coords.push_back(pos);
     }
-    if (!first_click) {
+    if (!first_click) { // actually, if this is the first click
+      game.currentTile(pixel);
       if (split)
         game.askSplitTiles(pixel);
       else if (merge)
@@ -106,7 +137,7 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
-    if (!second_click) {
+    if (!second_click) { // actually, if this is the second click
       if (split) {
         penultimate_click = last_click;
         last_click = pixel;
@@ -124,23 +155,21 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
-    if (second_click) {
-      if (split) {
-        game.splitChessman(penultimate_click, last_click, pixel);
-        game.setDefaultBoard();
-        first_click = false;
-        second_click = false;
-        split = false;
-      }
-      if (merge) {
-        game.mergeChessman(penultimate_click, last_click, pixel);
-        game.setDefaultBoard();
-        first_click = false;
-        second_click = false;
-        merge = false;
-      }
+    // third click
+    if (split) {
+      game.splitChessman(penultimate_click, last_click, pixel);
+      game.setDefaultBoard();
+      first_click = false;
+      second_click = false;
+      split = false;
     }
-
+    if (merge) {
+      game.mergeChessman(penultimate_click, last_click, pixel);
+      game.setDefaultBoard();
+      first_click = false;
+      second_click = false;
+      merge = false;
+    }
   }
   catch (const ChessException &e) {
     std::cerr << e.what() << std::endl;
@@ -149,9 +178,33 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
 
 void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
   PixelCoordinate pixel(mouse.x, mouse.y);
+  if (!game.isPixelInBoard(pixel)) {
+    text_entry.disableEntry();
+    return;
+  }
   // board is set default here because is needed to color the two at the same
   // time.
   game.setDefaultBoard();
   game.askEntangledTiles(pixel);
   game.askQuantumTiles(pixel);
+}
+
+void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
+  if (window_event.event == SDL_WINDOWEVENT_RESIZED) {
+    // TODO solo anda en el de santi
+    window.setMaxHeight(window_event.data1 / window.getMinRatio());
+    // TODO santi ver esto del resize
+    /*if (window_event.data1 < window_event.data2 / window.getMinRatio())
+      window.setSize(window_event.data2 * window.getMinRatio(),
+                     window_event.data2);*/
+  }
+  // TODO: fix fullscreen // solo se rompe en el de santi
+}
+
+void EventHandlerThread::handleTextInput(const std::string &text) {
+  if (text_entry.isEnabled())
+    if (!text_entry.concat(text)) {
+      chat.sendMessage(text_entry.getText());
+      text_entry.clear();
+    }
 }

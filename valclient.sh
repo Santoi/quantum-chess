@@ -1,4 +1,2 @@
-valgrind ./build/src/client/client localhost 3643
-
-
+valgrind ./build/src/client/client "$1" "$2"
 

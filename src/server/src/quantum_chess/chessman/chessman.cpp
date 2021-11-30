@@ -46,10 +46,14 @@ bool Chessman::move(const Position &initial, const Position &final) {
   // Measure solved from here.
   // If there is final chessman, then is removed of the board.
   if (final_chessman) {
-    if (final_chessman->charId() == 'K')
+    if (final_chessman->charId() == 'K') {
+      std::string color = white ? "white" : "black";
+      board.pushToLog("End of the game, " + color + " wins");
       board.endGame();
+    }
     board.removeChessmanOf(final);
     capture = true;
+    board.pushToLog(final.print() + " was captured");
   }
 
   // If there is a chessman in path then entangle.
@@ -63,6 +67,7 @@ bool Chessman::move(const Position &initial, const Position &final) {
     initial_qp_it->setPosition(final);
     board.addChessmanOfIn(initial, final);
   }
+  board.pushToLog(initial.print() + " moved to " + final.print());
   return capture;
 }
 
@@ -103,6 +108,8 @@ void Chessman::split(const Position &initial, const Position &final1,
   entanglement_log.addEntanglementsOfTo(*initial_qp_it, *new_qp_it);
 
   board.addChessmanOfIn(initial, final1, final2);
+  board.pushToLog(initial.print() + " split to " + final1.print() + " and " +
+                  final2.print());
 }
 
 void Chessman::merge(const Position &initial1, const Position &initial2,
@@ -154,6 +161,8 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
   board.removeChessmanOf(initial1);
   board.removeChessmanOf(initial2);
   board.addChessmanIn(final, this);
+  board.pushToLog(initial1.print() + " and " + initial2.print() +
+                  " merged into " + final.print());
 }
 
 void Chessman::measure(const Position &position) {
@@ -177,7 +186,10 @@ void Chessman::measure(const Position &position) {
         board.removeChessmanOf(Position(*position_qp_it));
     }
     positions.erase(++positions.begin(), positions.end());
-  } else if (position_qp_it != positions.end()) {
+    board.pushToLog(position.print() + " measured, was there");
+    return;
+  }
+  if (position_qp_it != positions.end()) {
     /* If is not real, then delete only it, un entangling
      * and measuring other. */
     measureOthers(*position_qp_it);
@@ -189,6 +201,8 @@ void Chessman::measure(const Position &position) {
          position_qp_it != positions.end(); ++position_qp_it) {
       position_qp_it->setProb(position_qp_it->getProb() / (1 - prob));
     }
+    board.pushToLog(position.print() + " measured, was not there");
+    return;
   }
 }
 
@@ -565,6 +579,8 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
       throw ChessException("pawn cannot split");
     case PAWN_CANT_MERGE:
       throw ChessException("pawn cannot merge");
+    case PAWN_CANT_EAT_LIKE_THAT:
+      throw ChessException("pawn cannot eat like that");
   }
 }
 

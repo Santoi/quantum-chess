@@ -14,16 +14,17 @@
 #define TEAL {0x00, 0xff, 0xff}
 
 
-Font::Font(int ptx, int index) : regular_font("fonts/font-regular.ttf", ptx,
-                                              index),
-                                 mono_font("fonts/erusfont.pcf",
-                                           ptx,
-                                           index),
-                                 bold_font("fonts/erusfontbold.pcf",
-                                           ptx, index),
-                                 italic_font(
-                                     "fonts/font-italic.ttf", ptx,
-                                     index) {
+Font::Font(int ptx, int index)
+    : ttf(), regular_font("fonts/font-regular.ttf", ptx,
+                          index),
+      mono_font("fonts/erusfont.pcf",
+                ptx,
+                index),
+      bold_font("fonts/erusfontbold.pcf",
+                ptx, index),
+      italic_font(
+          "fonts/font-italic.ttf", ptx,
+          index) {
   colors = {
       {'k', BLACK},
       {'w', WHITE},
@@ -58,4 +59,12 @@ SDL2pp::Surface Font::renderItalicText(const std::string &text, char color) {
 
 int Font::size() const {
   return mono_font.GetHeight();
+}
+
+std::list<char> Font::getColors() const {
+  std::list<char> color_list;
+  for (auto color: colors) {
+    color_list.push_back(color.first);
+  }
+  return color_list;
 }

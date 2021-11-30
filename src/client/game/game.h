@@ -2,10 +2,10 @@
 #define QUANTUM_CHESS_PROJ_GAME_H
 
 #include <vector>
+#include "drawable_board.h"
+#include "../sdl/window.h"
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
-#include "../sdl/window.h"
-#include "board.h"
 #include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"
@@ -21,20 +21,22 @@ class RemoteClientInstruction;
 
 class Game {
 private:
-  int scale;
-  Board board;
+  int x_scale, y_scale;
+  DrawableBoard board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  std::map<const PixelCoordinate, TextureSprite> sprites;
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
   SoundHandler &sound_handler;
 
 public:
-  Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, SoundHandler &sound_handler_);
+  Game(Window &window,
+       BlockingQueue<RemoteClientInstruction> &send_queue_,
+       ClientData::Role role_, Font &font);
 
-  void setScale(int scale_);
+  void setScale(int x_scale_, int y_scale_);
+
+  DrawableBoard &getBoard();
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
 
@@ -51,10 +53,6 @@ public:
   void mergeTiles(const std::list<Position> &positions);
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
-
-  void loadSprite(TextureSprite &sprite, int x, int y);
-
-  void render();
 
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
@@ -86,6 +84,8 @@ public:
   void toggleSounds();
 
   void toggleMusic();
+
+  void currentTile(const PixelCoordinate &coordinate);
 };
 
 

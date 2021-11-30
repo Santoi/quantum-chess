@@ -234,16 +234,19 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
 }
 
 void ServerProtocol::fillPacketWithChatInfo(Packet &packet,
-                                            const std::string &nick_name,
-                                            const std::string &message) {
+                                            const ClientData &client_data,
+                                            const std::string &message,
+                                            const std::string &timestamp) {
   packet.addByte(CHAT_PREFIX);
-  this->addStringAndItsLengthToPacket(packet, nick_name);
-  this->addStringAndItsLengthToPacket(packet, message);
+  changeNumberToBigEndianAndAddToPacket(packet, client_data.id);
+  addStringAndItsLengthToPacket(packet, client_data.name);
+  addStringAndItsLengthToPacket(packet, timestamp);
+  addStringAndItsLengthToPacket(packet, message);
 }
 
 void ServerProtocol::fillPacketWithExceptionInfo(Packet &packet,
                                                  const std::string &message) {
-  packet.addByte(SHORT_LOG_PREFIX);
+  packet.addByte(EXCEPTION_PREFIX);
   this->addStringAndItsLengthToPacket(packet, message);
 }
 
@@ -251,7 +254,8 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
                                                  const std::vector<char> &characters,
                                                  const std::vector<bool> &colors,
                                                  const std::vector<Position> &positions,
-                                                 const std::vector<double> &probabilities) {
+                                                 const std::vector<double> &probabilities,
+                                                 bool white) {
   packet.addByte(LOAD_BOARD_PREFIX);
   packet.addByte(characters.size());
   for (uint16_t i = 0; i < characters.size(); i++) {
@@ -262,6 +266,7 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
     uint16_t prob_int = probabilities[i] * (UINT16_MAX + 1) - 1;
     changeNumberToBigEndianAndAddToPacket(packet, prob_int);
   }
+  addNumber8ToPacket(packet, white);
 }
 
 void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,
@@ -314,6 +319,15 @@ void ServerProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
   }
 }
 
+void ServerProtocol::fillPacketLogInstruction(Packet &packet,
+                                              std::list<std::string> &log) {
+  packet.addByte(LOG_PREFIX);
+  changeNumberToBigEndianAndAddToPacket(packet, log.size());
+  for (auto &entry: log) {
+    addStringAndItsLengthToPacket(packet, entry);
+  }
+}
+
 void ServerProtocol::sendPacketWithUpdates(Socket &socket,
                                            std::shared_ptr<Instruction> &instruct_ptr,
                                            const ClientData &client_data) {
@@ -332,6 +346,8 @@ void ServerProtocol::fillPacketWithSoundInfo(Packet &packet, uint8_t sound) {
   packet.addByte(SOUND_PREFIX);
   addNumber8ToPacket(packet, sound);
 }
+
+
 
 
 

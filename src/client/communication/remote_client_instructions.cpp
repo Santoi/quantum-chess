@@ -2,29 +2,36 @@
 #include "client_protocol.h"
 #include "../position.h"
 #include "../game/game.h"
+#include "../game/chat.h"
+#include "../game/error_log.h"
+#include "../game/chess_log.h"
+#include "../game/turn_log.h"
 #include <iostream>
-
-
-RemoteClientInstruction::RemoteClientInstruction(
-        const std::string &instructor_nick_name)
-        : instructor_nick_name(instructor_nick_name) {
-}
+#include <utility>
 
 void RemoteClientInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                                ClientProtocol &protocol) {
 
 }
 
+RemoteClientChatInstruction::RemoteClientChatInstruction(std::string message_) :
+        client_id(0), nickname(), message(message_), timestamp() {}
 
-RemoteClientChatInstruction::RemoteClientChatInstruction(
-        const std::string &nick_name,
-        const std::string &message)
-        : RemoteClientInstruction(nick_name), message(message) {
+
+RemoteClientChatInstruction::RemoteClientChatInstruction(uint16_t client_id,
+                                                         std::string nick_name,
+                                                         std::string message,
+                                                         std::string timestamp)
+        : client_id(client_id), nickname(std::move(nick_name)),
+          message(std::move(message)),
+          timestamp(std::move(timestamp)) {
 }
 
-void RemoteClientChatInstruction::makeAction(Game &game) {
-  std::cout << this->instructor_nick_name << " envia: " << this->message
-            << std::endl;
+void RemoteClientChatInstruction::makeAction(Game &game, Chat &chat,
+                                             ChessLog &chess_log,
+                                             ErrorLog &error_log,
+                                             TurnLog &turn_log) {
+  chat.addMessage(client_id, nickname, message, timestamp);
 }
 
 void
@@ -33,29 +40,41 @@ RemoteClientChatInstruction::fillPacketWithInstructionsToSend(Packet &packet,
   protocol.fillPacketWithChatMessage(packet, message);
 }
 
+// TODO hacer como los del chat
 RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(
         const std::string &nick_name)
-        : RemoteClientInstruction(nick_name) {
+        : nickname(nick_name) {
 }
 
-void RemoteClientExitMessageInstruction::makeAction(Game &game) {
-  std::cout << this->instructor_nick_name << " se fue de la partida."
+void RemoteClientExitMessageInstruction::makeAction(Game &game, Chat &chat,
+                                                    ChessLog &chess_log,
+                                                    ErrorLog &error_log,
+                                                    TurnLog &turn_log) {
+  std::cout << nickname << " se fue de la partida."
             << std::endl;
 }
 
 RemoteClientLoadBoardInstruction::RemoteClientLoadBoardInstruction(
-        std::vector<ChessmanData> &&chessman_data_vector_) :
-        chessman_data_vector(std::move(chessman_data_vector_)) {}
+        std::vector<ChessmanData> &&chessman_data_vector_, bool next_white_) :
+        chessman_data_vector(std::move(chessman_data_vector_)),
+        next_white(next_white_) {}
 
-void RemoteClientLoadBoardInstruction::makeAction(Game &game) {
+void RemoteClientLoadBoardInstruction::makeAction(Game &game, Chat &chat,
+                                                  ChessLog &chess_log,
+                                                  ErrorLog &error_log,
+                                                  TurnLog &turn_log) {
   game.load(chessman_data_vector);
+  turn_log.changeTurn(next_white);
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(
         const Position &initial_,
         const Position &final_) : initial(initial_), final(final_) {}
 
-void RemoteClientMoveInstruction::makeAction(Game &game) {}
+void RemoteClientMoveInstruction::makeAction(Game &game, Chat &chat,
+                                             ChessLog &chess_log,
+                                             ErrorLog &error_log,
+                                             TurnLog &turn_log) {}
 
 void
 RemoteClientMoveInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -67,8 +86,11 @@ RemoteClientExceptionInstruction::RemoteClientExceptionInstruction(
         const std::string &message)
         : message(message) {}
 
-void RemoteClientExceptionInstruction::makeAction(Game &game) {
-  std::cout << "Error: " << this->message << std::endl;
+void RemoteClientExceptionInstruction::makeAction(Game &game, Chat &chat,
+                                                  ChessLog &chess_log,
+                                                  ErrorLog &error_log,
+                                                  TurnLog &turn_log) {
+  error_log.addMessage(message);
 }
 
 void RemoteClientExceptionInstruction::fillPacketWithInstructionsToSend(
@@ -79,7 +101,10 @@ RemoteClientPossibleMovesInstruction::RemoteClientPossibleMovesInstruction
         (std::list<Position> &&positions_) :
         positions(std::move(positions_)) {}
 
-void RemoteClientPossibleMovesInstruction::makeAction(Game &game) {
+void RemoteClientPossibleMovesInstruction::makeAction(Game &game, Chat &chat,
+                                                      ChessLog &chess_log,
+                                                      ErrorLog &error_log,
+                                                      TurnLog &turn_log) {
   game.moveTiles(positions);
 }
 
@@ -94,7 +119,10 @@ RemoteClientPossibleSplitsInstruction::RemoteClientPossibleSplitsInstruction
         (std::list<Position> &&positions_) :
         positions(std::move(positions_)) {}
 
-void RemoteClientPossibleSplitsInstruction::makeAction(Game &game) {
+void RemoteClientPossibleSplitsInstruction::makeAction(Game &game, Chat &chat,
+                                                       ChessLog &chess_log,
+                                                       ErrorLog &error_log,
+                                                       TurnLog &turn_log) {
   game.splitTiles(positions);
 }
 
@@ -110,7 +138,10 @@ RemoteClientPossibleMergesInstruction::RemoteClientPossibleMergesInstruction
          &&positions_) :
         positions(std::move(positions_)) {}
 
-void RemoteClientPossibleMergesInstruction::makeAction(Game &game) {
+void RemoteClientPossibleMergesInstruction::makeAction(Game &game, Chat &chat,
+                                                       ChessLog &chess_log,
+                                                       ErrorLog &error_log,
+                                                       TurnLog &turn_log) {
   game.mergeTiles(positions);
 }
 
@@ -130,7 +161,10 @@ RemoteClientSplitInstruction::RemoteClientSplitInstruction(
         const Position &from_, const Position &to1_, const Position &to2_)
         : from(from_), to1(to1_), to2(to2_) {}
 
-void RemoteClientSplitInstruction::makeAction(Game &game) {}
+void RemoteClientSplitInstruction::makeAction(Game &game, Chat &chat,
+                                              ChessLog &chess_log,
+                                              ErrorLog &error_log,
+                                              TurnLog &turn_log) {}
 
 void
 RemoteClientSplitInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -142,7 +176,10 @@ RemoteClientMergeInstruction::RemoteClientMergeInstruction(
         const Position &from1_, const Position &from2_, const Position &to_)
         : from1(from1_), from2(from2_), to(to_) {}
 
-void RemoteClientMergeInstruction::makeAction(Game &game) {}
+void RemoteClientMergeInstruction::makeAction(Game &game, Chat &chat,
+                                              ChessLog &chess_log,
+                                              ErrorLog &error_log,
+                                              TurnLog &turn_log) {}
 
 void
 RemoteClientMergeInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -155,7 +192,10 @@ RemoteClientSameChessmanInstruction::RemoteClientSameChessmanInstruction
         (std::list<Position> &&positions_) :
         positions(std::move(positions_)) {}
 
-void RemoteClientSameChessmanInstruction::makeAction(Game &game) {
+void RemoteClientSameChessmanInstruction::makeAction(Game &game, Chat &chat,
+                                                     ChessLog &chess_log,
+                                                     ErrorLog &error_log,
+                                                     TurnLog &turn_log) {
   game.quantumTiles(positions);
 }
 
@@ -170,7 +210,11 @@ RemoteClientEntangledChessmanInstruction::RemoteClientEntangledChessmanInstructi
         (std::list<Position>
          &&positions_) : positions(std::move(positions_)) {}
 
-void RemoteClientEntangledChessmanInstruction::makeAction(Game &game) {
+void
+RemoteClientEntangledChessmanInstruction::makeAction(Game &game, Chat &chat,
+                                                     ChessLog &chess_log,
+                                                     ErrorLog &error_log,
+                                                     TurnLog &turn_log) {
   game.entangledTiles(positions);
 }
 
@@ -185,7 +229,10 @@ RemoteClientEntangledChessmanInstruction::fillPacketWithInstructionsToSend(
 RemoteClientSoundInstruction::RemoteClientSoundInstruction(uint8_t sound_) :
         sound(sound_) {}
 
-void RemoteClientSoundInstruction::makeAction(Game &game) {
+void RemoteClientSoundInstruction::makeAction(Game &game, Chat &chat,
+                                              ChessLog &chess_log,
+                                              ErrorLog &error_log,
+                                              TurnLog &turn_log) {
   switch (sound) {
     case SPLIT_SOUND:
       game.playSplitSound();
@@ -203,3 +250,24 @@ void
 RemoteClientSoundInstruction::fillPacketWithInstructionsToSend(
         Packet &packet,
         ClientProtocol &protocol) {}
+
+RemoteClientLogInstruction::RemoteClientLogInstruction(
+        std::list<std::string> &&log_)
+        : log(std::move(log_)) {
+}
+
+void RemoteClientLogInstruction::makeAction(Game &game, Chat &chat,
+                                            ChessLog &chess_log,
+                                            ErrorLog &error_log,
+                                            TurnLog &turn_log) {
+  for (auto &entry: log) {
+    chess_log.addMessage(entry);
+  }
+  error_log.clear();
+}
+
+void
+RemoteClientLogInstruction::fillPacketWithInstructionsToSend(Packet &packet,
+                                                             ClientProtocol &protocol) {}
+
+

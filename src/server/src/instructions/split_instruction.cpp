@@ -3,6 +3,7 @@
 #include "../../../common/src/chess_exception.h"
 #include "chess_exception_instruction.h"
 #include "sound_instruction.h"
+#include "log_instruction.h"
 
 SplitInstruction::SplitInstruction(const ClientData &instructor_data,
                                    const Position &from_,
@@ -31,6 +32,15 @@ void SplitInstruction::makeActionAndNotifyAllListeningQueues(
   LoadBoardInstruction instruction;
   match_updates_queue.push(
           std::make_shared<LoadBoardInstruction>(instruction));
+
+  std::list<std::string> log;
+  match.getBoard().popLog(log);
+  // Send Log
+  auto log_ptr = std::make_shared<LogInstruction>(
+          std::move(log));
+  for (auto &listening_queue: listening_queues)
+    listening_queue.second.push(log_ptr);
+
   auto this_instr_ptr = std::make_shared<SoundInstruction>(
           SPLIT_SOUND);
   for (auto it = listening_queues.begin(); it != listening_queues.end(); ++it)

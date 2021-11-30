@@ -42,7 +42,8 @@ protected:
     MERGING_AND_ENTANGLING,
     PAWN_CANT_SPLIT,
     PAWN_CANT_MERGE,
-    PAWN_CANT_ENTANGLE
+    PAWN_CANT_ENTANGLE,
+    PAWN_CANT_EAT_LIKE_THAT
   } MoveValidationStatus;
 
   std::list<QuantumPosition> positions;

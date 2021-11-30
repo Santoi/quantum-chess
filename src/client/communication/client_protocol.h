@@ -12,7 +12,7 @@
 #define CHAT_PREFIX 'c'
 #define LOAD_BOARD_PREFIX 'l'
 #define EXIT_PREFIX 'e'
-#define SHORT_LOG_PREFIX 'x'
+#define EXCEPTION_PREFIX 'x'
 #define POSSIBLE_SPLITS_PREFIX 'b'
 #define POSSIBLE_MERGES_PREFIX 'd'
 #define SAME_CHESSMAN_PREFIX 'f'
@@ -21,6 +21,7 @@
 #define SPLIT_PREFIX 's'
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
+#define LOG_PREFIX 'j'
 
 class RemoteClientInstruction;
 
@@ -123,6 +124,9 @@ private:
 
   void fillSoundInstruction(Socket &socket,
                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+
+  void fillLogInstruction(Socket &socket,
+                          std::shared_ptr<RemoteClientInstruction> &ptr);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

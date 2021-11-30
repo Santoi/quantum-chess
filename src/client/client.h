@@ -24,7 +24,7 @@ public:
   //false, then both remote_sender and remote_receiver threads are started, and client can receive
   //and send instruction without any synchronization. When the command "exit" is read, both sender and
   //receiver threads are joined and the execution is finished.
-  void execute(const char *host, const char *port, bool single_threaded_client);
+  void execute(const char *host, const char *port);
 
   //Se destruye el socket cliente.
   ~Client() = default;

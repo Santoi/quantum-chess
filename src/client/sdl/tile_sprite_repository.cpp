@@ -21,9 +21,11 @@ void TileSpriteRepository::loadWhite(Renderer &renderer) {
       {TILE_ENTANGLED, "img/white_square_entangled.png"},
       {TILE_QUANTUM,   "img/white_square_quantum.png"},
       {TILE_SPLIT,     "img/white_square_split.png"},
-      {TILE_MERGE,     "img/white_square_merge.png"}
+      {TILE_MERGE,     "img/white_square_merge.png"},
+      {TILE_SELECTED,  "img/current_tile.png"},
   };
   for (auto &pair: images) {
+    // TODO: renderer.getHeight() maybe?
     TextureSprite tile(renderer, pair.second,
                        renderer.getMinDimension() / 10,
                        renderer.getMinDimension() / 10);
@@ -38,7 +40,8 @@ void TileSpriteRepository::loadBlack(Renderer &renderer) {
       {TILE_ENTANGLED, "img/black_square_entangled.png"},
       {TILE_QUANTUM,   "img/black_square_quantum.png"},
       {TILE_SPLIT,     "img/black_square_split.png"},
-      {TILE_MERGE,     "img/black_square_merge.png"}
+      {TILE_MERGE,     "img/black_square_merge.png"},
+      {TILE_SELECTED,  "img/current_tile.png"},
   };
   for (auto &pair: images) {
     TextureSprite tile(renderer, pair.second,

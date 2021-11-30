@@ -57,8 +57,8 @@ protected:
 private:
   //Creates a new ClientHandler and adds it to the client's vector (if the vector's capacity is not
   //enough, it is incremented by BASE_CLIENTS). The number of accepted clients is incremented by one.
-  void addClientWithIdToListOfClients(Socket &&client_socket,
-                                      ClientData &client_data);
+  void addClientToListOfClients(Socket &&client_socket,
+                                ClientData &client_data);
 
   ClientData askClientData(Socket &socket, uint16_t client_id);
 

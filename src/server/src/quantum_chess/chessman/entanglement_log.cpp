@@ -56,7 +56,7 @@ bool EntanglementLog::areEntangled(const Chessman &chessman1,
 }
 
 void EntanglementLog::getEntangledOf(const Chessman &chessman,
-                                     std::list<const Chessman *> positions) {
+                                     std::list<const Chessman *> &positions) {
   for (auto &entangled: log) {
     if (entangled.first.isMyChessman(chessman))
       positions.push_back(&entangled.second.getChessman());

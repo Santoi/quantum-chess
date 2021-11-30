@@ -1,17 +1,24 @@
-#include <iostream>
-#include <sstream>
 #include "client.h"
+#include "sdl/window.h"
+#include "sdl/scene.h"
 #include "position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
 #include "../common/src/chess_exception.h"
 #include "../common/src/client_data.h"
-#include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
-#include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
+#include "game/chat.h"
+#include "game/chess_log.h"
+#include "game/error_log.h"
+#include "game/turn_log.h"
+#include <SDL2pp/Mixer.hh>
+#include <iostream>
+#include <sstream>
 
 #define FRAME_RATE 60
+#define FONT_SIZE 10
+#define MAX_CHAR_ENTRY 29
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
@@ -90,12 +97,7 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 }
 
 
-void Client::execute(const char *host, const char *port,
-                     bool single_threaded_client) {
-  SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-  SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-  SoundHandler sound_handler(mixer);
-  //sound_handler.playMusic();
+void Client::execute(const char *host, const char *port) {
   welcomeClientAndAskForNickName();
   Socket socket = Socket::createAConnectedSocket(host, port);
 
@@ -105,30 +107,43 @@ void Client::execute(const char *host, const char *port,
 
   Window window;
   Renderer &renderer = window.renderer();
-  Game game(window, send, role, sound_handler);
+  Font font(FONT_SIZE);
+  Game game(window, send, role, font);
+  Scene scene(window, game.getBoard(), font);
+  Chat chat(send, scene);
+  ChessLog chess_log(scene);
+  ErrorLog error_log(scene);
+  TurnLog turn_log(scene);
+  TextEntry text_entry(scene.getChatWidth() / font.size());
 
-  ActionThread action_thread(received, game);
-  EventHandlerThread event_handler(game);
+  ActionThread action_thread(received, game, chat, chess_log, error_log,
+                             turn_log);
+  EventHandlerThread event_handler(window, game, chat, text_entry);
 
   receiver_thread.start();
   sender_thread.start();
   action_thread.start();
   event_handler.start();
   // comment if you dont want to go crazy while debugging.
-  sound_handler.playMusic();
+  //sound_handler.playMusic();
 
   while (event_handler.isOpen()) {
     // Timing: calculate difference between this and previous frame
     // in milliseconds
     uint32_t before_render_ticks = SDL_GetTicks();
 
+    // Update chess dimensions to game
+    game.setScale(scene.getChessWidth(), scene.getChessHeight());
+
+    // Get current message
+    scene.addCurrentMessage(text_entry.getText());
+
     // Show rendered frame
-    renderer.render(game);
+    renderer.render(scene);
 
     uint32_t after_render_ticks = SDL_GetTicks();
     uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
-    // Frame limiter: sleep for a little bit to not eat 100% of CPU
     if (frame_delta < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE);
   }
@@ -159,8 +174,8 @@ bool Client::readCommand() {
       iss >> temp_message;
       message += temp_message + " ";
     }
-    send.push(std::make_shared<RemoteClientChatInstruction>(client_nick_name,
-                                                            message));
+    send.push(std::make_shared<RemoteClientChatInstruction>(
+            message));
 
   }
 

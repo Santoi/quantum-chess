@@ -10,7 +10,8 @@ class TextEntryButton {
 private:
     //has a text entry field
     const std::string button_name;
-    TextureSprite texture;
+    TextureSprite text_texture;
+    TextureSprite name_texture;
     int x;
     int y;
     int width;

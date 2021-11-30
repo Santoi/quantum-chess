@@ -13,9 +13,8 @@
 class Renderer;
 
 class Button {
-private:
+protected:
     DrawableButton drawable;
-    int scale;
 
 public:
 

@@ -3,7 +3,7 @@
 
 Button::Button(Renderer& renderer_, const std::string& not_pressed_file_name,
                const std::string& pressed_file_name)
-        :drawable(renderer_, not_pressed_file_name, pressed_file_name), scale(0) {
+        :drawable(renderer_, not_pressed_file_name, pressed_file_name) {
 }
 
 void Button::render() {
@@ -11,7 +11,7 @@ void Button::render() {
 }
 
 void Button::setScale(const int& scale_) {
-    scale = scale_;
+    drawable.setScale(scale_);
 }
 
 
@@ -28,12 +28,11 @@ ConnectButton::ConnectButton(Renderer& renderer,
 }
 
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    if (pixel.x() > scale * BOARD_MIN_LIMIT && pixel.x() < scale * BOARD_MAX_LIMIT &&
-        pixel.y() > scale * BOARD_MIN_LIMIT && pixel.y() < scale * BOARD_MAX_LIMIT) {
+    if (drawable.pixelIsOnButton(pixel_)) {
         for (auto it = text_entries.begin(); it != text_entries.end(); it++)
             tokens.push_back((**it).getText());
-        return true
-    } else{
+        return true;
+    } else {
         return false;
     }
 }

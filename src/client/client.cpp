@@ -23,7 +23,7 @@
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
   std::map<uint16_t, std::vector<ClientData>> data =
-          protocol.receiveMatchesInfo(client_socket);
+      protocol.receiveMatchesInfo(client_socket);
   std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                " quieres entrar." << std::endl;
   std::cout << "Las partidas disponibles son" << std::endl;
@@ -99,7 +99,6 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
-  //sound_handler.playMusic();
   welcomeClientAndAskForNickName();
   Socket socket = Socket::createAConnectedSocket(host, port);
 
@@ -116,7 +115,7 @@ void Client::execute(const char *host, const char *port,
   ChessLog chess_log(scene);
   ErrorLog error_log(scene);
   TurnLog turn_log(scene);
-  TextEntry text_entry(MAX_CHAR_ENTRY);
+  TextEntry text_entry(scene.getChatWidth() / font.size());
 
   ActionThread action_thread(received, game, chat, chess_log, error_log,
                              turn_log);
@@ -177,7 +176,7 @@ bool Client::readCommand() {
       message += temp_message + " ";
     }
     send.push(std::make_shared<RemoteClientChatInstruction>(
-            message));
+        message));
 
   }
 
@@ -189,8 +188,8 @@ bool Client::readCommand() {
       throw ChessException("posicion invalida");
 
     send.push(std::make_shared<RemoteClientMoveInstruction>(
-            Position((uint8_t) x1 - 'A', (uint8_t) y1),
-            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
+        Position((uint8_t) x1 - 'A', (uint8_t) y1),
+        Position((uint8_t) x2 - 'A', (uint8_t) y2)));
   }
   return false;
 }

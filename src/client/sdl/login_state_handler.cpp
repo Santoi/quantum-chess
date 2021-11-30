@@ -37,8 +37,10 @@ void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
     } catch (const NetworkAddressInfoException& error) {
         error.what();
         std::cout << "estamos en error" << std::endl;
+        return;
     } catch (...) {
     }
+    std::cout << "Conectado al server!" << std::endl;
 }
 
 void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) {

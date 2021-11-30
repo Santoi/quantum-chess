@@ -8,10 +8,12 @@ LoginState::LoginState(Login& login_)
 
 NotConnectedToServerState::NotConnectedToServerState(Login& login_, Renderer& renderer_)
                             :LoginState(login_) {
+    text_entry_buttons_ptr.reserve(2);
     std::unique_ptr<TextEntryButton> ip_ptr = make_unique<TextEntryButton>("IP");
     text_entry_buttons_ptr.push_back(std::move(ip_ptr));
     std::unique_ptr<TextEntryButton> port_ptr = make_unique<TextEntryButton>("Port");
     text_entry_buttons_ptr.push_back(std::move(port_ptr));
+    buttons_ptr.reserve(1);
     std::unique_ptr<Button> button_ptr = make_unique<ConnectButton>(renderer_, text_entry_buttons_ptr);
     buttons_ptr.push_back(std::move(button_ptr));
 }
@@ -21,7 +23,8 @@ bool NotConnectedToServerState::clientIsConnectedToMatch() {
 }
 
 void NotConnectedToServerState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
-   // login_renderer.renderIPAndPortFields(buttons_ptr);
+    login_renderer.renderIPAndPortFields(*buttons_ptr[0], *text_entry_buttons_ptr[0],
+                                         *text_entry_buttons_ptr[1]);
 }
 
 void NotConnectedToServerState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {

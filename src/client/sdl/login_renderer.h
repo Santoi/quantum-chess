@@ -23,11 +23,9 @@ public:
 
   void render();
 
-  void renderIPAndPortFields(ConnectButton &connect_button,
+  void renderIPAndPortFields(Button &connect_button,
                              TextEntryButton &ip_text_entry,
                              TextEntryButton &port_text_entry);
-
-  void setScale(int scale_);
 };
 
 

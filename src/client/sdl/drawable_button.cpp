@@ -13,9 +13,9 @@ DrawableButton::DrawableButton(Renderer& renderer_, const std::string& not_press
 
 void DrawableButton::render() {
     if (is_pressed)
-        sprites[1].render(x, y, height, width);
+        sprites[1].render(x, y, width, height);
     else
-        sprites[0].render(x, y, height, width);
+        sprites[0].render(x, y, width, height);
 }
 
 void DrawableButton::setAreaAndPosition(int x_, int y_, int height_, int width_) {

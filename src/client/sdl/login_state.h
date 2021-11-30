@@ -6,7 +6,7 @@
 #include "button.h"
 #include "text_entry_button.h"
 #include <atomic>
-#include <list>
+#include <vector>
 #include <memory>
 
 class LoginRenderer;
@@ -14,8 +14,8 @@ class LoginRenderer;
 class LoginState {
 protected:
     Login& login;
-    std::list<std::unique_ptr<Button>> buttons_ptr;
-    std::list<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
+    std::vector<std::unique_ptr<Button>> buttons_ptr;
+    std::vector<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
 
 public:
 

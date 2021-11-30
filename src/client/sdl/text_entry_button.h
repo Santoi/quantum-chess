@@ -34,6 +34,9 @@ public:
     std::string getText() const;
 
     void disableTextEntry();
+
+private:
+    bool pixelIsOnTextEntry(const PixelCoordinate& pixel);
 };
 
 

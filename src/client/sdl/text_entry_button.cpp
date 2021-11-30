@@ -18,12 +18,19 @@ void TextEntryButton::render() {
     name_texture.render(x, y, 40, height);
 }
 
-bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate& pixel) {
-    //if (pixel is in area)
-    //  expecting_text = true;
-    //enable text entry if clicked. return true in this case
-    //else return false
-    return false;
+bool TextEntryButton::pixelIsOnTextEntry(const PixelCoordinate& pixel_) {
+    return (pixel_.x() > (unsigned)(x) && pixel_.x() < (unsigned)(x + width) &&
+                   pixel_.y() > (unsigned)(y) && pixel_.y() < (unsigned)(y + height));
+}
+
+bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate& pixel_) {
+    if (pixelIsOnTextEntry(pixel_)) {
+        expecting_text = true;
+        std::cout << "Text entry pressed!" << std::endl;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void TextEntryButton::disableTextEntry() {

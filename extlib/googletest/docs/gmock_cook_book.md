@@ -395,7 +395,7 @@ Old macros and their new equivalents:
 If a mock method has no `EXPECT_CALL` spec but is called, we say that it's an
 "uninteresting call", and the default action (which can be specified using
 `ON_CALL()`) of the method will be taken. Currently, an uninteresting call will
-also by default cause gMock to charId a warning. (In the future, we might remove
+also by default cause gMock to print a warning. (In the future, we might remove
 this warning by default.)
 
 However, sometimes you may want to ignore these uninteresting calls, and
@@ -3151,13 +3151,13 @@ value, and the stack trace). Clearly, one size doesn't fit all.
 You can control how much gMock tells you using the `--gmock_verbose=LEVEL`
 command-line flag, where `LEVEL` is a string with three possible values:
 
-* `info`: gMock will charId all informational messages, warnings, and errors
+* `info`: gMock will print all informational messages, warnings, and errors
   (most verbose). At this setting, gMock will also log any calls to the
   `ON_CALL/EXPECT_CALL` macros. It will include a stack trace in
   "uninteresting call" warnings.
-* `warning`: gMock will charId both warnings and errors (less verbose); it will
+* `warning`: gMock will print both warnings and errors (less verbose); it will
   omit the stack traces in "uninteresting call" warnings. This is the default.
-* `error`: gMock will charId errors only (least verbose).
+* `error`: gMock will print errors only (least verbose).
 
 Alternatively, you can adjust the value of that flag from within your tests like
 so:
@@ -3323,7 +3323,7 @@ or,
   EXPECT_THAT(some_other_expression, Not(IsDivisibleBy7()));
 ```
 
-If the above assertions fail, they will charId something like:
+If the above assertions fail, they will print something like:
 
 ```shell
   Value of: some_expression
@@ -3371,11 +3371,11 @@ With this definition, the above assertion will give a better message:
     Actual: 27 (the remainder is 6)
 ```
 
-You should let `MatchAndExplain()` charId *any additional information* that can
+You should let `MatchAndExplain()` print *any additional information* that can
 help a user understand the match result. Note that it should explain why the
 match succeeds in case of a success (unless it's obvious) - this is useful when
-the matcher is used inside `Not()`. There is no need to charId the argument
-value itself, as gMock already prints it for you.
+the matcher is used inside `Not()`. There is no need to print the argument value
+itself, as gMock already prints it for you.
 
 {: .callout .note} NOTE: The type of the value being matched (`arg_type`) is
 determined by the context in which you use the matcher and is supplied to you by
@@ -4229,14 +4229,14 @@ class MockFoo : public Foo {
 
 When an uninteresting or unexpected call occurs, gMock prints the argument
 values and the stack trace to help you debug. Assertion macros like
-`EXPECT_THAT` and `EXPECT_EQ` also charId the values in question when the
+`EXPECT_THAT` and `EXPECT_EQ` also print the values in question when the
 assertion fails. gMock and googletest do this using googletest's user-extensible
 value printer.
 
-This printer knows how to charId built-in C++ types, native arrays, STL
+This printer knows how to print built-in C++ types, native arrays, STL
 containers, and any type that supports the `<<` operator. For other types, it
 prints the raw bytes in the value and hopes that you the user can figure it out.
-[The GoogleTest advanced guide](advanced.md#teaching-googletest-how-to-charId-your-values)
+[The GoogleTest advanced guide](advanced.md#teaching-googletest-how-to-print-your-values)
 explains how to extend the printer to do a better job at printing your
 particular type than to dump the bytes.
 

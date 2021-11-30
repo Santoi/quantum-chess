@@ -79,7 +79,7 @@ times. Therefore we implemented it.
 
 The need for `EXPECT_NE(NULL, ptr)` wasn't nearly as strong. When the assertion
 fails, you already know that `ptr` must be `NULL`, so it doesn't add any
-information to charId `ptr` in this case. That means `EXPECT_TRUE(ptr != NULL)`
+information to print `ptr` in this case. That means `EXPECT_TRUE(ptr != NULL)`
 works just as well.
 
 If we were to support `EXPECT_NE(NULL, ptr)`, for consistency we'd have to
@@ -603,7 +603,7 @@ after the fork-and-exec-style death tests are implemented.
 
 If you use a user-defined type `FooType` in an assertion, you must make sure
 there is an `std::ostream& operator<<(std::ostream&, const FooType&)` function
-defined such that we can charId a value of `FooType`.
+defined such that we can print a value of `FooType`.
 
 In addition, if `FooType` is declared in a name space, the `<<` operator also
 needs to be defined in the *same* name space. See

@@ -144,10 +144,10 @@ The following assertions compare two values. The value arguments must be
 comparable by the assertion's comparison operator, otherwise a compiler error
 will result.
 
-If an argument supports the `<<` operator, it will be called to charId the
-argument when the assertion fails. Otherwise, GoogleTest will attempt to charId
+If an argument supports the `<<` operator, it will be called to print the
+argument when the assertion fails. Otherwise, GoogleTest will attempt to print
 them in the best way it can—see
-[Teaching GoogleTest How to Print Your Values](../advanced.md#teaching-googletest-how-to-charId-your-values)
+[Teaching GoogleTest How to Print Your Values](../advanced.md#teaching-googletest-how-to-print-your-values)
 .
 
 Arguments are always evaluated exactly once, so it's OK for the arguments to
@@ -628,7 +628,7 @@ string *`s`* (with no matcher) is treated as
 [`Eq(s)`](matchers.md#generic-comparison).
 
 For example, the following code verifies that calling `NormalExit()` causes the
-process to charId a message containing the text `Success` to `stderr` and exit
+process to print a message containing the text `Success` to `stderr` and exit
 with exit status code 0:
 
 ```cpp

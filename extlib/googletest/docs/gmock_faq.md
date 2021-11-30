@@ -83,13 +83,13 @@ void Bar(const int* p);  // p is not const, but *p is.
 ### I can't figure out why gMock thinks my expectations are not satisfied. What should I do?
 
 You might want to run your test with `--gmock_verbose=info`. This flag lets
-gMock charId a trace of every mock function call it receives. By studying the
+gMock print a trace of every mock function call it receives. By studying the
 trace, you'll gain insights on why the expectations you set are not met.
 
 If you see the message "The mock function has no default action set, and its
 return type has no default value set.", then try
 [adding a default action](gmock_cheat_sheet.md#OnCall). Due to a known issue,
-unexpected calls on mocks without default actions don't charId out a detailed
+unexpected calls on mocks without default actions don't print out a detailed
 comparison between the actual arguments and the expected arguments.
 
 ### My program crashed and `ScopedMockLog` spit out tons of messages. Is it a gMock bug?

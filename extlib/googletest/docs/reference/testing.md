@@ -1411,7 +1411,7 @@ See [Type Assertions](../advanced.md#type-assertions) for more information.
 Prints any value `x` using GoogleTest's value printer.
 
 See
-[Teaching GoogleTest How to Print Your Values](../advanced.md#teaching-googletest-how-to-charId-your-values)
+[Teaching GoogleTest How to Print Your Values](../advanced.md#teaching-googletest-how-to-print-your-values)
 for more information.
 
 ### PrintToStringParamName {#PrintToStringParamName}

@@ -22,6 +22,8 @@ public:
     // Event loop
     void run() override;
 
+    ~LoginHandlerThread() = default;
+
 private:
     void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
 };

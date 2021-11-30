@@ -146,7 +146,7 @@ void Client::execute(const char *host, const char *port,
   LoginHandlerThread login_handler(login_state_handler);
   login_handler.start();
   doRenderingLoopForSceneWithHandler(login_renderer, login_handler, renderer);
-    while (true) {
+    while (login_handler.isOpen()) {
         // Timing: calculate difference between this and previous frame
         // in milliseconds
         uint32_t before_render_ticks = SDL_GetTicks();
@@ -161,9 +161,10 @@ void Client::execute(const char *host, const char *port,
         if (frame_delta < 1000 / FRAME_RATE)
             SDL_Delay(1000 / FRAME_RATE);
     }
+    login_handler.join();
   //if we are here the client is connected to a match
-  Socket socket = login_state_handler.getClientSocket();
-  client_nick_name = login_state_handler.getClientNickName();
+//  Socket socket = login_state_handler.getClientSocket();
+ // client_nick_name = login_state_handler.getClientNickName();
   /*
    BlockingQueue<std::string> queue;
   Login login(queue);

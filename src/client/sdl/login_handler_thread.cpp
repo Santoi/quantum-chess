@@ -32,23 +32,24 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     while (it != active_buttons.end()) {
         if (it->get().fillTokensIfClicked(pixel, tokens))
             break;
-        else
-            it++;
+        it++;
     }
-
     if (it != active_buttons.end()) {
         login_state_handler.proccessTokens(tokens);
     } else {
         std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
         login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
         auto it2 = active_text_entries.begin();
-        while (!(it2->get().enableTextEntryIfClicked(pixel)) && (it2 != active_text_entries.end()))
-
+        while (it2 != active_text_entries.end()) {
+            if (it2->get().enableTextEntryIfClicked(pixel))
+                break;
+            it2++;
+        }
         if (it2 != active_text_entries.end()) {
             expecting_text_entry = true;
         } else { //click to nowhere in the screen, disable all text entries
-                for (it2 = active_text_entries.begin(); it2 != active_text_entries.end(); it++)
-                    it2->get().disableTextEntry();
+           for (it2 = active_text_entries.begin(); it2 != active_text_entries.end(); it2++)
+                it2->get().disableTextEntry();
         }
     }
 }

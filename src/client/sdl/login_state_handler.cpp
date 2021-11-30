@@ -25,6 +25,7 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_
 
 void LoginStateHandler::proccessTokens(std::list<std::string>& tokens) {
     std::lock_guard<std::mutex> lock_guard(mutex);
+    current_state.reset();
     current_state = make_unique<NotConnectedToMatchState>(login, renderer);
     //try {
      //   current_state->proccessTokens(std::move(tokens));

@@ -30,6 +30,8 @@ public:
     void render();
 
     void setAreaAndPosition(int x, int y, int height, int width);
+
+    ~Button() = default;
 };
 
 class ConnectButton: public Button {

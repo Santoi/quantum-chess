@@ -35,6 +35,8 @@ public:
                                                 active_text_entries) = 0;
 
     virtual void proccessTokens(std::list<std::string>&& tokens) = 0;
+
+    ~LoginState() = default;
 };
 
 class NotConnectedToServerState: public LoginState {
@@ -52,6 +54,8 @@ public:
                                         active_text_entries) override;
 
     void proccessTokens(std::list<std::string>&& tokens) override;
+
+    ~NotConnectedToServerState() = default;
 };
 
 class NotConnectedToMatchState: public LoginState {
@@ -69,6 +73,8 @@ public:
     active_text_entries) override;
 
     void proccessTokens(std::list<std::string>&& tokens) override;
+
+    ~NotConnectedToMatchState() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_H

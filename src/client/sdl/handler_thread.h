@@ -15,6 +15,8 @@ public:
 
     bool isOpen();
 
+    ~HandlerThread() = default;
+
 private:
 
     virtual void run() = 0;

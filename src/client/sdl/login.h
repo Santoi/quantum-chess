@@ -26,6 +26,7 @@ public:
 
   std::string getClientNickName();
 
+  ~Login() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

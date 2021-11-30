@@ -42,6 +42,8 @@ public:
     Socket getClientSocket();
 
     std::string getClientNickName();
+
+    ~LoginStateHandler() = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_HANDLER_H

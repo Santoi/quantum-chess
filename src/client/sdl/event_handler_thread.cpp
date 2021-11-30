@@ -3,10 +3,12 @@
 #include <iostream>
 #include <list>
 
-EventHandlerThread::EventHandlerThread(Window &window, Game &game)
+EventHandlerThread::EventHandlerThread(Window &window, Game &game,
+                                       Chat &chat_)
         : window(window), open(true), game(game), text_entry(29),
           split(false), merge(false),
-          first_click(false) {}
+          first_click(false), second_click(false), penultimate_click(),
+          last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
   while (true) {
@@ -17,10 +19,13 @@ void EventHandlerThread::run() {
         return;
       case SDL_WINDOWEVENT:
         handleWindowChange(event.window);
+        break;
       case SDL_TEXTINPUT:
+        std::cerr << "entre a text_input" << std::endl;
         handleTextInput(event.text.text);
         break;
       case SDL_KEYDOWN:
+        std::cerr << "entre a key down" << std::endl;
         handleKeyDown();
         break;
       case SDL_KEYUP:
@@ -44,6 +49,7 @@ bool EventHandlerThread::isOpen() {
 void EventHandlerThread::handleKeyDown() {
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
+      text_entry.disableEntry();
       game.setDefaultBoard();
       first_click = false;
       second_click = false;
@@ -62,21 +68,26 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_n: {
-      game.toggleSounds();
+      if (!text_entry.isEnabled())
+        game.toggleSounds();
       break;
     }
     case SDLK_m: {
-      game.toggleMusic();
-      case SDLK_BACKSPACE: {
-        if (text_entry.isEnabled())
-          text_entry.backspace();
-        break;
+      if (!text_entry.isEnabled())
+        game.toggleMusic();
+      break;
+    }
+    case SDLK_BACKSPACE: {
+      if (text_entry.isEnabled())
+        text_entry.backspace();
+      break;
+    }
+    case SDLK_RETURN: {
+      if (text_entry.isEnabled()) {
+        chat.sendMessage(text_entry.getText());
+        text_entry.clear();
       }
-      case SDLK_RETURN: {
-        if (text_entry.isEnabled()) {
-          // TODO MATI: send to server
-        }
-      }
+      break;
     }
   }
 }
@@ -103,7 +114,10 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       text_entry.enableEntry();
       return;
     }
-    text_entry.disableEntry();
+    if (text_entry.isEnabled()) {
+      text_entry.disableEntry();
+      return;
+    }
 
     std::list<Position> coords;
     for (size_t i = 0; i < 8; i++) {
@@ -176,10 +190,15 @@ void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
 void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
   if (window_event.event == SDL_WINDOWEVENT_RESIZED) {
     window.setMaxHeight(window_event.data1 / window.getMinRatio());
+    // TODO santi ver esto del resize
+    /*if (window_event.data1 < window_event.data2 / window.getMinRatio())
+      window.setSize(window_event.data2 * window.getMinRatio(),
+                     window_event.data2);*/
   }
   // TODO: fix fullscreen
 }
 
 void EventHandlerThread::handleTextInput(const std::string &text) {
-  text_entry.concat(text);
+  if (text_entry.isEnabled())
+    text_entry.concat(text);
 }

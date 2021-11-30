@@ -18,6 +18,7 @@ private:
   PixelCoordinate penultimate_click;
   PixelCoordinate last_click;
   SDL_Event event;
+  Chat &chat;
 
   void handleKeyDown();
 
@@ -32,7 +33,8 @@ private:
   void handleTextInput(const std::string &text);
 
 public:
-  explicit EventHandlerThread(Window &window, Game &game);
+  explicit EventHandlerThread(Window &window, Game &game,
+                              Chat &chat_);
 
   // Event loop
   void run() override;

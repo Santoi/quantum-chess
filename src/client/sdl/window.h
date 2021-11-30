@@ -32,6 +32,7 @@ public:
 
   void setMaxHeight(int height);
 
+  void setSize(int width, int height);
 };
 
 

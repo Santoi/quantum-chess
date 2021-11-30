@@ -8,6 +8,7 @@
 #include "../common/src/client_data.h"
 #include "sdl/event_handler_thread.h"
 #include "sdl/sound/sound_handler.h"
+#include "game/chat.h"
 #include <SDL2pp/Mixer.hh>
 #include <iostream>
 #include <sstream>
@@ -107,9 +108,11 @@ void Client::execute(const char *host, const char *port,
   Font font(FONT_SIZE);
   Game game(window, send, role);
   Scene scene(window, game.getBoard(), font);
+  Chat chat(send, scene);
+  ChessLog chess_log(scene);
 
-  ActionThread action_thread(received, game);
-  EventHandlerThread event_handler(window, game);
+  ActionThread action_thread(received, game, chat, chess_log);
+  EventHandlerThread event_handler(window, game, chat);
 
   receiver_thread.start();
   sender_thread.start();

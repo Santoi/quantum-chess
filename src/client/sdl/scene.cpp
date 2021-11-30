@@ -10,28 +10,34 @@
 #define CHAT_WIDTH 200
 
 Scene::Scene(Window &window, Board &board, Font &font)
-    : window(window), font(font), chess(board),
-      chat(MAX_CHAT_MESSAGES),
-      log(MAX_LOG_MESSAGES), error_log(
-        MAX_ERROR_LOG_MESSAGES), current_message(1) {
-  DrawableChatMessage msg1(window.renderer(), font, "santi", "0", "00:01",
-                           "hola");
-  chat.addDrawable(std::move(msg1));
-  DrawableChatMessage msg2(window.renderer(), font, "mati", "1", "00:01",
-                           "hola santi");
-  chat.addDrawable(std::move(msg2));
-  DrawableChatMessage msg3(window.renderer(), font, "santi", "0", "00:02",
-                           "no anda ni de onda esto");
-  chat.addDrawable(std::move(msg3));
-  DrawableText log_msg(window.renderer(), font, "B4 moved to E3");
-  DrawableText log_msg2(window.renderer(), font, "B4 moved to E4");
-  log.addDrawable(std::move(log_msg));
-  log.addDrawable(std::move(log_msg2));
-  DrawableText error_log_msg(window.renderer(), font, "Invalid move", 'r');
-  error_log.addDrawable(std::move(error_log_msg));
+        : window(window), font(font), chess(board),
+          chat(MAX_CHAT_MESSAGES),
+          log(MAX_LOG_MESSAGES), error_log(
+                MAX_ERROR_LOG_MESSAGES), current_message(1), mutex() {}
+
+void Scene::addChatMessage(const std::string &nickname, const std::string &id,
+                           const std::string &timestamp,
+                           const std::string &message) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  DrawableChatMessage msg(window.renderer(), font, nickname, id, timestamp,
+                          message);
+  chat.addDrawable(std::move(msg));
+}
+
+void Scene::addLogMessage(const std::string text) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  DrawableText msg(window.renderer(), font, text);
+  log.addDrawable(std::move(msg));
+}
+
+void Scene::addErrorLogMessage(const std::string text) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  DrawableText msg(window.renderer(), font, text);
+  error_log.addDrawable(std::move(msg));
 }
 
 void Scene::render() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   int width = window.getWidth(), height = window.getHeight();
   float total_messages = MAX_CHAT_MESSAGES +
                          MAX_LOG_MESSAGES +

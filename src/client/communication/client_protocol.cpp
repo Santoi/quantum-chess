@@ -291,7 +291,6 @@ void ClientProtocol::fillSoundInstruction(Socket &socket,
 
 void ClientProtocol::fillLogInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &ptr) {
-  std::cout << "hola" << std::endl;
   std::list<std::string> log;
   uint16_t amount = getNumber16FromSocket(socket);
   for (uint16_t i = 0; i < amount; i++) {

@@ -13,10 +13,11 @@
 #define BOARD_H_MAX_LIMIT .9
 #define BOARD_W_H_RATIO .4
 
-Game::Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_) :
+Game::Game(Window &window,
+           BlockingQueue<RemoteClientInstruction> &send_queue_,
+           ClientData::Role role_, Font &font) :
     x_scale(window.getWidth()), y_scale(window.getHeight()),
-    board(window, "img/stars.jpg", x_scale, y_scale),
+    board(window, "img/stars.jpg", x_scale, y_scale, font),
     send_queue(send_queue_), mutex(), role(role_),
     sound_handler(window.sound_handler()) {}
 
@@ -126,6 +127,13 @@ void Game::mergeTiles(const std::list<Position> &positions) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.mergeTile(position);
+}
+
+void Game::currentTile(const PixelCoordinate &coordinate) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  Position position;
+  transformer.pixel2Position(coordinate, position, x_scale, y_scale);
+  board.currentTile(position);
 }
 
 void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {

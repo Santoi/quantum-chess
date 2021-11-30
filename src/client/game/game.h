@@ -30,8 +30,9 @@ private:
   SoundHandler &sound_handler;
 
 public:
-  Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_);
+  Game(Window &window,
+       BlockingQueue<RemoteClientInstruction> &send_queue_,
+       ClientData::Role role_, Font &font);
 
   void setScale(int x_scale_, int y_scale_);
 
@@ -83,6 +84,8 @@ public:
   void toggleSounds();
 
   void toggleMusic();
+
+  void currentTile(const PixelCoordinate &coordinate);
 };
 
 

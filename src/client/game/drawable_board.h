@@ -9,6 +9,8 @@
 #include "../sdl/texture_sprite.h"
 #include "../sdl/renderer.h"
 #include "../sdl/window.h"
+#include "../sdl/chat/drawable_text.h"
+#include "../sdl/chat/text_sprite_repository.h"
 #include "../sdl/coordinate_transformer.h"
 #include <map>
 #include <string>
@@ -23,13 +25,17 @@ private:
   TextureSprite background;
   std::map<const Position, DrawableChessman> chessmen;
   std::map<const Position, DrawableTile> board;
+  std::map<const Position, DrawableText> positions;
   ChessmanSpriteRepository chessman_repository;
   TileSpriteRepository tile_repository;
+  TextSpriteRepository text_repository;
+  bool current;
+  std::pair<Position, DrawableTile> current_tile;
   std::mutex mutex;
 
 public:
-  DrawableBoard(Window &window, const std::string &image, int width,
-                int height);
+  DrawableBoard(Window &window, const std::string &image, int width, int height,
+                Font &font);
 
   ~DrawableBoard() = default;
 
@@ -56,6 +62,8 @@ public:
   void setDefault();
 
   void render(CoordinateTransformer &transformer, int width, int height);
+
+  void currentTile(const Position &pos);
 };
 
 

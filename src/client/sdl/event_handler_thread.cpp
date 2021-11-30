@@ -6,10 +6,10 @@
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
                                        Chat &chat_, TextEntry &text_entry)
-        : window(window), open(true), game(game), text_entry(text_entry),
-          split(false), merge(false),
-          first_click(false), second_click(false), penultimate_click(),
-          last_click(), chat(chat_) {}
+    : window(window), open(true), game(game), text_entry(text_entry),
+      split(false), merge(false),
+      first_click(false), second_click(false), penultimate_click(),
+      last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
   while (true) {
@@ -188,16 +188,20 @@ void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
 
 void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
   if (window_event.event == SDL_WINDOWEVENT_RESIZED) {
+    // TODO solo anda en el de santi
     window.setMaxHeight(window_event.data1 / window.getMinRatio());
     // TODO santi ver esto del resize
     /*if (window_event.data1 < window_event.data2 / window.getMinRatio())
       window.setSize(window_event.data2 * window.getMinRatio(),
                      window_event.data2);*/
   }
-  // TODO: fix fullscreen
+  // TODO: fix fullscreen // solo se rompe en el de santi
 }
 
 void EventHandlerThread::handleTextInput(const std::string &text) {
   if (text_entry.isEnabled())
-    text_entry.concat(text);
+    if (!text_entry.concat(text)) {
+      chat.sendMessage(text_entry.getText());
+      text_entry.clear();
+    }
 }

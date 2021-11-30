@@ -7,12 +7,10 @@ TextEntry::TextEntry(uint8_t limit) : limit(limit) {
   SDL_StopTextInput();
 }
 
-void TextEntry::concat(const std::string &text_) {
+bool TextEntry::concat(const std::string &text_) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   text.append(text_);
-  if (text.size() >= limit) {
-    SDL_StopTextInput();
-  }
+  return text.size() < limit;
 }
 
 void TextEntry::backspace() {

@@ -1,2 +1,2 @@
-./build/src/client/client localhost 3643
+./build/src/client/client "$1" "$2"
 

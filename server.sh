@@ -1,1 +1,1 @@
-./build/src/server/src/server 3643
+./build/src/server/src/server "$1" "$2"

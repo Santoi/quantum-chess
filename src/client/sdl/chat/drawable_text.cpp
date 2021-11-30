@@ -1,39 +1,33 @@
 #include "drawable_text.h"
 #include "../renderer.h"
-#include "text_sprite.h"
 #include <string>
 #include <iostream>
 #include <utility>
+#include "text_sprite_repository.h"
 
 #define SCALE_FACTOR 10
 #define RENDER_HEIGHT_SCALE_FACTOR 28
 #define HEIGHT_SCALE_FACTOR 14
 
-DrawableText::DrawableText(Renderer &renderer_, Font &font_, std::string text,
-                           char color) :
-    renderer(renderer_),
-    sprite(renderer_,
-           font_, " "),
-    font(font_),
-    text(std::move(text)),
-    color(color) {}
+DrawableText::DrawableText(TextSpriteRepository &text_sprite_repository_,
+                           std::string text, char color) :
+        text_sprite_repository(text_sprite_repository_),
+        text(std::move(text)),
+        color(color) {}
 
 DrawableText::DrawableText(DrawableText &&other) noexcept:
-    renderer(
-        other.renderer),
-    sprite(std::move(
-        other.sprite)),
-    font(other.font),
-    text(std::move(
-        other.text)),
-    color(other.color) {}
+        text_sprite_repository(other.text_sprite_repository),
+        text(std::move(other.text)),
+        color(other.color) {
+}
 
 void DrawableText::render(int x, int y) {
   if (!text.empty()) {
-    sprite.render(text, x, y,
-                  text.size() * font.size(),
-                  font.size(),
-                  color);
+    for (auto c: text) {
+      Sprite &sprite = text_sprite_repository.getChar(c);
+      sprite.render(x, y);
+      x += sprite.width();
+    }
   }
 }
 
@@ -42,9 +36,9 @@ size_t DrawableText::length() const {
 }
 
 int DrawableText::getDrawableWidth() const {
-  return text.size() * font.size();
+  return text.size() * text_sprite_repository.getSpriteSize();
 }
 
 int DrawableText::getDrawableHeight() const {
-  return font.size();
+  return text_sprite_repository.getSpriteSize();
 }

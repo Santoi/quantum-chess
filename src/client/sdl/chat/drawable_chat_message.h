@@ -14,12 +14,17 @@ class DrawableChatMessage {
   DrawableText id;
   DrawableText time;
   DrawableText message;
+  TextSpriteRepository &repository;
   int height = 0;
+
 
 public:
   DrawableChatMessage(Renderer &renderer, Font &font,
-                      const std::string &name, const std::string &id,
-                      const std::string &time, const std::string &message);
+                      const std::string &name,
+                      const std::string &id,
+                      const std::string &time,
+                      const std::string &message,
+                      TextSpriteRepository &repository);
 
   // TODO MATI: constructor con Chat::StructChat
 
@@ -28,6 +33,7 @@ public:
   void render(int x, int y);
 
   int getDrawableHeight() const;
+
 };
 
 

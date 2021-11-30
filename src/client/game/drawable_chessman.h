@@ -10,6 +10,8 @@
 
 class Renderer;
 
+class ChessmanSpriteRepository;
+
 class DrawableChessman {
 private:
   Renderer *renderer;

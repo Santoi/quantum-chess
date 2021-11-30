@@ -14,7 +14,7 @@
 #define CHAT_PREFIX 'c'
 #define LOAD_BOARD_PREFIX 'l'
 #define EXIT_PREFIX 'e'
-#define SHORT_LOG_PREFIX 'x'
+#define EXCEPTION_PREFIX 'x'
 #define POSSIBLE_SPLITS_PREFIX 'b'
 #define POSSIBLE_MERGES_PREFIX 'd'
 #define SAME_CHESSMAN_PREFIX 'f'
@@ -77,7 +77,8 @@ public:
                               const std::vector<char> &characters,
                               const std::vector<bool> &colors,
                               const std::vector<Position> &positions,
-                              const std::vector<double> &probabilities);
+                              const std::vector<double> &probabilities,
+                              bool white);
 
   ~ServerProtocol() = default;
 

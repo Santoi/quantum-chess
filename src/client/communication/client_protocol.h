@@ -12,7 +12,7 @@
 #define CHAT_PREFIX 'c'
 #define LOAD_BOARD_PREFIX 'l'
 #define EXIT_PREFIX 'e'
-#define SHORT_LOG_PREFIX 'x'
+#define EXCEPTION_PREFIX 'x'
 #define POSSIBLE_SPLITS_PREFIX 'b'
 #define POSSIBLE_MERGES_PREFIX 'd'
 #define SAME_CHESSMAN_PREFIX 'f'

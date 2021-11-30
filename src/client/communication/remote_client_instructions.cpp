@@ -3,6 +3,9 @@
 #include "../position.h"
 #include "../game/game.h"
 #include "../game/chat.h"
+#include "../game/error_log.h"
+#include "../game/chess_log.h"
+#include "../game/turn_log.h"
 #include <iostream>
 #include <utility>
 
@@ -25,7 +28,9 @@ RemoteClientChatInstruction::RemoteClientChatInstruction(uint16_t client_id,
 }
 
 void RemoteClientChatInstruction::makeAction(Game &game, Chat &chat,
-                                             ChessLog &chess_log) {
+                                             ChessLog &chess_log,
+                                             ErrorLog &error_log,
+                                             TurnLog &turn_log) {
   chat.addMessage(client_id, nickname, message, timestamp);
 }
 
@@ -42,18 +47,24 @@ RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(
 }
 
 void RemoteClientExitMessageInstruction::makeAction(Game &game, Chat &chat,
-                                                    ChessLog &chess_log) {
+                                                    ChessLog &chess_log,
+                                                    ErrorLog &error_log,
+                                                    TurnLog &turn_log) {
   std::cout << nickname << " se fue de la partida."
             << std::endl;
 }
 
 RemoteClientLoadBoardInstruction::RemoteClientLoadBoardInstruction(
-        std::vector<ChessmanData> &&chessman_data_vector_) :
-        chessman_data_vector(std::move(chessman_data_vector_)) {}
+        std::vector<ChessmanData> &&chessman_data_vector_, bool next_white_) :
+        chessman_data_vector(std::move(chessman_data_vector_)),
+        next_white(next_white_) {}
 
 void RemoteClientLoadBoardInstruction::makeAction(Game &game, Chat &chat,
-                                                  ChessLog &chess_log) {
+                                                  ChessLog &chess_log,
+                                                  ErrorLog &error_log,
+                                                  TurnLog &turn_log) {
   game.load(chessman_data_vector);
+  turn_log.changeTurn(next_white);
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(
@@ -61,7 +72,9 @@ RemoteClientMoveInstruction::RemoteClientMoveInstruction(
         const Position &final_) : initial(initial_), final(final_) {}
 
 void RemoteClientMoveInstruction::makeAction(Game &game, Chat &chat,
-                                             ChessLog &chess_log) {}
+                                             ChessLog &chess_log,
+                                             ErrorLog &error_log,
+                                             TurnLog &turn_log) {}
 
 void
 RemoteClientMoveInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -74,8 +87,10 @@ RemoteClientExceptionInstruction::RemoteClientExceptionInstruction(
         : message(message) {}
 
 void RemoteClientExceptionInstruction::makeAction(Game &game, Chat &chat,
-                                                  ChessLog &chess_log) {
-  std::cout << "Error: " << this->message << std::endl;
+                                                  ChessLog &chess_log,
+                                                  ErrorLog &error_log,
+                                                  TurnLog &turn_log) {
+  error_log.addMessage(message);
 }
 
 void RemoteClientExceptionInstruction::fillPacketWithInstructionsToSend(
@@ -87,7 +102,9 @@ RemoteClientPossibleMovesInstruction::RemoteClientPossibleMovesInstruction
         positions(std::move(positions_)) {}
 
 void RemoteClientPossibleMovesInstruction::makeAction(Game &game, Chat &chat,
-                                                      ChessLog &chess_log) {
+                                                      ChessLog &chess_log,
+                                                      ErrorLog &error_log,
+                                                      TurnLog &turn_log) {
   game.moveTiles(positions);
 }
 
@@ -103,7 +120,9 @@ RemoteClientPossibleSplitsInstruction::RemoteClientPossibleSplitsInstruction
         positions(std::move(positions_)) {}
 
 void RemoteClientPossibleSplitsInstruction::makeAction(Game &game, Chat &chat,
-                                                       ChessLog &chess_log) {
+                                                       ChessLog &chess_log,
+                                                       ErrorLog &error_log,
+                                                       TurnLog &turn_log) {
   game.splitTiles(positions);
 }
 
@@ -120,7 +139,9 @@ RemoteClientPossibleMergesInstruction::RemoteClientPossibleMergesInstruction
         positions(std::move(positions_)) {}
 
 void RemoteClientPossibleMergesInstruction::makeAction(Game &game, Chat &chat,
-                                                       ChessLog &chess_log) {
+                                                       ChessLog &chess_log,
+                                                       ErrorLog &error_log,
+                                                       TurnLog &turn_log) {
   game.mergeTiles(positions);
 }
 
@@ -141,7 +162,9 @@ RemoteClientSplitInstruction::RemoteClientSplitInstruction(
         : from(from_), to1(to1_), to2(to2_) {}
 
 void RemoteClientSplitInstruction::makeAction(Game &game, Chat &chat,
-                                              ChessLog &chess_log) {}
+                                              ChessLog &chess_log,
+                                              ErrorLog &error_log,
+                                              TurnLog &turn_log) {}
 
 void
 RemoteClientSplitInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -154,7 +177,9 @@ RemoteClientMergeInstruction::RemoteClientMergeInstruction(
         : from1(from1_), from2(from2_), to(to_) {}
 
 void RemoteClientMergeInstruction::makeAction(Game &game, Chat &chat,
-                                              ChessLog &chess_log) {}
+                                              ChessLog &chess_log,
+                                              ErrorLog &error_log,
+                                              TurnLog &turn_log) {}
 
 void
 RemoteClientMergeInstruction::fillPacketWithInstructionsToSend(Packet &packet,
@@ -168,7 +193,9 @@ RemoteClientSameChessmanInstruction::RemoteClientSameChessmanInstruction
         positions(std::move(positions_)) {}
 
 void RemoteClientSameChessmanInstruction::makeAction(Game &game, Chat &chat,
-                                                     ChessLog &chess_log) {
+                                                     ChessLog &chess_log,
+                                                     ErrorLog &error_log,
+                                                     TurnLog &turn_log) {
   game.quantumTiles(positions);
 }
 
@@ -185,7 +212,9 @@ RemoteClientEntangledChessmanInstruction::RemoteClientEntangledChessmanInstructi
 
 void
 RemoteClientEntangledChessmanInstruction::makeAction(Game &game, Chat &chat,
-                                                     ChessLog &chess_log) {
+                                                     ChessLog &chess_log,
+                                                     ErrorLog &error_log,
+                                                     TurnLog &turn_log) {
   game.entangledTiles(positions);
 }
 
@@ -201,7 +230,9 @@ RemoteClientSoundInstruction::RemoteClientSoundInstruction(uint8_t sound_) :
         sound(sound_) {}
 
 void RemoteClientSoundInstruction::makeAction(Game &game, Chat &chat,
-                                              ChessLog &chess_log) {
+                                              ChessLog &chess_log,
+                                              ErrorLog &error_log,
+                                              TurnLog &turn_log) {
   switch (sound) {
     case SPLIT_SOUND:
       game.playSplitSound();
@@ -226,7 +257,9 @@ RemoteClientLogInstruction::RemoteClientLogInstruction(
 }
 
 void RemoteClientLogInstruction::makeAction(Game &game, Chat &chat,
-                                            ChessLog &chess_log) {
+                                            ChessLog &chess_log,
+                                            ErrorLog &error_log,
+                                            TurnLog &turn_log) {
   for (auto &entry: log) {
     chess_log.addMessage(entry);
   }

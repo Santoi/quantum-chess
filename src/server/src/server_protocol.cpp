@@ -246,7 +246,7 @@ void ServerProtocol::fillPacketWithChatInfo(Packet &packet,
 
 void ServerProtocol::fillPacketWithExceptionInfo(Packet &packet,
                                                  const std::string &message) {
-  packet.addByte(SHORT_LOG_PREFIX);
+  packet.addByte(EXCEPTION_PREFIX);
   this->addStringAndItsLengthToPacket(packet, message);
 }
 
@@ -254,7 +254,8 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
                                                  const std::vector<char> &characters,
                                                  const std::vector<bool> &colors,
                                                  const std::vector<Position> &positions,
-                                                 const std::vector<double> &probabilities) {
+                                                 const std::vector<double> &probabilities,
+                                                 bool white) {
   packet.addByte(LOAD_BOARD_PREFIX);
   packet.addByte(characters.size());
   for (uint16_t i = 0; i < characters.size(); i++) {
@@ -265,6 +266,7 @@ void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
     uint16_t prob_int = probabilities[i] * (UINT16_MAX + 1) - 1;
     changeNumberToBigEndianAndAddToPacket(packet, prob_int);
   }
+  addNumber8ToPacket(packet, white);
 }
 
 void ServerProtocol::fillPacketWithPossibleMoves(Packet &packet,

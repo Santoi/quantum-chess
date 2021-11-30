@@ -201,8 +201,9 @@ void ClientProtocol::fillLoadBoardInstruction(Socket &socket,
     double prob = ((double) prob_int + 1) / (UINT16_MAX + 1);
     chessman_data_vector.push_back(ChessmanData(position, chessman, prob));
   }
+  bool white = getNumber8FromSocket(socket);
   ptr_instruction = make_unique<RemoteClientLoadBoardInstruction>(
-          std::move(chessman_data_vector));
+          std::move(chessman_data_vector), white);
 }
 
 void ClientProtocol::fillShortLogInstruction(Socket &socket,
@@ -319,7 +320,7 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case EXIT_PREFIX:
       fillExitInstruction(socket, ptr_instruction);
       break;
-    case SHORT_LOG_PREFIX:
+    case EXCEPTION_PREFIX:
       fillShortLogInstruction(socket, ptr_instruction);
       break;
     case POSSIBLE_MOVES_PREFIX:

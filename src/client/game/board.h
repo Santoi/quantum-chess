@@ -3,11 +3,13 @@
 
 #include "drawable_chessman.h"
 #include "drawable_tile.h"
+#include "../sdl/chessman_sprite_repository.h"
 #include "../position.h"
 #include "../communication/chessman_data.h"
 #include "../sdl/texture_sprite.h"
 #include "../sdl/renderer.h"
 #include "../sdl/window.h"
+#include "../sdl/coordinate_transformer.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -32,9 +34,9 @@ public:
 
   void render();
 
-  std::map<const Position, DrawableTile> &getTiles();
+  std::map<const Position, DrawableTile> getTiles();
 
-  std::map<const Position, DrawableChessman> &getChessmen();
+  std::map<const Position, DrawableChessman> getChessmen();
 
   TextureSprite &getBackground();
 
@@ -51,6 +53,8 @@ public:
   void mergeTile(const Position &pos);
 
   void setDefault();
+
+  void render(CoordinateTransformer &transformer, int width, int height);
 };
 
 

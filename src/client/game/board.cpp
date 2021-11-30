@@ -24,7 +24,7 @@ Board::Board(Window &window, const std::string &image,
       DrawableTile tile(renderer, position.isEven(), tile_repository);
       board.insert(std::move(std::pair<const Position, DrawableTile>(position,
                                                                      std::move(
-                                                                         tile))));
+                                                                             tile))));
     }
   }
 }
@@ -46,8 +46,8 @@ void Board::load(std::vector<ChessmanData> &chessman_data_vector) {
   for (auto &chessman_data: chessman_data_vector) {
     DrawableChessman chessman(renderer, chessman_repository, chessman_data);
     chessmen.insert(std::pair<const Position, DrawableChessman>
-                        (chessman_data.position,
-                         std::move(chessman)));
+                            (chessman_data.position,
+                             std::move(chessman)));
   }
 }
 
@@ -88,12 +88,12 @@ void Board::setDefault() {
   }
 }
 
-std::map<const Position, DrawableTile> &Board::getTiles() {
+std::map<const Position, DrawableTile> Board::getTiles() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return board;
 }
 
-std::map<const Position, DrawableChessman> &Board::getChessmen() {
+std::map<const Position, DrawableChessman> Board::getChessmen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return chessmen;
 }
@@ -101,4 +101,20 @@ std::map<const Position, DrawableChessman> &Board::getChessmen() {
 TextureSprite &Board::getBackground() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return background;
+}
+
+void Board::render(CoordinateTransformer &transformer, int width,
+                   int height) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  for (auto &tile: board) {
+    PixelCoordinate pixel(0, 0);
+    transformer.position2Pixel(tile.first, pixel, width, height);
+    tile.second.render(pixel.x(), pixel.y());
+  }
+  background.render(0, 0, width, height);
+  for (auto &chessman: chessmen) {
+    PixelCoordinate pixel(0, 0);
+    transformer.position2Pixel(chessman.first, pixel, width, height);
+    chessman.second.render(pixel.x(), pixel.y());
+  }
 }

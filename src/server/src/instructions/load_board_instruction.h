@@ -10,6 +10,7 @@ class LoadBoardInstruction : public Instruction {
   std::vector<char> characters;
   std::vector<bool> colors;
   std::vector<double> probabilities;
+  bool white;
 
 public:
   LoadBoardInstruction();

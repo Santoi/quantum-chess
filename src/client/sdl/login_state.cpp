@@ -48,3 +48,28 @@ void NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) 
      //pop port token, ip, name...
      //tell login to connect to socket
 }
+
+NotConnectedToMatchState::NotConnectedToMatchState(Login& login_, Renderer& renderer_)
+                        :LoginState(login_) {
+}
+
+bool NotConnectedToMatchState::clientIsConnectedToMatch() {
+    return true;
+}
+
+void NotConnectedToMatchState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
+
+}
+
+void NotConnectedToMatchState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {
+
+}
+
+void NotConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+                                                                        active_text_entries) {
+
+}
+
+void NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
+
+}

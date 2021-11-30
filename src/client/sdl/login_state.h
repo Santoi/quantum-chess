@@ -52,5 +52,21 @@ public:
     void proccessTokens(std::list<std::string>&& tokens) override;
 };
 
+class NotConnectedToMatchState: public LoginState {
+public:
+
+    NotConnectedToMatchState(Login& login_, Renderer& renderer_);
+
+    bool clientIsConnectedToMatch() override;
+
+    void tellRendererWhatToRender(LoginRenderer& login_renderer) override;
+
+    void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) override;
+
+    void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+    active_text_entries) override;
+
+    void proccessTokens(std::list<std::string>&& tokens) override;
+};
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_H

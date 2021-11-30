@@ -23,12 +23,14 @@ ConnectButton::ConnectButton(Renderer& renderer,
 }
 
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    //if (wasClicked)
-      for (auto it = text_entries.begin(); it != text_entries.end(); it++)
+    if (pixel.x() > scale * BOARD_MIN_LIMIT && pixel.x() < scale * BOARD_MAX_LIMIT &&
+        pixel.y() > scale * BOARD_MIN_LIMIT && pixel.y() < scale * BOARD_MAX_LIMIT) {
+        for (auto it = text_entries.begin(); it != text_entries.end(); it++)
             tokens.push_back((**it).getText());
-    //  return true
-    //else
-    return false;
+        return true
+    } else{
+        return false;
+    }
 }
 
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {

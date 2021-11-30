@@ -21,11 +21,12 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_
 
 
 void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
-    try {
-        current_state->proccessTokens(std::move(tokens));
-    } catch (...) {
-        //TODO handlear catchear excepción si es que, por ejemplo, se intenta conectar a una ip y puerto no válido
-    }
+    current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+    //try {
+     //   current_state->proccessTokens(std::move(tokens));
+    //} catch (...) {
+     //   //TODO handlear catchear excepción si es que, por ejemplo, se intenta conectar a una ip y puerto no válido
+   // }
 }
 
 void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) {

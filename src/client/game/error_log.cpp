@@ -8,4 +8,9 @@ ErrorLog::addMessage(std::string message) {
   scene.addErrorLogMessage(message);
 }
 
+void
+ErrorLog::clear() {
+  scene.clearErrorLog();
+}
+
 

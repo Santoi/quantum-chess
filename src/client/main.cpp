@@ -4,13 +4,13 @@
 #define SUCCESS 0
 
 int main(int argc, char *argv[]) {
-  //return main_drawer();
-  bool single_threaded_client = false;
-  if (argc == 4)
-    single_threaded_client = true;
+  if (argc < 3) {
+    std::cerr << "Not enough arugments";
+    return 1;
+  }
   try {
     Client client;
-    client.execute(argv[1], argv[2], single_threaded_client);
+    client.execute(argv[1], argv[2]);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;
   }

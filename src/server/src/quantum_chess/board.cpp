@@ -41,9 +41,9 @@ void Board::addNewChessman(char chessman_, Position position_,
 bool
 Board::move(const Position &initial, const Position &final, bool player_white) {
   if (finished)
-    throw ChessException("game has ended");
+    throw ChessException("game over");
   if (player_white != next_white)
-    throw ChessException("is not your turn!");
+    throw ChessException("it is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
     throw ChessException("there is no chessman there");
@@ -58,9 +58,9 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
 void Board::split(const Position &initial, const Position &pos1,
                   const Position &pos2, bool player_white) {
   if (finished)
-    throw ChessException("game has ended");
+    throw ChessException("game over");
   if (player_white != next_white)
-    throw ChessException("is not your turn!");
+    throw ChessException("it is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
     throw ChessException("there is no chessman there");
@@ -74,9 +74,9 @@ void Board::split(const Position &initial, const Position &pos1,
 void Board::merge(const Position &initial1, const Position &initial2,
                   const Position &final, bool player_white) {
   if (finished)
-    throw ChessException("game has ended");
+    throw ChessException("game over");
   if (player_white != next_white)
-    throw ChessException("is not your turn!");
+    throw ChessException("it is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
           *chessman_2 = getChessmanAt(initial2);
   if (!chessman_1 || !chessman_2)

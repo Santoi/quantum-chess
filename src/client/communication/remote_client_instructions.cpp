@@ -263,6 +263,7 @@ void RemoteClientLogInstruction::makeAction(Game &game, Chat &chat,
   for (auto &entry: log) {
     chess_log.addMessage(entry);
   }
+  error_log.clear();
 }
 
 void

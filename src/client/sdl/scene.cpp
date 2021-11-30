@@ -16,12 +16,12 @@
 #define CHAT_WIDTH 300
 
 Scene::Scene(Window &window, DrawableBoard &board, Font &font)
-    : window(window), font(font), chess(board),
-      chat(MAX_CHAT_MESSAGES),
-      log(MAX_LOG_MESSAGES), error_log(
-        MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
-      current_message(1), mutex(),
-      text_repository(window.renderer(), font) {}
+        : window(window), font(font), chess(board),
+          chat(MAX_CHAT_MESSAGES),
+          log(MAX_LOG_MESSAGES), error_log(
+                MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
+          current_message(1), mutex(),
+          text_repository(window.renderer(), font) {}
 
 void Scene::addChatMessage(const std::string &nickname, const std::string &id,
                            const std::string &timestamp,
@@ -42,6 +42,11 @@ void Scene::addErrorLogMessage(std::string text) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   DrawableText msg(text_repository, text, 'r');
   error_log.addDrawable(std::move(msg));
+}
+
+void Scene::clearErrorLog() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  error_log.clear();
 }
 
 void Scene::addTurnLogMessage(std::string text) {

@@ -17,6 +17,8 @@ public:
   explicit ErrorLog(Scene &scene);
 
   void addMessage(std::string message);
+
+  void clear();
 };
 
 

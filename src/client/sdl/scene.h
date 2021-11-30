@@ -49,6 +49,7 @@ public:
 
   void addTurnLogMessage(std::string text);
 
+  void clearErrorLog();
 };
 
 

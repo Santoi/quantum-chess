@@ -14,7 +14,6 @@ class DrawableContainer {
 private:
   std::list<T> drawables_list;
   size_t max_drawables;
-  std::mutex mutex;
 
 public:
   DrawableContainer();
@@ -24,6 +23,8 @@ public:
   void addDrawable(T &&drawable);
 
   void render(int x, int y);
+
+  void clear();
 };
 
 template<class T>
@@ -38,15 +39,18 @@ DrawableContainer<T>::DrawableContainer(unsigned int max_drawables_)
 
 template<class T>
 void DrawableContainer<T>::addDrawable(T &&drawable) {
-  std::lock_guard<std::mutex> lock_guard(mutex);
   if (drawables_list.size() == max_drawables)
     drawables_list.pop_back();
   drawables_list.push_front(std::move(drawable));
 }
 
 template<class T>
+void DrawableContainer<T>::clear() {
+  drawables_list.clear();
+}
+
+template<class T>
 void DrawableContainer<T>::render(int x, int y) {
-  std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &drawable: drawables_list) {
     drawable.render(x, y);
     y -= drawable.getDrawableHeight();

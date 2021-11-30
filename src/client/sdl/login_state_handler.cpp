@@ -34,12 +34,6 @@ void LoginStateHandler::proccessTokens(std::list<std::string>& tokens) {
    // }
 }
 
-void LoginStateHandler::setScale(const int& scale_) {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    current_state->setScale(scale_);
-}
-
-
 void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) {
     std::lock_guard<std::mutex> lock_guard(mutex);
     current_state->tellRendererWhatToRender(login_renderer);

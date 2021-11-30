@@ -25,8 +25,6 @@ public:
 
     virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
 
-    void setScale(const int& scale_);
-
     void render();
 
     void setAreaAndPosition(int x, int y, int height, int width);

@@ -11,11 +11,6 @@ void Button::render() {
     drawable.render();
 }
 
-void Button::setScale(const int& scale_) {
-    drawable.setScale(scale_);
-}
-
-
 void Button::setAreaAndPosition(int x_, int y_, int height_, int width_) {
     drawable.setAreaAndPosition(x_, y_, height_, width_);
 }

@@ -11,10 +11,6 @@ void TextEntryButton::setAreaAndPosition(int x_, int y_, int height_, int width_
     width = width_;
 }
 
-void TextEntryButton::setScale(const int& scale_) {
-    scale = scale_;
-}
-
 bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate& pixel) {
     //if (pixel is in area)
     //  expecting_text = true;

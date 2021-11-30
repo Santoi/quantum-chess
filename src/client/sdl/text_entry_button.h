@@ -23,8 +23,6 @@ public:
 
     void setAreaAndPosition(int x_, int y_, int height_, int width_);
 
-    void setScale(const int& scale_);
-
     bool enableTextEntryIfClicked(const PixelCoordinate& pixel);
 
     std::string getText() const;

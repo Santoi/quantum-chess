@@ -93,7 +93,7 @@ void Client::setUpClientsDataInServer(Socket &socket) {
   protocol.sendChosenRole(socket, *available_roles.begin());
 }
 
-
+/*
 void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
                                         Renderer &renderer) {
   while (handler.isOpen()) {
@@ -112,7 +112,7 @@ void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
       SDL_Delay(1000 / FRAME_RATE);
   }
 }
-
+*/
 void doRenderingLoopForSceneWithHandler(LoginRenderer& login_renderer, HandlerThread& login_handler,
                                         Renderer& renderer) {
     while (login_handler.isOpen()) {
@@ -143,7 +143,9 @@ void Client::execute(const char *host, const char *port,
   Renderer &renderer = window.renderer();
   LoginStateHandler login_state_handler(window.renderer());
   LoginRenderer login_renderer(login_state_handler, window);
-
+  LoginHandlerThread login_handler(login_state_handler);
+  login_handler.start();
+  doRenderingLoopForSceneWithHandler(login_renderer, login_handler, renderer);
     while (true) {
         // Timing: calculate difference between this and previous frame
         // in milliseconds
@@ -159,10 +161,6 @@ void Client::execute(const char *host, const char *port,
         if (frame_delta < 1000 / FRAME_RATE)
             SDL_Delay(1000 / FRAME_RATE);
     }
-  //LoginHandlerThread login_handler(login_state_handler);
-  //login_handler.start();
-  //doRenderingLoopForSceneWithHandler(&login_renderer, login_handler, renderer);
-
   //if we are here the client is connected to a match
   Socket socket = login_state_handler.getClientSocket();
   client_nick_name = login_state_handler.getClientNickName();

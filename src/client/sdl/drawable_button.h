@@ -18,7 +18,7 @@ private:
 
 public:
 
-    DrawableButton() = delete;
+   // DrawableButton() = default;
 
     DrawableButton(Renderer& renderer_, const std::string& not_pressed_file_name,
                    const std::string& pressed_file_name);

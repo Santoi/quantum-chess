@@ -6,7 +6,7 @@
 #include "button.h"
 #include "text_entry_button.h"
 #include <atomic>
-#include <list>
+#include <vector>
 #include <memory>
 
 class LoginRenderer;
@@ -14,8 +14,8 @@ class LoginRenderer;
 class LoginState {
 protected:
     Login& login;
-    std::list<std::unique_ptr<Button>> buttons_ptr;
-    std::list<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
+    std::vector<std::unique_ptr<Button>> buttons_ptr;
+    std::vector<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
 
 public:
 
@@ -54,5 +54,21 @@ public:
     void proccessTokens(std::list<std::string>&& tokens) override;
 };
 
+class NotConnectedToMatchState: public LoginState {
+public:
+
+    NotConnectedToMatchState(Login& login_, Renderer& renderer_);
+
+    bool clientIsConnectedToMatch() override;
+
+    void tellRendererWhatToRender(LoginRenderer& login_renderer) override;
+
+    void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) override;
+
+    void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+    active_text_entries) override;
+
+    void proccessTokens(std::list<std::string>&& tokens) override;
+};
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_H

@@ -15,10 +15,10 @@ void LoginRenderer::render() {
   login_state_handler.tellRendererWhatToRender(*this);
 }
 
-void LoginRenderer::renderIPAndPortFields(ConnectButton& connect_button,
+void LoginRenderer::renderIPAndPortFields(Button& connect_button,
                                           TextEntryButton& ip_text_entry,
                                           TextEntryButton& port_text_entry) {
-   connect_button.setAreaAndPosition(50, 50, 50, 20);
+   connect_button.setAreaAndPosition(50, 50, 50, 100);
    connect_button.render();
-  //...
+   //...
 }

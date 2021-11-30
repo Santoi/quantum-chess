@@ -2,10 +2,12 @@
 #define QUANTUM_CHESS_PROJ_FONT_H
 
 #include <SDL2pp/Font.hh>
+#include <SDL2pp/SDLTTF.hh>
 #include <string>
 #include <map>
 
 class Font {
+  SDL2pp::SDLTTF ttf;
   SDL2pp::Font regular_font;
   SDL2pp::Font mono_font;
   SDL2pp::Font bold_font;

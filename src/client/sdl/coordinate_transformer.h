@@ -6,11 +6,13 @@
 
 class CoordinateTransformer {
 public:
-  void position2Pixel(const Position &position, PixelCoordinate &pixel,
-                      int scale_factor);
+  void position2Pixel(const Position &position,
+                      PixelCoordinate &pixel, int width,
+                      int height);
 
-  void pixel2Position(const PixelCoordinate &pixel, Position &position,
-                      int scale_factor);
+  void pixel2Position(const PixelCoordinate &pixel,
+                      Position &position, int width,
+                      int height);
 };
 
 

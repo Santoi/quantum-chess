@@ -41,10 +41,10 @@ size_t DrawableText::length() const {
   return text.size();
 }
 
-int DrawableText::getTextOutputWidth() const {
+int DrawableText::getDrawableWidth() const {
   return text.size() * font.size();
 }
 
-int DrawableText::getTextOutputHeight() const {
+int DrawableText::getDrawableHeight() const {
   return font.size();
 }

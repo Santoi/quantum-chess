@@ -1,17 +1,19 @@
-#include <iostream>
-#include <sstream>
 #include "client.h"
+#include "sdl/window.h"
+#include "sdl/scene.h"
 #include "position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
 #include "../common/src/chess_exception.h"
 #include "../common/src/client_data.h"
-#include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
-#include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
+#include <SDL2pp/Mixer.hh>
+#include <iostream>
+#include <sstream>
 
 #define FRAME_RATE 60
+#define FONT_SIZE 10
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
@@ -92,9 +94,6 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
-  SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-  SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-  SoundHandler sound_handler(mixer);
   //sound_handler.playMusic();
   welcomeClientAndAskForNickName();
   Socket socket = Socket::createAConnectedSocket(host, port);
@@ -105,10 +104,12 @@ void Client::execute(const char *host, const char *port,
 
   Window window;
   Renderer &renderer = window.renderer();
-  Game game(window, send, role, sound_handler);
+  Font font(FONT_SIZE);
+  Game game(window, send, role);
+  Scene scene(window, game.getBoard(), font);
 
   ActionThread action_thread(received, game);
-  EventHandlerThread event_handler(game);
+  EventHandlerThread event_handler(window, game);
 
   receiver_thread.start();
   sender_thread.start();
@@ -122,13 +123,15 @@ void Client::execute(const char *host, const char *port,
     // in milliseconds
     uint32_t before_render_ticks = SDL_GetTicks();
 
+    // Update chess dimensions to game
+    game.setScale(scene.getChessWidth(), scene.getChessHeight());
+
     // Show rendered frame
-    renderer.render(game);
+    renderer.render(scene);
 
     uint32_t after_render_ticks = SDL_GetTicks();
     uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
-    // Frame limiter: sleep for a little bit to not eat 100% of CPU
     if (frame_delta < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE);
   }

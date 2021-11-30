@@ -12,7 +12,7 @@ template<class T>
 class DrawableContainer {
 private:
   std::list<T> drawables_list;
-  int max_drawables;
+  size_t max_drawables;
 
 public:
   DrawableContainer();
@@ -36,9 +36,9 @@ DrawableContainer<T>::DrawableContainer(unsigned int max_drawables_)
 
 template<class T>
 void DrawableContainer<T>::addDrawable(T &&drawable) {
-  if (drawables_list.size() == this->max_drawables)
-    drawables_list.pop_front();
-  drawables_list.push_back(std::move(drawable));
+  if (drawables_list.size() == max_drawables)
+    drawables_list.pop_back();
+  drawables_list.push_front(std::move(drawable));
 }
 
 template<class T>

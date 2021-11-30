@@ -1,10 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_H
 #define QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_H
 
-#include "../renderer.h"
-#include "text_sprite.h"
 #include "font.h"
+#include "text_sprite.h"
 #include <string>
+
+class Renderer;
 
 class DrawableText {
   Renderer &renderer;
@@ -23,9 +24,9 @@ public:
 
   size_t length() const;
 
-  int getTextOutputWidth() const;
+  int getDrawableWidth() const;
 
-  int getTextOutputHeight() const;
+  int getDrawableHeight() const;
 
   void render(int x, int y);
 

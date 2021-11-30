@@ -1,16 +1,19 @@
 #ifndef QUANTUM_CHESS_PROJ_BOARD_H
 #define QUANTUM_CHESS_PROJ_BOARD_H
 
-#include "../sdl/renderer.h"
-#include "../sdl/texture_sprite.h"
 #include "drawable_chessman.h"
 #include "drawable_tile.h"
 #include "../position.h"
 #include "../communication/chessman_data.h"
+#include "../sdl/texture_sprite.h"
+#include "../sdl/renderer.h"
+#include "../sdl/window.h"
 #include <map>
 #include <string>
 #include <vector>
 #include <mutex>
+
+class Renderer;
 
 class Board {
 private:
@@ -20,9 +23,10 @@ private:
   std::map<const Position, DrawableTile> board;
   ChessmanSpriteRepository chessman_repository;
   TileSpriteRepository tile_repository;
+  std::mutex mutex;
 
 public:
-  Board(Renderer &renderer_, const std::string &image, int width, int height);
+  Board(Window &window, const std::string &image, int width, int height);
 
   ~Board() = default;
 
@@ -50,4 +54,4 @@ public:
 };
 
 
-#endif //QUANTUM_CHESS_PROJ_BOARD_CLIENT_H
+#endif //QUANTUM_CHESS_PROJ_BOARD_H

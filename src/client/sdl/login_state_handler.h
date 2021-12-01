@@ -37,7 +37,7 @@ public:
 
     void tellRendererWhatToRender(LoginRenderer& login_renderer);
 
-    Socket getClientSocket();
+    //Socket getClientSocket();
 
     std::string getClientNickName();
 

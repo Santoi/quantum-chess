@@ -25,22 +25,32 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_
 
 
 void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-   // current_state.reset();
-    //current_state = make_unique<NotConnectedToMatchState>(login, renderer);
-    try {
-        int aux = current_state->proccessTokens(std::move(tokens));
-        current_state.reset();
-        if (aux == 1)
-            current_state = make_unique<NotConnectedToMatchState>(login, renderer);
-        //else if (aux == 2
-    } catch (const NetworkAddressInfoException& error) {
-        error.what();
-        std::cout << "estamos en error" << std::endl;
-        return;
-    } catch (...) {
+    {
+        std::lock_guard<std::mutex> lock_guard(mutex);
+        // current_state.reset();
+        //current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+        try {
+            std::cout << "esto es aux" << std::endl;
+            int aux = current_state->proccessTokens(std::move(tokens));
+            std::cout << "hola" << std::endl;
+            current_state.reset();
+            if (aux == 1)
+                current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+            else if (aux == 2) {
+                std::cout << "conectado a partida" << std::endl;
+                current_state = make_unique<ConnectedToMatchState>(login, renderer);
+                std::cout << "ya cree" <<std::endl;
+            }
+        } catch (const NetworkAddressInfoException &error) {
+            std::cout << "Error: " << error.what() << std::endl;
+            return;
+        } catch (const std::exception &e) {
+            std::cout << "Error: " << e.what() << std::endl;
+            return;
+        }
+        catch (...) {
+        }
     }
-    std::cout << "Conectado al server!" << std::endl;
 }
 
 void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) {
@@ -48,10 +58,10 @@ void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) 
     current_state->tellRendererWhatToRender(login_renderer);
 }
 
-
+/*
 Socket LoginStateHandler::getClientSocket() {
-    return login.getClientSocket();
-}
+    return std::move(login.getClientSocket());
+}*/
 
 std::string LoginStateHandler::getClientNickName() {
     return login.getClientNickName();

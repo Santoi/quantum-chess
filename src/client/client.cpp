@@ -6,6 +6,7 @@
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
 #include "../server/src/quantum_chess/chess_exception.h"
+#include "../common/src/packet.h"
 #include "../common/src/client_data.h"
 #include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
@@ -135,6 +136,7 @@ void doRenderingLoopForSceneWithHandler(LoginRenderer& login_renderer, HandlerTh
 
 void Client::execute(const char *host, const char *port,
                      bool single_threaded_client) {
+
   SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
   SoundHandler sound_handler(mixer);
@@ -148,42 +150,10 @@ void Client::execute(const char *host, const char *port,
 
   login_handler.start();
   doRenderingLoopForSceneWithHandler(login_renderer, login_handler, renderer);
-    while (login_handler.isOpen()) {
-        // Timing: calculate difference between this and previous frame
-        // in milliseconds
-        uint32_t before_render_ticks = SDL_GetTicks();
-
-        // Show rendered frame
-        renderer.render(login_renderer);
-
-        uint32_t after_render_ticks = SDL_GetTicks();
-        uint32_t frame_delta = after_render_ticks - before_render_ticks;
-
-        // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        if (frame_delta < 1000 / FRAME_RATE)
-            SDL_Delay(1000 / FRAME_RATE);
-    }
-    login_handler.join();
+  login_handler.join();
   //if we are here the client is connected to a match
 //  Socket socket = login_state_handler.getClientSocket();
  // client_nick_name = login_state_handler.getClientNickName();
-  /*
-   BlockingQueue<std::string> queue;
-  Login login(queue);
-  LoginHandlerThread login_thread(login);
-  login_thread.start();
-
-  std::shared_ptr<std::string> string_ptr;
-  queue.pop(string_ptr);
-  IP = string_ptr->stoi();
-  queue.pop(string_ptr);
-  PORT = string_ptr->stoi();
-  queue.pop(string_ptr);
-  client_nick_name = *string_ptr;
-  queue.pop(string_ptr);
-  MATCH_NUMBER = string_PTR->stoi();
-  welcomeClientAndAskForNickName();
-   */
   //login_handler.join();
 /*
   RemoteClientSender sender_thread(socket, send);

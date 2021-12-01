@@ -25,3 +25,15 @@ void LoginRenderer::renderIPAndPortFields(Button& connect_button,
    port_text_entry.setAreaAndPosition(10, 100, scale*0.1, scale*0.3);
    port_text_entry.render();
 }
+
+void LoginRenderer::renderMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons) {
+    for (int i = 0; i < (int)match_buttons.size(); i++) {
+        match_buttons[i]->setAreaAndPosition(i * 20 + 10, 200, 0.1 * scale, 0.1 * scale);
+        match_buttons[i]->render();
+    }
+}
+
+void LoginRenderer::renderConnectedSprite(TextureSprite& texture) {
+    texture.render(10, 10, scale*0.9, scale*0.9);
+}
+

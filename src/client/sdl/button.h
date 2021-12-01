@@ -47,11 +47,18 @@ public:
 };
 
 class PickMatchButton: public Button {
+private:
+    int match_number;
 
 public:
 
+    PickMatchButton() = delete;
+
+    PickMatchButton(Renderer& renderer_, int match_number);
+
     bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
 
+    ~PickMatchButton() = default;
 };
 
 

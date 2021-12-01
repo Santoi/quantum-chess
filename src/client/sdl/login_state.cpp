@@ -1,8 +1,9 @@
 #include "login_state.h"
 #include "../../common/src/unique_ptr.h"
+#include <iostream>
 
 LoginState::LoginState(Login& login_)
-            :login(login_){
+            :login(login_) {
 }
 
 NotConnectedToServerState::NotConnectedToServerState(Login& login_, Renderer& renderer_)
@@ -53,25 +54,56 @@ int NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
 
 NotConnectedToMatchState::NotConnectedToMatchState(Login& login_, Renderer& renderer_)
                         :LoginState(login_) {
+    login.getListOfMatchButtons(renderer_, buttons_ptr);
 }
 
 bool NotConnectedToMatchState::clientIsConnectedToMatch() {
-    return true;
+    return false;
 }
 
 void NotConnectedToMatchState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
-
+    login_renderer.renderMatchButtons(buttons_ptr);
 }
 
 void NotConnectedToMatchState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {
-
+    for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); it++)
+        active_buttons.push_back(**it);
 }
 
 void NotConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                                         active_text_entries) {
-
+    //dont have text_entries
 }
 
 int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
+    std::string str_match_number = tokens.front();
+    int match_number = std::stoi(str_match_number);
+    login.chooseMatchNumber(match_number);
     return 2;
+}
+
+ConnectedToMatchState::ConnectedToMatchState(Login& login_, Renderer& renderer_)
+                        :LoginState(login_),
+                         texture_sprite(renderer_, "img/button/connected_sprite.png") {
+    std::cout << "me creé" << std::endl;
+}
+
+bool ConnectedToMatchState::clientIsConnectedToMatch() {
+    return true;
+}
+
+void ConnectedToMatchState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
+    login_renderer.renderConnectedSprite(texture_sprite);
+}
+
+void ConnectedToMatchState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {
+
+}
+
+void ConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+                                                            active_text_entries) {
+}
+
+int ConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
+    return 3;
 }

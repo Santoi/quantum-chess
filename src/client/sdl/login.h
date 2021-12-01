@@ -22,11 +22,15 @@ public:
 
   void connectToServer(const std::string &ip, const std::string &port);
 
-  Socket getClientSocket();
+  void getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_ptr<Button>>& buttons_ptr);
+
+  //Socket getClientSocket();
 
   std::string getClientNickName();
 
   ~Login() = default;
+
+    void chooseMatchNumber(int match_number);
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

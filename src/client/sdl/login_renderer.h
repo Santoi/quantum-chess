@@ -8,6 +8,8 @@
 
 class LoginStateHandler;
 
+class TextureSprite;
+
 class LoginRenderer {
 private:
   int scale;
@@ -22,6 +24,10 @@ public:
   void setScale(const int& scale_);
 
   void render();
+
+  void renderMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons);
+
+  void renderConnectedSprite(TextureSprite& texture);
 
   void renderIPAndPortFields(Button &connect_button,
                              TextEntryButton &ip_text_entry,

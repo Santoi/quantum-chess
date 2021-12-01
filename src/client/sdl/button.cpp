@@ -30,12 +30,25 @@ bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list
         for (it = text_entries.begin(); it != text_entries.end(); it++)
             tokens.push_back((*it)->getText());
         return true;
-    } else {
-        std::cout << "button not pressed" <<std::endl;
-        return false;
     }
+    std::cout << "button not pressed" <<std::endl;
+    return false;
+}
+
+PickMatchButton::PickMatchButton(Renderer& renderer, int match_number_)
+                :Button(renderer, "img/buttons/not_pressed_match_button.png",
+                        "img/buttons/pressed_match_button.png"),
+                        match_number(match_number_) {
 }
 
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
+    if (drawable.pixelIsOnButton(pixel_)) {
+        std::cout << "match button pressed!!" <<std::endl;
+        std::vector<std::unique_ptr<TextEntryButton>>::const_iterator it;
+        std::string str_match_number = std::to_string(match_number);
+        tokens.push_back(std::move(str_match_number));
+        return true;
+    }
+    std::cout << "button not pressed" <<std::endl;
     return false;
 }

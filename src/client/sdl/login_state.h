@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 
 #include "login_renderer.h"
+#include "texture_sprite.h"
 #include "login.h"
 #include "button.h"
 #include "text_entry_button.h"
@@ -74,5 +75,27 @@ public:
 
     ~NotConnectedToMatchState() = default;
 };
+
+class ConnectedToMatchState: public LoginState {
+private:
+    TextureSprite texture_sprite;
+
+public:
+    ConnectedToMatchState(Login& login_, Renderer& renderer_);
+
+    bool clientIsConnectedToMatch() override;
+
+    void tellRendererWhatToRender(LoginRenderer& login_renderer) override;
+
+    void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) override;
+
+    void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+    active_text_entries) override;
+
+    int proccessTokens(std::list<std::string>&& tokens) override;
+
+    ~ConnectedToMatchState() = default;
+};
+
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_H

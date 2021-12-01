@@ -77,6 +77,10 @@ Si una pieza se mueve a un casillero del color contrario, al igual que en el aje
     <img src="docs/images/movement_with_capture.gif" alt="Movimiento con captura"/>
 </p>
 
+### Fin del juego
+
+A diferencia del ajedrez clásico, en el ajedrez cuántico no existe el jaque ni el jaque mate. Ya que por la aleatoriedad de las piezas superpuestas, un jaque mate es practicamente imposible. Por lo tanto el juego terminará cuando el rey de un bando sea capturado.
+
 ### Split
 
 Las piezas pueden ser partidas y puestas en superposición, y pasará a ser una pieza cuántica. Una vez entrado en este modo, la pieza estará en dos o más lugares a la vez con cierta probabilidad. Esta probabilidad se divide por dos cada vez que se divide una pieza con un split.
@@ -145,6 +149,10 @@ Cuando se realiza un movimiento, podría ocurrir que en el camino de la pieza, s
 
 A partir de aquí cuando, se mida una de las piezas entrelazadas, el destino de la otra también se definirá.
 
+<p align=center>
+    <img src="docs/images/entanglement.gif" alt="Entrelazado"/>
+</p>
+
 Algunas consideraciones y limitaciones a la hora de entrelazar:
 * No se puede entrelazar con más de una pieza a la vez.
 * No se puede entrelazar dos veces la misma pieza.
@@ -155,14 +163,73 @@ Algunas consideraciones y limitaciones a la hora de entrelazar:
 Si se hace clic derecho en una pieza, se podra observar en verde cuales son las otras partes de la pieza, y en celeste con que piezas está entrelazada.
 
 <p align=center>
-    <img src="docs/images/see.gif" alt="Medicion no estaba alli"/>
+    <img src="docs/images/see.gif" alt="Enroque"/>
 </p>
+
+### Enroque
+
+El enroque permite mover en un mismo movimiento al rey y a una de las torres. Según que torre se utilize, se puede hacer:
+
+* Enroque largo (en la imagen): se intercambian el rey y la torre de la izquierda, en este caso tienen que estar vacios los tres casilleros entre el rey y la torre. El rey queda en el casillero C1 (si se juega con blancas) y la torre en el casillero D1. 
+* Enroque corto: se intercambian el rey y la torre de la derecha, en este caso tienen que estar vacios los dos casilleros entre el rey y la torre.  El rey queda en el casillero G1 (si se juega con blancas) y la torre en el casillero F1.
+
+<p align=center>
+    <img src="docs/images/castling.gif" alt="Enroque con entrelazado"/>
+</p>
+
+Para hacer un enroque simplemente se debe hacer clic en la posición que el rey ocupará, cuando esté disponible.
+
+Consideraciones y limitaciones a la hora de enrocar:
+* No se puede enrocar si alguno de los dos casilleros que deben ocupar la torre y el rey, están ocupados (no se puede medir).
+* Al igual que en el ajedrez clásico, tanto torre como rey no deben haberse movido nunca (aunque hayan vuelto al lugar).
+* A diferencia del ajedrez clásico, como no existe el jaque, el rey puede estar siendo atacado, y las casillas de paso y finales pueden estar bajo ataque tambien.
+
+Además, se pueden hacer movimientos de tipo cuantico mientras se enroca.
+
+* Podría ocurrir que en el enroque largo, al lado de la torre haya una pieza cuantica, con lo cual, como no es un casillero donde quedará una pieza del enroque, y la pieza podría estar allí o no, se enlazará la torre y el rey con esta pieza.
+
+<p align=center>
+    <img src="docs/images/entangled_castling.gif" alt="Visualizacion de piezas"/>
+</p>
+
+* Podría hacerse un split mientras se enroca, eligiendo en el split una posición correspondiente al enroque (o ambas). Al hacer esto, la torre (o las torres, si se hizo el split en ambos enroques) quedarán entrelazadas con el rey.
+
+<p align=center>
+    <img src="docs/images/quantum_castling.gif" alt="Visualizacion de piezas"/>
+</p>
+
+
+
+### Logs y Chat
+
+En la zona derecha de la pantalla, se pueden visualizar 4 secciones: el log de errores (1), el log de turnos (2), el log de movimientos (3) y el chat(4).
+
+
+ <p align=center>
+    <img src="docs/images/chat_log.png" alt="Log and chat"/>
+</p>
+
+
+ 1. El log de errores se muestra en rojo, cuando un movimiento no se haya podido completar por algún error del usuario (tal como un movimiento inválido, no es su turno, etcetera).
+ 2. El log de turnos se muestra en verde, e indica quien debe jugar.
+ 3. El log de movimientos detalla en vivo cuales fueron los últimos movimientos realizados en la partida y sus consecuencias.
+ 4. El chat permite conversar con los otros jugadores y observadores. Para utilizarlo se deberá hacer clic sobre la barra negra de la derecha, allí se podrá tipear. Los mensajes son enviados utilizando ```ENTER``` o automáticamente al llegar al final de la linea. Para voler al juego, solo se debe presionar sobre el tablero (este primer toque no activará ninguna casilla).
+
+
+ <p align=center>
+    <img src="docs/images/chat.gif" alt="Chat"/>
+</p>
+
+
+### Activación de musica y sonidos
+
+La música puede ser activada y desactivada utilizando la tecla ```M```. Los efectos de sonidos pueden ser desactivados utilizando la telca ```N```.
 
 ### Cancelando movimientos
 
 Todos los movimientos pueden ser cancelados con la tecla ```ESC```
 
-## Archivo de configuración
+## Archivo de configuración del tablero
 
 El archivo de configuracion permite cargar tableros pre-definidos. Esto es para el server, por lo que un server inicializado con un archivo, lo usará para todas sus partidas.
 

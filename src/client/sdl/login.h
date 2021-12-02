@@ -24,7 +24,9 @@ public:
 
   void getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_ptr<Button>>& buttons_ptr);
 
-  void sendNickNameToServer(std::string& nick_name);
+  void saveNickName(const std::string& nick_name);
+
+  void sendSavedNickNameToServer();
 
   //Socket getClientSocket();
 

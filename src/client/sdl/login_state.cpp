@@ -57,7 +57,8 @@ int NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
     login.connectToServer(ip, port);
     std::string nick_name = tokens.front();
     tokens.pop_front();
-    login.sendNickNameToServer(nick_name);
+    std::cout << nick_name << std::endl;
+    login.saveNickName(nick_name);
     return 1;
 }
 
@@ -88,6 +89,7 @@ int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
     std::string str_match_number = tokens.front();
     int match_number = std::stoi(str_match_number);
     login.chooseMatchNumber(match_number);
+    login.sendSavedNickNameToServer();
     return 2;
 }
 

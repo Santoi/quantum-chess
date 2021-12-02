@@ -58,9 +58,8 @@ void Login::getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_p
     std::cout << "Todavía no estamos conectado al match!" << std::endl;*/
 }
 
-void Login::sendNickNameToServer(std::string& nick_name) {
-    ClientProtocol protocol;
-    protocol.sendClientsNickName(*client_socket_ptr, nick_name);
+void Login::saveNickName(const std::string& nick_name) {
+    client_nick_name = nick_name;
 }
 /*
 Socket Login::getClientSocket() {
@@ -69,6 +68,11 @@ Socket Login::getClientSocket() {
 
 std::string Login::getClientNickName() {
     return client_nick_name;
+}
+
+void Login::sendSavedNickNameToServer() {
+    ClientProtocol protocol;
+    protocol.sendClientsNickName(*client_socket_ptr, client_nick_name);
 }
 
 void Login::chooseMatchNumber(int match_number) {

@@ -8,6 +8,9 @@
 #include "instructions/load_board_instruction.h"
 #include "instructions/chat_instruction.h"
 
+// TODO maps de listening queues y client hanlders hay que hacerlos protegidos,
+//  podria haber race condition si el cliente manda algo y justo se une alguien.
+
 Match::Match(std::ifstream &file_)
         : Thread(), board(), clients(), listening_queues(),
           match_updates_queue(), file(file_) {

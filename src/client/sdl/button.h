@@ -17,10 +17,11 @@ class Button {
 protected:
     DrawableButton drawable;
 
+    Button(Renderer& renderer_);
+
 public:
 
     Button() = delete;
-
 
     Button(Renderer& renderer_, const std::string& not_pressed_file_name,
            const std::string& pressed_file_name);
@@ -34,10 +35,6 @@ public:
     void resetButton();
 
     ~Button() = default;
-
-protected:
-
-    Button(Renderer& renderer_);
 };
 
 class ConnectButton: public Button {
@@ -70,5 +67,19 @@ public:
     ~PickMatchButton() = default;
 };
 
+class RoleButton: public Button {
+private:
+    const ClientData::Role role;
+
+public:
+
+    RoleButton() = delete;
+
+    RoleButton(Renderer& renderer_, ClientData::Role role_);
+
+    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
+
+    ~RoleButton() = default;
+};
 
 #endif //QUANTUM_CHESS_PROJ_BUTTON_H

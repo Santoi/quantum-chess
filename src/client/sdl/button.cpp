@@ -15,6 +15,9 @@ void Button::setAreaAndPosition(int x_, int y_, int height_, int width_) {
     drawable.setAreaAndPosition(x_, y_, height_, width_);
 }
 
+void Button::resetButton() {
+    drawable.disablePressedStatus();
+}
 
 ConnectButton::ConnectButton(Renderer& renderer,
                              const std::vector<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr)

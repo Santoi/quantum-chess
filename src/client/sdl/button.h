@@ -29,6 +29,8 @@ public:
 
     void setAreaAndPosition(int x, int y, int height, int width);
 
+    void resetButton();
+
     ~Button() = default;
 };
 

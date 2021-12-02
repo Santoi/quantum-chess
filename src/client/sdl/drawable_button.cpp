@@ -34,3 +34,8 @@ bool DrawableButton::pixelIsOnButton(const PixelCoordinate &pixel_) {
                   pixel_.y() > (unsigned)(y) && pixel_.y() < (unsigned)(y + height));
     return is_pressed;
 }
+
+void DrawableButton::disablePressedStatus() {
+    is_pressed = false;
+}
+

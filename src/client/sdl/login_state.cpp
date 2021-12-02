@@ -6,6 +6,12 @@ LoginState::LoginState(Login& login_)
             :login(login_) {
 }
 
+void LoginState::resetPressedButtons() {
+    for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); it++)
+        (*it)->resetButton();
+}
+
+
 NotConnectedToServerState::NotConnectedToServerState(Login& login_, Renderer& renderer_)
                             :LoginState(login_) {
     text_entry_buttons_ptr.reserve(3);

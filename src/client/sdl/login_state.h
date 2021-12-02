@@ -35,6 +35,8 @@ public:
 
     virtual int proccessTokens(std::list<std::string>&& tokens) = 0;
 
+    void resetPressedButtons();
+
     ~LoginState() = default;
 };
 

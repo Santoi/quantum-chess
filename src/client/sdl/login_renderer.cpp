@@ -15,15 +15,17 @@ void LoginRenderer::render() {
   login_state_handler.tellRendererWhatToRender(*this);
 }
 
-void LoginRenderer::renderIPAndPortFields(Button& connect_button,
-                                          TextEntryButton& ip_text_entry,
-                                          TextEntryButton& port_text_entry) {
+void LoginRenderer::renderSettingsPage(Button &connect_button,
+                        TextEntryButton &ip_text_entry,
+                        TextEntryButton &port_text_entry, TextEntryButton &name_text_entry) {
    connect_button.setAreaAndPosition(200, 300, scale*0.135, scale*0.310);
    connect_button.render();
    ip_text_entry.setAreaAndPosition(10, 10, scale*0.1, scale*0.8);
    ip_text_entry.render();
    port_text_entry.setAreaAndPosition(10, 100, scale*0.1, scale*0.3);
    port_text_entry.render();
+   name_text_entry.setAreaAndPosition(300, 100, scale*0.1, scale*0.5);
+   name_text_entry.render();
 }
 
 void LoginRenderer::renderMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons) {

@@ -29,9 +29,9 @@ public:
 
   void renderConnectedSprite(TextureSprite& texture);
 
-  void renderIPAndPortFields(Button &connect_button,
+  void renderSettingsPage(Button &connect_button,
                              TextEntryButton &ip_text_entry,
-                             TextEntryButton &port_text_entry);
+                             TextEntryButton &port_text_entry, TextEntryButton &name_text_entry);
 };
 
 

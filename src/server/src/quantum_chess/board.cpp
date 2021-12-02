@@ -246,9 +246,7 @@ void Board::load(std::ifstream &file) {
   file.seekg(0);
   while (!file.eof() && file.peek() != EOF) {
     std::getline(file, line);
-    if (line.empty())
-      continue;
-    if (line[0] == LOADER_COMMENT)
+    if (line.empty() || line[0] == LOADER_COMMENT)
       continue;
     std::stringstream iss(line);
     char chessman, color;
@@ -260,7 +258,7 @@ void Board::load(std::ifstream &file) {
       throw std::invalid_argument("invalid color");
     Position position(x, y);
     if (getChessmanAt(position))
-      throw std::invalid_argument("position occupied twice loading file");
+      throw std::invalid_argument("position occupied twice in file");
     addNewChessman(chessman, position, color == 'W');
   }
 }

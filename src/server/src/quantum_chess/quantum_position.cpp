@@ -10,7 +10,7 @@ QuantumPosition::QuantumPosition(uint8_t x, uint8_t y, double prob_,
                                                         prob(prob_),
                                                         chessman(chessman_) {
   if (prob > 1 || prob < 0)
-    throw ChessException("probabilidad invalida");
+    throw ChessException("invalid probability");
 }
 
 QuantumPosition::QuantumPosition(const Position &position_, double prob_,
@@ -18,7 +18,7 @@ QuantumPosition::QuantumPosition(const Position &position_, double prob_,
                                                         prob(prob_),
                                                         chessman(chessman_) {
   if (prob > 1 || prob < 0)
-    throw ChessException("probabilidad invalida");
+    throw ChessException("invalid probability");
 }
 
 uint8_t QuantumPosition::x() const {
@@ -52,26 +52,12 @@ bool QuantumPosition::operator!=(const Position &other) const {
 
 void QuantumPosition::setProb(double prob_) {
   if (prob < 0 || prob > 1)
-    throw ChessException("probabilidad invalida");
+    throw ChessException("invalid probability");
   prob = prob_;
 }
 
-/*
-void QuantumPosition::entangle(QuantumPosition &other) {
-  entangled.push_back(&other);
-}
-
-void QuantumPosition::unentangle() {
-  entangled = std::list<QuantumPosition *>();
-}
-
-std::list<QuantumPosition *> &QuantumPosition::getEntangled() {
-  return entangled;
-}
-
-*/
-
 void QuantumPosition::measure() {
+  // TODO borrar cuando cambie a referencia.
   if (chessman)
     chessman->measure(Position(*this));
   else
@@ -88,53 +74,10 @@ void QuantumPosition::setPosition(const Position &position_) {
   position = position_;
 }
 
-
 const Chessman &QuantumPosition::getChessman() {
   return *chessman;
 }
 
-/*
-void QuantumPosition::addMeToEntangled() {
-  if (entangled.empty())
-    return;
-  for (auto &entangled_qp: entangled)
-    entangled_qp->entangled.push_back(this);
-}
-
-void QuantumPosition::deleteMeFromEntangled() {
-  for (auto &other: entangled) {
-    auto search_it = std::find(other->entangled.begin(),
-                               other->entangled.end(), this);
-    if (search_it != other->entangled.end())
-      other->entangled.erase(search_it);
-  }
-}
-
-void QuantumPosition::deleteMeFromEntangled(QuantumPosition &other) {
-  auto search_it = std::find(other.entangled.begin(),
-                             other.entangled.end(), this);
-  if (search_it != other.entangled.end())
-    other.entangled.erase(search_it);
-}
-
-void QuantumPosition::ifNotInOtherUnentangle(const QuantumPosition &other) {
-  for (auto it = entangled.begin(); it != entangled.end();) {
-    auto search_it = std::find(other.entangled.begin(),
-                               other.entangled.end(), *it);
-    if (search_it == other.entangled.end()) {
-      this->deleteMeFromEntangled(**it);
-      it = entangled.erase(it);
-      continue;
-    }
-    ++it;
-  }
-}
-
-bool QuantumPosition::isEntangled(const QuantumPosition &other) {
-  auto it = std::find(entangled.begin(), entangled.end(), &other);
-  return it != entangled.end();
-}
-*/
 bool QuantumPosition::isMyChessman(const Chessman &chessman_) const {
   return &chessman_ == chessman;
 }

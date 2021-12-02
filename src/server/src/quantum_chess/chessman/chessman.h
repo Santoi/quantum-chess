@@ -20,10 +20,7 @@ class ChessmanContainer;
 
 class QuantumPosition;
 
-/* Clase abstracta que representa una pieza del tablero.
- * Posee como atributos una COMPLETAR de posiciones, una
- * referencia al tablero al que pertenece y un booleano
- * que indica color. */
+// Abstract class that represent a chessman or quantum chessman.
 class Chessman {
   friend class QuantumPosition;
 
@@ -51,121 +48,145 @@ protected:
   bool white;
   EntanglementLog &entanglement_log;
 
-  /* Calcula los casilleros por los que se debe pasar para llegar desde
-   * una posicion a otra. No asegura orden, solo que la posicion
-   * final se encuentra al final del vector. */
+  // Calculates squares where chessman has to pass to go from one position to
+  // another. It doesn't secures order, only that last position is in final
+  // position of the vector.
   virtual void calculatePath(const Position &initial,
                              const Position &final,
                              std::vector<Position> &path) const;
 
-  // Calcula camino por una fila.
+  // Calculates path by a row.
   void calculateFilePath(const Position &initial,
                          const Position &final,
                          std::vector<Position> &path) const;
 
-  // Calcula camino por una columna.
+  // Calculates path by a column.
   void calculateRowPath(const Position &initial,
                         const Position &final,
                         std::vector<Position> &path) const;
 
-  // Calcula camino por una diagonal.
+  // Calculates path by a diagonal.
   void calculateDiagonalPath(const Position &initial,
                              const Position &final,
                              std::vector<Position> &path) const;
 
-  /* Devuelve si el camino es transitable (hay como mucho una pieza cuantica
-   * en el trayecto. Guarda en el puntero la pieza. No chequea ni la primer
-   * ni ultima posicion. */
+  // Returns true if path can be walked (there is at the most one quantum
+  // chessman) and saves a pointer to the chessman in a pair with its position.
+  // Doesnt' check last position.
   bool getMiddlePathChessman(const std::vector<Position> &path,
                              std::pair<Position,
                                      Chessman *> &chessman) const;
 
-  // Chequea que el camino sea transitable.
+  // Returns true if path can be walked. It checks last position, and boolean
+  // final_same_color_free states if it's ok to be a chessman of same color
+  // or different color in the final position.
   bool checkFreePath(const std::vector<Position> &path, std::pair<Position,
           Chessman *> &chessman_in_path, bool final_same_color_free) const;
 
+  // Returns true if chessman is already entangled.
   bool chessmanIsAlreadyEntangled(Chessman *chessman);
 
+  // Checks if chessman is in board. If not, it throws exception.
   void checkIsInBoardOrFail(const Position &position);
 
+  // Measure other chessman entangled with QuantumPosition.
   void measureOthers(QuantumPosition &quantum_position);
 
+  // Checks if a move is valid. Returning a status. It is used for validating
+  // possible moves and moves send by user.
   virtual
   MoveValidationStatus checkIsAValidMove(const Position &initial,
                                          const Position &final);
-
+  // Checks if a split is valid. Returning a status. It is used for validating
+  // possible splits and splits send by user.
   virtual Chessman::MoveValidationStatus
   checkIsAValidSplit(const Position &initial, const Position &final);
 
+  // Checks if a merge is valid. Returning a status. It is used for validating
+  // possible merges and merges send by user.
   virtual Chessman::MoveValidationStatus
   checkIsAValidMerge(const Position &initial1, const Position &final);
 
-  // Carga un vector con todos las posiciones a donde se puede mover la pieza.
+  // Loads a vector with all posible moves of the chessman.
   virtual void calculateMoves(const Position &initial,
                               std::list<Position> &posible_moves) const = 0;
 
+  // Depending on status passed, throws an exception with corresponding message.
   void moveValidationExceptionThrower(MoveValidationStatus status);
 
+  // Entangles chessman with the other chessman. Splitting this chessman with
+  // corresponding probability.
   void entangle(const Position &initial, const Position &final,
                 Chessman &other, const Position &other_position);
 
 public:
-  // Constructor, se le pasa posicion, color y referencia al tablero.
   Chessman(const Position &position_, bool white_, Board &board_,
            EntanglementLog &entanglement_log_);
-
-  // Mueve la pieza desde una posicion a otra, valida el movimiento.
+           
+  virtual ~Chessman() = default;
+           
+  // Moves chessman from initial position to final, validating the move.
   virtual bool move(const Position &initial, const Position &final);
 
+  // Splits chessman from initial position to final1 and final2 validating.
   virtual void split(const Position &initial, const Position &final1,
                      const Position &final2);
-
+  
+  // Merges chessman from initial1 and initial2 to final, validating.
   void merge(const Position &initial1, const Position &initial2,
              const Position &final);
 
-  // Devuelve true si la pieza esta en estado cuantico.
+  // Returns true if chessman is in quantum state.
   bool isQuantum() const;
 
-  // Devuelve true si la pieza es blanca.
+  // Returns true is chessman is white. 
   bool isWhite() const;
 
   friend std::ostream &operator<<(std::ostream &os,
                                   const Chessman &chessman);
 
-  virtual ~Chessman() = default;
-
+  // Returns probability corresponding to position.
   double getProbability(Position position);
 
-  // Devuelve la posicion real de una pieza.
+  // Returns real position of chessman.
   const QuantumPosition &getPosition() const;
 
+  // Returns position of index.
   const QuantumPosition &getPosition(size_t index) const;
 
+  // Returns amount of positions of chessman.
   size_t countPositions() const;
 
   // TODO despues hacer privada.
+  // Measures position of chessman.
   void measure(const Position &position);
 
-
+  // Calculates possible moves of chessman from initial position.
   virtual void calculatePossibleMoves(const Position &initial,
                                       std::list<Position> &posible_moves);
 
+  // Calculates possible splits of chessman from initial position.
   virtual void calculatePossibleSplits(const Position &initial,
                                        std::list<Position> &posible_moves);
-
+  
+  // Calculates possible merges of chessman from initial position.
   virtual void calculatePossibleMerges(const Position &initial,
                                        std::list<Position> &posible_moves);
 
+  // Calculates possible merges of chessman from two initial positions. Only
+  // is a merge possible if it possible for the two initial positions.
   void
   calculatePossibleMerges(const Position &initial1, const Position &initial2,
                           std::list<Position> &posible_moves);
-
-  // Metodo que devuelve la letra que representa a la pieza.
-  virtual char charId() const = 0;
-
+                          
+  // Load list with all the positions of chessman.
   void getAllPositions(std::list<Position> &output) const;
 
+  // Load list with all positions of all entangled chessman.
   void getEntangledPositions(std::list<Position> &output);
+
+  // Returns character that represents chessman.
+  virtual char charId() const = 0;
 };
 
 #endif //QUANTUM_CHESS_PROJ_CHESSMAN_H

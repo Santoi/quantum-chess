@@ -131,7 +131,7 @@ En el caso de que la pieza no esté realmente allí, esta desaparecerá, y se pr
 En el siguiente caso, la torre mide a la reina contraria, y como la reina estaba allí, fue capturada.
 
 <p align=center>
-    <img src="docs/images/readmemeasure_was_there.gif" alt="Medicion estaba alli" height="400"/>
+    <img src="docs/images/readme/measure_was_there.gif" alt="Medicion estaba alli" height="400"/>
 </p>
 
 En el siguiente caso, el rey mide a la torre propia, y resulta que no estaba alli, por lo que se realiza el movimiento.

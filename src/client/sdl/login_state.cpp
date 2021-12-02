@@ -93,6 +93,32 @@ int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
     return 2;
 }
 
+SelectingRoleState::SelectingRoleState(Login& login_, Renderer& renderer_)
+                    :LoginState(login_) {
+
+}
+
+bool SelectingRoleState::clientIsConnectedToMatch() {
+    return false;
+}
+
+void SelectingRoleState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
+
+}
+
+void SelectingRoleState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {
+
+}
+
+void SelectingRoleState::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+                                                        active_text_entries) {
+
+}
+
+int SelectingRoleState::proccessTokens(std::list<std::string>&& tokens) {
+
+}
+
 ConnectedToMatchState::ConnectedToMatchState(Login& login_, Renderer& renderer_)
                         :LoginState(login_),
                          texture_sprite(renderer_, "img/buttons/connected_sprite.png") {

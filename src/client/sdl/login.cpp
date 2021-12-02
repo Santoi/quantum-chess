@@ -27,35 +27,6 @@ void Login::getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_p
     std::vector<ClientData> empty_clients_list;
     std::unique_ptr<Button> button = make_unique<PickMatchButton>(renderer_, i, std::move(empty_clients_list));
     buttons_ptr.push_back(std::move(button));
-    //std::cout << "Selecciona de las partidas disponibles a cuál de estas"
-    //             " quieres entrar." << std::endl;
-    /*std::cout << "Las partidas disponibles son" << std::endl;
-    uint16_t last_id = 0;
-    for (auto it = data.begin(); it != data.end(); ++it) {
-        std::cout << "#" << it->first << ": ";
-        std::vector<ClientData> &client_data = it->second;
-        for (auto it_match = client_data.begin();
-             it_match != client_data.end(); ++it_match) {
-            char other_cliente_role = ' ';
-            switch (it_match->role) {
-                case ClientData::ROLE_WHITE:
-                    other_cliente_role = 'w';
-                    break;
-                case ClientData::ROLE_BLACK:
-                    other_cliente_role = 'b';
-                    break;
-                case ClientData::ROLE_SPECTATOR:
-                    other_cliente_role = 'o';
-                    break;
-            }
-            std::cout << it_match->name << "#" << it_match->id << "("
-                      << other_cliente_role << "), ";
-        }
-        std::cout << std::endl;
-        last_id = it->first;
-        std::cout << last_id << std::endl;
-    }
-    std::cout << "Todavía no estamos conectado al match!" << std::endl;*/
 }
 
 void Login::saveNickName(const std::string& nick_name) {

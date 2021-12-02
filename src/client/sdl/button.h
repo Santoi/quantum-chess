@@ -21,6 +21,7 @@ public:
 
     Button() = delete;
 
+
     Button(Renderer& renderer_, const std::string& not_pressed_file_name,
            const std::string& pressed_file_name);
 
@@ -33,6 +34,10 @@ public:
     void resetButton();
 
     ~Button() = default;
+
+protected:
+
+    Button(Renderer& renderer_);
 };
 
 class ConnectButton: public Button {

@@ -42,6 +42,8 @@ PickMatchButton::PickMatchButton(Renderer& renderer, int match_number_, std::vec
                 :Button(renderer, "img/buttons/not_pressed_match_button.png",
                         "img/buttons/pressed_match_button.png"),
                         match_number(match_number_), clients(clients_) {
+    //Drawable aux(renderer, )
+    //drawable =
 }
 
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {

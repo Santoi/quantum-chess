@@ -78,6 +78,25 @@ public:
     ~NotConnectedToMatchState() = default;
 };
 
+class SelectingRoleState: public LoginState {
+public:
+
+    SelectingRoleState(Login& login_, Renderer& renderer_);
+
+    bool clientIsConnectedToMatch() override;
+
+    void tellRendererWhatToRender(LoginRenderer& login_renderer) override;
+
+    void fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) override;
+
+    void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
+    active_text_entries) override;
+
+    int proccessTokens(std::list<std::string>&& tokens) override;
+
+    ~SelectingRoleState() = default;
+};
+
 class ConnectedToMatchState: public LoginState {
 private:
     TextureSprite texture_sprite;

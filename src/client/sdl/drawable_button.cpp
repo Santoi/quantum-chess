@@ -2,7 +2,7 @@
 
 DrawableButton::DrawableButton(Renderer& renderer_, const std::string& not_pressed_file_name,
                                const std::string& pressed_file_name)
-                :renderer(renderer_), scale(0), is_pressed(false), x(0), y(0),
+                :renderer(renderer_), is_pressed(false), x(0), y(0),
                  height(0), width(0) {
     sprites.reserve(2);
     TextureSprite not_pressed_sprite(renderer_, not_pressed_file_name);
@@ -11,8 +11,8 @@ DrawableButton::DrawableButton(Renderer& renderer_, const std::string& not_press
     sprites.push_back(std::move(pressed_sprite));
 }
 
-void DrawableButton::setScale(const int &scale_) {
-    scale = scale_;
+DrawableButton::DrawableButton(Renderer& renderer_)
+                :renderer(renderer_) {
 }
 
 void DrawableButton::render() {
@@ -20,6 +20,16 @@ void DrawableButton::render() {
         sprites[1].render(x, y, width, height);
     else
         sprites[0].render(x, y, width, height);
+}
+
+void DrawableButton::changeNotPressedImage(const std::string& not_pressed_file_name) {
+    TextureSprite aux_texture_sprite(renderer, not_pressed_file_name);
+    sprites[0] = std::move(aux_texture_sprite);
+}
+
+void DrawableButton::changePressedImage(const std::string& pressed_file_name) {
+    TextureSprite aux_texture_sprite(renderer, pressed_file_name);
+    sprites[1] = std::move(aux_texture_sprite);
 }
 
 void DrawableButton::setAreaAndPosition(int x_, int y_, int height_, int width_) {

@@ -11,7 +11,6 @@ class DrawableButton {
 private:
     Renderer& renderer;
     std::vector<TextureSprite> sprites;
-    int scale;
     bool is_pressed;
     int x;
     int y;
@@ -23,9 +22,13 @@ public:
     DrawableButton(Renderer& renderer_, const std::string& not_pressed_file_name,
                    const std::string& pressed_file_name);
 
-    void setScale(const int& scale_);
+    DrawableButton(Renderer& renderer_);
 
     void render();
+
+    void changeNotPressedImage(const std::string& not_pressed_file_name);
+
+    void changePressedImage(const std::string& pressed_file_name);
 
     bool pixelIsOnButton(const PixelCoordinate& pixel_);
 

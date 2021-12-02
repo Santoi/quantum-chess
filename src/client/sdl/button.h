@@ -4,6 +4,7 @@
 #include "pixel_coordinate.h"
 #include "text_entry_button.h"
 #include "drawable_button.h"
+#include "../../common/src/client_data.h"
 #include <vector>
 #include <list>
 #include <string>
@@ -51,12 +52,13 @@ public:
 class PickMatchButton: public Button {
 private:
     int match_number;
+    std::vector<ClientData> clients;
 
 public:
 
     PickMatchButton() = delete;
 
-    PickMatchButton(Renderer& renderer_, int match_number);
+    PickMatchButton(Renderer& renderer_, int match_number, std::vector<ClientData>&& clients_);
 
     bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
 

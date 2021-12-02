@@ -38,10 +38,10 @@ bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list
     return false;
 }
 
-PickMatchButton::PickMatchButton(Renderer& renderer, int match_number_)
+PickMatchButton::PickMatchButton(Renderer& renderer, int match_number_, std::vector<ClientData>&& clients_)
                 :Button(renderer, "img/buttons/not_pressed_match_button.png",
                         "img/buttons/pressed_match_button.png"),
-                        match_number(match_number_) {
+                        match_number(match_number_), clients(clients_) {
 }
 
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {

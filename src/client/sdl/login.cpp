@@ -20,11 +20,12 @@ void Login::getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_p
     buttons_ptr.reserve(data.size() + 1);
     int i = 0;
     for (auto it = data.begin(); it != data.end(); it++) {
-        std::unique_ptr<Button> button = make_unique<PickMatchButton>(renderer_, i);
+        std::unique_ptr<Button> button = make_unique<PickMatchButton>(renderer_, it->first, std::move(it->second));
         buttons_ptr.push_back(std::move(button));
         i++;
     }
-    std::unique_ptr<Button> button = make_unique<PickMatchButton>(renderer_, i);
+    std::vector<ClientData> empty_clients_list;
+    std::unique_ptr<Button> button = make_unique<PickMatchButton>(renderer_, i, std::move(empty_clients_list));
     buttons_ptr.push_back(std::move(button));
     //std::cout << "Selecciona de las partidas disponibles a cuál de estas"
     //             " quieres entrar." << std::endl;

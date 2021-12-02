@@ -37,12 +37,18 @@ void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
         else if (aux == 2)
             current_state = make_unique<ConnectedToMatchState>(login, renderer);
     } catch (const NetworkAddressInfoException &error) {
-        sleep(1);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                                 "ERROR",
+                                 "IP y/o puerto no válido. Por favor, vuelvalo a intentar.",
+                                 nullptr);
         current_state->resetPressedButtons();
         std::cout << "Error: " << error.what() << std::endl;
         return;
     } catch (const std::exception &e) {
-        sleep(1);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                                 "ERROR",
+                                 "IP y/o puerto no válido. Por favor, vuelvalo a intentar.",
+                                 nullptr);
         current_state->resetPressedButtons();
         std::cout << "Error: " << e.what() << std::endl;
         return;

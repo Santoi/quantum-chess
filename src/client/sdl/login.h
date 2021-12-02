@@ -4,6 +4,7 @@
 #include "pixel_coordinate.h"
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
+#include "../../common/src/client_data.h"
 #include "button.h"
 #include <memory>
 #include <vector>
@@ -35,6 +36,9 @@ public:
   ~Login() = default;
 
     void chooseMatchNumber(int match_number);
+
+private:
+    std::list<ClientData::Role> getAvailableRoles();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

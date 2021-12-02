@@ -37,6 +37,17 @@ void TextEntryButton::disableTextEntry() {
     text_entry.disableEntry();
 }
 
+void TextEntryButton::backSpaceIfEnabled() {
+    //text_entry.backspace();
+    std::lock_guard<std::mutex> lock_guard(mutex);
+    if (!expecting_text_entry)
+        return;
+    else if (!input_text.empty())
+        input_text.pop_back();
+    std::cout << input_text << std::endl;
+}
+
+
 void TextEntryButton::concatIfEnabled(const std::string &text_) {
     std::lock_guard<std::mutex> lock_guard(mutex);
     if (!expecting_text_entry)

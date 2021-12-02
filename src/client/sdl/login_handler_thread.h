@@ -28,6 +28,10 @@ private:
 
     void handleTextInput(const std::string& input);
 
+    void handleKeyDown();
+
+    void handleBackSpaceKey();
+
     void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
 };
 

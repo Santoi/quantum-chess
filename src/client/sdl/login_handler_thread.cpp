@@ -17,8 +17,8 @@ void LoginHandlerThread::run() {
             case SDL_TEXTINPUT:
                 if (expecting_text_entry)
                     handleTextInput(event.text.text);
-                    //std::cout << event.text.text << std::endl;
-                //                text_entry.concat(event.text.text);
+            case SDL_KEYDOWN:
+                handleKeyDown();
             case SDL_MOUSEBUTTONDOWN:
                 SDL_MouseButtonEvent mouse = event.button;
                 if (mouse.button == SDL_BUTTON_LEFT)
@@ -26,6 +26,23 @@ void LoginHandlerThread::run() {
         }
     }
     open = false;
+}
+
+void LoginHandlerThread::handleKeyDown() {
+    switch (event.key.keysym.sym) {
+        case SDLK_BACKSPACE: {
+            if (expecting_text_entry)
+                handleBackSpaceKey();
+            break;
+        }
+    }
+}
+
+void LoginHandlerThread::handleBackSpaceKey() {
+    std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
+    login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
+    for (auto it = active_text_entries.begin(); it != active_text_entries.end(); it++)
+        it->get().backSpaceIfEnabled();
 }
 
 void LoginHandlerThread::handleTextInput(const std::string& new_text) {

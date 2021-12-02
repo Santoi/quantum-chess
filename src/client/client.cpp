@@ -94,7 +94,6 @@ void Client::setUpClientsDataInServer(Socket &socket) {
   protocol.sendChosenRole(socket, *available_roles.begin());
 }
 
-/*
 void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
                                         Renderer &renderer) {
   while (handler.isOpen()) {
@@ -113,7 +112,7 @@ void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
       SDL_Delay(1000 / FRAME_RATE);
   }
 }
-*/
+
 void doRenderingLoopForSceneWithHandler(LoginRenderer& login_renderer, HandlerThread& login_handler,
                                         Renderer& renderer) {
     while (login_handler.isOpen()) {
@@ -146,19 +145,17 @@ void Client::execute(const char *host, const char *port,
   LoginStateHandler login_state_handler(window.renderer());
   LoginRenderer login_renderer(login_state_handler, window);
   LoginHandlerThread login_handler(login_state_handler);
-
-
   login_handler.start();
   doRenderingLoopForSceneWithHandler(login_renderer, login_handler, renderer);
   login_handler.join();
   //if we are here the client is connected to a match
-//  Socket socket = login_state_handler.getClientSocket();
+  Socket socket = login_state_handler.getClientSocket();
+  std::cout << "Ya agarré el socket" << std::endl;
  // client_nick_name = login_state_handler.getClientNickName();
-  //login_handler.join();
-/*
+
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
-  setUpClientsDataInServer(socket);
+//  setUpClientsDataInServer(socket);
 
   Game game(window, send, role, sound_handler);
 
@@ -178,7 +175,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.join();
   event_handler.join();
   sender_thread.join();
-  receiver_thread.join();*/
+  receiver_thread.join();
 }
 
 bool Client::readCommand() {

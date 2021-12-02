@@ -60,10 +60,10 @@ void Login::getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_p
 void Login::saveNickName(const std::string& nick_name) {
     client_nick_name = nick_name;
 }
-/*
+
 Socket Login::getClientSocket() {
     return std::move(*client_socket_ptr);
-}*/
+}
 
 std::string Login::getClientNickName() {
     return client_nick_name;

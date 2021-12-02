@@ -61,10 +61,10 @@ void LoginStateHandler::tellRendererWhatToRender(LoginRenderer& login_renderer) 
     current_state->tellRendererWhatToRender(login_renderer);
 }
 
-/*
+
 Socket LoginStateHandler::getClientSocket() {
     return std::move(login.getClientSocket());
-}*/
+}
 
 std::string LoginStateHandler::getClientNickName() {
     return login.getClientNickName();

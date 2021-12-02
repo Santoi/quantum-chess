@@ -29,7 +29,7 @@ public:
 
   void sendSavedNickNameToServer();
 
-  //Socket getClientSocket();
+  Socket getClientSocket();
 
   std::string getClientNickName();
 

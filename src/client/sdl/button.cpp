@@ -18,8 +18,8 @@ void Button::setAreaAndPosition(int x_, int y_, int height_, int width_) {
 
 ConnectButton::ConnectButton(Renderer& renderer,
                              const std::vector<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr)
-                :Button(renderer, "img/buttons/not_pressed_connect_button.png",
-                        "img/buttons/pressed_connect_button.png"),
+                :Button(renderer, "img/buttons/not_pressed1.png",
+                        "img/buttons/pressed.png"),
                  text_entries(text_entry_buttons_ptr) {
 }
 

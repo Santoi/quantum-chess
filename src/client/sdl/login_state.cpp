@@ -48,8 +48,6 @@ int NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
     std::cout << port << std::endl;
     login.connectToServer(ip, port);
     return 1;
-     //pop port token, ip, name...
-     //tell login to connect to socket
 }
 
 NotConnectedToMatchState::NotConnectedToMatchState(Login& login_, Renderer& renderer_)
@@ -84,8 +82,7 @@ int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
 
 ConnectedToMatchState::ConnectedToMatchState(Login& login_, Renderer& renderer_)
                         :LoginState(login_),
-                         texture_sprite(renderer_, "img/button/connected_sprite.png") {
-    std::cout << "me creé" << std::endl;
+                         texture_sprite(renderer_, "img/buttons/connected_sprite.png") {
 }
 
 bool ConnectedToMatchState::clientIsConnectedToMatch() {

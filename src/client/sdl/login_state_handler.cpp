@@ -25,31 +25,24 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_
 
 
 void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
-    {
+    try {
+        std::cout << "esto es aux" << std::endl;
+        int aux = current_state->proccessTokens(std::move(tokens));
+        sleep(1);
         std::lock_guard<std::mutex> lock_guard(mutex);
-        // current_state.reset();
-        //current_state = make_unique<NotConnectedToMatchState>(login, renderer);
-        try {
-            std::cout << "esto es aux" << std::endl;
-            int aux = current_state->proccessTokens(std::move(tokens));
-            std::cout << "hola" << std::endl;
-            current_state.reset();
-            if (aux == 1)
-                current_state = make_unique<NotConnectedToMatchState>(login, renderer);
-            else if (aux == 2) {
-                std::cout << "conectado a partida" << std::endl;
-                current_state = make_unique<ConnectedToMatchState>(login, renderer);
-                std::cout << "ya cree" <<std::endl;
-            }
-        } catch (const NetworkAddressInfoException &error) {
-            std::cout << "Error: " << error.what() << std::endl;
-            return;
-        } catch (const std::exception &e) {
-            std::cout << "Error: " << e.what() << std::endl;
-            return;
-        }
-        catch (...) {
-        }
+        std::cout << "hola" << std::endl;
+        current_state.reset();
+        if (aux == 1)
+            current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+        else if (aux == 2)
+            current_state = make_unique<ConnectedToMatchState>(login, renderer);
+    } catch (const NetworkAddressInfoException &error) {
+        std::cout << "Error: " << error.what() << std::endl;
+        return;
+    } catch (const std::exception &e) {
+        std::cout << "Error: " << e.what() << std::endl;
+        return;
+    } catch (...) {
     }
 }
 

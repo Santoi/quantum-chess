@@ -127,8 +127,10 @@ SelectingRoleState::SelectingRoleState(Login& login_, Renderer& renderer_)
                                             "img/buttons/not_available_black_role.png",
                                             "img/buttons/not_available_black_role.png");
     addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_SPECTATOR, renderer_, available_roles,
-                                            "img/buttons/spectator_role.png", "img/buttons/spectator_role.png",
-                                            "img/buttons/spectator_role.png", "img/buttons/spectator_role.png");
+                                            "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png");
 }
 
 bool SelectingRoleState::clientIsConnectedToMatch() {

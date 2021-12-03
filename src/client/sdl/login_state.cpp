@@ -116,7 +116,7 @@ void SelectingRoleState::fillWithActiveTextEntryButtons(std::list<std::reference
 }
 
 int SelectingRoleState::proccessTokens(std::list<std::string>&& tokens) {
-
+    return 3;
 }
 
 ConnectedToMatchState::ConnectedToMatchState(Login& login_, Renderer& renderer_)

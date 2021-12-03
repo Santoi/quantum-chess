@@ -15,7 +15,6 @@ private:
     DrawableTextEntryButton drawable_text_button;
     mutable std::mutex mutex;
     bool expecting_text_entry;
-    std::string input_text;
 
 public:
 

@@ -26,6 +26,10 @@ public:
   int height() const;
 
   SDL2pp::Texture &sprite();
+
+  void render(int x, int y);
+
+  void render(int x, int y, int width, int height);
 };
 
 

@@ -8,14 +8,15 @@
 // The function accesses and modifies internal state objects, which may cause
 //data races with concurrent calls to rand or srand.
 class PseudoRandomCoin {
-    std::minstd_rand engine;
+  std::mt19937_64 engine;
+  bool random;
 
 public:
-    PseudoRandomCoin();
+  PseudoRandomCoin();
 
-    explicit PseudoRandomCoin(uint seed);
+  explicit PseudoRandomCoin(bool random_);
 
-    bool flip();
+  bool flip();
 };
 
 

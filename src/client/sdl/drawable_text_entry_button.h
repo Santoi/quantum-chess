@@ -4,6 +4,8 @@
 #include "pixel_coordinate.h"
 #include "chat/font.h"
 #include "chat/drawable_text.h"
+#include "texture_sprite.h"
+#include "chat/drawable_container.h"
 #include <string>
 
 class Renderer;
@@ -11,46 +13,26 @@ class Renderer;
 class DrawableTextEntryButton {
 private:
     Renderer& renderer;
+    TextSpriteRepository &repository;
     const std::string button_name;
-    TextureSprite text_texture;
-    TextureSprite name_texture;
-    int x;
-    int y;
-    int width;
-    int height;
+    TextureSprite text_box;
+    DrawableText text_entry;
+    uint32_t x;
+    uint32_t y;
+    uint32_t width;
+    uint32_t height;
 
 public:
 
     DrawableTextEntryButton() = delete;
 
-    DrawableTextEntryButton(Renderer& renderer_, const std::string& button_name_)
-                            :renderer(renderer_), button_name(button_name_),
-                             text_texture(renderer_, "img/buttons/White_text_field.png"),
-                             name_texture(renderer_, button_name_), x(0), y(0), width(0),
-                             height(0)  {
-    }
+    DrawableTextEntryButton(Renderer& renderer, TextSpriteRepository &repository);
 
-    void setAreaAndPosition(int x_, int y_, int height_, int width_) {
-        x = x_;
-        y = y_;
-        height = height_;
-        width = width_;
-    }
+    void setAreaAndPosition(int x_, int y_, int height_, int width_);
 
-    bool pixelIsOnTextEntry(const PixelCoordinate& pixel_) {
-        return (pixel_.x() > (unsigned)(x) && pixel_.x() < (unsigned)(x + width) &&
-                pixel_.y() > (unsigned)(y) && pixel_.y() < (unsigned)(y + height));
-    }
+    bool pixelIsOnTextEntry(const PixelCoordinate& pixel) const;
 
-    void render(const std::string& current_text) {
-         text_texture.render(x + 60, y, width - 60, height);
-         name_texture.render(x, y, 40, height);
-         if (current_text.empty())
-             return;
-         Font font(10);
-         DrawableText drawable_text(renderer, font, current_text, 'k');
-         drawable_text.render(x + 65, y);
-    }
+    void render(const std::string& current_text);
 };
 
 #endif //QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_ENTRY_BUTTON_H

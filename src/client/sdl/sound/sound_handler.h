@@ -5,32 +5,41 @@
 #include <vector>
 #include <SDL2pp/Chunk.hh>
 #include <SDL2pp/Music.hh>
+#include <mutex>
 
 class SoundHandler {
 private:
-    SDL2pp::Mixer& mixer;
-    SDL2pp::Music music;
-    std::vector<SDL2pp::Chunk> chunks;
+  SDL2pp::Mixer &mixer;
+  SDL2pp::Music music;
+  std::vector<SDL2pp::Chunk> chunks;
+  std::mutex mutex;
+  bool playing_music;
+  bool playing_sounds;
+  bool music_started;
 
 public:
-    SoundHandler() = delete;
+  SoundHandler() = delete;
 
-    explicit SoundHandler(SDL2pp::Mixer& mixer);
+  explicit SoundHandler(SDL2pp::Mixer &mixer);
 
-    void playMusic() const;
+  void playMusic();
 
-    void stopMusic() const;
+  void pauseMusic();
 
-    void playSplitSound() const;
+  void playSplitSound() const;
 
-    void playMovementSound() const;
+  void playMergeSound() const;
 
-    void playTakenPieceSound() const;
+  void playCaptureSound() const;
 
-    void playNewClientSound() const;
+  void toggleMusic();
 
+  void toggleSounds();
+
+  void resumeMusic();
+
+  void stopMusic();
 };
-
 
 
 #endif //QUANTUM_CHESS_PROJ_SOUNDHANDLER_H

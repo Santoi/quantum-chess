@@ -27,15 +27,15 @@ public:
   //Returns true if the object has an active thread and can be joined, or false othrewise.
   bool isJoinable();
 
-  //Calls pure virtual protected method run(), catching any exception that may rise.
-  void runCatchingExceptions();
-
   //Default destructor
   virtual ~Thread() = default;
 
 protected:
   //Method that any class that inherits this Thread class needs to implement.
   virtual void run() = 0;
+
+  //Calls pure virtual protected method run(), catching any exception that may rise.
+  virtual void runCatchingExceptions();
 };
 
 #endif //QUANTUM_CHESS_PROJ_THREAD_H

@@ -4,15 +4,13 @@
 #include <cstdint>
 
 TextEntry::TextEntry(uint8_t limit) : limit(limit) {
-    text.reserve(limit);
+  SDL_StopTextInput();
 }
 
-void TextEntry::concat(const std::string &text_) {
+bool TextEntry::concat(const std::string &text_) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   text.append(text_);
-  if (text.size() >= limit) {
-    SDL_StopTextInput();
-  }
+  return text.size() < limit;
 }
 
 void TextEntry::backspace() {
@@ -39,4 +37,9 @@ void TextEntry::disableEntry() {
 std::string TextEntry::getText() const {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return text;
+}
+
+bool TextEntry::isEnabled() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return SDL_IsTextInputActive();
 }

@@ -41,13 +41,11 @@ void TextEntryButton::concatIfEnabled(const std::string &text_) {
     std::lock_guard<std::mutex> lock_guard(mutex);
     if (!expecting_text_entry)
         return;
-    input_text.append(text_);
-    //text_entry.concat(text_);
-    std::cout << input_text << std::endl;
+    if (text_entry.isEnabled())
+      text_entry.concat(text_);
 }
 
 std::string TextEntryButton::getText() const {
     std::lock_guard<std::mutex> lock_guard(mutex);
-    //get string from text entry
-    return input_text;
+    return text_entry.getText();
 }

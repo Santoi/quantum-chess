@@ -1,27 +1,34 @@
-#include <iostream>
-#include <sstream>
-#include <memory>
 #include "client.h"
+#include "sdl/window.h"
+#include "sdl/scene.h"
 #include "position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
-#include "../server/src/quantum_chess/chess_exception.h"
 #include "../common/src/packet.h"
+#include "../common/src/chess_exception.h"
 #include "../common/src/client_data.h"
-#include "sdl/window.h"
 #include "sdl/event_handler_thread.h"
-#include <SDL2pp/Mixer.hh>
 #include "sdl/sound/sound_handler.h"
 #include "sdl/login_handler_thread.h"
 #include "sdl/login_renderer.h"
 #include "sdl/login_state_handler.h"
+#include "game/chat.h"
+#include "game/chess_log.h"
+#include "game/error_log.h"
+#include "game/turn_log.h"
+#include <SDL2pp/Mixer.hh>
+#include <iostream>
+#include <sstream>
+#include <memory>
 
 #define FRAME_RATE 60
+#define FONT_SIZE 10
+#define MAX_CHAR_ENTRY 29
 
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
-  std::map<uint16_t, std::vector<ClientData>> data = std::move(
-      protocol.receiveMatchesInfo(client_socket));
+  std::map<uint16_t, std::vector<ClientData>> data =
+          protocol.receiveMatchesInfo(client_socket);
   std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                " quieres entrar." << std::endl;
   std::cout << "Las partidas disponibles son" << std::endl;
@@ -94,27 +101,32 @@ void Client::setUpClientsDataInServer(Socket &socket) {
   protocol.sendChosenRole(socket, *available_roles.begin());
 }
 
-/*
-void doRenderingLoopForSceneWithHandler(Game &game, HandlerThread &handler,
-                                        Renderer &renderer) {
+
+void Client::gameRenderLoop(Scene &scene, Game &game, TextEntry &text_entry,
+                            HandlerThread &handler, Renderer &renderer) {
   while (handler.isOpen()) {
     // Timing: calculate difference between this and previous frame
     // in milliseconds
     uint32_t before_render_ticks = SDL_GetTicks();
 
+    // Update chess dimensions to game
+    game.setScale(scene.getChessWidth(), scene.getChessHeight());
+
+    // Get current message
+    scene.addCurrentMessage(text_entry.getText());
+
     // Show rendered frame
-    renderer.render(game);
+    renderer.render(scene);
 
     uint32_t after_render_ticks = SDL_GetTicks();
     uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
-    // Frame limiter: sleep for a little bit to not eat 100% of CPU
     if (frame_delta < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE);
   }
 }
-*/
-void doRenderingLoopForSceneWithHandler(LoginRenderer& login_renderer, HandlerThread& login_handler,
+
+void Client::loginRenderLoop(LoginRenderer& login_renderer, HandlerThread& login_handler,
                                         Renderer& renderer) {
     while (login_handler.isOpen()) {
         // Timing: calculate difference between this and previous frame
@@ -134,51 +146,58 @@ void doRenderingLoopForSceneWithHandler(LoginRenderer& login_renderer, HandlerTh
 }
 
 
-void Client::execute(const char *host, const char *port,
-                     bool single_threaded_client) {
+void Client::execute(const char *host, const char *port) {
+  // welcomeClientAndAskForNickName();
+  // Socket socket = Socket::createAConnectedSocket(host, port);
 
-  SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-  SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
-  SoundHandler sound_handler(mixer);
-  sound_handler.playMusic();
   Window window;
   Renderer &renderer = window.renderer();
+  Font font(FONT_SIZE);
   LoginStateHandler login_state_handler(window.renderer());
   LoginRenderer login_renderer(login_state_handler, window);
   LoginHandlerThread login_handler(login_state_handler);
 
-
   login_handler.start();
-  doRenderingLoopForSceneWithHandler(login_renderer, login_handler, renderer);
+  loginRenderLoop(login_renderer, login_handler, renderer);
   login_handler.join();
-  //if we are here the client is connected to a match
-//  Socket socket = login_state_handler.getClientSocket();
- // client_nick_name = login_state_handler.getClientNickName();
-  //login_handler.join();
-/*
-  RemoteClientSender sender_thread(socket, send);
-  RemoteClientReceiver receiver_thread(socket, received);
-  setUpClientsDataInServer(socket);
 
-  Game game(window, send, role, sound_handler);
+  // if we are here the client is connected to a match
+  Socket socket = login_state_handler.getClientSocket();
+  client_nick_name = login_state_handler.getClientNickName();//TODO borrar
 
-  ActionThread action_thread(received, game);
-  EventHandlerThread event_handler(game);
+   RemoteClientSender sender_thread(socket, send);
+   RemoteClientReceiver receiver_thread(socket, received);
+   setUpClientsDataInServer(socket);
+
+  Game game(window, send, role, font);
+  Scene scene(window, game.getBoard(), font);
+  Chat chat(send, scene);
+  ChessLog chess_log(scene);
+  ErrorLog error_log(scene);
+  TurnLog turn_log(scene);
+  TextEntry text_entry(scene.getChatWidth() / font.size());
+
+  ActionThread action_thread(received, game, chat, chess_log, error_log,
+                             turn_log);
+  EventHandlerThread event_handler(window, game, chat, text_entry);
 
   receiver_thread.start();
   sender_thread.start();
   action_thread.start();
   event_handler.start();
+  // comment if you dont want to go crazy while debugging.
+  //sound_handler.playMusic();
 
-  doRenderingLoopForSceneWithHandler(game, event_handler, renderer);
+  gameRenderLoop(scene, game, text_entry, event_handler, renderer);
 
   received.close();
   send.close();
+  receiver_thread.notifySocketClosed();
   socket.shutdownAndClose();
   action_thread.join();
   event_handler.join();
   sender_thread.join();
-  receiver_thread.join();*/
+  receiver_thread.join();
 }
 
 bool Client::readCommand() {
@@ -197,8 +216,8 @@ bool Client::readCommand() {
       iss >> temp_message;
       message += temp_message + " ";
     }
-    send.push(std::make_shared<RemoteClientChatInstruction>(client_nick_name,
-                                                            message));
+    send.push(std::make_shared<RemoteClientChatInstruction>(
+            message));
 
   }
 
@@ -210,8 +229,8 @@ bool Client::readCommand() {
       throw ChessException("posicion invalida");
 
     send.push(std::make_shared<RemoteClientMoveInstruction>(
-        Position((uint8_t) x1 - 'A', (uint8_t) y1),
-        Position((uint8_t) x2 - 'A', (uint8_t) y2)));
+            Position((uint8_t) x1 - 'A', (uint8_t) y1),
+            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
   }
   return false;
 }

@@ -1,7 +1,9 @@
 #include "movement_instruction.h"
 #include "load_board_instruction.h"
-#include "../quantum_chess/chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 #include "chess_exception_instruction.h"
+#include "sound_instruction.h"
+#include "log_instruction.h"
 
 MovementInstruction::MovementInstruction(const ClientData &instructor_data,
                                          const Position &initial_,
@@ -14,11 +16,13 @@ void MovementInstruction::makeActionAndNotifyAllListeningQueues(
         std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
   // TODO validar color, permisos, etc
+  bool capture = false;
   try {
     if (instructor_data.role == ClientData::ROLE_SPECTATOR)
       throw ChessException("you cannot move been spectator");
-    match.getBoard().move(initial, final,
-                          instructor_data.role == ClientData::ROLE_WHITE);
+    capture = match.getBoard().move(initial, final,
+                                    instructor_data.role ==
+                                    ClientData::ROLE_WHITE);
   }
   catch (const ChessException &e) {
     ChessExceptionInstruction instruction(instructor_data, e.what());
@@ -29,6 +33,21 @@ void MovementInstruction::makeActionAndNotifyAllListeningQueues(
   LoadBoardInstruction instruction;
   match_updates_queue.push(
           std::make_shared<LoadBoardInstruction>(instruction));
+
+  std::list<std::string> log;
+  match.getBoard().popLog(log);
+  // Send Log
+  auto log_ptr = std::make_shared<LogInstruction>(
+          std::move(log));
+  for (auto &listening_queue: listening_queues)
+    listening_queue.second.push(log_ptr);
+
+  if (capture) {
+    auto sound_ptr = std::make_shared<SoundInstruction>(
+            CAPTURE_SOUND);
+    for (auto it = listening_queues.begin(); it != listening_queues.end(); ++it)
+      it->second.push(sound_ptr);
+  }
 }
 
 void

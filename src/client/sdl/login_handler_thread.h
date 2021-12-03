@@ -10,7 +10,7 @@
 class LoginHandlerThread : public HandlerThread {
 private:
     PixelCoordinate last_click;
-    SDL_Event event;
+    SDL_Event event{};
     LoginStateHandler& login_state_handler;
     bool expecting_text_entry;
 

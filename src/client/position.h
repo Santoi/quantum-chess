@@ -4,23 +4,23 @@
 #include <iostream>
 #include <cstdint>
 
-#define BOUND 7
-
 // Represents a tile position inside the board
 // Bottom right is (0, 0) and top left is (BOUND, BOUND)
 class Position {
 private:
-  uint8_t x_ = 0;
-  uint8_t y_ = 0;
+  int8_t x_ = 0;
+  int8_t y_ = 0;
 
 public:
   Position();
-  Position(uint8_t x, uint8_t y);
+
+  Position(int8_t x, int8_t y);
+
   ~Position() = default;
 
   Position(const Position &orig) = default;
 
-  Position& operator=(const Position &orig) = default;
+  Position &operator=(const Position &orig) = default;
 
   bool operator==(const Position &other) const;
 
@@ -29,13 +29,13 @@ public:
   friend bool operator<(const Position &a, const Position &b);
 
   // Return x coordinate.
-  uint8_t x() const;
+  int8_t x() const;
 
   // Return y coordinate.
-  uint8_t y() const;
+  int8_t y() const;
 
-  friend std::ostream & operator<<(std::ostream & os,
-                                   const Position & position);
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const Position &position);
 
   bool isEven() const;
 };

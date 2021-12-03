@@ -13,7 +13,8 @@ void LoginHandlerThread::run() {
         SDL_WaitEvent(&event);
         switch (event.type) {
             case SDL_QUIT:
-                return;
+              open = false;
+              return;
             case SDL_TEXTINPUT:
                 if (expecting_text_entry)
                     handleTextInput(event.text.text);
@@ -31,8 +32,8 @@ void LoginHandlerThread::run() {
 void LoginHandlerThread::handleTextInput(const std::string& new_text) {
     std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
     login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
-    for (auto it = active_text_entries.begin(); it != active_text_entries.end(); it++)
-        it->get().concatIfEnabled(new_text);
+    for (auto & active_text_entry : active_text_entries)
+        active_text_entry.get().concatIfEnabled(new_text);
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
@@ -44,21 +45,21 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     while (it != active_buttons.end()) {
         if (it->get().fillTokensIfClicked(pixel, tokens))
             break;
-        it++;
+        ++it;
     }
     if (it != active_buttons.end()) {
         login_state_handler.proccessTokens(std::move(tokens));
     } else { //first disable all text entries
         std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
         login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
-        for (auto it2 = active_text_entries.begin(); it2 != active_text_entries.end(); it2++)
-            it2->get().disableTextEntry();
+        for (auto & active_text_entry : active_text_entries)
+            active_text_entry.get().disableTextEntry();
         //enable text entry if pressed
         auto it2 = active_text_entries.begin();
         while (it2 != active_text_entries.end()) {
             if (it2->get().enableTextEntryIfClicked(pixel))
                 break;
-            it2++;
+            ++it2;
         }
         if (it2 != active_text_entries.end())
             expecting_text_entry = true;

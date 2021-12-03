@@ -1,5 +1,6 @@
 #include "exit_instruction.h"
 #include "../../../common/src/blocking_queue.h"
+#include "chat_instruction.h"
 
 ExitInstruction::ExitInstruction(const ClientData &instructor_data_)
         : instructor_data(instructor_data_) {
@@ -18,6 +19,12 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(
 
   for (auto &listening_queue: listening_queues)
     listening_queue.second.push(this_instruc_ptr);
+
+  std::shared_ptr<Instruction> chat_instruction = std::make_shared<ChatInstruction>(
+          instructor_data, "has left");
+
+  for (auto &listening_queue: listening_queues)
+    listening_queue.second.push(chat_instruction);
 }
 
 void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,

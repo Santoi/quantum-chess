@@ -1,5 +1,5 @@
 #include "drawable_chessman.h"
-#include "../sdl/chessman_sprite_repository.h"
+#include "../sdl/sprite_repositories/chessman_sprite_repository.h"
 #include <utility>
 
 DrawableChessman::DrawableChessman(Renderer &renderer,

@@ -2,7 +2,7 @@
 
 #include <utility>
 #include "window.h"
-#include "../sdl/chessman_sprite_repository.h"
+#include "sprite_repositories/chessman_sprite_repository.h"
 #include "../game/drawable_board.h"
 
 

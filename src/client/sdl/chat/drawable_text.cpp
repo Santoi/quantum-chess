@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <utility>
-#include "text_sprite_repository.h"
+#include "../sprite_repositories/text_sprite_repository.h"
 
 #define SCALE_FACTOR 10
 #define RENDER_HEIGHT_SCALE_FACTOR 28

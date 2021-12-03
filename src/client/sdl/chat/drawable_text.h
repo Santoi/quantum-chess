@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_H
 
 #include "font.h"
-#include "text_sprite_repository.h"
+#include "../sprite_repositories/text_sprite_repository.h"
 #include <string>
 
 class Renderer;

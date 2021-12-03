@@ -1,8 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_SCENE_H
 #define QUANTUM_CHESS_PROJ_SCENE_H
 
-#include "chat/text_sprite_repository.h"
-#include "chessman_sprite_repository.h"
+#include "sprite_repositories/text_sprite_repository.h"
+#include "sprite_repositories/chessman_sprite_repository.h"
 #include "../game/drawable_chess.h"
 #include "chat/drawable_container.h"
 #include "chat/drawable_chat_message.h"

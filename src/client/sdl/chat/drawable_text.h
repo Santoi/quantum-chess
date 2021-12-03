@@ -31,7 +31,9 @@ public:
 
   void render(int x, int y);
 
-  void setText(std::string &&text_);
+  void setText(const std::string &text_);
+
+  void setColor(char color_);
 };
 
 

@@ -43,6 +43,10 @@ int DrawableText::getDrawableHeight() const {
   return text_sprite_repository.getSpriteSize();
 }
 
-void DrawableText::setText(std::string &&text_) {
-  text = std::move(text_);
+void DrawableText::setText(const std::string &text_) {
+  text = text_;
+}
+
+void DrawableText::setColor(char color_) {
+  color = color_;
 }

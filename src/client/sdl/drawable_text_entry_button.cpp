@@ -1,10 +1,10 @@
 #include "drawable_text_entry_button.h"
 
 DrawableTextEntryButton::DrawableTextEntryButton(Renderer &renderer,
-                                                 TextSpriteRepository &repository)
+                                                 TextSpriteRepository &repository, const std::string &default_text)
                              : renderer(renderer),
                                repository(repository),
-                               button_name(),
+                               button_name(default_text),
                                text_box(renderer,
                                         "img/buttons/White_text_field.png"),
                                text_entry(repository, ""),
@@ -26,11 +26,11 @@ bool DrawableTextEntryButton::pixelIsOnTextEntry(const PixelCoordinate& pixel) c
 
 void DrawableTextEntryButton::render(const std::string& current_text) {
   text_box.render(x + 60, y, width - 60, height);
-  text_entry.
+  if (current_text.empty()) {
+    text_entry.setColor('d');
+    text_entry.setText(button_name);
+  } else {
+    text_entry.setText(current_text);
+  }
   text_entry.render(x, y);
-  if (current_text.empty())
-    return;
-  Font font(10);
-
-  drawable_text.render(x + 65, y);
 }

@@ -26,7 +26,8 @@ public:
 
     DrawableTextEntryButton() = delete;
 
-    DrawableTextEntryButton(Renderer& renderer, TextSpriteRepository &repository);
+    DrawableTextEntryButton(Renderer& renderer, TextSpriteRepository
+    &repository, const std::string &default_text);
 
     void setAreaAndPosition(int x_, int y_, int height_, int width_);
 

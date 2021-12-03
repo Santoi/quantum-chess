@@ -104,6 +104,8 @@ private:
                                                  const std::string& available_pressed_image,
                                                  const std::string& not_available_not_pressed_image,
                                                  const std::string& not_available_pressed_image);
+
+    ClientData::Role getRoleFromString(const std::string& str_selected_role);
 };
 
 class ConnectedToMatchState: public LoginState {

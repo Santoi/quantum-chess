@@ -80,6 +80,9 @@ public:
     bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
 
     ~RoleButton() = default;
+
+private:
+    void addEnumToListOfTokens(std::list<std::string>& tokens);
 };
 
 #endif //QUANTUM_CHESS_PROJ_BUTTON_H

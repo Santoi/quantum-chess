@@ -64,6 +64,21 @@ RoleButton::RoleButton(Renderer& renderer_, ClientData::Role role_, bool role_is
              role_is_available(role_is_available_) {
 }
 
+void RoleButton::addEnumToListOfTokens(std::list<std::string>& tokens) {
+    if (role == ClientData::ROLE_WHITE)
+        tokens.push_back("ROLE_WHITE");
+    else if (role == ClientData::ROLE_BLACK)
+        tokens.push_back("ROLE_BLACK");
+    else
+        tokens.push_back("ROLE_SPECTATOR");
+}
+
+
 bool RoleButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
+    if (drawable.pixelIsOnButton(pixel_)) {
+        if (role_is_available)
+            addEnumToListOfTokens(tokens);
+        return true;
+    }
     return false;
 }

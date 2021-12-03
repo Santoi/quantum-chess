@@ -35,6 +35,8 @@ void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
         if (aux == 1)
             current_state = make_unique<NotConnectedToMatchState>(login, renderer);
         else if (aux == 2)
+            current_state = make_unique<SelectingRoleState>(login, renderer);
+        else if (aux == 3)
             current_state = make_unique<ConnectedToMatchState>(login, renderer);
     } catch (const NetworkAddressInfoException &error) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,

@@ -148,7 +148,7 @@ void SelectingRoleState::fillWithActiveTextEntryButtons(std::list<std::reference
     //dont have any
 }
 
-ClientData::Role getRoleFromString(const std::string& str_selected_role) {
+ClientData::Role SelectingRoleState::getRoleFromString(const std::string& str_selected_role) {
     if (str_selected_role == "ROLE_WHITE")
         return ClientData::ROLE_WHITE;
     else if (str_selected_role == "ROLE_BLACK")

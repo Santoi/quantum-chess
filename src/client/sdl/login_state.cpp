@@ -135,7 +135,7 @@ bool SelectingRoleState::clientIsConnectedToMatch() {
 }
 
 void SelectingRoleState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
-  //  login_renderer.renderRolesButtons(buttons_ptr);
+    login_renderer.renderRolesButtons(*buttons_ptr[0], *buttons_ptr[1], *buttons_ptr[2]);
 }
 
 void SelectingRoleState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {

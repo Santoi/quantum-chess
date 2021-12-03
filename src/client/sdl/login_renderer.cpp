@@ -35,6 +35,16 @@ void LoginRenderer::renderMatchButtons(std::vector<std::unique_ptr<Button>>& mat
     }
 }
 
+void renderRolesButtons(Button& white_role_buton, Button& black_role_buton, Button& spectator_role_buton) {
+    white_role_buton.setAreaAndPosition(100, 100, 0.3*scale, 0.3*scale);
+    white_role_buton.render();
+    black_role_buton.setAreaAndPosition(250, 100, 0.3*scale, 0.3*scale);
+    black_role_buton.render();
+    spectator_role_buton.setAreaAndPosition(400, 100, 0.3*scale, 0.3*scale);
+    spectator_role_buton.render();
+}
+
+
 void LoginRenderer::renderConnectedSprite(TextureSprite& texture) {
     texture.render(10, 10, scale*0.9, scale*0.9);
 }

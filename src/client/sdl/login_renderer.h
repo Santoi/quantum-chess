@@ -32,6 +32,8 @@ public:
   void renderSettingsPage(Button &connect_button,
                              TextEntryButton &ip_text_entry,
                              TextEntryButton &port_text_entry, TextEntryButton &name_text_entry);
+
+  void renderRolesButtons(Button& white_role_buton, Button& black_role_buton, Button& spectator_role_buton);
 };
 
 

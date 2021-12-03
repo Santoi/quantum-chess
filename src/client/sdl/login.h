@@ -35,6 +35,8 @@ public:
 
   std::list<ClientData::Role> getAvailableRoles();
 
+  void sendChosenRole(ClientData::Role role_);
+
   void chooseMatchNumber(int match_number);
 
   ~Login() = default;

@@ -135,19 +135,34 @@ bool SelectingRoleState::clientIsConnectedToMatch() {
 }
 
 void SelectingRoleState::tellRendererWhatToRender(LoginRenderer& login_renderer) {
-
+  //  login_renderer.renderRolesButtons(buttons_ptr);
 }
 
 void SelectingRoleState::fillWithActiveButtons(std::list<std::reference_wrapper<Button>>& active_buttons) {
-
+    for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); it++)
+        active_buttons.push_back(**it);
 }
 
 void SelectingRoleState::fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                         active_text_entries) {
+    //dont have any
+}
 
+ClientData::Role getRoleFromString(const std::string& str_selected_role) {
+    if (str_selected_role == "ROLE_WHITE")
+        return ClientData::ROLE_WHITE;
+    else if (str_selected_role == "ROLE_BLACK")
+        return ClientData::ROLE_BLACK;
+    else
+        return ClientData::ROLE_SPECTATOR;
 }
 
 int SelectingRoleState::proccessTokens(std::list<std::string>&& tokens) {
+    if (tokens.empty())
+        return -1;
+    std::string str_selected_role = tokens.front();
+    ClientData::Role selected_role = getRoleFromString(str_selected_role);
+    login.sendChosenRole(selected_role);
     return 3;
 }
 
@@ -173,5 +188,5 @@ void ConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::refere
 }
 
 int ConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
-    return 3;
+    return 4;
 }

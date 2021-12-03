@@ -33,12 +33,11 @@ public:
 
   std::string getClientNickName();
 
+  std::list<ClientData::Role> getAvailableRoles();
+
+  void chooseMatchNumber(int match_number);
+
   ~Login() = default;
-
-    void chooseMatchNumber(int match_number);
-
-private:
-    std::list<ClientData::Role> getAvailableRoles();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

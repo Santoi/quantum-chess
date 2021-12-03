@@ -17,8 +17,6 @@ class Button {
 protected:
     DrawableButton drawable;
 
-    Button(Renderer& renderer_);
-
 public:
 
     Button() = delete;
@@ -70,12 +68,14 @@ public:
 class RoleButton: public Button {
 private:
     const ClientData::Role role;
+    bool role_is_available;
 
 public:
 
     RoleButton() = delete;
 
-    RoleButton(Renderer& renderer_, ClientData::Role role_);
+    RoleButton(Renderer& renderer_, ClientData::Role role_, bool role_is_available_,
+               const std::string& not_pressed_file_name, const std::string& pressed_file_name);
 
     bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
 

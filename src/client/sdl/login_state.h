@@ -95,6 +95,15 @@ public:
     int proccessTokens(std::list<std::string>&& tokens) override;
 
     ~SelectingRoleState() = default;
+
+private:
+
+    void addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_, Renderer& renderer_,
+                                                 std::list<ClientData::Role>& available_roles,
+                                                 const std::string& available_not_pressed_image,
+                                                 const std::string& available_pressed_image,
+                                                 const std::string& not_available_not_pressed_image,
+                                                 const std::string& not_available_pressed_image);
 };
 
 class ConnectedToMatchState: public LoginState {

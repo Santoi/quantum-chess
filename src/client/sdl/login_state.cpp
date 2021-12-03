@@ -1,5 +1,6 @@
 #include "login_state.h"
 #include "../../common/src/unique_ptr.h"
+#include "../../common/src/client_data.h"
 #include <iostream>
 
 LoginState::LoginState(Login& login_)
@@ -93,9 +94,40 @@ int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
     return 2;
 }
 
+void SelectingRoleState::addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_, Renderer& renderer_,
+                                                            std::list<ClientData::Role>& available_roles,
+                                                            const std::string& available_not_pressed_image,
+                                                            const std::string& available_pressed_image,
+                                                            const std::string& not_available_not_pressed_image,
+                                                            const std::string& not_available_pressed_image) {
+    std::unique_ptr<RoleButton> role_button_ptr;
+    std::list<ClientData::Role>::iterator findIter = std::find(available_roles.begin(),
+                                                           available_roles.end(), role_);
+    if (findIter != available_roles.end())
+        role_button_ptr = make_unique<RoleButton>(renderer_, role_, true, available_not_pressed_image,
+                                                  available_pressed_image);
+    else
+        role_button_ptr = make_unique<RoleButton>(renderer_, role_, false, not_available_not_pressed_image,
+                                                  not_available_pressed_image);
+    buttons_ptr.push_back(std::move(role_button_ptr));
+}
+
 SelectingRoleState::SelectingRoleState(Login& login_, Renderer& renderer_)
                     :LoginState(login_) {
-
+    std::list<ClientData::Role> available_roles = login.getAvailableRoles();
+    addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_WHITE, renderer_, available_roles,
+                                            "img/buttons/available_white_role.png",
+                                            "img/buttons/available_white_role.png",
+                                            "img/buttons/not_available_white_role.png",
+                                            "img/buttons/not_available_white_role.png");
+    addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_BLACK, renderer_, available_roles,
+                                            "img/buttons/available_black_role.png",
+                                            "img/buttons/available_black_role.png",
+                                            "img/buttons/not_available_black_role.png",
+                                            "img/buttons/not_available_black_role.png");
+    addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_SPECTATOR, renderer_, available_roles,
+                                            "img/buttons/spectator_role.png", "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png", "img/buttons/spectator_role.png");
 }
 
 bool SelectingRoleState::clientIsConnectedToMatch() {

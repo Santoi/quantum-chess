@@ -7,11 +7,6 @@ Button::Button(Renderer& renderer_, const std::string& not_pressed_file_name,
         :drawable(renderer_, not_pressed_file_name, pressed_file_name) {
 }
 
-Button::Button(Renderer& renderer_)
-        :drawable(renderer_) {
-}
-
-
 void Button::render() {
     drawable.render();
 }
@@ -63,18 +58,10 @@ bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::li
     return false;
 }
 
-RoleButton::RoleButton(Renderer& renderer_, ClientData::Role role_)
-            :Button(renderer_), role(role_) {
-    if (role_ == ClientData::ROLE_WHITE) {
-        drawable.changeNotPressedImage("img/buttons/not_pressed_match_button.png");
-        drawable.changePressedImage("img/buttons/pressed_match_button.png");
-    } else if (role == ClientData::ROLE_BLACK) {
-        drawable.changeNotPressedImage("img/buttons/not_pressed_match_button.png");
-        drawable.changePressedImage("img/buttons/pressed_match_button.png");
-    } else {
-        drawable.changeNotPressedImage("img/buttons/not_pressed_match_button.png");
-        drawable.changePressedImage("img/buttons/pressed_match_button.png");
-    }
+RoleButton::RoleButton(Renderer& renderer_, ClientData::Role role_, bool role_is_available_,
+                       const std::string& not_pressed_file_name, const std::string& pressed_file_name)
+            :Button(renderer_, not_pressed_file_name, pressed_file_name), role(role_),
+             role_is_available(role_is_available_) {
 }
 
 bool RoleButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {

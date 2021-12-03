@@ -139,7 +139,7 @@ void Client::execute(const char *host, const char *port,
   SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
   SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096);
   SoundHandler sound_handler(mixer);
-  sound_handler.playMusic();
+  //sound_handler.playMusic();
   Window window;
   Renderer &renderer = window.renderer();
   LoginStateHandler login_state_handler(window.renderer());
@@ -152,7 +152,7 @@ void Client::execute(const char *host, const char *port,
   Socket socket = login_state_handler.getClientSocket();
   std::cout << "Ya agarré el socket" << std::endl;
  // client_nick_name = login_state_handler.getClientNickName();
-
+/*
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 //  setUpClientsDataInServer(socket);
@@ -175,7 +175,7 @@ void Client::execute(const char *host, const char *port,
   action_thread.join();
   event_handler.join();
   sender_thread.join();
-  receiver_thread.join();
+  receiver_thread.join();*/
 }
 
 bool Client::readCommand() {

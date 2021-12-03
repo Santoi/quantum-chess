@@ -33,7 +33,7 @@ public:
     virtual void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                                 active_text_entries) = 0;
 
-    virtual int proccessTokens(std::list<std::string>&& tokens) = 0;
+    virtual int processTokens(std::list<std::string>&& tokens) = 0;
 
     void resetPressedButtons();
 
@@ -54,7 +54,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
                                         active_text_entries) override;
 
-    int proccessTokens(std::list<std::string>&& tokens) override;
+    int processTokens(std::list<std::string>&& tokens) override;
 
     ~NotConnectedToServerState() = default;
 };
@@ -73,7 +73,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
     active_text_entries) override;
 
-    int proccessTokens(std::list<std::string>&& tokens) override;
+    int processTokens(std::list<std::string>&& tokens) override;
 
     ~NotConnectedToMatchState() = default;
 };
@@ -92,7 +92,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
     active_text_entries) override;
 
-    int proccessTokens(std::list<std::string>&& tokens) override;
+    int processTokens(std::list<std::string>&& tokens) override;
 
     ~SelectingRoleState() = default;
 
@@ -124,7 +124,7 @@ public:
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>&
     active_text_entries) override;
 
-    int proccessTokens(std::list<std::string>&& tokens) override;
+    int processTokens(std::list<std::string>&& tokens) override;
 
     ~ConnectedToMatchState() = default;
 };

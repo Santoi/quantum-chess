@@ -1,6 +1,7 @@
 #include "login_state_handler.h"
 #include "../../common/src/unique_ptr.h"
 #include "../../common/src/network_address_info_exception.h"
+#include "unavailable_role_exception.h"
 
 LoginStateHandler::LoginStateHandler(Renderer& renderer_)
                     :login(), renderer(renderer_),
@@ -24,10 +25,10 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(std::list<std::reference_
 }
 
 
-void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
+void LoginStateHandler::processTokens(std::list<std::string>&& tokens) {
     try {
         std::cout << "esto es aux" << std::endl;
-        int aux = current_state->proccessTokens(std::move(tokens));
+        int aux = current_state->processTokens(std::move(tokens));
         sleep(1);
         std::lock_guard<std::mutex> lock_guard(mutex);
         std::cout << "hola" << std::endl;
@@ -42,6 +43,14 @@ void LoginStateHandler::proccessTokens(std::list<std::string>&& tokens) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                                  "ERROR",
                                  "IP y/o puerto no válido. Por favor, vuelvalo a intentar.",
+                                 nullptr);
+        current_state->resetPressedButtons();
+        std::cout << "Error: " << error.what() << std::endl;
+        return;
+    } catch (const UnavailableRoleException& error) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                                 "ERROR",
+                                 "El rol seleccionado no está disponible. Seleccione otro.",
                                  nullptr);
         current_state->resetPressedButtons();
         std::cout << "Error: " << error.what() << std::endl;

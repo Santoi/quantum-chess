@@ -64,7 +64,7 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
         it++;
     }
     if (it != active_buttons.end()) {
-        login_state_handler.proccessTokens(std::move(tokens));
+        login_state_handler.processTokens(std::move(tokens));
     } else { //first disable all text entries
         std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
         login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);

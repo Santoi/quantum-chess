@@ -1,6 +1,7 @@
 #include "login_state.h"
 #include "../../common/src/unique_ptr.h"
 #include "../../common/src/client_data.h"
+#include "unavailable_role_exception.h"
 #include <iostream>
 
 LoginState::LoginState(Login& login_)
@@ -47,7 +48,7 @@ void NotConnectedToServerState::fillWithActiveTextEntryButtons(std::list<std::re
         active_text_entries.push_back(**it);
 }
 
-int NotConnectedToServerState::proccessTokens(std::list<std::string>&& tokens) {
+int NotConnectedToServerState::processTokens(std::list<std::string>&& tokens) {
     std::string ip = tokens.front(); //tokens strings has the same order as how TextEntryButton are in the list
                                     //(first the ip string, second the port string, third the nick name)
     tokens.pop_front();
@@ -86,7 +87,7 @@ void NotConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::ref
     //dont have text_entries
 }
 
-int NotConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
+int NotConnectedToMatchState::processTokens(std::list<std::string>&& tokens) {
     std::string str_match_number = tokens.front();
     int match_number = std::stoi(str_match_number);
     login.chooseMatchNumber(match_number);
@@ -157,9 +158,9 @@ ClientData::Role SelectingRoleState::getRoleFromString(const std::string& str_se
         return ClientData::ROLE_SPECTATOR;
 }
 
-int SelectingRoleState::proccessTokens(std::list<std::string>&& tokens) {
-    if (tokens.empty())
-        return -1;
+int SelectingRoleState::processTokens(std::list<std::string>&& tokens) {
+    if (tokens.empty()) {}
+        throw UnavailableRoleException("El rol seleccionado no está disponible.");
     std::string str_selected_role = tokens.front();
     ClientData::Role selected_role = getRoleFromString(str_selected_role);
     login.sendChosenRole(selected_role);
@@ -187,6 +188,6 @@ void ConnectedToMatchState::fillWithActiveTextEntryButtons(std::list<std::refere
                                                             active_text_entries) {
 }
 
-int ConnectedToMatchState::proccessTokens(std::list<std::string>&& tokens) {
+int ConnectedToMatchState::processTokens(std::list<std::string>&& tokens) {
     return 4;
 }

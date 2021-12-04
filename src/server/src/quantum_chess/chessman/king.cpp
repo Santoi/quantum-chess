@@ -35,17 +35,18 @@ const {
 }
 
 void King::calculatePossibleSplits(const Position &initial,
-                                   std::list<Position> &posible_moves) {
+                                   std::list<Position> &possible_moves) {
   // if spliting, dont want to entangle.
-  calculateMoves(initial, posible_moves);
-  auto it = std::find(posible_moves.begin(), posible_moves.end(),
+  calculateMoves(initial, possible_moves);
+  auto it = std::find(possible_moves.begin(), possible_moves.end(),
                       Position(2, first_line));
-  if (it != posible_moves.end() && board.getChessmanAt(Position(1, first_line)))
-    posible_moves.erase(it);
+  if (it != possible_moves.end() &&
+      board.getChessmanAt(Position(1, first_line)))
+    possible_moves.erase(it);
 
-  for (it = posible_moves.begin(); it != posible_moves.end();) {
+  for (it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidMove(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;

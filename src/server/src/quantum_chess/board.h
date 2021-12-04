@@ -51,21 +51,29 @@ public:
   void merge(const Position &initial1, const Position &initial2,
              const Position &final, bool player_white);
 
+  // Loads in output possible moves of chessman in position.
   void getPossibleMovesOf(const Position &position,
                           std::list<Position> &output);
 
+  // Loads in output possible splits of chessman in position.
   void getPossibleSplitsOf(const Position &position,
                            std::list<Position> &output);
 
+  // Loads in output possible merges of chessman in position.
   void getPossibleMergesOf(const Position &position,
                            std::list<Position> &output);
 
+  // Loads in output possible merges of two chessman in position (possible moves
+  // that share both).
   void
   getPossibleMergesOf(const Position &position1, const Position &position2,
                       std::list<Position> &output);
 
+  // Loads in output all positions of chessman.
   void getPositionsOf(const Position &position1, std::list<Position> &output);
 
+  // Loads in output all positions of entangled chessmen with chessman in
+  // position.
   void
   getEntangledOf(const Position &position1, std::list<Position> &output);
 
@@ -82,8 +90,6 @@ public:
   // Removes chessman of position,
   void removeChessmanOf(const Position &position);
 
-  /* Quita la pieza de la posicion inicial y la guarda en la
-   * posicion inicial. */
   // Remove chessman of initial position and save it in final.
   void addChessmanOfIn(const Position &initial, const Position &final);
 
@@ -95,9 +101,6 @@ public:
 
   // Returns a random boolean.
   bool flipACoin();
-
-  void addChessmanOfIn(const Position &initial, const Position &pos1,
-                       const Position &pos2);
 
   // Creates a chessman and add it to position given. chessman_ is chessman
   // name's initial (except for Knight, which is H).

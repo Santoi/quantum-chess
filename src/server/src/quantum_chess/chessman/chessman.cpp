@@ -107,7 +107,8 @@ void Chessman::split(const Position &initial, const Position &final1,
                                                     this));
   entanglement_log.addEntanglementsOfTo(*initial_qp_it, *new_qp_it);
 
-  board.addChessmanOfIn(initial, final1, final2);
+  board.addChessmanOfIn(initial, final1);
+  board.addChessmanIn(final2, this);
   board.pushToLog(initial.print() + " split to " + final1.print() + " and " +
                   final2.print());
 }
@@ -248,7 +249,7 @@ Chessman::checkIsAValidMove(const Position &initial, const Position &final) {
   if (final_chessman && chessman_in_path.second)
     return MEASURING_AND_ENTANGLING;
 
-  if (chessmanIsAlreadyEntangled(chessman_in_path.second))
+  if (chessmanIsAlreadyEntangled(*chessman_in_path.second))
     return ENTANGLING_SAME_PIECE_TWO_TIMES;
 
   return OK;
@@ -584,8 +585,8 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
   }
 }
 
-bool Chessman::chessmanIsAlreadyEntangled(Chessman *chessman) {
-  return entanglement_log.areEntangled(*this, *chessman);
+bool Chessman::chessmanIsAlreadyEntangled(Chessman &chessman) {
+  return entanglement_log.areEntangled(*this, chessman);
 }
 
 void Chessman::getEntangledPositions(std::list<Position> &output) {

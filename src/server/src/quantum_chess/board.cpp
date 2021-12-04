@@ -156,18 +156,6 @@ void Board::addChessmanOfIn(const Position &initial, const Position &final) {
   board.insert(std::pair<Position, Chessman *>(final, chessman));
 }
 
-void Board::addChessmanOfIn(const Position &initial, const Position &pos1,
-                            const Position &pos2) {
-  Chessman *chessman = getChessmanAt(initial);
-  if (!chessman)
-    throw ChessException("there isn a chessman there");
-  if (board.count(pos1) || board.count(pos2))
-    throw ChessException("there is a chessman there already");
-  board.erase(initial);
-  board.insert(std::pair<Position, Chessman *>(pos1, chessman));
-  board.insert(std::pair<Position, Chessman *>(pos2, chessman));
-}
-
 Chessman *Board::getChessmanAt(const Position &position) {
   if (board.count(position))
     return board.at(position);

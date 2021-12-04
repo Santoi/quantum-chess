@@ -1,8 +1,6 @@
 #include "renderer.h"
 #include "sprite.h"
-#include "../game/game.h"
-#include "login_scene.h"
-#include "game_scene.h"
+#include "scene.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
@@ -23,14 +21,7 @@ void Renderer::copy(Sprite &sprite, int x_src, int y_src, int x_dst,
   renderer_.Copy(sprite.sprite(), src, dest);
 }
 
-void Renderer::render(LoginScene& login_renderer) {
-    renderer_.Clear();
-    login_renderer.setScale(getMinDimension());
-    login_renderer.render();
-    renderer_.Present();
-}
-
-void Renderer::render(GameScene &scene) {
+void Renderer::render(Scene &scene) {
   renderer_.Clear();
   scene.render();
   renderer_.Present();

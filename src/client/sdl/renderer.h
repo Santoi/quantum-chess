@@ -3,6 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
+#include "scene.h"
 
 class Sprite;
 
@@ -19,9 +20,7 @@ public:
 
   SDL2pp::Renderer &renderer();
 
-  void render(GameScene &scene);
-
-  void render(LoginScene& login_renderer);
+  void render(Scene &scene);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)

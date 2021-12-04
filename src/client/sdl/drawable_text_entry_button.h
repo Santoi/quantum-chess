@@ -15,7 +15,7 @@ private:
   TextSpriteRepository &repository;
   const std::string button_name;
   DrawableButton text_box;
-  DrawableText text_entry;
+  DrawableText text;
   uint32_t x;
   uint32_t y;
   uint32_t width;

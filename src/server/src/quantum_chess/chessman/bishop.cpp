@@ -13,7 +13,7 @@ const {
   posible_moves = std::list<Position>();
   Position position;
 
-  // Primero se recorre la diagonal hacia la derecha.
+  // First right diagonal.
   int8_t min = std::min(initial.x(), initial.y());
   for (int8_t i = initial.x() - min, j = initial.y() - min;
        i < 8 && j < 8; i++, j++) {
@@ -21,7 +21,7 @@ const {
     if (position != initial)
       posible_moves.push_back(position);
   }
-  // Se recorre para el otro lado
+  // Then left diagonal.
   min = std::min(7 - initial.x(), (int) initial.y());
   for (int8_t i = initial.x() + min, j = initial.y() - min;
        i >= 0 && j < 8; i--, j++) {

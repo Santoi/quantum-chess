@@ -157,27 +157,27 @@ public:
 
   // Returns amount of positions of chessman.
   size_t positionsAmount() const;
-  
+
   // Measures position of chessman.
   void measure(const Position &position);
 
   // Calculates possible moves of chessman from initial position.
   virtual void calculatePossibleMoves(const Position &initial,
-                                      std::list<Position> &posible_moves);
+                                      std::list<Position> &possible_moves);
 
   // Calculates possible splits of chessman from initial position.
   virtual void calculatePossibleSplits(const Position &initial,
-                                       std::list<Position> &posible_moves);
+                                       std::list<Position> &possible_moves);
 
   // Calculates possible merges of chessman from initial position.
   virtual void calculatePossibleMerges(const Position &initial,
-                                       std::list<Position> &posible_moves);
+                                       std::list<Position> &possible_moves);
 
   // Calculates possible merges of chessman from two initial positions. Only
   // is a merge possible if it possible for the two initial positions.
   void
   calculatePossibleMerges(const Position &initial1, const Position &initial2,
-                          std::list<Position> &posible_moves);
+                          std::list<Position> &possible_moves);
 
   // Load list with all the positions of chessman.
   void getAllPositions(std::list<Position> &output) const;

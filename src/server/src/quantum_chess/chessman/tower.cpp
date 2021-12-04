@@ -9,22 +9,22 @@ Tower::Tower(const Position &position, bool white_, Board &board_,
         first_move(true) {}
 
 void Tower::calculateMoves(const Position &initial,
-                           std::list<Position> &posible_moves)
+                           std::list<Position> &possible_moves)
 const {
-  posible_moves = std::list<Position>();
+  possible_moves = std::list<Position>();
   Position position;
-  // Se chequea la columna.
+  // Column is checked.
   for (uint8_t i = 0; i < 8; i++) {
     position = Position(initial.x(), i);
     if (position != initial)
-      posible_moves.push_back(position);
+      possible_moves.push_back(position);
   }
 
-  // Se chequea la fila.
+  // File is checked.
   for (uint8_t i = 0; i < 8; i++) {
     position = Position(i, initial.y());
     if (position != initial)
-      posible_moves.push_back(position);
+      possible_moves.push_back(position);
   }
 }
 
@@ -38,7 +38,7 @@ bool Tower::move(const Position &initial, const Position &final) {
   return capture;
 }
 
-bool Tower::notMovedYet() {
+bool Tower::hasNotMovedYet() {
   return first_move;
 }
 

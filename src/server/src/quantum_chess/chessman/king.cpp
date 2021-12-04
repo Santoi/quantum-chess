@@ -237,7 +237,7 @@ bool King::checkShortCastling() const {
 
   if (supposed_tower->charId() == 'T') {
     auto *tower = (Tower *) supposed_tower;
-    if (tower->isWhite() == white && tower->notMovedYet())
+    if (tower->isWhite() == white && tower->hasNotMovedYet())
       return true;
   }
   return false;
@@ -257,7 +257,7 @@ bool King::checkLongCastling() const {
 
   if (supposed_tower->charId() == 'T') {
     auto *tower = (Tower *) supposed_tower;
-    if (tower->isWhite() == white && tower->notMovedYet())
+    if (tower->isWhite() == white && tower->hasNotMovedYet())
       return true;
   }
   return false;

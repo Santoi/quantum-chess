@@ -19,14 +19,14 @@ public:
         EntanglementLog &entanglement_log_);
 
   void calculateMoves(const Position &initial,
-                      std::list<Position> &posible_moves)
-  const override;
+                      std::list<Position> &possible_moves) const override;
 
   bool move(const Position &initial, const Position &final) override;
 
   ~Tower() override = default;
 
-  bool notMovedYet();
+  // Returns true if chessman has not moved yet.
+  bool hasNotMovedYet();
 
   void
   split(const Position &initial, const Position &final1,

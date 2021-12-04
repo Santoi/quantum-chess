@@ -306,12 +306,12 @@ Chessman::checkIsAValidMerge(const Position &initial1, const Position &final) {
 
 // TODO posible moves to list
 void Chessman::calculatePossibleMoves(const Position &initial,
-                                      std::list<Position> &posible_moves) {
-  calculateMoves(initial, posible_moves);
+                                      std::list<Position> &possible_moves) {
+  calculateMoves(initial, possible_moves);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidMove(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
@@ -319,12 +319,12 @@ void Chessman::calculatePossibleMoves(const Position &initial,
 }
 
 void Chessman::calculatePossibleSplits(const Position &initial,
-                                       std::list<Position> &posible_moves) {
-  calculateMoves(initial, posible_moves);
+                                       std::list<Position> &possible_moves) {
+  calculateMoves(initial, possible_moves);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidSplit(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
@@ -332,16 +332,16 @@ void Chessman::calculatePossibleSplits(const Position &initial,
 }
 
 void Chessman::calculatePossibleMerges(const Position &initial,
-                                       std::list<Position> &posible_moves) {
+                                       std::list<Position> &possible_moves) {
   if (getProbability(initial) == 1)
     return;
 
-  calculateMoves(initial, posible_moves);
-  posible_moves.push_back(initial);
+  calculateMoves(initial, possible_moves);
+  possible_moves.push_back(initial);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidMerge(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
@@ -350,14 +350,14 @@ void Chessman::calculatePossibleMerges(const Position &initial,
 
 void Chessman::calculatePossibleMerges(const Position &initial1,
                                        const Position &initial2,
-                                       std::list<Position> &posible_moves) {
+                                       std::list<Position> &possible_moves) {
   std::list<Position> aux;
-  calculatePossibleMerges(initial1, posible_moves);
+  calculatePossibleMerges(initial1, possible_moves);
   calculatePossibleMerges(initial2, aux);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (std::find(aux.begin(), aux.end(), *it) == aux.end()) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;

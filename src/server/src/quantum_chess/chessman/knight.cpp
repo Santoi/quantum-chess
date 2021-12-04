@@ -2,18 +2,14 @@
 #include <string>
 #include "knight.h"
 
-// TODO CAMBIAR POSIBLE MOVES A LIST.
-
 Knight::Knight(const Position &position, bool white_, Board &board_,
                EntanglementLog &entanglement_log_) :
         Chessman(position, white_, board_, entanglement_log_) {}
 
 void Knight::calculateMoves(const Position &initial,
-                            std::list<Position> &posible_moves)
+                            std::list<Position> &possible_moves)
 const {
-  posible_moves = std::list<Position>();
-
-  Position position;
+  possible_moves = std::list<Position>();
 
   std::vector<int> x_sum = {2, 1, -1, -2, -2, -1, 1, 2};
   std::vector<int> y_sum = {1, 2, 2, 1, -1, -2, -2, -1};
@@ -22,7 +18,7 @@ const {
     int x = 0, y = 0;
     if ((x = initial.x() + x_sum[i]) < 8 && x >= 0 &&
         (y = initial.y() + y_sum[i]) < 8 && y >= 0) {
-      posible_moves.push_back(Position(x, y));
+      possible_moves.emplace_back(x, y);
     }
   }
 }

@@ -15,7 +15,7 @@ public:
         EntanglementLog &entanglement_log_);
 
   void calculateMoves(const Position &initial,
-                      std::list<Position> &posible_moves)
+                      std::list<Position> &possible_moves)
   const override;
 
   ~Queen() override = default;

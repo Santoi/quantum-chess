@@ -1,10 +1,10 @@
 #ifndef QUANTUM_CHESS_PROJ_LOGIN_H
 #define QUANTUM_CHESS_PROJ_LOGIN_H
 
-#include "pixel_coordinate.h"
+#include "../sdl/pixel_coordinate.h"
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
-#include "button.h"
+#include "../sdl/button.h"
 #include <memory>
 #include <vector>
 #include <mutex>
@@ -22,7 +22,8 @@ public:
 
   void connectToServer(const std::string &ip, const std::string &port);
 
-  void getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_ptr<Button>>& buttons_ptr);
+  void getListOfMatchButtons(Renderer &renderer_,
+                             std::vector<std::unique_ptr<Button>> &buttons_ptr);
 
   Socket getClientSocket();
 
@@ -30,7 +31,7 @@ public:
 
   ~Login() = default;
 
-    void chooseMatchNumber(int match_number);
+  void chooseMatchNumber(int match_number);
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

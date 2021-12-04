@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_SCENE_H
 
 #include "window.h"
-#include "login_state_handler.h"
+#include "../login/login_state_handler.h"
 #include "button.h"
 #include "text_entry_button.h"
 #include "scene.h"
@@ -19,7 +19,7 @@ private:
   DrawableTextEntryButton port;
   DrawableTextEntryButton nickname;
   DrawableButton submit;
-  DrawableContainer<DrawableButton> matches;
+  DrawableContainer <DrawableButton> matches;
   DrawableButton new_match;
   DrawableButton refresh;
 
@@ -33,9 +33,9 @@ public:
 
   void render();
 
-  void renderMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons);
+  void renderMatchButtons(std::vector<std::unique_ptr<Button>> &match_buttons);
 
-  void renderConnectedSprite(TextureSprite& texture);
+  void renderConnectedSprite(TextureSprite &texture);
 
   void renderIPAndPortFields(Button &connect_button,
                              TextEntryButton &ip_text_entry,

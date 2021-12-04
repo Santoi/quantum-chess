@@ -1,11 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 #define QUANTUM_CHESS_PROJ_LOGIN_STATE_H
 
-#include "login_scene.h"
-#include "texture_sprite.h"
+#include "../sdl/login_scene.h"
+#include "../sdl/texture_sprite.h"
 #include "login.h"
-#include "button.h"
-#include "text_entry_button.h"
+#include "../sdl/button.h"
+#include "../sdl/text_entry_button.h"
 #include <atomic>
 #include <vector>
 #include <memory>

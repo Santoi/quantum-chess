@@ -5,16 +5,18 @@
 #include "../../common/src/socket.h"
 #include "matches_repository.h"
 
-class AcceptorThread: public Thread {
+// Thread that accepts new client connections.
+class AcceptorThread : public Thread {
 private:
-    Socket & socket;
-    MatchesRepository & matches;
+  Socket &socket;
+  MatchesRepository &matches;
 
 protected:
-    void run() override;
+  // Accepts new sockets and push them into a queue to be read by lobby thread.
+  void run() override;
 
 public:
-    explicit AcceptorThread(Socket & acceptor, MatchesRepository & matches_);
+  AcceptorThread(Socket &acceptor, MatchesRepository &matches_);
 };
 
 

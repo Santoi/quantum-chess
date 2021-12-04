@@ -6,18 +6,16 @@
 #include "../../common/src/blocking_queue.h"
 #include "matches_repository.h"
 
-#define MAX_GAMES 5
-
-class LobbyThread: public Thread {
+class LobbyThread : public Thread {
 private:
-    BlockingQueue<Socket> & queue;
-    MatchesRepository & matches;
+  BlockingQueue<Socket> &queue;
+  MatchesRepository &matches;
 
 protected:
-    void run() override;
+  void run() override;
 
 public:
-    LobbyThread(BlockingQueue<Socket> & queue_, MatchesRepository & matches);
+  LobbyThread(BlockingQueue<Socket> &queue_, MatchesRepository &matches);
 };
 
 

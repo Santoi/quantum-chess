@@ -156,9 +156,8 @@ public:
   const QuantumPosition &getPosition(size_t index) const;
 
   // Returns amount of positions of chessman.
-  size_t countPositions() const;
-
-  // TODO despues hacer privada.
+  size_t positionsAmount() const;
+  
   // Measures position of chessman.
   void measure(const Position &position);
 

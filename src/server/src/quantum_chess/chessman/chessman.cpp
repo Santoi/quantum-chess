@@ -224,7 +224,6 @@ void Chessman::measureOthers(const QuantumPosition &quantum_position) {
   entanglement_log.measureIfEntangledWithAllPositionsInList(positions_to_pass);
 }
 
-// Validates if move can be done (regardless the chessman).
 Chessman::MoveValidationStatus
 Chessman::checkIsAValidMove(const Position &initial, const Position &final) {
   checkIsInBoardOrFail(initial);
@@ -349,7 +348,6 @@ void Chessman::calculatePossibleMerges(const Position &initial,
   }
 }
 
-// TODO hacer tests de esto.
 void Chessman::calculatePossibleMerges(const Position &initial1,
                                        const Position &initial2,
                                        std::list<Position> &posible_moves) {
@@ -384,7 +382,6 @@ bool Chessman::getMiddlePathChessman(const std::vector<Position> &path,
                                      std::pair<Position, Chessman *> &chessman)
 const {
   bool can_move = true;
-  // Se revisa el camino.
   for (size_t i = 0; i < path.size() - 1; i++) {
     if (auto chessman_ = board.getChessmanAt(path[i])) {
       if (!can_move || !chessman_->isQuantum() || chessman_ == this)
@@ -427,7 +424,7 @@ void Chessman::getAllPositions(std::list<Position> &output) const {
 }
 
 
-size_t Chessman::countPositions() const {
+size_t Chessman::positionsAmount() const {
   return positions.size();
 }
 
@@ -435,7 +432,7 @@ void Chessman::calculatePath(const Position &initial,
                              const Position &final,
                              std::vector<Position> &path) const {
   if (initial == final)
-    ChessException("cant calculate path between same square");
+    throw ChessException("cant calculate path between same square");
   if (initial.y() == final.y())
     calculateFilePath(initial, final, path);
   else if (initial.x() == final.x())
@@ -443,7 +440,7 @@ void Chessman::calculatePath(const Position &initial,
   else if (abs((initial.x() - final.x()) / (initial.y() - final.y())) == 1)
     calculateDiagonalPath(initial, final, path);
   else
-    throw ChessException("imposible move");
+    throw ChessException("impossible move");
 }
 
 void Chessman::calculateFilePath(const Position &initial,
@@ -455,7 +452,7 @@ void Chessman::calculateFilePath(const Position &initial,
   path.reserve(7);
 
   for (uint8_t i = bottom.x() + 1; i < top.x(); i++)
-    path.push_back(Position(i, initial.y()));
+    path.emplace_back(i, initial.y());
   path.push_back(final);
 }
 
@@ -468,7 +465,7 @@ void Chessman::calculateRowPath(const Position &initial,
   path.reserve(7);
 
   for (uint8_t i = bottom.y() + 1; i < top.y(); i++)
-    path.push_back(Position(initial.x(), i));
+    path.emplace_back(initial.x(), i);
   path.push_back(final);
 }
 
@@ -483,7 +480,7 @@ void Chessman::calculateDiagonalPath(const Position &initial,
   for (int8_t i = initial.x() + sum_x, j = initial.y() + sum_y;
        i * sum_x < final.x() * sum_x && j * sum_y < final.y() * sum_y;
        i += sum_x, j += sum_y)
-    path.push_back(Position(i, j));
+    path.emplace_back(i, j);
   path.push_back(final);
 }
 

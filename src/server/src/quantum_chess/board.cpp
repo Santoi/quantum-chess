@@ -29,7 +29,7 @@ void Board::addNewChessman(char chessman_, Position position_,
   Chessman *ptr = new_chessman.get();
   chessmen.push_back(std::move(new_chessman));
 
-  for (size_t i = 0; i < ptr->countPositions(); i++) {
+  for (size_t i = 0; i < ptr->positionsAmount(); i++) {
     Position position = Position(ptr->getPosition(i));
     if (board.count(Position(position)))
       throw ChessException("there is a chessman there already");

@@ -11,8 +11,8 @@ class Renderer;
 
 class DrawableTextEntryButton {
 private:
-  Renderer &renderer;
-  TextSpriteRepository &repository;
+  TextSpriteRepository &text_repository;
+  ButtonSpriteRepository &button_repository;
   const std::string button_name;
   DrawableButton text_box;
   DrawableText text;
@@ -25,7 +25,8 @@ public:
 
   DrawableTextEntryButton() = delete;
 
-  DrawableTextEntryButton(TextSpriteRepository &repository,
+  DrawableTextEntryButton(TextSpriteRepository &text_repository,
+                          ButtonSpriteRepository &button_repository,
                           std::string default_text);
 
   void setAreaAndPosition(int x_, int y_, int height_, int width_);

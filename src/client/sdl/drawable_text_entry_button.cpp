@@ -2,14 +2,15 @@
 
 #include <utility>
 
-DrawableTextEntryButton::DrawableTextEntryButton(TextSpriteRepository
-                                                 &repository,
-                                                 std::string default_text) :
-    repository(repository),
+DrawableTextEntryButton::DrawableTextEntryButton(
+    TextSpriteRepository &text_repository,
+    ButtonSpriteRepository &button_repository,
+    std::string default_text) :
+    text_repository(text_repository),
+    button_repository(button_repository),
     button_name(std::move(default_text)),
-    text_box(renderer,
-             "img/buttons/White_text_field.png"),
-    text(repository, ""),
+    text_box(button_repository),
+    text(text_repository, ""),
     x(0), y(0), width(0),
     height(0) {}
 

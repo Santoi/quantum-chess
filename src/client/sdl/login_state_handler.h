@@ -7,7 +7,7 @@
 #include <memory>
 #include <mutex>
 
-class LoginRenderer;
+class LoginScene;
 
 class LoginState;
 
@@ -33,9 +33,9 @@ public:
 
     void fillWithActiveTextEntryButtons(std::list<std::reference_wrapper<TextEntryButton>>& active_text_entries);
 
-    void proccessTokens(std::list<std::string>&& tokens);
+    void processTokens(std::list<std::string>&& tokens);
 
-    void tellRendererWhatToRender(LoginRenderer& login_renderer);
+    void tellRendererWhatToRender(LoginScene& login_renderer);
 
     Socket getClientSocket();
 

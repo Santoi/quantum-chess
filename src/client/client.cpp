@@ -1,6 +1,6 @@
 #include "client.h"
 #include "sdl/window.h"
-#include "sdl/scene.h"
+#include "sdl/game_scene.h"
 #include "position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
@@ -10,7 +10,7 @@
 #include "sdl/event_handler_thread.h"
 #include "sdl/sound/sound_handler.h"
 #include "sdl/login_handler_thread.h"
-#include "sdl/login_renderer.h"
+#include "sdl/login_scene.h"
 #include "sdl/login_state_handler.h"
 #include "game/chat.h"
 #include "game/chess_log.h"
@@ -28,7 +28,7 @@
 uint16_t Client::getMatchesInfo(Socket &client_socket) {
   ClientProtocol protocol;
   std::map<uint16_t, std::vector<ClientData>> data =
-          protocol.receiveMatchesInfo(client_socket);
+      protocol.receiveMatchesInfo(client_socket);
   std::cout << "Selecciona de las partidas disponibles a cuál de estas"
                " quieres entrar." << std::endl;
   std::cout << "Las partidas disponibles son" << std::endl;
@@ -102,7 +102,7 @@ void Client::setUpClientsDataInServer(Socket &socket) {
 }
 
 
-void Client::gameRenderLoop(Scene &scene, Game &game, TextEntry &text_entry,
+void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
                             HandlerThread &handler, Renderer &renderer) {
   while (handler.isOpen()) {
     // Timing: calculate difference between this and previous frame
@@ -126,23 +126,24 @@ void Client::gameRenderLoop(Scene &scene, Game &game, TextEntry &text_entry,
   }
 }
 
-void Client::loginRenderLoop(LoginRenderer& login_renderer, HandlerThread& login_handler,
-                                        Renderer& renderer) {
-    while (login_handler.isOpen()) {
-        // Timing: calculate difference between this and previous frame
-        // in milliseconds
-        uint32_t before_render_ticks = SDL_GetTicks();
+void Client::loginRenderLoop(LoginScene &login_renderer,
+                             HandlerThread &login_handler,
+                             Renderer &renderer) {
+  while (login_handler.isOpen()) {
+    // Timing: calculate difference between this and previous frame
+    // in milliseconds
+    uint32_t before_render_ticks = SDL_GetTicks();
 
-        // Show rendered frame
-        renderer.render(login_renderer);
+    // Show rendered frame
+    renderer.render(login_renderer);
 
-        uint32_t after_render_ticks = SDL_GetTicks();
-        uint32_t frame_delta = after_render_ticks - before_render_ticks;
+    uint32_t after_render_ticks = SDL_GetTicks();
+    uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
-        // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        if (frame_delta < 1000 / FRAME_RATE)
-            SDL_Delay(1000 / FRAME_RATE);
-    }
+    // Frame limiter: sleep for a little bit to not eat 100% of CPU
+    if (frame_delta < 1000 / FRAME_RATE)
+      SDL_Delay(1000 / FRAME_RATE);
+  }
 }
 
 
@@ -153,8 +154,10 @@ void Client::execute(const char *host, const char *port) {
   Window window;
   Renderer &renderer = window.renderer();
   Font font(FONT_SIZE);
+  ButtonSpriteRepository button_sprite_repository(renderer);
+  TextSpriteRepository text_sprite_repository(renderer, font);
   LoginStateHandler login_state_handler(window.renderer());
-  LoginRenderer login_renderer(login_state_handler, window);
+  LoginScene login_renderer(login_state_handler, window);
   LoginHandlerThread login_handler(login_state_handler);
 
   login_handler.start();
@@ -165,12 +168,13 @@ void Client::execute(const char *host, const char *port) {
   Socket socket = login_state_handler.getClientSocket();
   client_nick_name = login_state_handler.getClientNickName();//TODO borrar
 
-   RemoteClientSender sender_thread(socket, send);
-   RemoteClientReceiver receiver_thread(socket, received);
-   setUpClientsDataInServer(socket);
+  RemoteClientSender sender_thread(socket, send);
+  RemoteClientReceiver receiver_thread(socket, received);
+  setUpClientsDataInServer(socket);
 
   Game game(window, send, role, font);
-  Scene scene(window, game.getBoard(), font);
+  GameScene scene(window, game.getBoard(), font, text_sprite_repository,
+                  button_sprite_repository);
   Chat chat(send, scene);
   ChessLog chess_log(scene);
   ErrorLog error_log(scene);
@@ -217,7 +221,7 @@ bool Client::readCommand() {
       message += temp_message + " ";
     }
     send.push(std::make_shared<RemoteClientChatInstruction>(
-            message));
+        message));
 
   }
 
@@ -229,8 +233,8 @@ bool Client::readCommand() {
       throw ChessException("posicion invalida");
 
     send.push(std::make_shared<RemoteClientMoveInstruction>(
-            Position((uint8_t) x1 - 'A', (uint8_t) y1),
-            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
+        Position((uint8_t) x1 - 'A', (uint8_t) y1),
+        Position((uint8_t) x2 - 'A', (uint8_t) y2)));
   }
   return false;
 }

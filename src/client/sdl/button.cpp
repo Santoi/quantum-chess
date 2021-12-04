@@ -4,7 +4,7 @@
 
 Button::Button(Renderer& renderer_, const std::string& not_pressed_file_name,
                const std::string& pressed_file_name)
-        :drawable(renderer_, not_pressed_file_name, pressed_file_name) {
+        : drawable(button_sprite_repository) {
 }
 
 void Button::render() {

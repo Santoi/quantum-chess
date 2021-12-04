@@ -1,10 +1,11 @@
 #include "drawable_text_entry_button.h"
 
-DrawableTextEntryButton::DrawableTextEntryButton(Renderer &renderer,
-                                                 TextSpriteRepository &repository, const std::string &default_text)
-                             : renderer(renderer),
+#include <utility>
+
+DrawableTextEntryButton::DrawableTextEntryButton(TextSpriteRepository
+                                         &repository, std::string default_text):
                                repository(repository),
-                               button_name(default_text),
+                               button_name(std::move(default_text)),
                                text_box(renderer,
                                         "img/buttons/White_text_field.png"),
                                text_entry(repository, ""),

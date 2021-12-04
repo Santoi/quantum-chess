@@ -5,16 +5,16 @@
 
 #include "../../common/src/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
 #define MAX_MESSAGES 10
 
 class TurnLog {
 private:
-  Scene &scene;
+  GameScene &scene;
 
 public:
-  explicit TurnLog(Scene &scene);
+  explicit TurnLog(GameScene &scene);
 
   void changeTurn(bool white);
 };

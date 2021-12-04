@@ -5,16 +5,16 @@
 
 #include "../../common/src/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
 #define MAX_MESSAGES 10
 
 class ErrorLog {
 private:
-  Scene &scene;
+  GameScene &scene;
 
 public:
-  explicit ErrorLog(Scene &scene);
+  explicit ErrorLog(GameScene &scene);
 
   void addMessage(std::string message);
 

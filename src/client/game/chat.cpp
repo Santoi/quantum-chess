@@ -1,8 +1,8 @@
 #include "chat.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
 Chat::Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
-           Scene &scene)
+           GameScene &scene)
         : send_queue(send_queue_), scene(scene) {}
 
 void Chat::sendMessage(const std::string &message) {

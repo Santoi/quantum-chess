@@ -14,7 +14,6 @@ class DrawableText {
   std::string text;
   char color;
 
-
 public:
   DrawableText(TextSpriteRepository &text_sprite_repository_,
                std::string text, char color = 'w');

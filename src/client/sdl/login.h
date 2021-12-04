@@ -24,7 +24,7 @@ public:
 
   void getListOfMatchButtons(Renderer& renderer_, std::vector<std::unique_ptr<Button>>& buttons_ptr);
 
-  //Socket getClientSocket();
+  Socket getClientSocket();
 
   std::string getClientNickName();
 

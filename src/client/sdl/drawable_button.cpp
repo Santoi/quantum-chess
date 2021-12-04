@@ -1,7 +1,7 @@
 #include "drawable_button.h"
+#include "sprite_repositories/button_sprite_repository.h"
 
-DrawableButton::DrawableButton(Renderer& renderer_, const std::string& not_pressed_file_name,
-                               const std::string& pressed_file_name)
+DrawableButton::DrawableButton(ButtonSpriteRepository &repository)
                 :renderer(renderer_), scale(0), is_pressed(false), x(0), y(0),
                  height(0), width(0) {
     sprites.reserve(2);

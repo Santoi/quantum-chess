@@ -6,9 +6,9 @@
 
 class Sprite;
 
-class Scene;
+class GameScene;
 
-class LoginRenderer;
+class LoginScene;
 
 class Renderer {
 private:
@@ -19,9 +19,9 @@ public:
 
   SDL2pp::Renderer &renderer();
 
-  void render(Scene &scene);
+  void render(GameScene &scene);
 
-  void render(LoginRenderer& login_renderer);
+  void render(LoginScene& login_renderer);
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)

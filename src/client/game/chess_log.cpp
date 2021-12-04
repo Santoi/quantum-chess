@@ -1,7 +1,7 @@
 #include "chess_log.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
-ChessLog::ChessLog(Scene &scene) : scene(scene) {}
+ChessLog::ChessLog(GameScene &scene) : scene(scene) {}
 
 void
 ChessLog::addMessage(std::string message) {

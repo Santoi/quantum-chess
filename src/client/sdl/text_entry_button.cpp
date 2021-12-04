@@ -5,8 +5,9 @@
 
 #define MAX_INPUT 20
 
-TextEntryButton::TextEntryButton(Renderer& renderer_, const std::string& button_name_)
-                :text_entry(30), drawable_text_button(renderer_, button_name_), expecting_text_entry(false) {
+TextEntryButton::TextEntryButton(Renderer& renderer_, TextSpriteRepository repository, const std::string& button_name_)
+                : text_entry(30), drawable_text_button(repository,
+                                                       button_name_), expecting_text_entry(false) {
     input_text.reserve(MAX_INPUT);
 }
 

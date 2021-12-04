@@ -18,10 +18,10 @@ private:
   std::string client_nick_name;
   ClientData::Role role;
 
-  void gameRenderLoop(Scene &scene, Game &game, TextEntry &text_entry,
+  void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
                       HandlerThread &handler, Renderer &renderer);
-  void loginRenderLoop(LoginRenderer& login_renderer, HandlerThread& login_handler,
-                                        Renderer& renderer);
+  void loginRenderLoop(LoginScene& login_renderer, HandlerThread& login_handler,
+                       Renderer& renderer);
 
 
 public:

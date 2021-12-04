@@ -14,9 +14,9 @@ void ChessExceptionInstruction::makeActionAndNotifyAllListeningQueues(
         std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
 
-  std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChessExceptionInstruction>(
+  std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<ChessExceptionInstruction>(
           instructor_data, std::move(this->message));
-  listening_queues.at(instructor_data.id).push(this_instruc_ptr);
+  listening_queues.at(instructor_data.id).push(this_instruct_ptr);
 }
 
 void ChessExceptionInstruction::fillPacketWithInstructionsToSend(

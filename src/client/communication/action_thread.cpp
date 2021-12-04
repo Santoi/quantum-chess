@@ -14,8 +14,7 @@ ActionThread::ActionThread(
 void ActionThread::run() {
   try {
     while (true) {
-      std::shared_ptr<RemoteClientInstruction> ptr_instruction;
-      instructions.pop(ptr_instruction);
+      auto ptr_instruction = instructions.pop();
       ptr_instruction->makeAction(game, chat, chess_log, error_log,
                                   turn_log);
     }

@@ -60,10 +60,9 @@ ClientHandlersSender::ClientHandlersSender(ClientHandlersSender &&otherSender,
 }
 
 void ClientHandlersSender::popFromQueueAndSendInstruction() {
-  std::shared_ptr<Instruction> instruc_ptr;
-  this->notifications_queue.pop(instruc_ptr);
+  auto instruct_ptr = notifications_queue.pop();
   ServerProtocol protocol;
-  protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr,
+  protocol.sendPacketWithUpdates(this->client_socket, instruct_ptr,
                                  client_data);
 }
 

@@ -23,10 +23,10 @@ void PossibleSplitsInstruction::makeActionAndNotifyAllListeningQueues(
             std::make_shared<ChessExceptionInstruction>(instruction));
     return;
   }
-  std::shared_ptr<Instruction> this_instruc_ptr =
+  std::shared_ptr<Instruction> this_instruct_ptr =
           std::make_shared<PossibleSplitsInstruction>(instructor_data,
                                                       std::move(positions_));
-  listening_queues.at(instructor_data.id).push(this_instruc_ptr);
+  listening_queues.at(instructor_data.id).push(this_instruct_ptr);
 }
 
 void

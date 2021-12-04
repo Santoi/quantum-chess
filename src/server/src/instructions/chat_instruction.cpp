@@ -10,11 +10,11 @@ ChatInstruction::ChatInstruction(const ClientData &instructor_data_,
 void ChatInstruction::makeActionAndNotifyAllListeningQueues(
         std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
-  std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(
+  std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<ChatInstruction>(
           instructor_data, std::move(this->message));
 
   for (auto &listening_queue: listening_queues)
-    listening_queue.second.push(this_instruc_ptr);
+    listening_queue.second.push(this_instruct_ptr);
 }
 
 void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,

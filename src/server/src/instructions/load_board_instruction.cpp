@@ -14,10 +14,10 @@ void LoadBoardInstruction::makeActionAndNotifyAllListeningQueues(
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
   match.getBoard().loadVectors(characters, colors, positions, probabilities);
   white = match.getBoard().isNextWhite();
-  std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<LoadBoardInstruction>(
+  std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<LoadBoardInstruction>(
           std::move(*this));
   for (auto it = listening_queues.begin(); it != listening_queues.end(); ++it)
-    it->second.push(this_instruc_ptr);
+    it->second.push(this_instruct_ptr);
 }
 
 void

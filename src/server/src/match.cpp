@@ -81,11 +81,10 @@ void Match::stop() {
 }
 
 void Match::checkAndNotifyUpdates() {
-  std::shared_ptr<Instruction> instruc_ptr;
-  this->match_updates_queue.pop(instruc_ptr);
-  instruc_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues,
-                                                     *this,
-                                                     match_updates_queue);
+  auto instruct_ptr = match_updates_queue.pop();
+  instruct_ptr->makeActionAndNotifyAllListeningQueues(this->listening_queues,
+                                                      *this,
+                                                      match_updates_queue);
 }
 
 void Match::run() {

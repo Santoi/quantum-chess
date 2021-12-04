@@ -50,7 +50,7 @@ public:
   void fillInstructions(Socket &socket, const ClientData &client_data,
                         std::shared_ptr<Instruction> &instruct_ptr);
 
-  //Given a instruc_ptr, the function fillPacketWithInstructionsToSend is called passing the
+  //Given a instruct_ptr, the function fillPacketWithInstructionsToSend is called passing the
   //nick names repository and the client id, so that the instruction knows how to get the
   //information that is needed to fill up the packet to be sent to the given socket.
   void sendPacketWithUpdates(Socket &socket,
@@ -111,7 +111,7 @@ public:
 
 private:
   //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.
-  //By the end of the function, the instruc_ptr points to this new ChatInstruction object.
+  //By the end of the function, the instruct_ptr points to this new ChatInstruction object.
   void fillChatInstructions(Socket &socket, const ClientData &client_data,
                             std::shared_ptr<Instruction> &instruct_ptr);
 

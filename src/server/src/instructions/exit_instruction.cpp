@@ -13,12 +13,12 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(
   /*if (this->instructor_data.id == MATCH_ID)
     throw std::runtime_error("");*/
   //Just notify existing queues that the player left the game
-  std::shared_ptr<Instruction> this_instruc_ptr =
+  std::shared_ptr<Instruction> this_instruct_ptr =
           std::make_shared<ExitInstruction>(instructor_data);
   match.deleteClientWithId(instructor_data.id);
 
   for (auto &listening_queue: listening_queues)
-    listening_queue.second.push(this_instruc_ptr);
+    listening_queue.second.push(this_instruct_ptr);
 
   std::shared_ptr<Instruction> chat_instruction = std::make_shared<ChatInstruction>(
           instructor_data, "has left");

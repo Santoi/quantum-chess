@@ -11,8 +11,7 @@ void LobbyThread::run() {
   try {
     while (true) {
       // TODO LANZAR UN HILO POR CADA CONEXION PENDIENTE. MATCHES RESPOTIROY PROTEGIDO.
-      std::shared_ptr<Socket> peer;
-      queue.pop(peer);
+      auto peer = queue.pop();
       matches.joinInactiveMatches();
       matches.addClientToMatchCreatingIfNeeded((std::move(*peer)));
     }

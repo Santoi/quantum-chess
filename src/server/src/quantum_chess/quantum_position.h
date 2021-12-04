@@ -10,15 +10,15 @@ class Position;
 
 class Chessman;
 
-// Represents a Quantum Position. It has as atributes its position, its
+// Represents a Quantum Position. It has as attributes its position, its
 // probability and a reference to its Chessman.
 class QuantumPosition {
   Position position;
   double prob;
   Chessman *chessman;
 
-// Compare a double with pecision, used to compare probabilities.  
-bool compareDoubleWithPrecision(double a, double b, double e) const;
+// Compare a double with precision, used to compare probabilities.
+  bool compareDoubleWithPrecision(double a, double b, double e) const;
 
 public:
   // Constructor from Position object.
@@ -32,7 +32,7 @@ public:
   bool operator==(const QuantumPosition &other) const;
 
   bool operator!=(const QuantumPosition &other) const;
-  
+
   // Compares with Position object.
   bool operator==(const Position &other) const;
 

@@ -15,10 +15,12 @@ void PossibleMergesInstruction::makeActionAndNotifyAllListeningQueues(
   std::list<Position> positions_;
   try {
     if (positions.size() == 1)
-      positions_ = match.getBoard().getPossibleMergesOf(*positions.begin());
+      match.getBoard().getPossibleMergesOf(*positions.begin(),
+                                           positions_);
     else
-      positions_ = match.getBoard().getPossibleMergesOf(*positions.begin(),
-                                                        *(++positions.begin()));
+      match.getBoard().getPossibleMergesOf(*positions.begin(),
+                                           *(++positions.begin()),
+                                           positions_);
   }
   catch (const ChessException &e) {
     ChessExceptionInstruction instruction(instructor_data, e.what());

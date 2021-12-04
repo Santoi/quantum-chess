@@ -14,7 +14,8 @@ void EntangledChessmanInstruction::makeActionAndNotifyAllListeningQueues(
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
   std::list<Position> positions_;
   try {
-    positions_ = match.getBoard().getEntangledOf(*positions.begin());
+    match.getBoard().getEntangledOf(*positions.begin(),
+                                    positions_);
   }
   catch (const ChessException &e) {
     ChessExceptionInstruction instruction(instructor_data, e.what());

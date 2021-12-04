@@ -91,53 +91,47 @@ void Board::merge(const Position &initial1, const Position &initial2,
   next_white = !next_white;
 }
 
-std::list<Position> Board::getPossibleMovesOf(const Position &position) {
-  std::list<Position> output;
+void Board::getPossibleMovesOf(const Position &position,
+                               std::list<Position> &output) {
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
     chessman->calculatePossibleMoves(position, output);
-  return output;
 }
 
-std::list<Position> Board::getPossibleSplitsOf(const Position &position) {
-  std::list<Position> output;
+void Board::getPossibleSplitsOf(const Position &position,
+                                std::list<Position> &output) {
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
     chessman->calculatePossibleSplits(position, output);
-  return output;
 }
 
-std::list<Position> Board::getPossibleMergesOf(const Position &position) {
-  std::list<Position> output;
+void Board::getPossibleMergesOf(const Position &position,
+                                std::list<Position> &output) {
   Chessman *chessman = getChessmanAt(position);
   if (chessman)
     chessman->calculatePossibleMerges(position, output);
-  return output;
 }
 
-std::list<Position> Board::getPossibleMergesOf(const Position &position1,
-                                               const Position &position2) {
-  std::list<Position> output;
+void
+Board::getPossibleMergesOf(const Position &position1, const Position &position2,
+                           std::list<Position> &output) {
   Chessman *chessman = getChessmanAt(position1);
   if (chessman)
     chessman->calculatePossibleMerges(position1, position2, output);
-  return output;
 }
 
-std::list<Position> Board::getPositionsOf(const Position &position1) {
-  std::list<Position> output;
+void
+Board::getPositionsOf(const Position &position1, std::list<Position> &output) {
   Chessman *chessman = getChessmanAt(position1);
   if (chessman)
     chessman->getAllPositions(output);
-  return output;
 }
 
-std::list<Position> Board::getEntangledOf(const Position &position1) {
-  std::list<Position> output;
+void
+Board::getEntangledOf(const Position &position1, std::list<Position> &output) {
   Chessman *chessman = getChessmanAt(position1);
   if (chessman)
     chessman->getEntangledPositions(output);
-  return output;
 }
 
 void Board::addChessmanIn(const Position &position, Chessman *chessman) {

@@ -39,7 +39,7 @@ public:
   // Moves chessman from initial to final position. Boolean player_white
   // indicates if player which is playing is white.
   bool move(const Position &initial, const Position &final, bool player_white);
-  
+
   // Split chessman from initial to pos1 and pos2, splitting its probability
   // in a factor 2. Boolean player_white indicates if player which is playing
   // is white.
@@ -51,23 +51,28 @@ public:
   void merge(const Position &initial1, const Position &initial2,
              const Position &final, bool player_white);
 
-  std::list<Position> getPossibleMovesOf(const Position &position);
-  
-  std::list<Position> getPossibleSplitsOf(const Position &position);
+  void getPossibleMovesOf(const Position &position,
+                          std::list<Position> &output);
 
-  std::list<Position> getPossibleMergesOf(const Position &position);
+  void getPossibleSplitsOf(const Position &position,
+                           std::list<Position> &output);
 
-  std::list<Position>
-  getPossibleMergesOf(const Position &position1, const Position &position2);
-  
-  std::list<Position> getPositionsOf(const Position &position1);
+  void getPossibleMergesOf(const Position &position,
+                           std::list<Position> &output);
 
-  std::list<Position> getEntangledOf(const Position &position1);
+  void
+  getPossibleMergesOf(const Position &position1, const Position &position2,
+                      std::list<Position> &output);
+
+  void getPositionsOf(const Position &position1, std::list<Position> &output);
+
+  void
+  getEntangledOf(const Position &position1, std::list<Position> &output);
 
   // Returns a pointer to chessman in position. Returns nullptr if there isnt
   // a chessman.
   Chessman *getChessmanAt(const Position &position);
-  
+
   // Returns true if chessman is in the board (in the map).
   bool isThere(Chessman *chessman);
 
@@ -105,7 +110,7 @@ public:
 
   // Finish the game, after calling this methods, no more moves can be done.
   void endGame();
-  
+
   // Push string to log (log is a stack).
   void pushToLog(std::string);
 

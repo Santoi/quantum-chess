@@ -13,7 +13,8 @@ void PossibleMovesInstruction::makeActionAndNotifyAllListeningQueues(
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
   std::list<Position> positions_;
   try {
-    positions_ = match.getBoard().getPossibleMovesOf(*positions.begin());
+    match.getBoard().getPossibleMovesOf(*positions.begin(),
+                                        positions_);
   }
   catch (const ChessException &e) {
     ChessExceptionInstruction instruction(instructor_data, e.what());

@@ -14,7 +14,8 @@ void PossibleSplitsInstruction::makeActionAndNotifyAllListeningQueues(
         Match &match, BlockingQueue<Instruction> &match_updates_queue) {
   std::list<Position> positions_;
   try {
-    positions_ = match.getBoard().getPossibleSplitsOf(*positions.begin());
+    match.getBoard().getPossibleSplitsOf(*positions.begin(),
+                                         positions_);
   }
   catch (const ChessException &e) {
     ChessExceptionInstruction instruction(instructor_data, e.what());

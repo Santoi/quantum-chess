@@ -57,12 +57,11 @@ void QuantumPosition::setProb(double prob_) {
 }
 
 void QuantumPosition::measure() {
-  // TODO borrar cuando cambie a referencia.
   if (chessman)
     chessman->measure(Position(*this));
   else
-    throw std::runtime_error("se intenta medir una posicion "
-                             "no asignada a un chessman");
+    throw std::runtime_error("trying to measure a position not assigned to"
+                             "chessman");
 }
 
 bool QuantumPosition::compareDoubleWithPrecision(double a, double b,

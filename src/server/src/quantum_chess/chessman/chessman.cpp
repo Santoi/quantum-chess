@@ -206,7 +206,7 @@ void Chessman::measure(const Position &position) {
   }
 }
 
-void Chessman::measureOthers(QuantumPosition &quantum_position) {
+void Chessman::measureOthers(const QuantumPosition &quantum_position) {
   // If entangled appears only in this position, then measure.
   entanglement_log.measureEntanglements(*this, quantum_position);
 
@@ -421,8 +421,8 @@ const QuantumPosition &Chessman::getPosition(size_t index) const {
 }
 
 void Chessman::getAllPositions(std::list<Position> &output) const {
-  for (auto &position: positions)
-    output.push_back(Position(position));
+  for (auto it = positions.begin(); it != positions.end(); ++it)
+    output.push_back(Position(*it));
 }
 
 

@@ -90,13 +90,14 @@ protected:
   void checkIsInBoardOrFail(const Position &position);
 
   // Measure other chessman entangled with QuantumPosition.
-  void measureOthers(QuantumPosition &quantum_position);
+  void measureOthers(const QuantumPosition &quantum_position);
 
   // Checks if a move is valid. Returning a status. It is used for validating
   // possible moves and moves send by user.
   virtual
   MoveValidationStatus checkIsAValidMove(const Position &initial,
                                          const Position &final);
+
   // Checks if a split is valid. Returning a status. It is used for validating
   // possible splits and splits send by user.
   virtual Chessman::MoveValidationStatus
@@ -122,16 +123,16 @@ protected:
 public:
   Chessman(const Position &position_, bool white_, Board &board_,
            EntanglementLog &entanglement_log_);
-           
+
   virtual ~Chessman() = default;
-           
+
   // Moves chessman from initial position to final, validating the move.
   virtual bool move(const Position &initial, const Position &final);
 
   // Splits chessman from initial position to final1 and final2 validating.
   virtual void split(const Position &initial, const Position &final1,
                      const Position &final2);
-  
+
   // Merges chessman from initial1 and initial2 to final, validating.
   void merge(const Position &initial1, const Position &initial2,
              const Position &final);
@@ -168,7 +169,7 @@ public:
   // Calculates possible splits of chessman from initial position.
   virtual void calculatePossibleSplits(const Position &initial,
                                        std::list<Position> &posible_moves);
-  
+
   // Calculates possible merges of chessman from initial position.
   virtual void calculatePossibleMerges(const Position &initial,
                                        std::list<Position> &posible_moves);
@@ -178,7 +179,7 @@ public:
   void
   calculatePossibleMerges(const Position &initial1, const Position &initial2,
                           std::list<Position> &posible_moves);
-                          
+
   // Load list with all the positions of chessman.
   void getAllPositions(std::list<Position> &output) const;
 

@@ -41,13 +41,13 @@ Socket &Socket::operator=(Socket &&other) noexcept {
 Socket Socket::createAConnectedSocket(const char *host, const char *service) {
   Socket skt(host, service);
   skt.connect();
-  return std::move(skt);
+  return skt;
 }
 
 Socket Socket::createAListeningSocket(const char *host, const char *service) {
   Socket skt(host, service);
   skt.bindAndListen();
-  return std::move(skt);
+  return skt;
 }
 
 void Socket::connect() {

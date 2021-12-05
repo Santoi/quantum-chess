@@ -26,26 +26,28 @@ Socket::Socket(const char *hostname, const char *service) : fd(-1),
                                                             network(hostname,
                                                                     service) {}
 
-Socket::Socket(Socket &&other) noexcept {
+Socket::Socket(Socket &&other) noexcept: fd(other.fd),
+                                         network(std::move(other.network)) {
+  other.fd = INVALID_FILE_DESCRIPTOR;
+}
+
+Socket &Socket::operator=(Socket &&other) noexcept {
   fd = other.fd;
   other.fd = INVALID_FILE_DESCRIPTOR;
+  network = std::move(other.network);
+  return *this;
 }
 
 Socket Socket::createAConnectedSocket(const char *host, const char *service) {
   Socket skt(host, service);
   skt.connect();
-  return skt;
-}
-
-void Socket::createAConnectedSocket(std::unique_ptr<Socket>& socket_ptr, const char* host, const char* service) {
-    socket_ptr = make_unique<Socket>(host, service);
-    socket_ptr->connect();
+  return std::move(skt);
 }
 
 Socket Socket::createAListeningSocket(const char *host, const char *service) {
   Socket skt(host, service);
   skt.bindAndListen();
-  return skt;
+  return std::move(skt);
 }
 
 void Socket::connect() {

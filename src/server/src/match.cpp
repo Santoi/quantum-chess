@@ -118,7 +118,7 @@ std::list<ClientData::Role> Match::getAvailableRoles() {
 }
 
 // TODO Pasar referencia?
-std::vector<const ClientData *> Match::getClientsData() const {
+std::vector<ClientData> Match::getClientsData() const {
   return clients_map.getClientsData();
 }
 

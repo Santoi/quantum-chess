@@ -46,7 +46,7 @@ public:
 
   void stop();
 
-  std::vector<const ClientData *> getClientsData() const;
+  std::vector<ClientData> getClientsData() const;
 
   void deleteClientWithId(uint16_t client_id);
 

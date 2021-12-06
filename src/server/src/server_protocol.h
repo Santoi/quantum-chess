@@ -38,7 +38,8 @@ public:
 
   //Sends to the socket the number of games running max_games.
   void sendMatchesInfo(Socket &socket,
-                       const std::map<uint16_t, std::unique_ptr<Match>> &matches);
+                       const std::map<uint16_t, std::vector<ClientData>>
+                       &matches_data);
 
   //Receives from socket the number of the chosen game and returns it.
   uint16_t receiveChosenGame(Socket &socket);

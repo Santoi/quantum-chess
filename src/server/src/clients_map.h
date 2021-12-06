@@ -41,7 +41,7 @@ public:
 
   void getAvailableRoles(bool &white_available, bool &black_available);
 
-  std::vector<const ClientData *> getClientsData() const;
+  std::vector<ClientData> getClientsData() const;
 };
 
 

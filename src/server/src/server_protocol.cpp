@@ -20,20 +20,20 @@
 #define POSSIBLE_MOVES_PREFIX 'a'
 
 void ServerProtocol::sendMatchesInfo(Socket &socket,
-                                     const std::map<uint16_t, std::unique_ptr<Match>> &matches) {
+                                     const std::map<uint16_t,
+                                             std::vector<ClientData>>
+                                     &matches_data) {
   Packet packet;
-  changeNumberToBigEndianAndAddToPacket(packet, matches.size());
-  for (auto &pair: matches) {
+  changeNumberToBigEndianAndAddToPacket(packet, matches_data.size());
+  for (auto &pair: matches_data) {
     changeNumberToBigEndianAndAddToPacket(packet, (uint16_t) pair.first);
-    std::vector<const ClientData *> client_data_repository =
-            pair.second->getClientsData();
     changeNumberToBigEndianAndAddToPacket(packet,
-                                          (uint16_t) client_data_repository.size());
-    for (auto &client_data: client_data_repository) {
+                                          (uint16_t) pair.second.size());
+    for (auto &client_data: pair.second) {
       changeNumberToBigEndianAndAddToPacket(packet,
-                                            (uint16_t) client_data->id);
-      addStringAndItsLengthToPacket(packet, client_data->name);
-      addNumber8ToPacket(packet, client_data->role);
+                                            (uint16_t) client_data.id);
+      addStringAndItsLengthToPacket(packet, client_data.name);
+      addNumber8ToPacket(packet, client_data.role);
     }
   }
   socket.send(packet);

@@ -11,10 +11,7 @@ public:
   EntangledChessmanInstruction(const ClientData &instructor_data,
                                std::list<Position> &&pos);
 
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_queues_update) override;
+  void makeActionAndNotify(Match &match) override;
 
   void
   fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,

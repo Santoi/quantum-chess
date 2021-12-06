@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <memory>
+#include "clients_map.h"
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
 #include "clients_threads.h"

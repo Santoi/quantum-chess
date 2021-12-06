@@ -9,15 +9,12 @@ LoadBoardInstruction::LoadBoardInstruction()
         : positions(), characters(), colors(), probabilities(), white(true) {}
 
 
-void LoadBoardInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {
+void LoadBoardInstruction::makeActionAndNotify(Match &match) {
   match.getBoard().loadVectors(characters, colors, positions, probabilities);
   white = match.getBoard().isNextWhite();
   std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<LoadBoardInstruction>(
           std::move(*this));
-  for (auto it = listening_queues.begin(); it != listening_queues.end(); ++it)
-    it->second.push(this_instruct_ptr);
+  match.addInstrToAllListeningQueues(this_instruct_ptr);
 }
 
 void

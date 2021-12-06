@@ -4,9 +4,7 @@
 SoundInstruction::SoundInstruction(uint8_t sound_) : sound(sound_) {}
 
 
-void SoundInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {}
+void SoundInstruction::makeActionAndNotify(Match &match) {}
 
 void
 SoundInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,

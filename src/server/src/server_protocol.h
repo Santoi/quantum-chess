@@ -3,12 +3,14 @@
 
 #include "../../common/src/socket.h"
 #include "../../common/src/packet.h"
-#include "instructions/instruction.h"
 #include "../../common/src/protocol.h"
-#include "match.h"
+#include "quantum_chess/position.h"
+//#include "match.h"
 #include <memory>
 #include "../../common/src/protocol.h"
 #include "../../common/src/client_data.h"
+#include <map>
+#include <list>
 
 #define POSSIBLE_MOVES_PREFIX 'a'
 #define CHAT_PREFIX 'c'

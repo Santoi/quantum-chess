@@ -15,10 +15,7 @@ public:
                    const Position &from1_, const Position &from2_,
                    const Position &to_);
 
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_queues_update) override;
+  void makeActionAndNotify(Match &match) override;
 
   void
   fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,

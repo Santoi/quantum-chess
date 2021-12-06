@@ -2,12 +2,15 @@
 #define QUANTUM_CHESS_PROJ_MATCH_H
 
 #include <list>
+#include "../../common/src/socket.h"
+#include "clients_map.h"
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/socket.h"
 #include "../../common/src/thread.h"
 #include "quantum_chess/board.h"
 #include "instructions/instruction.h"
 #include "client_handler.h"
+
 
 class Instruction;
 
@@ -16,8 +19,7 @@ private:
   Board board;
   // TODO estos maps hay que hacerlos protegidos, podria haber race
   // condition si el server manda algo y justo se une alguien.
-  std::map<uint16_t, ClientHandler> clients;
-  std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
+  ClientsMap clients_map;
   BlockingQueue<Instruction> match_updates_queue;
   std::ifstream &file;
 
@@ -33,12 +35,12 @@ public:
   //Adds client to list of clients and nick names repository, and calls the client to start.
   void addClientToMatch(Socket &&client_socket, uint16_t client_id);
 
-  //Pops from updates_queue an instruction, and asks this instruction to makeActionAndNotifyAllListeningQueues.
+  //Pops from updates_queue an instruction, and asks this instruction to makeActionAndNotify.
   void checkAndNotifyUpdates();
 
   //Iterates over the list of clients, asking each one if the respective client is active. If either
   //of them is active, then a true is returned. If neither is active, a false is returned.
-  bool hasActiveClients() const;
+  bool hasActiveClients();
 
   ~Match() = default;
 
@@ -50,18 +52,20 @@ public:
 
   Board &getBoard();
 
+  void addInstrToClientListeningQueue(uint16_t client_id,
+                                      std::shared_ptr<Instruction> &instr_ptr);
+
+  void addInstrToAllListeningQueues(std::shared_ptr<Instruction> instr_ptr);
+
+  void addInstrToUpdateQueue(std::shared_ptr<Instruction> instr_ptr);
+
 protected:
   //Calls checkAndNotifyUpdates until the match's ExitInstruction is popped and asked to
-  //makeActionAndNotifyAllListeningQueues. This throws a running exception that is catched and
+  //makeActionAndNotify. This throws a running exception that is catched and
   //execution ends.
   void run() override;
 
 private:
-  //Creates a new ClientHandler and adds it to the client's vector (if the vector's capacity is not
-  //enough, it is incremented by BASE_CLIENTS). The number of accepted clients is incremented by one.
-  void addClientToListOfClients(Socket &&client_socket,
-                                ClientData &client_data);
-
   ClientData askClientData(Socket &socket, uint16_t client_id);
 
   std::list<ClientData::Role> getAvailableRoles();

@@ -20,10 +20,7 @@ public:
   SoundInstruction(uint8_t sound_);
 
   //Creates a new ChatInstruction and sends it to all listening queues.
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_updates_queue) override;
+  void makeActionAndNotify(Match &match) override;
 
   //Gets the instructor's nickname from the ClientDataRepository using the object's instructor_id
   //attribute, and calls the protocol method fillPacketWithChatInfo to fill the given packet.

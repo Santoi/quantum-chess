@@ -8,6 +8,7 @@
 #include "../server_protocol.h"
 #include "../../../common/src/blocking_queue.h"
 #include "../../../common/src/client_data.h"
+#include "../match.h"
 #include <vector>
 
 class ServerProtocol;
@@ -22,10 +23,7 @@ public:
 
   //Given the list of listening queues and the client's vector, it makes the appropiate action
   //and notifies all queues of the changes.
-  virtual void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_updates_queue) = 0;
+  virtual void makeActionAndNotify(Match &match) = 0;
 
   //The derived Instruction class asks the protocol to fill the given packet with the information
   //accordingly.

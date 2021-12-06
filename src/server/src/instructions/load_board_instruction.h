@@ -15,10 +15,7 @@ class LoadBoardInstruction : public Instruction {
 public:
   LoadBoardInstruction();
 
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_updates_queue) override;
+  void makeActionAndNotify(Match &match) override;
 
   void
   fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,

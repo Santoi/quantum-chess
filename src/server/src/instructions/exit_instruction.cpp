@@ -6,10 +6,7 @@ ExitInstruction::ExitInstruction(const ClientData &instructor_data_)
         : instructor_data(instructor_data_) {
 }
 
-// TODO Hacer que esto reciba match y lo borre por ahi!!
-void ExitInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {
+void ExitInstruction::makeActionAndNotify(Match &match) {
   /*if (this->instructor_data.id == MATCH_ID)
     throw std::runtime_error("");*/
   //Just notify existing queues that the player left the game
@@ -17,14 +14,12 @@ void ExitInstruction::makeActionAndNotifyAllListeningQueues(
           std::make_shared<ExitInstruction>(instructor_data);
   match.deleteClientWithId(instructor_data.id);
 
-  for (auto &listening_queue: listening_queues)
-    listening_queue.second.push(this_instruct_ptr);
+  match.addInstrToAllListeningQueues(this_instruct_ptr);
 
   std::shared_ptr<Instruction> chat_instruction = std::make_shared<ChatInstruction>(
           instructor_data, "has left");
 
-  for (auto &listening_queue: listening_queues)
-    listening_queue.second.push(chat_instruction);
+  match.addInstrToAllListeningQueues(chat_instruction);
 }
 
 void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,

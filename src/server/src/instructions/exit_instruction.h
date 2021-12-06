@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include "instruction.h"
 #include "../../../common/src/packet.h"
 #include "../server_protocol.h"
 #include <vector>
@@ -22,10 +23,7 @@ public:
   //client queue), and joins the ClientHandler that corresponds to the object's instructor_id.
   //If the instructor's id is the MATCH_ID, a runtime_error exception is thrown. This is useful
   //to stop the match's execution.
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_updates_queue) override;
+  void makeActionAndNotify(Match &match) override;
 
   //Gets the leaving instructor's nickname from the ClientDataRepository using the object's instructor_id
   //attribute, and calls the protocol method fillPacketWithExitInfo to fill the given packet. If the

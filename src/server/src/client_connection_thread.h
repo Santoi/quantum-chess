@@ -10,7 +10,6 @@ class ClientConnectionThread : public Thread {
   Socket socket;
   MatchOrganizer &matches;
   std::atomic<bool> active;
-  std::atomic<bool>
 
 public:
   explicit ClientConnectionThread(Socket &&socket_, MatchOrganizer &matches_);

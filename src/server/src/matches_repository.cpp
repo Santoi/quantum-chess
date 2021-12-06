@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "../../common/src/unique_ptr.h"
 
+#define REFRESH UINT16_MAX
+
 MatchOrganizer::MatchOrganizer(std::ifstream &file_)
         : matches_map(), file(file_) {
 }
@@ -10,10 +12,13 @@ MatchOrganizer::MatchOrganizer(std::ifstream &file_)
 // TODO HACER LO DE REFRESH
 uint16_t MatchOrganizer::getClientChosenMatch(Socket &client_socket) {
   ServerProtocol protocol;
-  std::map<uint16_t, std::vector<ClientData>> matches_data;
-  matches_map.getMatchesData(matches_data);
-  protocol.sendMatchesInfo(client_socket, matches_data);
-  uint16_t match_number = protocol.receiveChosenGame(client_socket);
+  uint16_t match_number = 0;
+  do {
+    std::map<uint16_t, std::vector<ClientData>> matches_data;
+    matches_map.getMatchesData(matches_data);
+    protocol.sendMatchesInfo(client_socket, matches_data);
+    match_number = protocol.receiveChosenGame(client_socket);
+  } while (match_number == REFRESH);
   return match_number;
 }
 

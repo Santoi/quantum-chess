@@ -24,9 +24,6 @@ public:
   //Joins Thread's thread. If the object does not have an active thread then it does nothing.
   void join();
 
-  //Returns true if the object has an active thread and can be joined, or false othrewise.
-  bool isJoinable();
-
   //Default destructor
   virtual ~Thread() = default;
 

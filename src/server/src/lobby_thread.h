@@ -5,17 +5,23 @@
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
 #include "matches_repository.h"
+#include "client_connection_thread.h"
 
 class LobbyThread : public Thread {
 private:
   BlockingQueue<Socket> &queue;
-  MatchesRepository &matches;
+  MatchOrganizer &matches;
+  std::list<ClientConnectionThread> client_connection_threads;
 
 protected:
   void run() override;
 
 public:
-  LobbyThread(BlockingQueue<Socket> &queue_, MatchesRepository &matches);
+  explicit LobbyThread(BlockingQueue<Socket> &queue_, MatchOrganizer &matches_);
+
+  void stopAndJoinLobbyThreads();
+
+  void joinInactiveLobbyThreads();
 };
 
 

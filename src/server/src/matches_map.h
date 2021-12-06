@@ -6,22 +6,21 @@
 #include "match.h"
 
 class MatchesMap {
+  uint16_t created_matches;
+  uint16_t accepted_clients;
   std::map<uint16_t, Match> map;
   std::mutex mutex;
 
 public:
   MatchesMap();
 
-  void addNewMatch(uint16_t match_id, std::ifstream &file);
-
-  void startMatch(uint16_t match_id);
+  uint16_t addNewMatchAndStart(std::ifstream &file);
 
   void getMatchesData(std::map<uint16_t, std::vector<ClientData>> &data);
 
   void joinInactiveMatches();
 
-  void addNewClientToMatch(uint16_t match_id, uint16_t client_id,
-                           Socket &&socket);
+  void addNewClientToMatch(uint16_t match_id, Socket &&socket);
 
   bool matchExists(uint16_t match_id);
 

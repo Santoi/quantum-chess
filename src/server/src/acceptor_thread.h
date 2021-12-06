@@ -9,14 +9,14 @@
 class AcceptorThread : public Thread {
 private:
   Socket &socket;
-  MatchesRepository &matches;
+  MatchOrganizer &matches;
 
 protected:
   // Accepts new sockets and push them into a queue to be read by lobby thread.
   void run() override;
 
 public:
-  AcceptorThread(Socket &acceptor, MatchesRepository &matches_);
+  AcceptorThread(Socket &acceptor, MatchOrganizer &matches_);
 };
 
 

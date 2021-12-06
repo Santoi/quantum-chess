@@ -1,26 +1,23 @@
 #include "matches_map.h"
 
-MatchesMap::MatchesMap() : map(), mutex() {}
+MatchesMap::MatchesMap() : created_matches(0), accepted_clients(0), map(),
+                           mutex() {}
 
-void MatchesMap::addNewMatch(uint16_t match_id, std::ifstream &file) {
+uint16_t MatchesMap::addNewMatchAndStart(std::ifstream &file) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  map.insert(std::make_pair((match_id), Match(file)));
+  map.insert(std::make_pair((created_matches), Match(file)));
+  map.at(created_matches).start();
+  return created_matches++;
 }
 
-void MatchesMap::addNewClientToMatch(uint16_t match_id, uint16_t client_id,
-                                     Socket &&socket) {
+void MatchesMap::addNewClientToMatch(uint16_t match_id, Socket &&socket) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  map.at(match_id).addClientToMatch(std::move(socket), client_id);
+  map.at(match_id).addClientToMatch(std::move(socket), accepted_clients++);
 }
 
 bool MatchesMap::matchExists(uint16_t match_id) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return map.count(match_id);
-}
-
-void MatchesMap::startMatch(uint16_t match_id) {
-  std::lock_guard<std::mutex> lock_guard(mutex);
-  map.at(match_id).start();
 }
 
 void

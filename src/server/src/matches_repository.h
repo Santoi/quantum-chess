@@ -7,22 +7,20 @@
 #include "matches_map.h"
 #include <memory>
 
-class MatchesRepository {
+class MatchOrganizer {
 private:
-  uint16_t created_matches;
-  uint16_t accepted_clients;
   MatchesMap matches_map;
   std::ifstream &file;
 
 public:
-  //Creates a MatchesRepository, setting the number of created_matches equal to cero.
-  MatchesRepository(std::ifstream &file_);
+  //Creates a MatchOrganizer, setting the number of created_matches equal to cero.
+  explicit MatchOrganizer(std::ifstream &file_);
 
   //Iterates over the matches vector: if a match is inactive, the method pushExitInstructionToUpdatesQueue
   //is called over the match to force its termination, and after that the match thread is joined.
   void joinInactiveMatches();
 
-  ~MatchesRepository() = default;
+  ~MatchOrganizer() = default;
 
   void stopMatches();
 

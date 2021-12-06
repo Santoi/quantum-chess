@@ -16,6 +16,7 @@ uint16_t MatchesRepository::createNewMatch() {
   return created_matches++;
 }
 
+// TODO HACER LO DE REFRESH
 uint16_t MatchesRepository::getClientChosenMatch(Socket &client_socket) {
   ServerProtocol protocol;
   protocol.sendMatchesInfo(client_socket, ptr_matches);

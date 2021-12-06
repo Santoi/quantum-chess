@@ -14,6 +14,8 @@ class Instruction;
 class Match : public Thread {
 private:
   Board board;
+  // TODO estos maps hay que hacerlos protegidos, podria haber race
+  // condition si el server manda algo y justo se une alguien.
   std::map<uint16_t, ClientHandler> clients;
   std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
   BlockingQueue<Instruction> match_updates_queue;

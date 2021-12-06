@@ -10,6 +10,7 @@ LobbyThread::LobbyThread(BlockingQueue<Socket> &queue_,
 void LobbyThread::run() {
   try {
     while (true) {
+      // TODO LANZAR UN HILO POR CADA CONEXION PENDIENTE. MATCHES RESPOTIROY PROTEGIDO.
       std::shared_ptr<Socket> peer;
       queue.pop(peer);
       matches.joinInactiveMatches();

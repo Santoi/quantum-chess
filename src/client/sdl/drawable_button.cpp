@@ -21,7 +21,9 @@ void DrawableButton::render() {
     pressed->render(x, y, width, height);
   else
     released->render(x, y, width, height);
-  text.render(x, y);
+  int text_x = x + width / 2 - text.getDrawableWidth() / 2;
+  int text_y = y + height / 2 - text.getDrawableHeight() / 2;
+  text.render(text_x, text_y);
 }
 
 void

@@ -30,6 +30,8 @@ public:
 
   void concatIfEnabled(const std::string &text_);
 
+  void backspaceIfEnabled();
+
   std::string getText() const;
 
   void disableTextEntry();

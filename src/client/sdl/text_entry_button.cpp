@@ -16,7 +16,7 @@ TextEntryButton::TextEntryButton(ButtonSpriteRepository &button_repository,
 void
 TextEntryButton::setAreaAndPosition(int x_, int y_, int width, int height) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  drawable_text_button.setAreaAndPosition(x_, y_, height, width);
+  drawable_text_button.setAreaAndPosition(x_, y_, width, height);
 }
 
 bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate &pixel_) {
@@ -50,5 +50,12 @@ std::string TextEntryButton::getText() const {
 }
 
 void TextEntryButton::render() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   drawable_text_button.render(text_entry.getText());
+}
+
+void TextEntryButton::backspaceIfEnabled() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (text_entry.isEnabled())
+    text_entry.backspace();
 }

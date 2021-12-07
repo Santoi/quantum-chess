@@ -9,7 +9,7 @@ DrawableTextEntryButton::DrawableTextEntryButton(
     text_repository(text_repository),
     button_repository(button_repository),
     button_name(std::move(default_text)),
-    text_box(button_repository, text_repository, "text", "hola"),
+    text_box(button_repository, text_repository, "text", ""),
     text(text_repository, ""),
     x(0), y(0), width(0),
     height(0) {}
@@ -29,7 +29,7 @@ bool DrawableTextEntryButton::pixelIsOnTextEntry(
 }
 
 void DrawableTextEntryButton::render(const std::string &current_text) {
-  text_box.setAreaAndPosition(x + 60, y, width - 60, height);
+  text_box.setAreaAndPosition(x, y, width, height);
   text_box.render();
   if (current_text.empty()) {
     text.setColor('d');
@@ -37,5 +37,7 @@ void DrawableTextEntryButton::render(const std::string &current_text) {
   } else {
     text.setText(current_text);
   }
-  text.render(x, y);
+  int text_x = x + width / 2 - text.getDrawableWidth() / 2;
+  int text_y = y + height / 2 - text.getDrawableHeight() / 2;
+  text.render(text_x, text_y);
 }

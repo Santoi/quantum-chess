@@ -10,28 +10,31 @@ void LoginScene::render() {
   login_state_handler.render(*this);
 }
 
-void LoginScene::renderIPAndPortFields(Button &connect_button,
-                                       TextEntryButton &ip_text_entry,
-                                       TextEntryButton &port_text_entry) {
-  // LoginScene::setButtonDimensions()
+void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
+                                                TextEntryButton &ip_text_entry,
+                                                TextEntryButton &port_text_entry) {
   int width = window.getWidth();
   int height = window.getHeight();
   int button_height = width / 20;
-  int ip_button_width = width / 4, port_button_width = width / 10;
-  int ip_button_x_pos =
-      width / 2 - ip_button_width / 2 - port_button_width * 1.1;
-  int port_button_x_pos =
-      width / 2 + ip_button_width / 2 + port_button_width * 1.1;
-  int connect_button_width = width / 6;
+  int ip_button_width = width / 3, port_button_width = width / 10;
+  int ip_button_x_pos = (width - ip_button_width) / 2 - port_button_width * 1.1;
+  int port_button_x_pos = width / 2 + port_button_width * 1.1;
+  int connect_button_width = width / 4;
   ip_text_entry.setAreaAndPosition(ip_button_x_pos, height / 10,
                                    ip_button_width, button_height);
   port_text_entry.setAreaAndPosition(port_button_x_pos, height / 10,
                                      port_button_width, button_height);
-  connect_button.setAreaAndPosition(connect_button_width, height / 5,
-                                    button_height,
-                                    ip_button_width);
-  // end setButtonDimensions()
+  connect_button.setAreaAndPosition(width / 2 - connect_button_width / 2,
+                                    height / 5,
+                                    connect_button_width,
+                                    button_height);
+}
 
+void LoginScene::renderIPAndPortFields(Button &connect_button,
+                                       TextEntryButton &ip_text_entry,
+                                       TextEntryButton &port_text_entry) {
+  setConnectionButtonsDimensions(connect_button, ip_text_entry,
+                                 port_text_entry);
   ip_text_entry.render();
   port_text_entry.render();
   connect_button.render();

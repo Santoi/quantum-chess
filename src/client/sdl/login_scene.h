@@ -17,6 +17,10 @@ class LoginScene : public Scene {
 private:
   LoginStateHandler &login_state_handler;
 
+  void setConnectionButtonsDimensions(Button &connect_button,
+                                      TextEntryButton &ip_text_entry,
+                                      TextEntryButton &port_text_entry);
+
 public:
 
   LoginScene() = delete;
@@ -32,6 +36,7 @@ public:
   void renderIPAndPortFields(Button &connect_button,
                              TextEntryButton &ip_text_entry,
                              TextEntryButton &port_text_entry);
+
 };
 
 

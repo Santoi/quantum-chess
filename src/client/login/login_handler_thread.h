@@ -36,6 +36,7 @@ private:
 
   void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
 
+  void handleKeyDown();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_HANDLER_THREAD_H

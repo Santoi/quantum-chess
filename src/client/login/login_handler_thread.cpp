@@ -19,6 +19,9 @@ void LoginHandlerThread::run() {
         was_closed_ = true;
         open = false;
         return;
+      case SDL_KEYDOWN:
+        handleKeyDown();
+        break;
       case SDL_TEXTINPUT:
         if (expecting_text_entry)
           handleTextInput(event.text.text);
@@ -31,6 +34,24 @@ void LoginHandlerThread::run() {
     }
   }
   open = false;
+}
+
+void LoginHandlerThread::handleKeyDown() {
+  std::list<std::reference_wrapper<TextEntryButton>> active_text_entries;
+  login_state_handler.fillWithActiveTextEntryButtons(active_text_entries);
+  switch (event.key.keysym.sym) {
+    case SDLK_ESCAPE: {
+      expecting_text_entry = false;
+      for (auto &active_text_entry: active_text_entries)
+        active_text_entry.get().disableTextEntry();
+      break;
+    }
+    case SDLK_BACKSPACE: {
+      for (auto &active_text_entry: active_text_entries)
+        active_text_entry.get().backspaceIfEnabled();
+      break;
+    }
+  }
 }
 
 void LoginHandlerThread::handleTextInput(const std::string &new_text) {

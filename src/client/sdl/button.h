@@ -86,7 +86,7 @@ public:
 
   RoleButton(ButtonSpriteRepository &button_repository,
              TextSpriteRepository &text_repository,
-             ClientData::Role role_,
+             ClientData::Role role_, std::string&& type,
              bool role_is_available_);
 
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,

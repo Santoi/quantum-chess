@@ -123,10 +123,7 @@ private:
   void addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_, ButtonSpriteRepository &button_repository,
                                                TextSpriteRepository &text_repository,
                                                std::list<ClientData::Role>& available_roles,
-                                               const std::string& available_not_pressed_image,
-                                               const std::string& available_pressed_image,
-                                               const std::string& not_available_not_pressed_image,
-                                               const std::string& not_available_pressed_image);
+                                               std::string&& type);
 
   ClientData::Role getRoleFromString(const std::string &str_selected_role);
 };

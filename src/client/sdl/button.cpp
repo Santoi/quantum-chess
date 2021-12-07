@@ -84,9 +84,9 @@ bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
 
 RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
                        TextSpriteRepository &text_repository,
-                       ClientData::Role role_,
+                       ClientData::Role role_, std::string&& type,
                        bool role_is_available_)
-    :Button(button_repository, text_repository, "role", ""), role(role_),
+    :Button(button_repository, text_repository, std::move(type), ""), role(role_),
       role_is_available(role_is_available_) {
 }
 

@@ -24,6 +24,8 @@ ConnectingToServerState::ConnectingToServerState(Login &login_,
                                                                           text_sprite_repository, "IP")));
   text_entry_buttons_ptr.push_back(std::move(make_unique<TextEntryButton>(button_sprite_repository,
                                                                           text_sprite_repository, "PORT")));
+  text_entry_buttons_ptr.push_back(std::move(make_unique<TextEntryButton>(button_sprite_repository,
+                                                                            text_sprite_repository, "NICK NAME")));
   buttons_ptr.push_back(std::move(make_unique<ConnectButton>(button_sprite_repository,
                                                              text_sprite_repository,
                                                              "CONNECT",
@@ -36,8 +38,8 @@ bool ConnectingToServerState::clientIsConnectedToMatch() {
 
 void ConnectingToServerState::render(LoginScene &login_scene) {
   login_scene.renderIPAndPortFields(*buttons_ptr[0],
-                                    *text_entry_buttons_ptr[0],
-                                    *text_entry_buttons_ptr[1]);
+                                    *text_entry_buttons_ptr[0], *text_entry_buttons_ptr[1],
+                                    *text_entry_buttons_ptr[2]);
 }
 
 void ConnectingToServerState::fillWithActiveButtons(
@@ -62,6 +64,9 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
   tokens.pop_front();
   std::cout << port << std::endl;
   login.connectToServer(ip, port);
+  std::string nick_name = tokens.front();
+  std::cout << nick_name << std::endl;
+  login.saveNickName(nick_name);
   return NEXT_STATE_CONNECT_TO_MATCH;
 }
 
@@ -69,15 +74,6 @@ SelectingMatchState::SelectingMatchState(Login &login_,
                                          ButtonSpriteRepository &button_sprite_repository,
                                          TextSpriteRepository &text_sprite_repository)
         : LoginState(login_, button_sprite_repository, text_sprite_repository) {
-   /* std::map<uint16_t, std::vector<ClientData>> matches_info;
-    login.getListOfMatchesInfo(matches_info);
-    for (auto &match_info: matches_info) {
-        auto button = make_unique<PickMatchButton>(button_sprite_repository,
-                                                   text_sprite_repository,
-                                                   match_info.second,
-                                                   match_info.first);
-        buttons_ptr.push_back(std::move(button));
-    }*/
    login.fillVectorWithMatchButtons(buttons_ptr, button_sprite_repository, text_sprite_repository);
 }
 

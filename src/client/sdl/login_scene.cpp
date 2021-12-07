@@ -12,7 +12,8 @@ void LoginScene::render() {
 
 void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                                 TextEntryButton &ip_text_entry,
-                                                TextEntryButton &port_text_entry) {
+                                                TextEntryButton &port_text_entry,
+                                                TextEntryButton &name_text_entry) {
   int width = window.getWidth();
   int height = window.getHeight();
   int button_height = width / 20;
@@ -28,15 +29,17 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                     height / 5,
                                     connect_button_width,
                                     button_height);
+  name_text_entry.setAreaAndPosition(200, 300, 100, 50);
 }
 
 void LoginScene::renderIPAndPortFields(Button &connect_button,
                                        TextEntryButton &ip_text_entry,
-                                       TextEntryButton &port_text_entry) {
+                                       TextEntryButton &port_text_entry, TextEntryButton &name_text_entry) {
   setConnectionButtonsDimensions(connect_button, ip_text_entry,
-                                 port_text_entry);
+                                 port_text_entry, name_text_entry);
   ip_text_entry.render();
   port_text_entry.render();
+  name_text_entry.render();
   connect_button.render();
 }
 

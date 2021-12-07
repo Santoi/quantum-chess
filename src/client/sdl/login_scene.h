@@ -19,7 +19,8 @@ private:
 
   void setConnectionButtonsDimensions(Button &connect_button,
                                       TextEntryButton &ip_text_entry,
-                                      TextEntryButton &port_text_entry);
+                                      TextEntryButton &port_text_entry,
+                                      TextEntryButton &name_text_entry);
 
 public:
 
@@ -35,7 +36,7 @@ public:
 
   void renderIPAndPortFields(Button &connect_button,
                              TextEntryButton &ip_text_entry,
-                             TextEntryButton &port_text_entry);
+                             TextEntryButton &port_text_entry, TextEntryButton &name_text_entry);
 
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
                           Button &spectator_role_button);

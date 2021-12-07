@@ -158,7 +158,7 @@ void Client::execute() {
   Login login;
   LoginStateHandler login_state_handler(login, button_sprite_repository,
                                         text_sprite_repository);
-  LoginScene login_scene(login_state_handler, window);
+  LoginScene login_scene(window, login_state_handler);
   LoginHandlerThread login_handler(login, login_state_handler);
 
   login_handler.start();

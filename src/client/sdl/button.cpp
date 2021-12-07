@@ -25,7 +25,7 @@ void Button::resetButton() {
 ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
                              TextSpriteRepository &text_repository,
                              std::string &&button_text,
-                             const std::list<TextEntryButton> &text_entry_buttons)
+                             const std::vector<std::unique_ptr<TextEntryButton>> &text_entry_buttons)
     : Button(button_repository, text_repository, "action",
              std::move(button_text)),
       text_entries(text_entry_buttons) {}
@@ -35,7 +35,7 @@ bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
   if (drawable.pixelIsOnButton(pixel_)) {
     std::cout << "button pressed!!" << std::endl;
     for (const auto &text_entry: text_entries)
-      tokens.push_back(text_entry.getText());
+      tokens.push_back((*text_entry).getText());
     return true;
   }
   std::cout << "button not pressed" << std::endl;

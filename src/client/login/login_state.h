@@ -7,7 +7,7 @@
 #include "../sdl/button.h"
 #include "../sdl/text_entry_button.h"
 #include <atomic>
-#include <list>
+#include <vector>
 #include <memory>
 
 #define NEXT_STATE_CONNECT_TO_MATCH 1
@@ -22,8 +22,8 @@ protected:
   Login &login;
   ButtonSpriteRepository &button_sprite_repository;
   TextSpriteRepository &text_sprite_repository;
-  std::list<std::unique_ptr<Button>> button_list;
-  std::list<TextEntryButton> text_entry_button_list;
+  std::vector<std::unique_ptr<Button>> button_list;
+  std::vector<std::unique_ptr<TextEntryButton>> text_entry_button_list;
 
 public:
 

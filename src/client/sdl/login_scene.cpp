@@ -41,7 +41,7 @@ void LoginScene::renderIPAndPortFields(Button &connect_button,
 }
 
 void LoginScene::renderMatchButtons(
-    std::list<std::unique_ptr<Button>> &match_buttons) {
+    std::vector<std::unique_ptr<Button>> &match_buttons) {
   int width = window.getWidth();
   int height = window.getHeight();
   int i = 0;

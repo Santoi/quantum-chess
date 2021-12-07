@@ -40,7 +40,7 @@ public:
 
 class ConnectButton : public Button {
 private:
-  const std::list<TextEntryButton> &text_entries;
+  const std::vector<std::unique_ptr<TextEntryButton>> &text_entries;
 
 public:
   ConnectButton() = delete;
@@ -48,7 +48,7 @@ public:
   ConnectButton(ButtonSpriteRepository &button_repository,
                 TextSpriteRepository &text_repository,
                 std::string &&button_text,
-                const std::list<TextEntryButton> &text_entry_buttons);
+                const std::vector<std::unique_ptr<TextEntryButton>> &text_entry_buttons);
 
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                            std::list<std::string> &tokens) override;

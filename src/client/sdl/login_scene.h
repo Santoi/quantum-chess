@@ -29,7 +29,7 @@ public:
 
   void render();
 
-  void renderMatchButtons(std::list<std::unique_ptr<Button>> &match_buttons);
+  void renderMatchButtons(std::vector<std::unique_ptr<Button>> &match_buttons);
 
   void renderConnectedSprite(TextureSprite &texture);
 

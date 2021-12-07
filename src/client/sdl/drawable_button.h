@@ -5,13 +5,18 @@
 #include <vector>
 #include "pixel_coordinate.h"
 #include "sprite_repositories/button_sprite_repository.h"
+#include "sprite_repositories/text_sprite_repository.h"
+#include "chat/drawable_text.h"
 
 class Renderer;
 
 class DrawableButton {
 private:
-  Renderer &renderer;
-  std::vector<TextureSprite> sprites;
+  ButtonSpriteRepository &button_repository;
+  TextSpriteRepository &text_repository;
+  TextureSprite *pressed;
+  TextureSprite *released;
+  DrawableText text;
   int scale;
   bool is_pressed;
   int x;
@@ -21,7 +26,11 @@ private:
 
 public:
 
-  explicit DrawableButton(ButtonSpriteRepository &repository);
+  DrawableButton(ButtonSpriteRepository &button_repository,
+                 TextSpriteRepository &text_repository,
+                 std::string &&type, std::string &&text);
+
+  void setText(std::string &&text_);
 
   void setScale(const int &scale_);
 
@@ -29,7 +38,7 @@ public:
 
   bool pixelIsOnButton(const PixelCoordinate &pixel_);
 
-  void setAreaAndPosition(int x, int y, int height, int width);
+  void setAreaAndPosition(int x_, int y_, int width_, int height_);
 
   ~DrawableButton() = default;
 };

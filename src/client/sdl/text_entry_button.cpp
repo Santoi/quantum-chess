@@ -5,24 +5,18 @@
 
 #define MAX_INPUT 20
 
-TextEntryButton::TextEntryButton(Renderer &renderer_,
-                                 TextSpriteRepository repository,
+TextEntryButton::TextEntryButton(ButtonSpriteRepository &button_repository,
+                                 TextSpriteRepository &text_repository,
                                  const std::string &button_name_)
-    : text_entry(MAX_INPUT), drawable_text_button(repository,
-                                                  button_sprite_repository,
+    : text_entry(MAX_INPUT), drawable_text_button(text_repository,
+                                                  button_repository,
                                                   button_name_),
-      expecting_text_entry(false) {
-}
+      expecting_text_entry(false) {}
 
 void
-TextEntryButton::setAreaAndPosition(int x_, int y_, int height_, int width_) {
+TextEntryButton::setAreaAndPosition(int x_, int y_, int width, int height) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  drawable_text_button.setAreaAndPosition(x_, y_, height_, width_);
-}
-
-void TextEntryButton::render() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
-  drawable_text_button.render(text_entry.getText());
+  drawable_text_button.setAreaAndPosition(x_, y_, height, width);
 }
 
 bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate &pixel_) {
@@ -53,4 +47,8 @@ void TextEntryButton::concatIfEnabled(const std::string &text_) {
 std::string TextEntryButton::getText() const {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return text_entry.getText();
+}
+
+void TextEntryButton::render() {
+  drawable_text_button.render(text_entry.getText());
 }

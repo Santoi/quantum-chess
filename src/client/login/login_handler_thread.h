@@ -2,6 +2,8 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_HANDLER_THREAD_H
 
 #include "../sdl/handler_thread.h"
+#include "login.h"
+#include "login_state.h"
 #include "login_state_handler.h"
 #include "../sdl/pixel_coordinate.h"
 #include <SDL2/SDL.h>
@@ -9,26 +11,31 @@
 
 class LoginHandlerThread : public HandlerThread {
 private:
+  Login &login;
+  LoginStateHandler &login_state_handler;
   PixelCoordinate last_click;
   SDL_Event event{};
-  LoginStateHandler &login_state_handler;
   bool expecting_text_entry;
+  bool was_closed_;
 
 public:
   LoginHandlerThread() = delete;
 
-  LoginHandlerThread(LoginStateHandler &login_state_handler_);
+  LoginHandlerThread(Login &login, LoginStateHandler &login_state_handler);
 
   // Event loop
   void run() override;
 
-  ~LoginHandlerThread() = default;
+  ~LoginHandlerThread() override = default;
+
+  bool was_closed() const;
 
 private:
 
   void handleTextInput(const std::string &input);
 
   void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
+
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_HANDLER_THREAD_H

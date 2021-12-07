@@ -2,10 +2,14 @@
 #include "../../common/src/unique_ptr.h"
 #include "../../common/src/network_address_info_exception.h"
 
-LoginStateHandler::LoginStateHandler(Renderer &renderer_)
-    : login(), renderer(renderer_),
-      current_state(make_unique<NotConnectedToServerState>(login, renderer)) {
-}
+LoginStateHandler::LoginStateHandler(Login &login,
+                                     ButtonSpriteRepository &button_repository,
+                                     TextSpriteRepository &text_repository)
+    : login(),
+      button_repository(button_repository),
+      text_repository(text_repository),
+      current_state(make_unique<ConnectToServerState>(login, button_repository,
+                                                      text_repository)) {}
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -37,10 +41,14 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
       std::cout << "hola" << std::endl;
       current_state.reset();
       if (aux == 1)
-        current_state = make_unique<NotConnectedToMatchState>(login, renderer);
+        current_state = make_unique<ConnectToMatchState>(login,
+                                                         button_repository,
+                                                         text_repository);
       else if (aux == 2) {
         std::cout << "conectado a partida" << std::endl;
-        current_state = make_unique<ConnectedToMatchState>(login, renderer);
+        current_state = make_unique<ConnectedToMatchState>(login,
+                                                           button_repository,
+                                                           text_repository);
         std::cout << "ya cree" << std::endl;
       }
     } catch(const NetworkAddressInfoException &error) {
@@ -55,13 +63,13 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
   }
 }
 
-void LoginStateHandler::tellRendererWhatToRender(LoginScene &login_renderer) {
+void LoginStateHandler::render(LoginScene &login_scene) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  current_state->tellRendererWhatToRender(login_renderer);
+  current_state->render(login_scene);
 }
 
 Socket LoginStateHandler::getClientSocket() {
-  return std::move(login.getClientSocket());
+  return login.getClientSocket();
 }
 
 std::string LoginStateHandler::getClientNickName() {

@@ -147,7 +147,7 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
 }
 
 
-void Client::execute(const char *host, const char *port) {
+void Client::execute() {
   // welcomeClientAndAskForNickName();
   // Socket socket = Socket::createAConnectedSocket(host, port);
 
@@ -156,17 +156,23 @@ void Client::execute(const char *host, const char *port) {
   Font font(FONT_SIZE);
   ButtonSpriteRepository button_sprite_repository(renderer);
   TextSpriteRepository text_sprite_repository(renderer, font);
-  LoginStateHandler login_state_handler(window.renderer());
-  LoginScene login_renderer(login_state_handler, window);
-  LoginHandlerThread login_handler(login_state_handler);
+  Login login;
+  LoginStateHandler login_state_handler(login, button_sprite_repository,
+                                        text_sprite_repository);
+  LoginScene login_scene(login_state_handler, window);
+  LoginHandlerThread login_handler(login, login_state_handler);
 
   login_handler.start();
-  loginRenderLoop(login_renderer, login_handler, renderer);
+  loginRenderLoop(login_scene, login_handler, renderer);
   login_handler.join();
 
+  if (login_handler.was_closed())
+    return;
+
+
   // if we are here the client is connected to a match
-  Socket socket = login_state_handler.getClientSocket();
-  client_nick_name = login_state_handler.getClientNickName();//TODO borrar
+  Socket socket = login.getClientSocket();
+  client_nick_name = login.getClientNickName();//TODO borrar
 
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);

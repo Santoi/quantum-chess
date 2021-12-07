@@ -9,6 +9,7 @@
 
 class Renderer;
 
+//TODO public DrawableButton
 class DrawableTextEntryButton {
 private:
   TextSpriteRepository &text_repository;
@@ -29,7 +30,8 @@ public:
                           ButtonSpriteRepository &button_repository,
                           std::string default_text);
 
-  void setAreaAndPosition(int x_, int y_, int height_, int width_);
+  void setAreaAndPosition(int x_, int y_, int width_,
+                          int height_);
 
   bool pixelIsOnTextEntry(const PixelCoordinate &pixel) const;
 

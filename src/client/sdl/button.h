@@ -8,57 +8,68 @@
 #include <list>
 #include <string>
 #include <memory>
+#include "../../common/src/client_data.h"
 
 
 class Renderer;
 
 class Button {
 protected:
-    DrawableButton drawable;
+  DrawableButton drawable;
 
 public:
 
-    Button() = delete;
+  Button() = delete;
 
-    Button(Renderer& renderer_, const std::string& not_pressed_file_name,
-           const std::string& pressed_file_name);
+  Button(ButtonSpriteRepository &button_repository,
+         TextSpriteRepository &text_repository, std::string &&type,
+         std::string &&text);
 
-    virtual bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) = 0;
+  virtual bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                   std::list<std::string> &tokens) = 0;
 
-    void render();
+  void render();
 
-    void setAreaAndPosition(int x, int y, int height, int width);
+  void setAreaAndPosition(int x, int y, int width, int height);
 
-    ~Button() = default;
+  virtual ~Button() = default;
 };
 
-class ConnectButton: public Button {
+class ConnectButton : public Button {
 private:
-    const std::vector<std::unique_ptr<TextEntryButton>>& text_entries;
+  const std::list<TextEntryButton> &text_entries;
 
 public:
-    ConnectButton() = delete;
+  ConnectButton() = delete;
 
-    ConnectButton(Renderer& renderer_, const std::vector<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr);
+  ConnectButton(ButtonSpriteRepository &button_repository,
+                TextSpriteRepository &text_repository,
+                std::string &&button_text,
+                const std::list<TextEntryButton> &text_entry_buttons);
 
-    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
+  bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                           std::list<std::string> &tokens) override;
 
-    ~ConnectButton() = default;
+  ~ConnectButton() override = default;
 };
 
-class PickMatchButton: public Button {
+class PickMatchButton : public Button {
 private:
-    int match_number;
+  uint16_t match_id;
 
 public:
 
-    PickMatchButton() = delete;
+  PickMatchButton() = delete;
 
-    PickMatchButton(Renderer& renderer_, int match_number);
+  PickMatchButton(ButtonSpriteRepository &button_repository,
+                  TextSpriteRepository &text_repository,
+                  std::vector<ClientData> &client_data,
+                  uint16_t match_id);
 
-    bool fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) override;
+  bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                           std::list<std::string> &tokens) override;
 
-    ~PickMatchButton() = default;
+  ~PickMatchButton() override = default;
 };
 
 

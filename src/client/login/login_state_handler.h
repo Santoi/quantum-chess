@@ -18,14 +18,17 @@ class TextEntryButton;
 class LoginStateHandler {
 protected:
   Login login;
-  Renderer &renderer;
-  std::mutex mutex;
+  ButtonSpriteRepository &button_repository;
+  TextSpriteRepository &text_repository;
   std::unique_ptr<LoginState> current_state;
+  std::mutex mutex;
 
 public:
   LoginStateHandler() = delete;
 
-  explicit LoginStateHandler(Renderer &renderer_);
+  explicit LoginStateHandler(Login &login,
+                             ButtonSpriteRepository &button_repository,
+                             TextSpriteRepository &text_repository);
 
   bool clientIsConnectedToMatch();
 
@@ -37,7 +40,7 @@ public:
 
   void processTokens(std::list<std::string> &&tokens);
 
-  void tellRendererWhatToRender(LoginScene &login_renderer);
+  void render(LoginScene &login_scene);
 
   Socket getClientSocket();
 

@@ -22,8 +22,8 @@ public:
 
   void connectToServer(const std::string &ip, const std::string &port);
 
-  void getListOfMatchButtons(Renderer &renderer_,
-                             std::vector<std::unique_ptr<Button>> &buttons_ptr);
+  void getListOfMatchesInfo(
+      std::map<uint16_t, std::vector<ClientData>> &match_info);
 
   Socket getClientSocket();
 

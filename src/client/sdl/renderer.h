@@ -3,13 +3,11 @@
 
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
-#include "scene.h"
+//#include "scene.h"
 
 class Sprite;
 
-class GameScene;
-
-class LoginScene;
+class Scene;
 
 class Renderer {
 private:

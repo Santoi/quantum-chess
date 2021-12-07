@@ -7,7 +7,7 @@
 #include "../sdl/button.h"
 #include "../sdl/text_entry_button.h"
 #include <atomic>
-#include <vector>
+#include <list>
 #include <memory>
 
 class LoginScene;
@@ -15,18 +15,22 @@ class LoginScene;
 class LoginState {
 protected:
   Login &login;
-  std::vector<std::unique_ptr<Button>> buttons_ptr;
-  std::vector<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
+  ButtonSpriteRepository &button_sprite_repository;
+  TextSpriteRepository &text_sprite_repository;
+  std::list<std::unique_ptr<Button>> button_list;
+  std::list<TextEntryButton> text_entry_button_list;
 
 public:
 
   LoginState() = delete;
 
-  explicit LoginState(Login &login_);
+  LoginState(Login &login_,
+             ButtonSpriteRepository &button_sprite_repository,
+             TextSpriteRepository &text_sprite_repository);
 
   virtual bool clientIsConnectedToMatch() = 0;
 
-  virtual void tellRendererWhatToRender(LoginScene &login_renderer) = 0;
+  virtual void render(LoginScene &login_scene) = 0;
 
   virtual void fillWithActiveButtons(
       std::list<std::reference_wrapper<Button>> &active_buttons) = 0;
@@ -37,17 +41,19 @@ public:
 
   virtual int processTokens(std::list<std::string> &&tokens) = 0;
 
-  ~LoginState() = default;
+  virtual ~LoginState() = default;
 };
 
-class NotConnectedToServerState : public LoginState {
+class ConnectToServerState : public LoginState {
 public:
 
-  NotConnectedToServerState(Login &login_, Renderer &renderer_);
+  ConnectToServerState(Login &login_,
+                       ButtonSpriteRepository &button_sprite_repository,
+                       TextSpriteRepository &text_sprite_repository);
 
   bool clientIsConnectedToMatch() override;
 
-  void tellRendererWhatToRender(LoginScene &login_renderer) override;
+  void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
       std::list<std::reference_wrapper<Button>> &active_buttons) override;
@@ -58,17 +64,19 @@ public:
 
   int processTokens(std::list<std::string> &&tokens) override;
 
-  ~NotConnectedToServerState() = default;
+  ~ConnectToServerState() override = default;
 };
 
-class NotConnectedToMatchState : public LoginState {
+class ConnectToMatchState : public LoginState {
 public:
 
-  NotConnectedToMatchState(Login &login_, Renderer &renderer_);
+  ConnectToMatchState(Login &login_,
+                      ButtonSpriteRepository &button_sprite_repository,
+                      TextSpriteRepository &text_sprite_repository);
 
   bool clientIsConnectedToMatch() override;
 
-  void tellRendererWhatToRender(LoginScene &login_renderer) override;
+  void render(LoginScene &login_renderer) override;
 
   void fillWithActiveButtons(
       std::list<std::reference_wrapper<Button>> &active_buttons) override;
@@ -79,19 +87,20 @@ public:
 
   int processTokens(std::list<std::string> &&tokens) override;
 
-  ~NotConnectedToMatchState() = default;
+  ~ConnectToMatchState() override = default;
 };
 
 class ConnectedToMatchState : public LoginState {
-private:
-  TextureSprite texture_sprite;
+//  Background loading_background;
 
 public:
-  ConnectedToMatchState(Login &login_, Renderer &renderer_);
+  ConnectedToMatchState(Login &login_,
+                        ButtonSpriteRepository &button_sprite_repository,
+                        TextSpriteRepository &text_sprite_repository);
 
   bool clientIsConnectedToMatch() override;
 
-  void tellRendererWhatToRender(LoginScene &login_renderer) override;
+  void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
       std::list<std::reference_wrapper<Button>> &active_buttons) override;
@@ -102,7 +111,7 @@ public:
 
   int processTokens(std::list<std::string> &&tokens) override;
 
-  ~ConnectedToMatchState() = default;
+  ~ConnectedToMatchState() override = default;
 };
 
 

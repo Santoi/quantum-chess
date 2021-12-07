@@ -3,16 +3,20 @@
 #include "../sdl/text_entry_button.h"
 #include <list>
 
-LoginHandlerThread::LoginHandlerThread(LoginStateHandler &login_state_handler_)
-    : HandlerThread(true), login_state_handler(login_state_handler_),
-      expecting_text_entry(false) {
-}
+LoginHandlerThread::LoginHandlerThread(Login &login,
+                                       LoginStateHandler &login_state_handler) :
+    HandlerThread(true),
+    login(login),
+    login_state_handler(login_state_handler),
+    expecting_text_entry(false),
+    was_closed_(false) {}
 
 void LoginHandlerThread::run() {
   while (!(login_state_handler.clientIsConnectedToMatch())) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
+        was_closed_ = true;
         open = false;
         return;
       case SDL_TEXTINPUT:
@@ -68,3 +72,6 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   }
 }
 
+bool LoginHandlerThread::was_closed() const {
+  return was_closed_;
+}

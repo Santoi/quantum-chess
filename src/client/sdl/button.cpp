@@ -1,54 +1,81 @@
 #include "button.h"
 #include "drawable_button.h"
+#include "../../common/src/client_data.h"
 #include <iostream>
 
-Button::Button(Renderer& renderer_, const std::string& not_pressed_file_name,
-               const std::string& pressed_file_name)
-        : drawable(button_sprite_repository) {
+Button::Button(ButtonSpriteRepository &button_repository,
+               TextSpriteRepository &text_repository, std::string &&type,
+               std::string &&text)
+    : drawable(button_repository, text_repository, std::move(type),
+               std::move(text)) {
 }
 
 void Button::render() {
-    drawable.render();
+  drawable.render();
 }
 
-void Button::setAreaAndPosition(int x_, int y_, int height_, int width_) {
-    drawable.setAreaAndPosition(x_, y_, height_, width_);
+void Button::setAreaAndPosition(int x, int y, int width, int height) {
+  drawable.setAreaAndPosition(x, y, width, height);
 }
 
 
-ConnectButton::ConnectButton(Renderer& renderer,
-                             const std::vector<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr)
-                :Button(renderer, "img/buttons/not_pressed_connect_button.png",
-                        "img/buttons/pressed_connect_button.png"),
-                 text_entries(text_entry_buttons_ptr) {
+ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
+                             TextSpriteRepository &text_repository,
+                             std::string &&button_text,
+                             const std::list<TextEntryButton> &text_entry_buttons)
+    : Button(button_repository, text_repository, "action",
+             std::move(button_text)),
+      text_entries(text_entry_buttons) {}
+
+bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                        std::list<std::string> &tokens) {
+  if (drawable.pixelIsOnButton(pixel_)) {
+    std::cout << "button pressed!!" << std::endl;
+    for (const auto &text_entry: text_entries)
+      tokens.push_back(text_entry.getText());
+    return true;
+  }
+  std::cout << "button not pressed" << std::endl;
+  return false;
 }
 
-bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    if (drawable.pixelIsOnButton(pixel_)) {
-        std::cout << "button pressed!!" <<std::endl;
-        std::vector<std::unique_ptr<TextEntryButton>>::const_iterator it;
-        for (it = text_entries.begin(); it != text_entries.end(); it++)
-            tokens.push_back((*it)->getText());
-        return true;
+PickMatchButton::PickMatchButton(ButtonSpriteRepository &button_repository,
+                                 TextSpriteRepository &text_repository,
+                                 std::vector<ClientData> &client_data,
+                                 uint16_t match_id)
+    : Button(button_repository, text_repository, "match",
+             ""),
+      match_id(match_id) {
+  std::string match_info = "#" + std::to_string(match_id) + ": ";
+  for (auto &client: client_data) {
+    char role;
+    switch (client.role) {
+      case ClientData::ROLE_WHITE:
+        role = 'w';
+        break;
+      case ClientData::ROLE_BLACK:
+        role = 'b';
+        break;
+      case ClientData::ROLE_SPECTATOR:
+        role = 'o';
+        break;
+      default:
+        role = ' ';
     }
-    std::cout << "button not pressed" <<std::endl;
-    return false;
+    match_info += client.name + "#" + std::to_string(client.id) + "("
+                  + role + "), ";
+  }
+
 }
 
-PickMatchButton::PickMatchButton(Renderer& renderer, int match_number_)
-                :Button(renderer, "img/buttons/not_pressed_match_button.png",
-                        "img/buttons/pressed_match_button.png"),
-                        match_number(match_number_) {
-}
-
-bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    if (drawable.pixelIsOnButton(pixel_)) {
-        std::cout << "match button pressed!!" <<std::endl;
-        std::vector<std::unique_ptr<TextEntryButton>>::const_iterator it;
-        std::string str_match_number = std::to_string(match_number);
-        tokens.push_back(std::move(str_match_number));
-        return true;
-    }
-    std::cout << "button not pressed" <<std::endl;
-    return false;
+bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                          std::list<std::string> &tokens) {
+  if (drawable.pixelIsOnButton(pixel_)) {
+    std::cout << "match button pressed!!" << std::endl;
+    std::string str_match_number = std::to_string(match_id);
+    tokens.push_back(std::move(str_match_number));
+    return true;
+  }
+  std::cout << "button not pressed" << std::endl;
+  return false;
 }

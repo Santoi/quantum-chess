@@ -66,7 +66,7 @@ public:
 
   PickMatchButton(ButtonSpriteRepository &button_repository,
                   TextSpriteRepository &text_repository,
-                  std::vector<ClientData> &client_data,
+                  std::vector<ClientData>& client_data,
                   uint16_t match_id);
 
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,

@@ -69,7 +69,7 @@ SelectingMatchState::SelectingMatchState(Login &login_,
                                          ButtonSpriteRepository &button_sprite_repository,
                                          TextSpriteRepository &text_sprite_repository)
         : LoginState(login_, button_sprite_repository, text_sprite_repository) {
-    std::map<uint16_t, std::vector<ClientData>> matches_info;
+   /* std::map<uint16_t, std::vector<ClientData>> matches_info;
     login.getListOfMatchesInfo(matches_info);
     for (auto &match_info: matches_info) {
         auto button = make_unique<PickMatchButton>(button_sprite_repository,
@@ -77,7 +77,8 @@ SelectingMatchState::SelectingMatchState(Login &login_,
                                                    match_info.second,
                                                    match_info.first);
         buttons_ptr.push_back(std::move(button));
-    }
+    }*/
+   login.fillVectorWithMatchButtons(buttons_ptr, button_sprite_repository, text_sprite_repository);
 }
 
 bool SelectingMatchState::clientIsConnectedToMatch() {

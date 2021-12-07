@@ -15,10 +15,26 @@ void Login::connectToServer(const std::string &ip_, const std::string &port_) {
           (Socket::createAConnectedSocket(ip, port)));
 }
 
-void Login::getListOfMatchesInfo(
-        std::map<uint16_t, std::vector<ClientData>> &match_info) {
-  ClientProtocol protocol;
-  match_info = protocol.receiveMatchesInfo(*client_socket_ptr);
+void Login::fillVectorWithMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons_ptr,
+                                ButtonSpriteRepository &button_sprite_repository,
+                                TextSpriteRepository &text_sprite_repository) {
+    ClientProtocol protocol;
+    std::map<uint16_t, std::vector<ClientData>> data = std::move(
+            protocol.receiveMatchesInfo(*client_socket_ptr));
+    match_buttons_ptr.reserve(data.size() + 1);
+    int i = 0;
+    for (auto it = data.begin(); it != data.end(); it++) {
+        match_buttons_ptr.push_back(std::move(make_unique<PickMatchButton>(button_sprite_repository,
+                                                                           text_sprite_repository,
+                                                                           it->second,
+                                                                           it->first)));
+        i++;
+    }
+    std::vector<ClientData> empty_clients_list;
+    match_buttons_ptr.push_back(std::move(make_unique<PickMatchButton>(button_sprite_repository,
+                                                                       text_sprite_repository,
+                                                                       empty_clients_list,
+                                                                       i)));
 }
 
 Socket Login::getClientSocket() {

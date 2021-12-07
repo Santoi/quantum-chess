@@ -25,83 +25,6 @@
 #define FONT_SIZE 10
 #define MAX_CHAR_ENTRY 29
 
-uint16_t Client::getMatchesInfo(Socket &client_socket) {
-  ClientProtocol protocol;
-  std::map<uint16_t, std::vector<ClientData>> data =
-          protocol.receiveMatchesInfo(client_socket);
-  std::cout << "Selecciona de las partidas disponibles a cuál de estas"
-               " quieres entrar." << std::endl;
-  std::cout << "Las partidas disponibles son" << std::endl;
-  uint16_t last_id = 0;
-  for (auto it = data.begin(); it != data.end(); ++it) {
-    std::cout << "#" << it->first << ": ";
-    std::vector<ClientData> &client_data = it->second;
-    for (auto it_match = client_data.begin();
-         it_match != client_data.end(); ++it_match) {
-      char other_cliente_role = ' ';
-      switch (it_match->role) {
-        case ClientData::ROLE_WHITE:
-          other_cliente_role = 'w';
-          break;
-        case ClientData::ROLE_BLACK:
-          other_cliente_role = 'b';
-          break;
-        case ClientData::ROLE_SPECTATOR:
-          other_cliente_role = 'o';
-          break;
-      }
-      std::cout << it_match->name << "#" << it_match->id << "("
-                << other_cliente_role << "), ";
-    }
-    std::cout << std::endl;
-    last_id = it->first;
-  }
-  std::cout << "¿Quieres crear una nueva partida? Escribe entonces "
-            << data.size() << std::endl;
-  std::cout << "Escriba un número de partida: " << std::endl;
-  return last_id;
-}
-
-void Client::askPlayerForMatchNumber(Socket &socket, uint16_t first_empty_id) {
-  uint16_t game_number;
-  std::cin >> game_number;
-  ClientProtocol protocol;
-  protocol.sendChosenGame(socket, game_number);
-  std::string aux;
-  std::getline(std::cin, aux); //empty cin buffer
-}
-
-std::list<ClientData::Role> Client::getAvailableRoles(Socket &socket) {
-  std::list<ClientData::Role> available_roles;
-  ClientProtocol protocol;
-  protocol.getAvailableRoles(socket, available_roles);
-  return available_roles;
-}
-
-void Client::associateClientWithARunningMatch(Socket &socket) {
-  uint16_t first_empty_id = this->getMatchesInfo(socket) + 1;
-  askPlayerForMatchNumber(socket, first_empty_id);
-}
-
-void Client::welcomeClientAndAskForNickName() {
-  std::cout << "Bienvenido a Quantum Chess. Por favor, ingresá tu nombre para "
-               "comenzar a jugar." << std::endl;
-  std::cin >> client_nick_name;
-  std::cout << "¡Qué tal, " << this->client_nick_name << "! ¿Listo para jugar?"
-            << std::endl;
-}
-
-void Client::setUpClientsDataInServer(Socket &socket) {
-  this->associateClientWithARunningMatch(socket);
-  ClientProtocol protocol;
-  protocol.sendClientsNickName(socket, this->client_nick_name);
-  std::list<ClientData::Role> available_roles = getAvailableRoles(socket);
-  // TODO, ahora agarra el primero que haya
-  role = *available_roles.begin();
-  protocol.sendChosenRole(socket, *available_roles.begin());
-}
-
-
 void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
                             HandlerThread &handler, Renderer &renderer) {
   while (handler.isOpen()) {
@@ -146,6 +69,7 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
   }
 }
 
+// TODO modularizar
 void Client::execute() {
   // welcomeClientAndAskForNickName();
   // Socket socket = Socket::createAConnectedSocket(host, port);

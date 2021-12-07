@@ -29,8 +29,10 @@ void MatchOrganizer::joinInactiveMatches() {
 void
 MatchOrganizer::addClientToMatchCreatingIfNeeded(Socket &&client_socket) {
   uint16_t match_id = getClientChosenMatch(client_socket);
-  if (!matches_map.matchExists(match_id))
+  if (match_id == 0)
     match_id = matches_map.addNewMatchAndStart(file);
+  if (!matches_map.matchExists(match_id))
+    throw std::runtime_error("match doesnt exists");
   matches_map.addNewClientToMatch(match_id,
                                   std::move(client_socket));
 }

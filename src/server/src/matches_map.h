@@ -7,7 +7,7 @@
 
 // Protected class that stores matches.
 class MatchesMap {
-  uint16_t created_matches;
+  uint16_t next_match_id;
   uint16_t accepted_clients;
   std::map<uint16_t, Match> map;
   std::mutex mutex;

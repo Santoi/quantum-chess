@@ -26,8 +26,10 @@ void LobbyThread::run() {
 }
 
 void LobbyThread::stopAndJoinClientConnectionThreads() {
-  for (auto &thread: client_connection_threads)
+  for (auto &thread: client_connection_threads) {
+    thread.stop();
     thread.join();
+  }
 }
 
 void LobbyThread::joinInactiveClientConnectionThreads() {

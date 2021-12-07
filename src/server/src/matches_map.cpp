@@ -1,13 +1,13 @@
 #include "matches_map.h"
 
-MatchesMap::MatchesMap() : created_matches(0), accepted_clients(0), map(),
+MatchesMap::MatchesMap() : next_match_id(1), accepted_clients(0), map(),
                            mutex() {}
 
 uint16_t MatchesMap::addNewMatchAndStart(std::ifstream &file) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  map.insert(std::make_pair((created_matches), Match(file)));
-  map.at(created_matches).start();
-  return created_matches++;
+  map.insert(std::make_pair((next_match_id), Match(file)));
+  map.at(next_match_id).start();
+  return next_match_id++;
 }
 
 void MatchesMap::addNewClientToMatch(uint16_t match_id, Socket &&socket) {

@@ -1,12 +1,16 @@
 #include "login_scene.h"
 #include "../login/login_state_handler.h"
 
-LoginScene::LoginScene(LoginStateHandler &login_state_handler, Window &window)
+LoginScene::LoginScene(Window &window,
+                       LoginStateHandler &login_state_handler)
     :
     Scene(window),
-    login_state_handler(login_state_handler) {}
+    login_state_handler(login_state_handler),
+    background(window.renderer(), "img/login-background.jpg", window.getWidth(),
+               window.getHeight()) {}
 
 void LoginScene::render() {
+  background.render(0, 0, window.getWidth(), window.getHeight());
   login_state_handler.render(*this);
 }
 
@@ -16,25 +20,32 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                                 TextEntryButton &name_text_entry) {
   int width = window.getWidth();
   int height = window.getHeight();
-  int button_height = width / 20;
-  int ip_button_width = width / 3, port_button_width = width / 10;
+  int button_height = height / 15;
+  int ip_button_width = width / 3, port_button_width = width / 10,
+      nick_button_width = width / 3, connect_button_width = width / 4;
   int ip_button_x_pos = (width - ip_button_width) / 2 - port_button_width * 1.1;
   int port_button_x_pos = width / 2 + port_button_width * 1.1;
-  int connect_button_width = width / 4;
-  ip_text_entry.setAreaAndPosition(ip_button_x_pos, height / 10,
+
+  ip_text_entry.setAreaAndPosition(ip_button_x_pos,
+                                   button_height,
                                    ip_button_width, button_height);
-  port_text_entry.setAreaAndPosition(port_button_x_pos, height / 10,
+  port_text_entry.setAreaAndPosition(port_button_x_pos,
+                                     button_height,
                                      port_button_width, button_height);
+  name_text_entry.setAreaAndPosition(width / 2 - nick_button_width / 2,
+                                     button_height * 3,
+                                     nick_button_width,
+                                     button_height);
   connect_button.setAreaAndPosition(width / 2 - connect_button_width / 2,
-                                    height / 5,
+                                    button_height * 5,
                                     connect_button_width,
                                     button_height);
-  name_text_entry.setAreaAndPosition(200, 300, 100, 50);
 }
 
 void LoginScene::renderIPAndPortFields(Button &connect_button,
                                        TextEntryButton &ip_text_entry,
-                                       TextEntryButton &port_text_entry, TextEntryButton &name_text_entry) {
+                                       TextEntryButton &port_text_entry,
+                                       TextEntryButton &name_text_entry) {
   setConnectionButtonsDimensions(connect_button, ip_text_entry,
                                  port_text_entry, name_text_entry);
   ip_text_entry.render();
@@ -50,7 +61,7 @@ void LoginScene::renderMatchButtons(
   int i = 0;
   for (auto &button: match_buttons) {
     button->setAreaAndPosition(10, ++i * 200,
-                               0.1 * height, 0.1 * width);
+                               0.1 * width, 0.1 * height);
     button->render();
   }
 }

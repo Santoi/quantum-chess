@@ -6,12 +6,12 @@
 LoginStateHandler::LoginStateHandler(Login &login,
                                      ButtonSpriteRepository &button_repository,
                                      TextSpriteRepository &text_repository)
-        : login(login),
-          button_repository(button_repository),
-          text_repository(text_repository),
-          current_state(
-                  make_unique<ConnectingToServerState>(login, button_repository,
-                                                       text_repository)) {}
+    : login(login),
+      button_repository(button_repository),
+      text_repository(text_repository),
+      current_state(
+          make_unique<ConnectingToServerState>(login, button_repository,
+                                               text_repository)) {}
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -19,14 +19,14 @@ bool LoginStateHandler::clientIsConnectedToMatch() {
 }
 
 void LoginStateHandler::fillWithActiveButtons(
-        std::list<std::reference_wrapper<Button>> &active_buttons) {
+    std::list<std::reference_wrapper<Button>> &active_buttons) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->fillWithActiveButtons(active_buttons);
 }
 
 void LoginStateHandler::fillWithActiveTextEntryButtons(
-        std::list<std::reference_wrapper<TextEntryButton>> &
-        active_text_entries) {
+    std::list<std::reference_wrapper<TextEntryButton>> &
+    active_text_entries) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->fillWithActiveTextEntryButtons(active_text_entries);
 }
@@ -53,32 +53,34 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
                                                            button_repository,
                                                            text_repository);
         break;
+      default:
+        break;
     }
-  } catch (const NetworkAddressInfoException &error) {
+  } catch(const NetworkAddressInfoException &error) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",
-                             "IP y/o puerto no válido. Por favor, vuelvalo a intentar.",
+                             "Invalid IP:port. Try again.",
                              nullptr);
     current_state->resetPressedButtons();
     std::cout << "Error: " << error.what() << std::endl;
     return;
-  } catch (const UnavailableRoleException &error) {
+  } catch(const UnavailableRoleException &error) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",
-                             "El rol seleccionado no está disponible. Seleccione otro.",
+                             "The selected role is unavailable. Select a different role.",
                              nullptr);
     current_state->resetPressedButtons();
     std::cout << "Error: " << error.what() << std::endl;
     return;
-  } catch (const std::exception &e) {
+  } catch(const std::exception &e) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",
-                             "IP y/o puerto no válido. Por favor, vuelvalo a intentar.",
+                             "Invalid IP:port. Try again.",
                              nullptr);
     current_state->resetPressedButtons();
     std::cout << "Error: " << e.what() << std::endl;
     return;
-  } catch (...) {
+  } catch(...) {
   }
 }
 

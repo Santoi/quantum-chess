@@ -12,9 +12,9 @@ ChessExceptionInstruction::ChessExceptionInstruction(
 
 void ChessExceptionInstruction::makeActionAndNotify(Match &match) {}
 
-void ChessExceptionInstruction::fillPacketWithInstructionsToSend(
+void ChessExceptionInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {
-  protocol.fillPacketWithExceptionInfo(packet, this->message);
+  protocol.fillPacketWithExceptionMessage(packet, this->message);
 }

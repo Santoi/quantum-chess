@@ -13,12 +13,12 @@ void ChatInstruction::makeActionAndNotify(Match &match) {
   match.addInstrToAllListeningQueues(this_instruct_ptr);
 }
 
-void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                       Packet &packet,
-                                                       const ClientData &client_receiver_data) {
+void ChatInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                      Packet &packet,
+                                                      const ClientData &client_receiver_data) {
   // Calculate time
-  protocol.fillPacketWithChatInfo(packet, instructor_data, this->message,
-                                  getTimeStamp());
+  protocol.fillPacketWithChatMessage(packet, instructor_data, this->message,
+                                     getTimeStamp());
 }
 
 std::string ChatInstruction::getTimeStamp() {

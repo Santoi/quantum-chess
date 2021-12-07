@@ -45,7 +45,7 @@ void SplitInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-SplitInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                   Packet &packet,
-                                                   const ClientData &client_receiver_data) {
+SplitInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                  Packet &packet,
+                                                  const ClientData &client_receiver_data) {
 }

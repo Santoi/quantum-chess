@@ -18,9 +18,9 @@ void LoadBoardInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-LoadBoardInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                       Packet &packet,
-                                                       const ClientData &client_receiver_data) {
-  protocol.fillPacketWithLoadBoardInfo(packet, characters, colors, positions,
-                                       probabilities, white);
+LoadBoardInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                      Packet &packet,
+                                                      const ClientData &client_receiver_data) {
+  protocol.fillPacketWithLoadBoardMessage(packet, characters, colors, positions,
+                                          probabilities, white);
 }

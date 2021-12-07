@@ -17,8 +17,8 @@ public:
   void makeActionAndNotify(Match &match) override;
 
   void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData &client_receiver_data) override;
 };
 
 

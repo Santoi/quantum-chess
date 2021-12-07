@@ -26,13 +26,13 @@ public:
   void makeActionAndNotify(Match &match) override;
 
   //Gets the leaving instructor's nickname from the ClientDataRepository using the object's instructor_id
-  //attribute, and calls the protocol method fillPacketWithExitInfo to fill the given packet. If the
+  //attribute, and calls the protocol method fillPacketWithExitMessage to fill the given packet. If the
   //client_receiver_id (this is, the id of the corresponding remote client) ìs the same as the object's
   //instructor_id (the id of the person that left), it means that the remote client is disconnected and
   //a runtime_error exception is thrown.
   void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData &client_receiver_data) override;
 
   ~ExitInstruction() = default;
 };

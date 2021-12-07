@@ -29,7 +29,7 @@ void EntangledChessmanInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-EntangledChessmanInstruction::fillPacketWithInstructionsToSend(
+EntangledChessmanInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

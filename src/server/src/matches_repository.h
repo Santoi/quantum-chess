@@ -13,26 +13,26 @@ private:
   std::ifstream &file;
 
 public:
-  //Creates a MatchOrganizer, setting the number of created_matches equal to cero.
   explicit MatchOrganizer(std::ifstream &file_);
 
-  //Iterates over the matches vector: if a match is inactive, the method pushExitInstructionToUpdatesQueue
-  //is called over the match to force its termination, and after that the match thread is joined.
+  // Joins all matches that are inactive.
   void joinInactiveMatches();
 
   ~MatchOrganizer() = default;
 
+  // Stops all matches.
   void stopMatches();
 
+  // Add client, ask it for match and add it to match, creating if doesn't
+  // exist the selected one.
   void
   addClientToMatchCreatingIfNeeded(Socket &&client_socket);
 
+  // Join all matches.
   void joinMatches();
 
 private:
-  //Following the protocol, it sends the number of games running to the remote client,
-  //and receives the client's chosen game. If the client wants to play in a new match, a new match
-  //is created.
+  // Sends matches information to client and receive the chosen one.
   uint16_t getClientChosenMatch(Socket &client_socket);
 };
 

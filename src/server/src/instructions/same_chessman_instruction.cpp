@@ -28,7 +28,7 @@ void SameChessmanInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-SameChessmanInstruction::fillPacketWithInstructionsToSend(
+SameChessmanInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

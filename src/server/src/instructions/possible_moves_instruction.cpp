@@ -28,7 +28,7 @@ void PossibleMovesInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-PossibleMovesInstruction::fillPacketWithInstructionsToSend(
+PossibleMovesInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

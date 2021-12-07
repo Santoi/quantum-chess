@@ -45,6 +45,6 @@ void MergeInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-MergeInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                   Packet &packet,
-                                                   const ClientData &client_receiver_data) {}
+MergeInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                  Packet &packet,
+                                                  const ClientData &client_receiver_data) {}

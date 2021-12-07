@@ -56,7 +56,7 @@ void Match::stop() {
 
 void Match::addInstrToClientListeningQueue(uint16_t client_id,
                                            std::shared_ptr<Instruction> &instr_ptr) {
-  clients_map.addInstrToClientListeningQueue(client_id, instr_ptr);
+  clients_map.pushInstrToClientListeningQueue(client_id, instr_ptr);
 }
 
 void

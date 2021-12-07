@@ -22,12 +22,12 @@ void ExitInstruction::makeActionAndNotify(Match &match) {
   match.addInstrToAllListeningQueues(chat_instruction);
 }
 
-void ExitInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                       Packet &packet,
-                                                       const ClientData &client_receiver_data) {
+void ExitInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                      Packet &packet,
+                                                      const ClientData &client_receiver_data) {
   // TODO ver cuando revise lo de matar los clientes cuando se van desconectando.
   if (this->instructor_data.id == client_receiver_data.id)
     return;
   // TODO Hacer que muestre tambien el id.
-  protocol.fillPacketWithExitInfo(packet, instructor_data.name);
+  protocol.fillPacketWithExitMessage(packet, instructor_data.name);
 }

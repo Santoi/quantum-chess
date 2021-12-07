@@ -9,10 +9,10 @@ MatchOrganizer::MatchOrganizer(std::ifstream &file_)
         : matches_map(), file(file_) {
 }
 
-// TODO HACER LO DE REFRESH
 uint16_t MatchOrganizer::getClientChosenMatch(Socket &client_socket) {
   ServerProtocol protocol;
   uint16_t match_number = 0;
+  // Sends data, if client sends REFRESH (UINT16_MAX) then data is sent again.
   do {
     std::map<uint16_t, std::vector<ClientData>> matches_data;
     matches_map.getMatchesData(matches_data);
@@ -29,9 +29,8 @@ void MatchOrganizer::joinInactiveMatches() {
 void
 MatchOrganizer::addClientToMatchCreatingIfNeeded(Socket &&client_socket) {
   uint16_t match_id = getClientChosenMatch(client_socket);
-  if (!matches_map.matchExists(match_id)) {
+  if (!matches_map.matchExists(match_id))
     match_id = matches_map.addNewMatchAndStart(file);
-  }
   matches_map.addNewClientToMatch(match_id,
                                   std::move(client_socket));
 }

@@ -28,8 +28,8 @@ public:
   //The derived Instruction class asks the protocol to fill the given packet with the information
   //accordingly.
   virtual void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) = 0;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData &client_receiver_data) = 0;
 
   virtual ~Instruction() = default;
 };

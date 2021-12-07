@@ -29,7 +29,7 @@ void PossibleSplitsInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-PossibleSplitsInstruction::fillPacketWithInstructionsToSend(
+PossibleSplitsInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

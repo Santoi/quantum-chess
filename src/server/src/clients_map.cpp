@@ -8,14 +8,13 @@ ClientsMap::addNewClient(Socket &&socket,
                          ClientData &client_data) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BlockingQueue<Instruction> new_listening_queue;
-  uint16_t client_id = client_data.id;
   listening_queues.insert(
-          std::make_pair(client_id, std::move(new_listening_queue)));
+          std::make_pair(client_data.id, std::move(new_listening_queue)));
   ClientHandler client(std::move(socket),
-                       listening_queues.at(client_id),
+                       listening_queues.at(client_data.id),
                        match_updates,
                        client_data);
-  clients.insert(std::make_pair(client_id, std::move(client)));
+  clients.insert(std::make_pair(client_data.id, std::move(client)));
 }
 
 void ClientsMap::startClient(uint16_t client_id) {
@@ -39,8 +38,8 @@ void ClientsMap::deleteClient(uint16_t client_id) {
   }
 }
 
-void ClientsMap::addInstrToClientListeningQueue(uint16_t client_id,
-                                                std::shared_ptr<Instruction> &instr_ptr) {
+void ClientsMap::pushInstrToClientListeningQueue(uint16_t client_id,
+                                                 std::shared_ptr<Instruction> &instr_ptr) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   listening_queues.at(client_id).push(instr_ptr);
 }

@@ -47,7 +47,7 @@ void MovementInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-MovementInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                      Packet &packet,
-                                                      const ClientData &client_receiver_data) {
+MovementInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                     Packet &packet,
+                                                     const ClientData &client_receiver_data) {
 }

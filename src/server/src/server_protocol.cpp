@@ -64,18 +64,18 @@ void ServerProtocol::getNickName(Socket &socket, std::string &nick_name) {
   this->getMessageFromSocket(socket, nick_name);
 }
 
-void ServerProtocol::fillChatInstructions(Socket &socket,
-                                          const ClientData &client_data,
-                                          std::shared_ptr<Instruction> &instruct_ptr) {
+void ServerProtocol::fillChatInstruction(Socket &socket,
+                                         const ClientData &client_data,
+                                         std::shared_ptr<Instruction> &instruct_ptr) {
   std::string message;
   this->getMessageFromSocket(socket, message);
   instruct_ptr = std::make_shared<ChatInstruction>(client_data,
                                                    std::move(message));
 }
 
-void ServerProtocol::fillMovementInstructions(Socket &socket,
-                                              const ClientData &client_data,
-                                              std::shared_ptr<Instruction> &instruct_ptr) {
+void ServerProtocol::fillMovementInstruction(Socket &socket,
+                                             const ClientData &client_data,
+                                             std::shared_ptr<Instruction> &instruct_ptr) {
   uint8_t ix = getNumber8FromSocket(socket);
   uint8_t iy = getNumber8FromSocket(socket);
   uint8_t fx = getNumber8FromSocket(socket);
@@ -179,9 +179,9 @@ void ServerProtocol::fillSameChessmanInstruction(Socket &socket,
                                                                    positions));
 }
 
-void ServerProtocol::fillEntangledInstruction(Socket &socket,
-                                              const ClientData &client_data,
-                                              std::shared_ptr<Instruction> &instruct_ptr) {
+void ServerProtocol::fillEntangledChessmenInstruction(Socket &socket,
+                                                      const ClientData &client_data,
+                                                      std::shared_ptr<Instruction> &instruct_ptr) {
   std::list<Position> positions;
   uint8_t x = getNumber8FromSocket(socket);
   uint8_t y = getNumber8FromSocket(socket);
@@ -194,8 +194,10 @@ void ServerProtocol::fillEntangledInstruction(Socket &socket,
 
 
 void
-ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
-                                 std::shared_ptr<Instruction> &instruct_ptr) {
+ServerProtocol::receiveAndFillInstruction(Socket &socket,
+                                          const ClientData &client_data,
+                                          std::shared_ptr<Instruction>
+                                          &instruct_ptr) {
   Packet packet;
   socket.receive(packet, 1);
   if (packet.size() != 1)
@@ -204,10 +206,10 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
 
   switch (action) {
     case CHAT_PREFIX:
-      fillChatInstructions(socket, client_data, instruct_ptr);
+      fillChatInstruction(socket, client_data, instruct_ptr);
       break;
     case MOVE_PREFIX:
-      fillMovementInstructions(socket, client_data, instruct_ptr);
+      fillMovementInstruction(socket, client_data, instruct_ptr);
       break;
     case POSSIBLE_MOVES_PREFIX:
       fillPossibleMovesInstruction(socket, client_data, instruct_ptr);
@@ -225,18 +227,20 @@ ServerProtocol::fillInstructions(Socket &socket, const ClientData &client_data,
       fillSameChessmanInstruction(socket, client_data, instruct_ptr);
       break;
     case ENTANGLED_CHESSMEN_PREFIX:
-      fillEntangledInstruction(socket, client_data, instruct_ptr);
+      fillEntangledChessmenInstruction(socket, client_data, instruct_ptr);
       break;
     case MERGE_PREFIX:
       fillMergeInstruction(socket, client_data, instruct_ptr);
       break;
+    default:
+      throw std::runtime_error("invalid message received");
   }
 }
 
-void ServerProtocol::fillPacketWithChatInfo(Packet &packet,
-                                            const ClientData &client_data,
-                                            const std::string &message,
-                                            const std::string &timestamp) {
+void ServerProtocol::fillPacketWithChatMessage(Packet &packet,
+                                               const ClientData &client_data,
+                                               const std::string &message,
+                                               const std::string &timestamp) {
   packet.addByte(CHAT_PREFIX);
   changeNumberToBigEndianAndAddToPacket(packet, client_data.id);
   addStringAndItsLengthToPacket(packet, client_data.name);
@@ -244,18 +248,18 @@ void ServerProtocol::fillPacketWithChatInfo(Packet &packet,
   addStringAndItsLengthToPacket(packet, message);
 }
 
-void ServerProtocol::fillPacketWithExceptionInfo(Packet &packet,
-                                                 const std::string &message) {
+void ServerProtocol::fillPacketWithExceptionMessage(Packet &packet,
+                                                    const std::string &message) {
   packet.addByte(EXCEPTION_PREFIX);
   this->addStringAndItsLengthToPacket(packet, message);
 }
 
-void ServerProtocol::fillPacketWithLoadBoardInfo(Packet &packet,
-                                                 const std::vector<char> &characters,
-                                                 const std::vector<bool> &colors,
-                                                 const std::vector<Position> &positions,
-                                                 const std::vector<double> &probabilities,
-                                                 bool white) {
+void ServerProtocol::fillPacketWithLoadBoardMessage(Packet &packet,
+                                                    const std::vector<char> &characters,
+                                                    const std::vector<bool> &colors,
+                                                    const std::vector<Position> &positions,
+                                                    const std::vector<double> &probabilities,
+                                                    bool white) {
   packet.addByte(LOAD_BOARD_PREFIX);
   packet.addByte(characters.size());
   for (uint16_t i = 0; i < characters.size(); i++) {
@@ -319,8 +323,8 @@ void ServerProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
   }
 }
 
-void ServerProtocol::fillPacketLogInstruction(Packet &packet,
-                                              std::list<std::string> &log) {
+void ServerProtocol::fillPacketLogMessage(Packet &packet,
+                                          std::list<std::string> &log) {
   packet.addByte(LOG_PREFIX);
   changeNumberToBigEndianAndAddToPacket(packet, log.size());
   for (auto &entry: log) {
@@ -328,21 +332,21 @@ void ServerProtocol::fillPacketLogInstruction(Packet &packet,
   }
 }
 
-void ServerProtocol::sendPacketWithUpdates(Socket &socket,
-                                           std::shared_ptr<Instruction> &instruct_ptr,
-                                           const ClientData &client_data) {
+void ServerProtocol::sendPacket(Socket &socket,
+                                std::shared_ptr<Instruction> &instruct_ptr,
+                                const ClientData &client_data) {
   Packet packet;
-  instruct_ptr->fillPacketWithInstructionsToSend(*this, packet, client_data);
+  instruct_ptr->fillPacketWithInstructionToSend(*this, packet, client_data);
   socket.send(packet);
 }
 
-void ServerProtocol::fillPacketWithExitInfo(Packet &packet,
-                                            const std::string &nick_name) {
+void ServerProtocol::fillPacketWithExitMessage(Packet &packet,
+                                               const std::string &nick_name) {
   packet.addByte(EXIT_PREFIX);
   this->addStringAndItsLengthToPacket(packet, nick_name);
 }
 
-void ServerProtocol::fillPacketWithSoundInfo(Packet &packet, uint8_t sound) {
+void ServerProtocol::fillPacketWithSoundMessage(Packet &packet, uint8_t sound) {
   packet.addByte(SOUND_PREFIX);
   addNumber8ToPacket(packet, sound);
 }

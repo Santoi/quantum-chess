@@ -6,6 +6,7 @@
 #include "../../common/src/socket.h"
 #include "matches_repository.h"
 
+// Thread that makes connection to match for a new client.
 class ClientConnectionThread : public Thread {
   Socket socket;
   MatchOrganizer &matches;
@@ -14,11 +15,14 @@ class ClientConnectionThread : public Thread {
 public:
   explicit ClientConnectionThread(Socket &&socket_, MatchOrganizer &matches_);
 
+  // Stops the thread.
   void stop();
 
+  // Returns true if thread is active.
   bool isActive() const;
 
 private:
+  // Communicates with client to add it to match.
   void run() override;
 };
 

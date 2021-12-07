@@ -22,10 +22,10 @@ public:
   void makeActionAndNotify(Match &match) override;
 
   //Gets the instructor's nickname from the ClientDataRepository using the object's instructor_id
-  //attribute, and calls the protocol method fillPacketWithChatInfo to fill the given packet.
+  //attribute, and calls the protocol method fillPacketWithChatMessage to fill the given packet.
   void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData &client_receiver_data) override;
 
   ~ChatInstruction() = default;
 

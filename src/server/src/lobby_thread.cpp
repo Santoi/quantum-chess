@@ -13,7 +13,7 @@ void LobbyThread::run() {
     while (true) {
       auto peer = queue.pop();
       matches.joinInactiveMatches();
-      joinInactiveLobbyThreads();
+      joinInactiveClientConnectionThreads();
       client_connection_threads.emplace_back(std::move(*peer), matches);
       client_connection_threads.back().start();
     }
@@ -21,16 +21,16 @@ void LobbyThread::run() {
   catch (const BlockingQueueClosed &e) {
     matches.stopMatches();
     matches.joinMatches();
-    stopAndJoinLobbyThreads();
+    stopAndJoinClientConnectionThreads();
   }
 }
 
-void LobbyThread::stopAndJoinLobbyThreads() {
+void LobbyThread::stopAndJoinClientConnectionThreads() {
   for (auto &thread: client_connection_threads)
     thread.join();
 }
 
-void LobbyThread::joinInactiveLobbyThreads() {
+void LobbyThread::joinInactiveClientConnectionThreads() {
   for (auto it = client_connection_threads.begin();
        it != client_connection_threads.end();) {
     if (!it->isActive()) {

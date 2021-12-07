@@ -34,7 +34,7 @@ void PossibleMergesInstruction::makeActionAndNotify(Match &match) {
 }
 
 void
-PossibleMergesInstruction::fillPacketWithInstructionsToSend(
+PossibleMergesInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

@@ -10,8 +10,8 @@ LoginStateHandler::LoginStateHandler(Login &login,
           button_repository(button_repository),
           text_repository(text_repository),
           current_state(
-                  make_unique<ConnectToServerState>(login, button_repository,
-                                                    text_repository)) {}
+                  make_unique<ConnectingToServerState>(login, button_repository,
+                                                       text_repository)) {}
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
   std::lock_guard<std::mutex> lock_guard(mutex);

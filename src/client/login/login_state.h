@@ -51,12 +51,12 @@ public:
   void resetPressedButtons();
 };
 
-class ConnectToServerState : public LoginState {
+class ConnectingToServerState : public LoginState {
 public:
 
-  ConnectToServerState(Login &login_,
-                       ButtonSpriteRepository &button_sprite_repository,
-                       TextSpriteRepository &text_sprite_repository);
+  ConnectingToServerState(Login &login_,
+                          ButtonSpriteRepository &button_sprite_repository,
+                          TextSpriteRepository &text_sprite_repository);
 
   bool clientIsConnectedToMatch() override;
 
@@ -71,7 +71,7 @@ public:
 
   int processTokens(std::list<std::string> &&tokens) override;
 
-  ~ConnectToServerState() override = default;
+  ~ConnectingToServerState() override = default;
 };
 
 class SelectingMatchState : public LoginState {

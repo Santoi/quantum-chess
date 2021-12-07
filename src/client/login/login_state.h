@@ -22,8 +22,8 @@ protected:
   Login &login;
   ButtonSpriteRepository &button_sprite_repository;
   TextSpriteRepository &text_sprite_repository;
-  std::vector<std::unique_ptr<Button>> button_list;
-  std::vector<std::unique_ptr<TextEntryButton>> text_entry_button_list;
+  std::vector<std::unique_ptr<Button>> buttons_ptr;
+  std::vector<std::unique_ptr<TextEntryButton>> text_entry_buttons_ptr;
 
 public:
 

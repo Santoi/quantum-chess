@@ -28,13 +28,13 @@ ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
                              const std::vector<std::unique_ptr<TextEntryButton>> &text_entry_buttons)
     : Button(button_repository, text_repository, "action",
              std::move(button_text)),
-      text_entries(text_entry_buttons) {}
+      text_entries_ptr(text_entry_buttons) {}
 
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                         std::list<std::string> &tokens) {
   if (drawable.pixelIsOnButton(pixel_)) {
     std::cout << "button pressed!!" << std::endl;
-    for (const auto &text_entry: text_entries)
+    for (const auto &text_entry: text_entries_ptr)
       tokens.push_back((*text_entry).getText());
     return true;
   }

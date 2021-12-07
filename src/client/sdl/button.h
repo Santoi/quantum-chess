@@ -40,7 +40,7 @@ public:
 
 class ConnectButton : public Button {
 private:
-  const std::vector<std::unique_ptr<TextEntryButton>> &text_entries;
+  const std::vector<std::unique_ptr<TextEntryButton>> &text_entries_ptr;
 
 public:
   ConnectButton() = delete;

@@ -17,6 +17,7 @@ private:
   const std::string button_name;
   DrawableButton text_box;
   DrawableText text;
+  bool is_pressed;
   uint32_t x;
   uint32_t y;
   uint32_t width;
@@ -33,7 +34,7 @@ public:
   void setAreaAndPosition(int x_, int y_, int width_,
                           int height_);
 
-  bool pixelIsOnTextEntry(const PixelCoordinate &pixel) const;
+  bool pixelIsOnTextEntry(const PixelCoordinate &pixel);
 
   void render(const std::string &current_text);
 };

@@ -86,7 +86,7 @@ RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
                        TextSpriteRepository &text_repository,
                        ClientData::Role role_,
                        bool role_is_available_)
-    : Button(button_repository, text_repository, "role", ""), role(role_),
+    :Button(button_repository, text_repository, "role", ""), role(role_),
       role_is_available(role_is_available_) {
 }
 

@@ -10,7 +10,7 @@ DrawableTextEntryButton::DrawableTextEntryButton(
     button_repository(button_repository),
     button_name(std::move(default_text)),
     text_box(button_repository, text_repository, "text", ""),
-    text(text_repository, ""),
+    text(text_repository, ""), is_pressed(false),
     x(0), y(0), width(0),
     height(0) {}
 
@@ -23,9 +23,10 @@ void DrawableTextEntryButton::setAreaAndPosition(int x_, int y_, int width_,
 }
 
 bool DrawableTextEntryButton::pixelIsOnTextEntry(
-    const PixelCoordinate &pixel) const {
-  return pixel.x() > x && pixel.x() < x + width &&
-         pixel.y() > y && pixel.y() < y + height;
+    const PixelCoordinate &pixel) {
+    is_pressed = (pixel.x() > x && pixel.x() < x + width &&
+                 pixel.y() > y && pixel.y() < y + height);
+  return is_pressed;
 }
 
 void DrawableTextEntryButton::render(const std::string &current_text) {

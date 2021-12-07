@@ -38,7 +38,8 @@ void Login::fillVectorWithMatchButtons(std::vector<std::unique_ptr<Button>>& mat
 }
 
 Socket Login::getClientSocket() {
-  return std::move(*client_socket_ptr);
+    std::cout << "Me movieron!!" <<std::endl;
+    return std::move(*client_socket_ptr);
 }
 
 std::string Login::getClientNickName() {

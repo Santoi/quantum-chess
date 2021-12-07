@@ -88,7 +88,8 @@ void LoginStateHandler::render(LoginScene &login_scene) {
 }
 
 Socket LoginStateHandler::getClientSocket() {
-  return login.getClientSocket();
+    std::cout << "Me movieron!!" <<std::endl;
+  return std::move(login.getClientSocket());
 }
 
 std::string LoginStateHandler::getClientNickName() {

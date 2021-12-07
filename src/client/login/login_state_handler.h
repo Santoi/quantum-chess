@@ -17,7 +17,7 @@ class TextEntryButton;
 
 class LoginStateHandler {
 protected:
-  Login login;
+  Login &login;
   ButtonSpriteRepository &button_repository;
   TextSpriteRepository &text_repository;
   std::unique_ptr<LoginState> current_state;
@@ -33,10 +33,10 @@ public:
   bool clientIsConnectedToMatch();
 
   void fillWithActiveButtons(
-      std::list<std::reference_wrapper<Button>> &active_buttons);
+          std::list<std::reference_wrapper<Button>> &active_buttons);
 
   void fillWithActiveTextEntryButtons(
-      std::list<std::reference_wrapper<TextEntryButton>> &active_text_entries);
+          std::list<std::reference_wrapper<TextEntryButton>> &active_text_entries);
 
   void processTokens(std::list<std::string> &&tokens);
 

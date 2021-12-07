@@ -3,23 +3,17 @@
 
 #include <exception>
 #include <string>
+#include <utility>
 
-class UnavailableRoleException: public std::exception {
-private:
-    std::string msg;
-
+class UnavailableRoleException : public std::exception {
 public:
-    UnavailableRoleException() = delete;
+  UnavailableRoleException() = default;
 
-    explicit UnavailableRoleException(std::string msg) noexcept
-            :msg(msg) {
-    }
+  const char *what() const noexcept override {
+    return "Selected role isn available";
+  }
 
-    const char *what() const noexcept {
-        return msg.c_str();
-    }
-
-    ~UnavailableRoleException() noexcept override = default;
+  ~UnavailableRoleException() noexcept override = default;
 };
 
 

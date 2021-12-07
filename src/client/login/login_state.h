@@ -10,6 +10,11 @@
 #include <list>
 #include <memory>
 
+#define NEXT_STATE_CONNECT_TO_MATCH 1
+#define NEXT_STATE_SELECTING_ROLE 2
+#define NEXT_STATE_CONNECTED_TO_MATCH 3
+#define NO_NEXT_STATE 0
+
 class LoginScene;
 
 class LoginState {
@@ -33,11 +38,11 @@ public:
   virtual void render(LoginScene &login_scene) = 0;
 
   virtual void fillWithActiveButtons(
-      std::list<std::reference_wrapper<Button>> &active_buttons) = 0;
+          std::list<std::reference_wrapper<Button>> &active_buttons) = 0;
 
   virtual void fillWithActiveTextEntryButtons(
-      std::list<std::reference_wrapper<TextEntryButton>> &
-      active_text_entries) = 0;
+          std::list<std::reference_wrapper<TextEntryButton>> &
+          active_text_entries) = 0;
 
   virtual int processTokens(std::list<std::string> &&tokens) = 0;
 
@@ -58,11 +63,11 @@ public:
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-      std::list<std::reference_wrapper<Button>> &active_buttons) override;
+          std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-      std::list<std::reference_wrapper<TextEntryButton>> &
-      active_text_entries) override;
+          std::list<std::reference_wrapper<TextEntryButton>> &
+          active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 
@@ -81,11 +86,11 @@ public:
   void render(LoginScene &login_renderer) override;
 
   void fillWithActiveButtons(
-      std::list<std::reference_wrapper<Button>> &active_buttons) override;
+          std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-      std::list<std::reference_wrapper<TextEntryButton>> &
-      active_text_entries) override;
+          std::list<std::reference_wrapper<TextEntryButton>> &
+          active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 
@@ -103,11 +108,11 @@ public:
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-      std::list<std::reference_wrapper<Button>> &active_buttons) override;
+          std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-      std::list<std::reference_wrapper<TextEntryButton>> &
-      active_text_entries) override;
+          std::list<std::reference_wrapper<TextEntryButton>> &
+          active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 
@@ -139,11 +144,11 @@ public:
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-      std::list<std::reference_wrapper<Button>> &active_buttons) override;
+          std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-      std::list<std::reference_wrapper<TextEntryButton>> &
-      active_text_entries) override;
+          std::list<std::reference_wrapper<TextEntryButton>> &
+          active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 

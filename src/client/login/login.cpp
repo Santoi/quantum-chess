@@ -15,31 +15,33 @@ void Login::connectToServer(const std::string &ip_, const std::string &port_) {
           (Socket::createAConnectedSocket(ip, port)));
 }
 
-void Login::fillVectorWithMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons_ptr,
-                                ButtonSpriteRepository &button_sprite_repository,
-                                TextSpriteRepository &text_sprite_repository) {
-    ClientProtocol protocol;
-    std::map<uint16_t, std::vector<ClientData>> data = std::move(
-            protocol.receiveMatchesInfo(*client_socket_ptr));
-    match_buttons_ptr.reserve(data.size() + 1);
-    int i = 0;
-    for (auto it = data.begin(); it != data.end(); it++) {
-        match_buttons_ptr.push_back(std::move(make_unique<PickMatchButton>(button_sprite_repository,
-                                                                           text_sprite_repository,
-                                                                           it->second,
-                                                                           it->first)));
-        i++;
-    }
-    std::vector<ClientData> empty_clients_list;
-    match_buttons_ptr.push_back(std::move(make_unique<PickMatchButton>(button_sprite_repository,
-                                                                       text_sprite_repository,
-                                                                       empty_clients_list,
-                                                                       i)));
+void Login::fillVectorWithMatchButtons(
+        std::vector<std::unique_ptr<Button>> &match_buttons_ptr,
+        ButtonSpriteRepository &button_sprite_repository,
+        TextSpriteRepository &text_sprite_repository) {
+  ClientProtocol protocol;
+  std::map<uint16_t, std::vector<ClientData>> data = std::move(
+          protocol.receiveMatchesInfo(*client_socket_ptr));
+  match_buttons_ptr.reserve(data.size() + 1);
+  int i = 0;
+  for (auto it = data.begin(); it != data.end(); it++) {
+    match_buttons_ptr.push_back(
+            std::move(make_unique<PickMatchButton>(button_sprite_repository,
+                                                   text_sprite_repository,
+                                                   it->second,
+                                                   it->first)));
+    i++;
+  }
+  std::vector<ClientData> empty_clients_list;
+  match_buttons_ptr.push_back(
+          std::move(make_unique<PickMatchButton>(button_sprite_repository,
+                                                 text_sprite_repository,
+                                                 empty_clients_list,
+                                                 i)));
 }
 
 Socket Login::getClientSocket() {
-    std::cout << "Me movieron!!" <<std::endl;
-    return std::move(*client_socket_ptr);
+  return std::move(*client_socket_ptr);
 }
 
 std::string Login::getClientNickName() {
@@ -48,7 +50,6 @@ std::string Login::getClientNickName() {
 
 void Login::chooseMatchNumber(int match_number) {
   ClientProtocol protocol;
-  std::cout << "Me conecto a la partida " << match_number << std::endl;
   protocol.sendChosenGame(*client_socket_ptr, match_number);
 }
 

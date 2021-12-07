@@ -6,10 +6,11 @@
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
                                        Chat &chat_, TextEntry &text_entry)
-    : window(window), open(true), game(game), text_entry(text_entry),
-      split(false), merge(false),
-      first_click(false), second_click(false), penultimate_click(),
-      last_click(), chat(chat_) {}
+        : HandlerThread(true), window(window), game(game),
+          text_entry(text_entry),
+          split(false), merge(false),
+          first_click(false), second_click(false), penultimate_click(),
+          last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
   while (true) {

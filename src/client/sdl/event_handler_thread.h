@@ -11,7 +11,6 @@
 class EventHandlerThread : public HandlerThread {
 private:
   Window &window;
-  std::atomic<bool> open;
   Game &game;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;

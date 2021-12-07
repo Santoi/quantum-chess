@@ -8,10 +8,10 @@
 TextEntryButton::TextEntryButton(ButtonSpriteRepository &button_repository,
                                  TextSpriteRepository &text_repository,
                                  const std::string &button_name_)
-    : text_entry(MAX_INPUT), drawable_text_button(text_repository,
-                                                  button_repository,
-                                                  button_name_),
-      expecting_text_entry(false) {}
+        : text_entry(MAX_INPUT), drawable_text_button(text_repository,
+                                                      button_repository,
+                                                      button_name_),
+          expecting_text_entry(false) {}
 
 void
 TextEntryButton::setAreaAndPosition(int x_, int y_, int width, int height) {
@@ -24,7 +24,6 @@ bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate &pixel_) {
   if (drawable_text_button.pixelIsOnTextEntry(pixel_)) {
     expecting_text_entry = true;
     text_entry.enableEntry();
-    std::cout << "Text entry pressed!" << std::endl;
     return true;
   }
   return false;

@@ -11,7 +11,9 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
       {"text",   "img/buttons/text-button-pressed.png"},
       {"action", "img/buttons/button-pressed.png"},
       {"match",  "img/buttons/button-pressed.png"},
-      {"role",   "img/buttons/spectator_role.png"},
+      {"role_white", "img/buttons/available_white_role.png"},
+      {"role_black", "img/buttons/available_black_role.png"},
+      {"role_spectator", "img/buttons/spectator_role.png"}
   };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,

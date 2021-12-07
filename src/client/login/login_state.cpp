@@ -102,6 +102,7 @@ int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
     std::string str_match_number = tokens.front();
     int match_number = std::stoi(str_match_number);
     login.chooseMatchNumber(match_number);
+    login.sendSavedNickNameToServer();
     return NEXT_STATE_SELECTING_ROLE;
 }
 
@@ -133,8 +134,6 @@ SelectingRoleState::SelectingRoleState(Login &login_, ButtonSpriteRepository &bu
     addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_SPECTATOR, button_repository, text_repository,
                                             available_roles, "role_spectator");
 }
-
-
 
 bool SelectingRoleState::clientIsConnectedToMatch() {
   return false;

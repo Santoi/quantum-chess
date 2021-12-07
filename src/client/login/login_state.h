@@ -74,10 +74,10 @@ public:
   ~ConnectToServerState() override = default;
 };
 
-class ConnectToMatchState : public LoginState {
+class SelectingMatchState : public LoginState {
 public:
 
-  ConnectToMatchState(Login &login_,
+  SelectingMatchState(Login &login_,
                       ButtonSpriteRepository &button_sprite_repository,
                       TextSpriteRepository &text_sprite_repository);
 
@@ -94,7 +94,7 @@ public:
 
   int processTokens(std::list<std::string> &&tokens) override;
 
-  ~ConnectToMatchState() override = default;
+  ~SelectingMatchState() override = default;
 };
 
 class SelectingRoleState : public LoginState {

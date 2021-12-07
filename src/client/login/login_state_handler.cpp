@@ -39,7 +39,7 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
     current_state.reset();
     switch (aux) {
       case NEXT_STATE_CONNECT_TO_MATCH:
-        current_state = make_unique<ConnectToMatchState>(login,
+        current_state = make_unique<SelectingMatchState>(login,
                                                          button_repository,
                                                          text_repository);
         break;

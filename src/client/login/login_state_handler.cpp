@@ -54,8 +54,6 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
                                                            text_repository);
         break;
     }
-
-    std::cout << "llegue" << std::endl;
   } catch (const NetworkAddressInfoException &error) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",
@@ -82,7 +80,6 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
     return;
   } catch (...) {
   }
-  std::cout << "llegue" << std::endl;
 }
 
 void LoginStateHandler::render(LoginScene &login_scene) {

@@ -105,6 +105,49 @@ int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
     return NEXT_STATE_SELECTING_ROLE;
 }
 
+void SelectingRoleState::addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_,
+                                                                 ButtonSpriteRepository &button_repository,
+                                                                 TextSpriteRepository &text_repository,
+                                                                 std::list<ClientData::Role>& available_roles,
+                                                                 const std::string& available_not_pressed_image,
+                                                                 const std::string& available_pressed_image,
+                                                                 const std::string& not_available_not_pressed_image,
+                                                                 const std::string& not_available_pressed_image) {
+    std::unique_ptr<RoleButton> role_button_ptr;
+    std::list<ClientData::Role>::iterator findIter = std::find(available_roles.begin(),
+                                                               available_roles.end(), role_);
+    if (findIter != available_roles.end())
+        role_button_ptr = make_unique<RoleButton>(button_repository, text_repository, role_, true);
+    else
+        role_button_ptr = make_unique<RoleButton>(button_repository, text_repository, role_, false);
+    buttons_ptr.push_back(std::move(role_button_ptr));
+}
+
+SelectingRoleState::SelectingRoleState(Login &login_, ButtonSpriteRepository &button_repository,
+                                       TextSpriteRepository &text_repository)
+        :LoginState(login_, button_repository, text_repository) {
+    std::list<ClientData::Role> available_roles = login.getAvailableRoles();
+    addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_WHITE, button_repository, text_repository,
+                                            available_roles,
+                                            "img/buttons/available_white_role.png",
+                                            "img/buttons/available_white_role.png",
+                                            "img/buttons/not_available_white_role.png",
+                                            "img/buttons/not_available_white_role.png");
+    addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_BLACK, button_repository, text_repository,
+                                            available_roles,
+                                            "img/buttons/available_black_role.png",
+                                            "img/buttons/available_black_role.png",
+                                            "img/buttons/not_available_black_role.png",
+                                            "img/buttons/not_available_black_role.png");
+    addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_SPECTATOR, button_repository, text_repository,
+                                            available_roles,
+                                            "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png",
+                                            "img/buttons/spectator_role.png");
+}
+
+
 
 bool SelectingRoleState::clientIsConnectedToMatch() {
   return false;
@@ -146,11 +189,6 @@ int SelectingRoleState::processTokens(std::list<std::string> &&tokens) {
   login.sendChosenRole(selected_role);
   return NEXT_STATE_CONNECTED_TO_MATCH;
 }
-
-SelectingRoleState::SelectingRoleState(Login &login_,
-                                       ButtonSpriteRepository &button_repository,
-                                       TextSpriteRepository &text_repository)
-        : LoginState(login_, button_repository, text_repository) {}
 
 ConnectedToMatchState::ConnectedToMatchState(Login &login_,
                                              ButtonSpriteRepository &button_sprite_repository,

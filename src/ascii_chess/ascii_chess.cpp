@@ -1,12 +1,14 @@
 #include <sstream>
 #include <string>
-#include "../server/src/quantum_chess/chess_exception.h"
+#include <fstream>
+#include "../common/src/chess_exception.h"
 #include "ascii_chess.h"
 
 AsciiChess::AsciiChess() : board() {}
 
 void AsciiChess::execute() {
-  board.load("default.txt");
+  std::ifstream file("default.txt");
+  board.load(file);
   draw();
   while (true) {
     try {

@@ -1,29 +1,20 @@
 #include "coordinate_transformer.h"
 
 void CoordinateTransformer::pixel2Position(const PixelCoordinate &pixel,
-                                           Position &position,
-                                           int scale_factor) {
-  int x = pixel.x(), y = pixel.y();
-  x *= 10;
-  y *= 10;
-  x /= scale_factor;
-  y /= -scale_factor;
-  x -= 1;
-  y += 8;
+                                           Position &position, int width,
+                                           int height) {
+  // TODO emprolijar
+  int x = (pixel.x() - (width / 2.0 - 4.0 * height / 10.0)) / (height / 10.0);
+  int y = (pixel.y() / (height / 10.0) - 8) * (-1) + 1;
   Position pos(x, y);
   position = pos;
 }
 
 void CoordinateTransformer::position2Pixel(const Position &position,
-                                           PixelCoordinate &pixel,
-                                           int scale_factor) {
-  int x = position.x(), y = position.y();
-  x += 1;
-  y -= 8;
-  x *= scale_factor;
-  y *= -scale_factor;
-  x /= 10;
-  y /= 10;
+                                           PixelCoordinate &pixel, int width,
+                                           int height) {
+  int x = height / 10 * position.x() + width / 2 - 4 * height / 10;
+  int y = (8 - position.y()) * height / 10;
   PixelCoordinate pc(x, y);
   pixel = pc;
 }

@@ -20,6 +20,21 @@ void ChatInstruction::makeActionAndNotifyAllListeningQueues(
 void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
                                                        Packet &packet,
                                                        const ClientData &client_receiver_data) {
-  // TODO agregar id.
-  protocol.fillPacketWithChatInfo(packet, instructor_data.name, this->message);
+  // Calculate time
+  protocol.fillPacketWithChatInfo(packet, instructor_data, this->message,
+                                  getTimeStamp());
+}
+
+std::string ChatInstruction::getTimeStamp() {
+  time_t now = time(nullptr);
+  struct tm *ts = localtime(&now);
+  std::string hour = std::to_string(ts->tm_hour);
+  std::string min = std::to_string(ts->tm_min);
+  // Formatting for 00
+  if (hour.size() == 1)
+    hour = "0" + hour;
+  if (min.size() == 1)
+    min = "0" + min;
+  std::string timestamp = hour + ":" + min;
+  return timestamp;
 }

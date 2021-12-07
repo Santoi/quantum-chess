@@ -1,6 +1,6 @@
 #include "possible_moves_instruction.h"
 #include "chess_exception_instruction.h"
-#include "../quantum_chess/chess_exception.h"
+#include "../../../common/src/chess_exception.h"
 
 PossibleMovesInstruction::PossibleMovesInstruction(const ClientData &inst_data,
                                                    std::list<Position> &&pos) :

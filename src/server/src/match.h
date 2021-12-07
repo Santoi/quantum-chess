@@ -17,12 +17,12 @@ private:
   std::map<uint16_t, ClientHandler> clients;
   std::map<uint16_t, BlockingQueue<Instruction>> listening_queues;
   BlockingQueue<Instruction> match_updates_queue;
-  const std::string board_filename;
+  std::ifstream &file;
 
 public:
   //Creates a match, creating the ClientDataRepository and the BlockingQueue<Instruction>. The client's vector
   //is also created and set with an initial capacity of BASE_CLIENTS.
-  Match(std::string board_filename);
+  Match(std::ifstream &file_);
 
   //Moves the other match's thread, clients, listening queues and the thread safe queue to the new
   //match. The new match also copies the number of accepted clients of the other.
@@ -46,7 +46,6 @@ public:
 
   void deleteClientWithId(uint16_t client_id);
 
-
   Board &getBoard();
 
 protected:
@@ -58,12 +57,14 @@ protected:
 private:
   //Creates a new ClientHandler and adds it to the client's vector (if the vector's capacity is not
   //enough, it is incremented by BASE_CLIENTS). The number of accepted clients is incremented by one.
-  void addClientWithIdToListOfClients(Socket &&client_socket,
-                                      ClientData &client_data);
+  void addClientToListOfClients(Socket &&client_socket,
+                                ClientData &client_data);
 
   ClientData askClientData(Socket &socket, uint16_t client_id);
 
   std::list<ClientData::Role> getAvailableRoles();
+
+  void runCatchingExceptions() override;
 };
 
 

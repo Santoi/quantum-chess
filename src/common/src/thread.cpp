@@ -22,12 +22,12 @@ bool Thread::isJoinable() {
 
 void Thread::runCatchingExceptions() {
   try {
-    this->run();
+    run();
   }
   catch (const std::exception &e) {
     std::cerr << "Error:" << e.what() << std::endl;
   }
   catch (...) {
-    std::cerr << "Error desconocido" << std::endl;
+    std::cerr << "Unknown error" << std::endl;
   }
 }

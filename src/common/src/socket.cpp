@@ -26,20 +26,22 @@ Socket::Socket(const char *hostname, const char *service) : fd(-1),
                                                             network(hostname,
                                                                     service) {}
 
-Socket::Socket(Socket &&other) noexcept {
+Socket::Socket(Socket &&other) noexcept: fd(other.fd),
+                                         network(std::move(other.network)) {
+  other.fd = INVALID_FILE_DESCRIPTOR;
+}
+
+Socket &Socket::operator=(Socket &&other) noexcept {
   fd = other.fd;
   other.fd = INVALID_FILE_DESCRIPTOR;
+  network = std::move(other.network);
+  return *this;
 }
 
 Socket Socket::createAConnectedSocket(const char *host, const char *service) {
   Socket skt(host, service);
   skt.connect();
   return skt;
-}
-
-void Socket::createAConnectedSocket(std::unique_ptr<Socket>& socket_ptr, const char* host, const char* service) {
-    socket_ptr = make_unique<Socket>(host, service);
-    socket_ptr->connect();
 }
 
 Socket Socket::createAListeningSocket(const char *host, const char *service) {
@@ -117,7 +119,7 @@ size_t Socket::receive(Packet &packet, size_t size) const {
     ssize_t bytes_recv = recv(fd, buffer.data(), size - packet.size(), 0);
     // Si no se recibio nada, socket cerrado. Sino error.
     if (bytes_recv == 0) {
-      throw SocketClosed();
+      return packet.size();
     }
     if (bytes_recv == -1) {
       if (errno == EBADF) {

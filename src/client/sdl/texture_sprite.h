@@ -1,8 +1,8 @@
 #ifndef QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 #define QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 
-#include "sprite.h"
 #include "renderer.h"
+#include "sprite.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <string>
 

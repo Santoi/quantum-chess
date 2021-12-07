@@ -5,60 +5,59 @@
 
 #define MAX_INPUT 20
 
-TextEntryButton::TextEntryButton(Renderer& renderer_, const std::string& button_name_)
-                :text_entry(30), drawable_text_button(renderer_, button_name_), expecting_text_entry(false) {
-    input_text.reserve(MAX_INPUT);
+TextEntryButton::TextEntryButton(ButtonSpriteRepository &button_repository,
+                                 TextSpriteRepository &text_repository,
+                                 const std::string &button_name_)
+    : text_entry(MAX_INPUT), drawable_text_button(text_repository,
+                                                  button_repository,
+                                                  button_name_),
+      expecting_text_entry(false) {}
+
+void
+TextEntryButton::setAreaAndPosition(int x_, int y_, int width, int height) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  drawable_text_button.setAreaAndPosition(x_, y_, width, height);
 }
 
-void TextEntryButton::setAreaAndPosition(int x_, int y_, int height_, int width_) {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    drawable_text_button.setAreaAndPosition(x_, y_, height_, width_);
-}
-
-void TextEntryButton::render() {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    drawable_text_button.render(text_entry.getText());
-}
-
-bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate& pixel_) {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    if (drawable_text_button.pixelIsOnTextEntry(pixel_)) {
-        expecting_text_entry = true;
-        text_entry.enableEntry();
-        std::cout << "Text entry pressed!" << std::endl;
-        return true;
-    }
-    return false;
+bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate &pixel_) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (drawable_text_button.pixelIsOnTextEntry(pixel_)) {
+    expecting_text_entry = true;
+    text_entry.enableEntry();
+    std::cout << "Text entry pressed!" << std::endl;
+    return true;
+  }
+  return false;
 }
 
 void TextEntryButton::disableTextEntry() {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    expecting_text_entry = false;
-    text_entry.disableEntry();
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  expecting_text_entry = false;
+  text_entry.disableEntry();
 }
-
-void TextEntryButton::backSpaceIfEnabled() {
-    //text_entry.backspace();
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    if (!expecting_text_entry)
-        return;
-    else if (!input_text.empty())
-        input_text.pop_back();
-    std::cout << input_text << std::endl;
-}
-
 
 void TextEntryButton::concatIfEnabled(const std::string &text_) {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    if (!expecting_text_entry)
-        return;
-    input_text.append(text_);
-    //text_entry.concat(text_);
-    std::cout << input_text << std::endl;
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (!expecting_text_entry)
+    return;
+  if (text_entry.isEnabled())
+    text_entry.concat(text_);
 }
 
 std::string TextEntryButton::getText() const {
-    std::lock_guard<std::mutex> lock_guard(mutex);
-    //get string from text entry
-    return input_text;
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return text_entry.getText();
+}
+
+void TextEntryButton::render() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  drawable_text_button.render(text_entry.getText());
+}
+
+void TextEntryButton::backspaceIfEnabled() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (!expecting_text_entry)
+    return;
+  if (text_entry.isEnabled())
+    text_entry.backspace();
 }

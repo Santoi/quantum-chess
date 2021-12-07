@@ -6,14 +6,11 @@
 #include "instructions/instruction.h"
 #include "instructions/exit_instruction.h"
 #include "instructions/load_board_instruction.h"
+#include "instructions/chat_instruction.h"
 
-#define MATCH_ID -1
-
-// TODO AVeriguar donde arranca match.
-
-Match::Match(std::string board_filename)
+Match::Match(std::ifstream &file_)
         : Thread(), board(), clients(), listening_queues(),
-          match_updates_queue(), board_filename(std::move(board_filename)) {
+          match_updates_queue(), file(file_) {
 }
 
 Match::Match(Match &&other) : Thread(std::move(other)),
@@ -23,7 +20,7 @@ Match::Match(Match &&other) : Thread(std::move(other)),
                                       other.listening_queues)),
                               match_updates_queue(std::move(
                                       other.match_updates_queue)),
-                              board_filename(std::move(other.board_filename)) {}
+                              file(other.file) {}
 
 ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
   ServerProtocol protocol;
@@ -37,8 +34,8 @@ ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
   return client_data;
 }
 
-void Match::addClientWithIdToListOfClients(Socket &&client_socket,
-                                           ClientData &client_data) {
+void Match::addClientToListOfClients(Socket &&client_socket,
+                                     ClientData &client_data) {
   BlockingQueue<Instruction> new_listening_queue;
   uint16_t client_id = client_data.id;
   listening_queues.insert(
@@ -52,8 +49,11 @@ void Match::addClientWithIdToListOfClients(Socket &&client_socket,
 
 void Match::addClientToMatch(Socket &&client_socket, uint16_t client_id) {
   ClientData client_data = askClientData(client_socket, client_id);
-  this->addClientWithIdToListOfClients(std::move(client_socket), client_data);
+  this->addClientToListOfClients(std::move(client_socket), client_data);
   this->clients.at(client_id).start();
+  std::shared_ptr<Instruction> chat_instruction = std::make_shared<ChatInstruction>(
+          client_data, "has joined");
+  match_updates_queue.push(chat_instruction);
   LoadBoardInstruction instruction;
   match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
 }
@@ -86,7 +86,7 @@ void Match::checkAndNotifyUpdates() {
 }
 
 void Match::run() {
-  board.load(board_filename);
+  board.load(file);
   try {
     while (true)
       checkAndNotifyUpdates();
@@ -97,7 +97,26 @@ void Match::run() {
       client.second.join();
     }
   }
+}
 
+void Match::runCatchingExceptions() {
+  try {
+    run();
+  }
+  catch (const std::exception &e) {
+    for (auto &client: clients) {
+      client.second.stop();
+      client.second.join();
+    }
+    std::cerr << "Error:" << e.what() << std::endl;
+  }
+  catch (...) {
+    for (auto &client: clients) {
+      client.second.stop();
+      client.second.join();
+    }
+    std::cerr << "Unknown error" << std::endl;
+  }
 }
 
 bool Match::hasActiveClients() const {

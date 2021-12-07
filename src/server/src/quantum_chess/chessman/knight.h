@@ -6,21 +6,22 @@
 #include "chessman.h"
 #include "../position.h"
 
-class Knight: public Chessman {
+class Knight : public Chessman {
 private:
-    char print() const override;
+  char charId() const override;
 
 public:
-    Knight(const Position & position, bool white_, Board & board_);
-    
-    void calculateMoves(const Position &initial,
-                        std::list<Position> &posible_moves)
-                               const override;
+  Knight(const Position &position, bool white_, Board &board_,
+         EntanglementLog &entanglement_log_);
 
-    void calculatePath(const Position &initial, const Position &final,
-                       std::vector<Position> &path) const override;
+  void calculateMoves(const Position &initial,
+                      std::list<Position> &posible_moves)
+  const override;
 
-    ~Knight() override = default;
+  void calculatePath(const Position &initial, const Position &final,
+                     std::vector<Position> &path) const override;
+
+  ~Knight() override = default;
 };
 
 

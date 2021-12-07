@@ -1,10 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_GAME_H
 #define QUANTUM_CHESS_PROJ_GAME_H
 
+#include <vector>
+#include "drawable_board.h"
+#include "../sdl/window.h"
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
-#include "../sdl/window.h"
-#include "board.h"
 #include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
 #include "../../common/src/blocking_queue.h"
@@ -20,20 +21,22 @@ class RemoteClientInstruction;
 
 class Game {
 private:
-  int scale;
-  Board board;
+  int x_scale, y_scale;
+  DrawableBoard board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  std::map<const PixelCoordinate, TextureSprite> sprites;
   CoordinateTransformer transformer;
   std::mutex mutex;
   ClientData::Role role;
-  const SoundHandler &sound_handler;
+  SoundHandler &sound_handler;
 
 public:
-  Game(Window &window, BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, const SoundHandler &sound_handler);
+  Game(Window &window,
+       BlockingQueue<RemoteClientInstruction> &send_queue_,
+       ClientData::Role role_, Font &font);
 
-  void setScale(int scale_);
+  void setScale(int x_scale_, int y_scale_);
+
+  DrawableBoard &getBoard();
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
 
@@ -51,10 +54,6 @@ public:
 
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
 
-  void loadSprite(TextureSprite &sprite, int x, int y);
-
-  void render();
-
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
   void askMoveTiles(PixelCoordinate &coords);
@@ -71,9 +70,9 @@ public:
 
   void playSplitSound();
 
-  void playMovementSound();
+  void playMergeSound();
 
-  void playTakenPieceSound();
+  void playCaptureSound();
 
   void askEntangledTiles(PixelCoordinate &coords);
 
@@ -81,6 +80,12 @@ public:
 
   void mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
                      PixelCoordinate &to);
+
+  void toggleSounds();
+
+  void toggleMusic();
+
+  void currentTile(const PixelCoordinate &coordinate);
 };
 
 

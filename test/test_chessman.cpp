@@ -6,10 +6,9 @@
 #include "../src/server/src/quantum_chess/chessman/tower.h"
 #include "../src/server/src/quantum_chess/chessman/bishop.h"
 #include "../src/server/src/quantum_chess/chessman/king.h"
-#include "../src/server/src/quantum_chess/chess_exception.h"
+#include "../src/common/src/chess_exception.h"
 
 
-// TODO test capture.
 TEST(Chessman, MoveFromANonExistingPosition) {
   Board board;
   board.addNewChessman('T', Position(0, 1), true);
@@ -51,7 +50,7 @@ TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
 
   std::list<Position> posible_moves;
 
-  chessman->calculatePosibleMoves(Position(5, 1), posible_moves);
+  chessman->calculatePossibleMoves(Position(5, 1), posible_moves);
 
   std::list<Position> posible_moves_gt = {
           Position(5, 0), Position(5, 2),
@@ -139,7 +138,7 @@ TEST(Bishop, CalculatePosibleMovesWithEmptyBoard) {
 
   std::list<Position> posible_moves;
 
-  bishop->calculatePosibleMoves(Position(2, 1), posible_moves);
+  bishop->calculatePossibleMoves(Position(2, 1), posible_moves);
 
   std::list<Position> posible_moves_gt = {
           Position(1, 0), Position(3, 2),
@@ -228,7 +227,7 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
 
   std::list<Position> posible_moves;
 
-  king->calculatePosibleMoves(Position(2, 1), posible_moves);
+  king->calculatePossibleMoves(Position(2, 1), posible_moves);
 
   std::list<Position> posible_moves_gt = {
           Position(3, 1), Position(3, 2),
@@ -264,7 +263,7 @@ TEST(Knight, CalculatePosibleMovesSurrounded) {
   Chessman *chessman = board.getChessmanAt(Position(4, 4));
 
   std::list<Position> posible_moves;
-  chessman->calculatePosibleMoves(Position(4, 4), posible_moves);
+  chessman->calculatePossibleMoves(Position(4, 4), posible_moves);
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
 }
@@ -279,7 +278,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
   };
 
   std::list<Position> posible_moves;
-  chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+  chessman->calculatePossibleMoves(Position(1, 1), posible_moves);
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
 
@@ -289,7 +288,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
           Position(1, 4)
   };
 
-  chessman->calculatePosibleMoves(Position(1, 3), posible_moves);
+  chessman->calculatePossibleMoves(Position(1, 3), posible_moves);
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
 }
@@ -308,7 +307,7 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCaptureButSameColor) {
   };
 
   std::list<Position> posible_moves;
-  chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+  chessman->calculatePossibleMoves(Position(1, 1), posible_moves);
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
 }
@@ -328,13 +327,13 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
   };
 
   std::list<Position> posible_moves;
-  chessman->calculatePosibleMoves(Position(1, 1), posible_moves);
+  chessman->calculatePossibleMoves(Position(1, 1), posible_moves);
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
 }
 
 TEST(Chessman, OneSplit) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -345,7 +344,7 @@ TEST(Chessman, OneSplit) {
 }
 
 TEST(Chessman, TwoSplitsSplittingReal) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -358,7 +357,7 @@ TEST(Chessman, TwoSplitsSplittingReal) {
 }
 
 TEST(Chessman, TwoSplitsSplittingFake) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -371,7 +370,7 @@ TEST(Chessman, TwoSplitsSplittingFake) {
 }
 
 TEST(Chessman, SplitThenMoveSplitted) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -388,7 +387,7 @@ TEST(Chessman, SplitThenMoveSplitted) {
 }
 
 TEST(Chessman, OneBadSplitToSamePosition) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -397,7 +396,7 @@ TEST(Chessman, OneBadSplitToSamePosition) {
 }
 
 TEST(Chessman, OneBadSplitToInvalidPosition) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -406,7 +405,7 @@ TEST(Chessman, OneBadSplitToInvalidPosition) {
 }
 
 TEST(Chessman, SplitToSamePosition) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -415,7 +414,7 @@ TEST(Chessman, SplitToSamePosition) {
 }
 
 TEST(Chessman, MergeOneSplit) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -427,7 +426,7 @@ TEST(Chessman, MergeOneSplit) {
 }
 
 TEST(Chessman, MergeTwoSplitsSplittingRealMergingTheTwoFakes) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -441,7 +440,7 @@ TEST(Chessman, MergeTwoSplitsSplittingRealMergingTheTwoFakes) {
 }
 
 TEST(Chessman, MergeTwoSplitsSplittingRealMergingRealWithFake) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -455,7 +454,7 @@ TEST(Chessman, MergeTwoSplitsSplittingRealMergingRealWithFake) {
 }
 
 TEST(Chessman, TwoSplitsSplittingFakeMergingFakes) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -469,7 +468,7 @@ TEST(Chessman, TwoSplitsSplittingFakeMergingFakes) {
 }
 
 TEST(Chessman, SplitThenMoveSplittedThenMerge) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -485,7 +484,7 @@ TEST(Chessman, SplitThenMoveSplittedThenMerge) {
 }
 
 TEST(Chessman, MergeOneSplitToPositionOfOneOfThem) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -497,7 +496,7 @@ TEST(Chessman, MergeOneSplitToPositionOfOneOfThem) {
 }
 
 TEST(Chessman, MergeOneSplitToPositionInTheSameLine) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -508,7 +507,7 @@ TEST(Chessman, MergeOneSplitToPositionInTheSameLine) {
 }
 
 TEST(Chessman, OneBadMergeToInvalidPosition) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -520,7 +519,7 @@ TEST(Chessman, OneBadMergeToInvalidPosition) {
 }
 
 TEST(Chessman, MergeFromSamePosition) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -533,7 +532,7 @@ TEST(Chessman, MergeFromSamePosition) {
 
 
 TEST(Chessman, OneSplitMeasureReal) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -546,7 +545,7 @@ TEST(Chessman, OneSplitMeasureReal) {
 }
 
 TEST(Chessman, OneSplitMeasureFake) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -559,7 +558,7 @@ TEST(Chessman, OneSplitMeasureFake) {
 }
 
 TEST(Chessman, TwoSplitsSplittingRealMeasureReal) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -573,7 +572,7 @@ TEST(Chessman, TwoSplitsSplittingRealMeasureReal) {
 }
 
 TEST(Chessman, TwoSplitsSplittingRealMeasureFakeFirstSplit) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -588,7 +587,7 @@ TEST(Chessman, TwoSplitsSplittingRealMeasureFakeFirstSplit) {
 }
 
 TEST(Chessman, TwoSplitsSplittingRealMeasureFakeSecondSplit) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -604,7 +603,7 @@ TEST(Chessman, TwoSplitsSplittingRealMeasureFakeSecondSplit) {
 }
 
 TEST(Chessman, TwoSplitsSplittingFakeMeasuringOneOfThem) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -620,7 +619,7 @@ TEST(Chessman, TwoSplitsSplittingFakeMeasuringOneOfThem) {
 }
 
 TEST(Chessman, MeasureOtherPosition) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
@@ -631,7 +630,7 @@ TEST(Chessman, MeasureOtherPosition) {
 }
 
 TEST(Chessman, MoveWithTwoQuantumInTheMiddle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -643,7 +642,7 @@ TEST(Chessman, MoveWithTwoQuantumInTheMiddle) {
 }
 
 TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfSameColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -658,7 +657,7 @@ TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfSameColor) {
 }
 
 TEST(Chessman, MoveClassicWithMeasureToRealQuantumPieceOfSameColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -673,7 +672,7 @@ TEST(Chessman, MoveClassicWithMeasureToRealQuantumPieceOfSameColor) {
 }
 
 TEST(Chessman, MoveClassicWithMeasureToRealQuantumPieceOfDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -687,7 +686,7 @@ TEST(Chessman, MoveClassicWithMeasureToRealQuantumPieceOfDifferentColor) {
 }
 
 TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -704,7 +703,7 @@ TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfDifferentColor) {
 
 // TODO que pasa si son del mismo palo.
 TEST(Chessman, MoveRealQPieceWithMeasureToClassicAndCaptureDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -718,7 +717,7 @@ TEST(Chessman, MoveRealQPieceWithMeasureToClassicAndCaptureDifferentColor) {
 }
 
 TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -734,7 +733,7 @@ TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceDifferentColor) {
 }
 
 TEST(Chessman, MoveRealQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -744,7 +743,7 @@ TEST(Chessman, MoveRealQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
 }
 
 TEST(Chessman, MoveFakeQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -754,7 +753,7 @@ TEST(Chessman, MoveFakeQuantumPieceWithMeasureToClassicAndCaptureSameColor) {
 }
 
 TEST(Chessman, MoveMeasureFromRealQuantumToRealQuantumOfDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('Q', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -769,7 +768,7 @@ TEST(Chessman, MoveMeasureFromRealQuantumToRealQuantumOfDifferentColor) {
 }
 
 TEST(Chessman, MoveMeasureFromRealQuantumToFakeQuantumOfDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('Q', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -785,7 +784,7 @@ TEST(Chessman, MoveMeasureFromRealQuantumToFakeQuantumOfDifferentColor) {
 }
 
 TEST(Chessman, MoveMeasureFromFakeQuantumToRealQuantumOfDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('Q', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -801,7 +800,7 @@ TEST(Chessman, MoveMeasureFromFakeQuantumToRealQuantumOfDifferentColor) {
 }
 
 TEST(Chessman, MoveMeasureFromFakeQuantumToFakeQuantumOfDifferentColor) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('Q', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -817,7 +816,7 @@ TEST(Chessman, MoveMeasureFromFakeQuantumToFakeQuantumOfDifferentColor) {
 }
 
 TEST(Chessman, CantSplitAndEntangle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('Q', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -829,7 +828,7 @@ TEST(Chessman, CantSplitAndEntangle) {
 }
 
 TEST(Chessman, CantMergeAndEntangle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('Q', Position(0, 0), false);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -842,7 +841,7 @@ TEST(Chessman, CantMergeAndEntangle) {
 }
 
 TEST(Chessman, MoveWithOneQuantumFakeInTheMiddle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -857,7 +856,7 @@ TEST(Chessman, MoveWithOneQuantumFakeInTheMiddle) {
 
 // medir entre ellos.
 TEST(Chessman, EntangleWithRealThenMeasureTheOneInTheMiddleThatWasEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -876,7 +875,7 @@ TEST(Chessman, EntangleWithRealThenMeasureTheOneInTheMiddleThatWasEntangled) {
 
 TEST(Chessman,
      EntangleWithRealThenMeasureTheOneInTheMiddleThatWasNotEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -894,7 +893,7 @@ TEST(Chessman,
 }
 
 TEST(Chessman, EntangleWithFakeThenMeasureTheOneInTheMiddleThatWasEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -912,7 +911,7 @@ TEST(Chessman, EntangleWithFakeThenMeasureTheOneInTheMiddleThatWasEntangled) {
 }
 
 TEST(Chessman, EntangleThenMoveBothPiecesThenMeasure) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -935,7 +934,7 @@ TEST(Chessman, EntangleThenMoveBothPiecesThenMeasure) {
 
 TEST(Chessman,
      EntangleWithFakeThenMeasureTheOneInTheMiddleThatWasNotEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -953,7 +952,7 @@ TEST(Chessman,
 }
 
 TEST(Chessman, EntangleWithRealThenSplitTheNonEntangledAndMeasureBothOfThem) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -982,7 +981,7 @@ TEST(Chessman, EntangleWithRealThenSplitTheNonEntangledAndMeasureBothOfThem) {
 }
 
 TEST(Chessman, EntangleWithFakeThenSplitEntangledThenMeasureNonMiddle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -1002,7 +1001,7 @@ TEST(Chessman, EntangleWithFakeThenSplitEntangledThenMeasureNonMiddle) {
 }
 
 TEST(Chessman, EntangleWithRealThenSplitGeneratedThenMeasureOriginal) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -1024,7 +1023,7 @@ TEST(Chessman, EntangleWithRealThenSplitGeneratedThenMeasureOriginal) {
 
 
 TEST(Chessman, EntangleWithFakethenSplitNotEntangledAndMeasureEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(1, 1));
@@ -1045,7 +1044,7 @@ TEST(Chessman, EntangleWithFakethenSplitNotEntangledAndMeasureEntangled) {
 }
 
 TEST(Chessman, DoubleEntangleWithRealThenMeasureMiddle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   board.addNewChessman('B', Position(2, 6), true);
@@ -1073,7 +1072,7 @@ TEST(Chessman, DoubleEntangleWithRealThenMeasureMiddle) {
 }
 
 TEST(Chessman, DoubleEntangleWithFakeThenMeasureMiddle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   board.addNewChessman('B', Position(2, 6), true);
@@ -1101,7 +1100,7 @@ TEST(Chessman, DoubleEntangleWithFakeThenMeasureMiddle) {
 }
 
 TEST(Chessman, DoubleEntangleWithRealThenMeasureOneOfOthers) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   board.addNewChessman('B', Position(2, 6), true);
@@ -1129,7 +1128,7 @@ TEST(Chessman, DoubleEntangleWithRealThenMeasureOneOfOthers) {
 }
 
 TEST(Chessman, DoubleEntangleWithFakeThenMeasureOneOfOthers) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   board.addNewChessman('B', Position(2, 6), true);
@@ -1156,8 +1155,8 @@ TEST(Chessman, DoubleEntangleWithFakeThenMeasureOneOfOthers) {
   EXPECT_EQ(queen->countPositions(), 1);
 }
 
-TEST(Chessman, DoubleEntangleSamePiecesEntangleWithFakeMeasurenInitialFake) {
-  Board board(0);
+TEST(Chessman, DoubleEntangleSamePieceFail) {
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(4, 3));
@@ -1170,7 +1169,7 @@ TEST(Chessman, DoubleEntangleSamePiecesEntangleWithFakeMeasurenInitialFake) {
 }
 
 TEST(Chessman, SplitUntilReachLimit) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(0, 0));
 
@@ -1201,7 +1200,7 @@ TEST(Chessman, SplitUntilReachLimit) {
 }
 
 TEST(Chessman, EntangleThenSplitThenMergeThenMeasure) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(4, 3));
@@ -1223,7 +1222,7 @@ TEST(Chessman, EntangleThenSplitThenMergeThenMeasure) {
 }
 
 TEST(Chessman, EntangleThenSplitTHenMergeThenMeasure) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(4, 3), true);
   board.addNewChessman('B', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(4, 3));
@@ -1247,7 +1246,7 @@ TEST(Chessman, EntangleThenSplitTHenMergeThenMeasure) {
 
 TEST(Chessman,
      EntangleThenMergeOneEntangledOtherNonEntangledThenMeasEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(0, 0), true);
   board.addNewChessman('Q', Position(4, 3), true);
   Chessman *queen_2 = board.getChessmanAt(Position(4, 3));
@@ -1274,7 +1273,7 @@ TEST(Chessman,
 
 TEST(Chessman,
      EntangleThenSplitThenMergeOneEntangledOtherNonEntangledThenMeasEntangled) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(0, 0), true);
   board.addNewChessman('Q', Position(4, 3), true);
   Chessman *queen_2 = board.getChessmanAt(Position(4, 3));
@@ -1301,7 +1300,7 @@ TEST(Chessman,
 }
 
 TEST(Chessman, EntangleWithItselfFails) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('Q', Position(0, 0), true);
   Chessman *queen = board.getChessmanAt(Position(0, 0));
 
@@ -1311,7 +1310,7 @@ TEST(Chessman, EntangleWithItselfFails) {
 }
 
 TEST(Pawn, PawnCannotSplitMergeNorEntangle) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('P', Position(5, 0), true);
   board.addNewChessman('Q', Position(4, 0), true);
   Chessman *pawn = board.getChessmanAt(Position(5, 0));
@@ -1328,13 +1327,13 @@ TEST(Pawn, PawnCannotSplitMergeNorEntangle) {
 }
 
 TEST(Chessman, calculatePosibleSplitsWithEmptyBoardAndEnemy) {
-  Board board(0);
+  Board board(false);
   board.addNewChessman('T', Position(5, 1), true);
   Chessman *tower = board.getChessmanAt(Position(5, 1));
 
   std::list<Position> posible_splits;
 
-  tower->calculatePosibleSplits(Position(5, 1), posible_splits);
+  tower->calculatePossibleSplits(Position(5, 1), posible_splits);
 
   std::list<Position> posible_splits_gt = {
           Position(5, 0), Position(5, 2),
@@ -1349,7 +1348,7 @@ TEST(Chessman, calculatePosibleSplitsWithEmptyBoardAndEnemy) {
   EXPECT_EQ(posible_splits, posible_splits_gt);
 
   board.addNewChessman('Q', Position(5, 7), false);
-  tower->calculatePosibleSplits(Position(5, 1), posible_splits);
+  tower->calculatePossibleSplits(Position(5, 1), posible_splits);
 
   posible_splits_gt = {
           Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
@@ -1369,7 +1368,7 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndEnemy) {
 
   tower->split(Position(4, 1), Position(5, 1), Position(4, 2));
 
-  tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+  tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   std::list<Position> posible_merges_gt = {
           Position(5, 0), Position(5, 2),
@@ -1384,7 +1383,7 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndEnemy) {
   EXPECT_EQ(posible_merges, posible_merges_gt);
 
   board.addNewChessman('Q', Position(5, 7), false);
-  tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+  tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   posible_merges_gt = {
           Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
@@ -1404,7 +1403,7 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndAlly) {
 
   tower->split(Position(4, 1), Position(5, 1), Position(4, 2));
 
-  tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+  tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   std::list<Position> posible_merges_gt = {
           Position(5, 0), Position(5, 2),
@@ -1419,7 +1418,7 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndAlly) {
   EXPECT_EQ(posible_merges, posible_merges_gt);
 
   board.addNewChessman('Q', Position(5, 7), true);
-  tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+  tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   posible_merges_gt = {
           Position(5, 0), Position(5, 2),
@@ -1440,7 +1439,7 @@ TEST(Chessman, MergeOnClassicChessmanDoesntHaveAnyPossibleMerge) {
   Chessman *tower = board.getChessmanAt(Position(5, 1));
   std::list<Position> posible_merges;
 
-  tower->calculatePosibleMerges(Position(5, 1), posible_merges);
+  tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   std::list<Position> posible_merges_gt = {};
 
@@ -1462,4 +1461,233 @@ TEST(Chessman, CannotMergeDifferentChessman) {
                ChessException);
 }
 
+TEST(King, CastlingKingHasMovementAvailableWithTowerToLeft) {
+  Board board;
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
 
+  std::list<Position> posible_moves;
+
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0), Position(2, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(King, CastlingKingHasMovementAvailableWithTowerToRight) {
+  Board board;
+  board.addNewChessman('T', Position(7, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+
+  std::list<Position> posible_moves;
+
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0), Position(6, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(King, AlreadyMovedTowerCantCastle) {
+  Board board;
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+
+  std::list<Position> posible_moves;
+
+  tower->move(Position(0, 0), Position(1, 0));
+  tower->move(Position(1, 0), Position(0, 0));
+
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(King, AlreadyMovedKingCantCastle) {
+  Board board;
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+
+  std::list<Position> posible_moves;
+
+  king->move(Position(4, 0), Position(5, 0));
+  king->move(Position(5, 0), Position(4, 0));
+
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(King, CantLongCastleWithClassicPieceInTheMiddleInLongCastling) {
+  Board board;
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  board.addNewChessman('Q', Position(3, 0), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+  Chessman *queen = board.getChessmanAt(Position(3, 0));
+
+  std::list<Position> posible_moves;
+
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+  };
+
+  queen->move(Position(3, 0), Position(2, 0));
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+
+  queen->move(Position(2, 0), Position(1, 0));
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(King, LongCastleWithQuantumPieceInTheMiddle) {
+  Board board;
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  board.addNewChessman('Q', Position(3, 1), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+  Chessman *queen = board.getChessmanAt(Position(3, 1));
+
+  queen->split(Position(3, 1), Position(3, 2), Position(3, 0));
+
+  std::list<Position> posible_moves;
+
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+  };
+
+  queen->move(Position(3, 0), Position(2, 0));
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+
+  queen->move(Position(2, 0), Position(1, 0));
+  king->calculatePossibleMoves(Position(4, 0), posible_moves);
+
+  posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0),
+          Position(2, 0)
+  };
+
+  EXPECT_EQ(posible_moves, posible_moves_gt);
+}
+
+TEST(King, LongCastleMoveWithQuantumInTheMiddleAndThenMeasureQueenWasThere) {
+  Board board(false);
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  board.addNewChessman('Q', Position(0, 1), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+  Chessman *queen = board.getChessmanAt(Position(0, 1));
+
+  queen->split(Position(0, 1), Position(1, 0), Position(1, 1));
+
+  std::list<Position> posible_moves;
+
+  king->move(Position(4, 0), Position(2, 0));
+
+  EXPECT_EQ(king->getPosition(), QuantumPosition(4, 0, 0.5));
+  EXPECT_EQ(king->getPosition(1), QuantumPosition(2, 0, 0.5));
+  EXPECT_EQ(king->countPositions(), 2);
+  EXPECT_EQ(tower->getPosition(), QuantumPosition(0, 0, 0.5));
+  EXPECT_EQ(tower->getPosition(1), QuantumPosition(3, 0, 0.5));
+  EXPECT_EQ(tower->countPositions(), 2);
+
+  queen->measure(Position(1, 1));
+
+  EXPECT_EQ(queen->getPosition(), QuantumPosition(1, 0, 1));
+  EXPECT_EQ(queen->countPositions(), 1);
+  EXPECT_EQ(king->getPosition(), QuantumPosition(4, 0, 1));
+  EXPECT_EQ(king->countPositions(), 1);
+  EXPECT_EQ(tower->getPosition(), QuantumPosition(0, 0, 1));
+  EXPECT_EQ(tower->countPositions(), 1);
+}
+
+TEST(King, LongCastleMoveWithQuantumInTheMiddleAndThenMeasureQueenWasNotThere) {
+  Board board(false);
+  board.addNewChessman('T', Position(0, 0), true);
+  board.addNewChessman('K', Position(4, 0), true);
+  board.addNewChessman('Q', Position(0, 1), true);
+  Chessman *tower = board.getChessmanAt(Position(0, 0));
+  Chessman *king = board.getChessmanAt(Position(4, 0));
+  Chessman *queen = board.getChessmanAt(Position(0, 1));
+
+  queen->split(Position(0, 1), Position(1, 1), Position(1, 0));
+
+  std::list<Position> posible_moves;
+
+  king->move(Position(4, 0), Position(2, 0));
+
+  EXPECT_EQ(king->getPosition(), QuantumPosition(2, 0, 0.5));
+  EXPECT_EQ(king->getPosition(1), QuantumPosition(4, 0, 0.5));
+  EXPECT_EQ(king->countPositions(), 2);
+  EXPECT_EQ(tower->getPosition(), QuantumPosition(3, 0, 0.5));
+  EXPECT_EQ(tower->getPosition(1), QuantumPosition(0, 0, 0.5));
+  EXPECT_EQ(tower->countPositions(), 2);
+
+  queen->measure(Position(1, 1));
+
+  EXPECT_EQ(queen->getPosition(), QuantumPosition(1, 1, 1));
+  EXPECT_EQ(queen->countPositions(), 1);
+  EXPECT_EQ(king->getPosition(), QuantumPosition(2, 0, 1));
+  EXPECT_EQ(king->countPositions(), 1);
+  EXPECT_EQ(tower->getPosition(), QuantumPosition(3, 0, 1));
+  EXPECT_EQ(tower->countPositions(), 1);
+}

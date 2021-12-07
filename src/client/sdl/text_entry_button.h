@@ -2,8 +2,6 @@
 #define QUANTUM_CHESS_PROJ_TEXT_ENTRY_BUTTON_H
 
 #include "pixel_coordinate.h"
-#include "texture_sprite.h"
-#include "renderer.h"
 #include "chat/text_entry.h"
 #include "drawable_text_entry_button.h"
 #include <string>
@@ -11,34 +9,35 @@
 
 class TextEntryButton {
 private:
-    TextEntry text_entry;
-    DrawableTextEntryButton drawable_text_button;
-    mutable std::mutex mutex;
-    bool expecting_text_entry;
-    std::string input_text;
+  TextEntry text_entry;
+  DrawableTextEntryButton drawable_text_button;
+  mutable std::mutex mutex;
+  bool expecting_text_entry;
 
 public:
 
-    TextEntryButton() = delete;
+  TextEntryButton() = delete;
 
-    TextEntryButton(Renderer& renderer_, const std::string& button_name_);
+  TextEntryButton(ButtonSpriteRepository &button_repository,
+                  TextSpriteRepository &text_repository,
+                  const std::string &button_name_);
 
-    void setAreaAndPosition(int x_, int y_, int height_, int width_);
+  void setAreaAndPosition(int x_, int y_, int width, int height);
 
-    bool enableTextEntryIfClicked(const PixelCoordinate& pixel);
+  bool enableTextEntryIfClicked(const PixelCoordinate &pixel);
 
-    void render();
+  void concatIfEnabled(const std::string &text_);
 
-    void concatIfEnabled(const std::string &text_);
+  void backspaceIfEnabled();
 
-    void backSpaceIfEnabled();
+  std::string getText() const;
 
-    std::string getText() const;
+  void disableTextEntry();
 
-    void disableTextEntry();
+  void render();
 
 private:
-    bool pixelIsOnTextEntry(const PixelCoordinate& pixel);
+  bool pixelIsOnTextEntry(const PixelCoordinate &pixel);
 };
 
 

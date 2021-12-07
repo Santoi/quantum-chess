@@ -1,84 +1,111 @@
 #include "button.h"
 #include "drawable_button.h"
+#include "../../common/src/client_data.h"
 #include <iostream>
 
-Button::Button(Renderer& renderer_, const std::string& not_pressed_file_name,
-               const std::string& pressed_file_name)
-        :drawable(renderer_, not_pressed_file_name, pressed_file_name) {
+Button::Button(ButtonSpriteRepository &button_repository,
+               TextSpriteRepository &text_repository, std::string &&type,
+               std::string &&text)
+    : drawable(button_repository, text_repository, std::move(type),
+               std::move(text)) {
 }
 
 void Button::render() {
-    drawable.render();
+  drawable.render();
 }
 
-void Button::setAreaAndPosition(int x_, int y_, int height_, int width_) {
-    drawable.setAreaAndPosition(x_, y_, height_, width_);
+void Button::setAreaAndPosition(int x, int y, int width, int height) {
+  drawable.setAreaAndPosition(x, y, width, height);
 }
 
 void Button::resetButton() {
-    drawable.disablePressedStatus();
+  drawable.disablePressedStatus();
 }
 
-ConnectButton::ConnectButton(Renderer& renderer,
-                             const std::vector<std::unique_ptr<TextEntryButton>>& text_entry_buttons_ptr)
-                :Button(renderer, "img/buttons/not_pressed1.png",
-                        "img/buttons/pressed.png"),
-                 text_entries(text_entry_buttons_ptr) {
+ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
+                             TextSpriteRepository &text_repository,
+                             std::string &&button_text,
+                             const std::list<TextEntryButton> &text_entry_buttons)
+    : Button(button_repository, text_repository, "action",
+             std::move(button_text)),
+      text_entries(text_entry_buttons) {}
+
+bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                        std::list<std::string> &tokens) {
+  if (drawable.pixelIsOnButton(pixel_)) {
+    std::cout << "button pressed!!" << std::endl;
+    for (const auto &text_entry: text_entries)
+      tokens.push_back(text_entry.getText());
+    return true;
+  }
+  std::cout << "button not pressed" << std::endl;
+  return false;
 }
 
-bool ConnectButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    if (drawable.pixelIsOnButton(pixel_)) {
-        std::cout << "button pressed!!" <<std::endl;
-        std::vector<std::unique_ptr<TextEntryButton>>::const_iterator it;
-        for (it = text_entries.begin(); it != text_entries.end(); it++)
-            tokens.push_back((*it)->getText());
-        return true;
+PickMatchButton::PickMatchButton(ButtonSpriteRepository &button_repository,
+                                 TextSpriteRepository &text_repository,
+                                 std::vector<ClientData> &client_data,
+                                 uint16_t match_id)
+    : Button(button_repository, text_repository, "match", ""),
+      match_id(match_id) {
+  std::string match_info = "#" + std::to_string(match_id) + ": ";
+  for (auto &client: client_data) {
+    char role;
+    switch (client.role) {
+      case ClientData::ROLE_WHITE:
+        role = 'w';
+        break;
+      case ClientData::ROLE_BLACK:
+        role = 'b';
+        break;
+      case ClientData::ROLE_SPECTATOR:
+        role = 'o';
+        break;
+      default:
+        role = ' ';
     }
-    std::cout << "button not pressed" <<std::endl;
-    return false;
+    match_info += client.name + "#" + std::to_string(client.id) + "("
+                  + role + "), ";
+  }
+
 }
 
-PickMatchButton::PickMatchButton(Renderer& renderer, int match_number_, std::vector<ClientData>&& clients_)
-                :Button(renderer, "img/buttons/not_pressed_match_button.png",
-                        "img/buttons/pressed_match_button.png"),
-                        match_number(match_number_), clients(clients_) {
-    //Drawable aux(renderer, )
-    //drawable =
+bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                          std::list<std::string> &tokens) {
+  if (drawable.pixelIsOnButton(pixel_)) {
+    std::cout << "match button pressed!!" << std::endl;
+    std::string str_match_number = std::to_string(match_id);
+    tokens.push_back(std::move(str_match_number));
+    return true;
+  }
+  std::cout << "button not pressed" << std::endl;
+  return false;
 }
 
-bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    if (drawable.pixelIsOnButton(pixel_)) {
-        std::cout << "match button pressed!!" <<std::endl;
-        std::vector<std::unique_ptr<TextEntryButton>>::const_iterator it;
-        std::string str_match_number = std::to_string(match_number);
-        tokens.push_back(std::move(str_match_number));
-        return true;
-    }
-    std::cout << "button not pressed" <<std::endl;
-    return false;
+RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
+                       TextSpriteRepository &text_repository,
+                       ClientData::Role role_,
+                       bool role_is_available_)
+    : Button(button_repository, text_repository, "role", ""), role(role_),
+      role_is_available(role_is_available_) {
 }
 
-RoleButton::RoleButton(Renderer& renderer_, ClientData::Role role_, bool role_is_available_,
-                       const std::string& not_pressed_file_name, const std::string& pressed_file_name)
-            :Button(renderer_, not_pressed_file_name, pressed_file_name), role(role_),
-             role_is_available(role_is_available_) {
-}
-
-void RoleButton::addEnumToListOfTokens(std::list<std::string>& tokens) {
-    if (role == ClientData::ROLE_WHITE)
-        tokens.push_back("ROLE_WHITE");
-    else if (role == ClientData::ROLE_BLACK)
-        tokens.push_back("ROLE_BLACK");
-    else
-        tokens.push_back("ROLE_SPECTATOR");
+void RoleButton::addEnumToListOfTokens(std::list<std::string> &tokens) {
+  if (role == ClientData::ROLE_WHITE)
+    tokens.push_back("ROLE_WHITE");
+  else if (role == ClientData::ROLE_BLACK)
+    tokens.push_back("ROLE_BLACK");
+  else
+    tokens.push_back("ROLE_SPECTATOR");
 }
 
 
-bool RoleButton::fillTokensIfClicked(const PixelCoordinate& pixel_, std::list<std::string>& tokens) {
-    if (drawable.pixelIsOnButton(pixel_)) {
-        if (role_is_available)
-            addEnumToListOfTokens(tokens);
-        return true;
-    }
-    return false;
+bool RoleButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                     std::list<std::string> &tokens) {
+  if (drawable.pixelIsOnButton(pixel_)) {
+    if (role_is_available)
+      addEnumToListOfTokens(tokens);
+    return true;
+  }
+  return false;
 }

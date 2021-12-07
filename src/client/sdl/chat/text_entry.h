@@ -17,8 +17,10 @@ public:
 
   void disableEntry();
 
+  bool isEnabled();
+
   // Concatenate string if length is less than limit
-  void concat(const std::string &text_);
+  bool concat(const std::string &text_);
 
   // Delete last character
   void backspace();

@@ -4,6 +4,7 @@
 
 #include "drawable_text.h"
 #include <list>
+#include <mutex>
 
 #define NO_LIMIT -1
 
@@ -12,7 +13,7 @@ template<class T>
 class DrawableContainer {
 private:
   std::list<T> drawables_list;
-  int max_drawables;
+  size_t max_drawables;
 
 public:
   DrawableContainer();
@@ -22,23 +23,30 @@ public:
   void addDrawable(T &&drawable);
 
   void render(int x, int y);
+
+  void clear();
 };
 
 template<class T>
 DrawableContainer<T>::DrawableContainer()
-    :max_drawables(NO_LIMIT) {
+        :max_drawables(NO_LIMIT) {
 }
 
 template<class T>
 DrawableContainer<T>::DrawableContainer(unsigned int max_drawables_)
-    :max_drawables(max_drawables_) {
+        :max_drawables(max_drawables_) {
 }
 
 template<class T>
 void DrawableContainer<T>::addDrawable(T &&drawable) {
-  if (drawables_list.size() == this->max_drawables)
-    drawables_list.pop_front();
-  drawables_list.push_back(std::move(drawable));
+  if (drawables_list.size() == max_drawables)
+    drawables_list.pop_back();
+  drawables_list.push_front(std::move(drawable));
+}
+
+template<class T>
+void DrawableContainer<T>::clear() {
+  drawables_list.clear();
 }
 
 template<class T>

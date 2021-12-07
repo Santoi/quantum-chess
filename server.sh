@@ -1,1 +1,1 @@
-./build/src/server/src/server 8055
+./build/src/server/src/server "$1" ${2-default.txt}

@@ -3,10 +3,12 @@
 
 #include <map>
 #include <vector>
+#include <stack>
 #include <memory>
 #include "position.h"
 #include "chessman/chessman.h"
 #include "pseudo_random_coin.h"
+#include "chessman/entanglement_log.h"
 
 #define LOADER_COMMENT '#'
 
@@ -23,6 +25,9 @@ class Board {
   std::map<const Position, Chessman *> board;
   bool next_white;
   PseudoRandomCoin coin;
+  EntanglementLog entanglement_log;
+  bool finished;
+  std::stack<std::string> chess_log;
 
 
   std::unique_ptr<Chessman>
@@ -31,11 +36,11 @@ class Board {
 public:
   Board();
 
-  explicit Board(int seed);
+  explicit Board(bool random);
 
   /* Mueve la pieza en la posicion inicial a la final, validando
    * el movimiento. */
-  void move(const Position &initial, const Position &final, bool player_white);
+  bool move(const Position &initial, const Position &final, bool player_white);
 
   void split(const Position &initial, const Position &pos1,
              const Position &pos2, bool player_white);
@@ -53,7 +58,7 @@ public:
   void addChessmanOfIn(const Position &initial, const Position &final);
 
   // Carga el tablero con las posiciones iniciales del ajedrez.
-  void load(const std::string &filename);
+  void load(std::ifstream &file);
 
   // Devuelve true si el siguiente turno es de las blancas.
   bool isNextWhite() const;
@@ -87,6 +92,12 @@ public:
   std::list<Position> getPositionsOf(const Position &position1);
 
   std::list<Position> getEntangledOf(const Position &position1);
+
+  void endGame();
+
+  void pushToLog(std::string);
+
+  void popLog(std::list<std::string> &popped);
 };
 
 

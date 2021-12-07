@@ -171,7 +171,6 @@ void Client::execute() {
   // if we are here the client is connected to a match
   Socket socket = login.getClientSocket();
   client_nick_name = login.getClientNickName();//TODO borrar
-  std::cout << client_nick_name << std::endl;
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 //  setUpClientsDataInServer(socket);

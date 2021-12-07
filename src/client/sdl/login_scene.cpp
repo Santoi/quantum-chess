@@ -42,10 +42,10 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                     button_height);
 }
 
-void LoginScene::renderIPAndPortFields(Button &connect_button,
-                                       TextEntryButton &ip_text_entry,
-                                       TextEntryButton &port_text_entry,
-                                       TextEntryButton &name_text_entry) {
+void LoginScene::renderConnectionToServerFields(Button &connect_button,
+                                                TextEntryButton &ip_text_entry,
+                                                TextEntryButton &port_text_entry,
+                                                TextEntryButton &name_text_entry) {
   setConnectionButtonsDimensions(connect_button, ip_text_entry,
                                  port_text_entry, name_text_entry);
   ip_text_entry.render();
@@ -58,9 +58,10 @@ void LoginScene::renderMatchButtons(
     std::vector<std::unique_ptr<Button>> &match_buttons) {
   int width = window.getWidth();
   int height = window.getHeight();
+  int button_width = width * .9;
   int i = 0;
   for (auto &button: match_buttons) {
-    button->setAreaAndPosition(10, ++i * 200,
+    button->setAreaAndPosition(width / 2 - button_width / 2, ++i * 200,
                                0.1 * width, 0.1 * height);
     button->render();
   }
@@ -75,12 +76,12 @@ void LoginScene::renderConnectedSprite(TextureSprite &texture) {
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
                                     Button &spectator_role_button) {
-    int width = window.getWidth();
-    int height = window.getHeight();
-    white_role_button.setAreaAndPosition(100, 100, 0.2 * width, 0.2 * height);
-    white_role_button.render();
-    black_role_button.setAreaAndPosition(350, 100, 0.2 * width, 0.2 * height);
-    black_role_button.render();
-    spectator_role_button.setAreaAndPosition(600, 100, 0.2 * width, 0.2 * height);
-    spectator_role_button.render();
+  int width = window.getWidth();
+  int height = window.getHeight();
+  white_role_button.setAreaAndPosition(100, 100, 0.2 * height, 0.2 * width);
+  white_role_button.render();
+  black_role_button.setAreaAndPosition(250, 100, 0.2 * height, 0.2 * width);
+  black_role_button.render();
+  spectator_role_button.setAreaAndPosition(400, 100, 0.2 * height, 0.2 * width);
+  spectator_role_button.render();
 }

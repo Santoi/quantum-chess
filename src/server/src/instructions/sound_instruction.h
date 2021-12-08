@@ -17,9 +17,9 @@ public:
   SoundInstruction() = delete;
 
   //Creates a ChatInstruction, saving the client_id and message passed to the function parameters.
-  SoundInstruction(uint8_t sound_);
+  explicit SoundInstruction(uint8_t sound_);
 
-  //Creates a new ChatInstruction and sends it to all listening queues.
+  // Does nothing
   void makeActionAndNotify(Match &match) override;
 
   //Gets the instructor's nickname from the ClientDataRepository using the object's instructor_id

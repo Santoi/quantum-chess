@@ -15,11 +15,14 @@ public:
                    const Position &from_, const Position &to1_,
                    const Position &to2_);
 
+  // Performs a split on the board.
   void makeActionAndNotify(Match &match) override;
 
+  // Does nothing.
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

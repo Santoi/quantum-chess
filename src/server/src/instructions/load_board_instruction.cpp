@@ -1,10 +1,7 @@
 #include <vector>
 #include "load_board_instruction.h"
-#include "../../../common/src/blocking_queue.h"
-#include "../../../client/position.h" // TODO: can use server's position?
+#include "../quantum_chess/position.h"
 
-
-// TODO ver si hacer una clase chessman_data o incluir la de common.
 LoadBoardInstruction::LoadBoardInstruction()
         : data(), white(true) {}
 

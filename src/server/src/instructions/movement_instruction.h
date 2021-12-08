@@ -14,11 +14,14 @@ public:
                       const Position &initial_,
                       const Position &final_);
 
+  // Performs move in board, send event log and sound if a chessman is captured.
   void makeActionAndNotify(Match &match) override;
 
+  // Does nothing
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

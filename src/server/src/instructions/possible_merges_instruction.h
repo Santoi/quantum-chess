@@ -11,8 +11,10 @@ public:
   PossibleMergesInstruction(const ClientData &instructor_data,
                             std::list<Position> &&pos);
 
+  // Gets information about possible merges and sends it to client.
   void makeActionAndNotify(Match &match) override;
 
+  // Does nothing.
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
                                   const ClientData &client_receiver_data) override;

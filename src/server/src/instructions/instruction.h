@@ -21,12 +21,10 @@ class Instruction {
 public:
   Instruction() = default;
 
-  //Given the list of listening queues and the client's vector, it makes the appropiate action
-  //and notifies all queues of the changes.
+  // Performs the instruction action and notifies
   virtual void makeActionAndNotify(Match &match) = 0;
 
-  //The derived Instruction class asks the protocol to fill the given packet with the information
-  //accordingly.
+  // Loads a packet with instruction to be sent to client.
   virtual void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
                                   const ClientData &client_receiver_data) = 0;

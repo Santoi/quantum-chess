@@ -11,6 +11,8 @@ public:
   SameChessmanInstruction(const ClientData &instructor_data,
                           std::list<Position> &&pos);
 
+  // Gets information about other parts of the same chessman and sends it to
+  // client.
   void makeActionAndNotify(Match &match) override;
 
   void

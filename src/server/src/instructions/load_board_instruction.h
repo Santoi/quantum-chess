@@ -13,13 +13,14 @@ class LoadBoardInstruction : public Instruction {
 public:
   LoadBoardInstruction();
 
+  // Loads data from vector and notifies all clients.
   void makeActionAndNotify(Match &match) override;
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
                                   const ClientData &client_receiver_data) override;
 
-
+  ~LoadBoardInstruction() override = default;
 };
 
 

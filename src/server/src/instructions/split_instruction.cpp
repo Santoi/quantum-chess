@@ -14,7 +14,6 @@ SplitInstruction::SplitInstruction(const ClientData &instructor_data,
 
 
 void SplitInstruction::makeActionAndNotify(Match &match) {
-  // TODO validar color, permisos, etc
   try {
     if (instructor_data.role == ClientData::ROLE_SPECTATOR)
       throw ChessException("you cannot move been spectator");
@@ -47,5 +46,5 @@ void SplitInstruction::makeActionAndNotify(Match &match) {
 void
 SplitInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
                                                   Packet &packet,
-                                                  const ClientData &client_receiver_data) {
-}
+                                                  const ClientData
+                                                  &client_receiver_data) {}

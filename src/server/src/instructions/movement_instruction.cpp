@@ -13,8 +13,7 @@ MovementInstruction::MovementInstruction(const ClientData &instructor_data,
 
 
 void MovementInstruction::makeActionAndNotify(Match &match) {
-  // TODO validar color, permisos, etc
-  bool capture = false;
+  bool capture;
   try {
     if (instructor_data.role == ClientData::ROLE_SPECTATOR)
       throw ChessException("you cannot move been spectator");
@@ -49,5 +48,5 @@ void MovementInstruction::makeActionAndNotify(Match &match) {
 void
 MovementInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
                                                      Packet &packet,
-                                                     const ClientData &client_receiver_data) {
-}
+                                                     const ClientData
+                                                     &client_receiver_data) {}

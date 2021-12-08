@@ -11,6 +11,7 @@ public:
   PossibleMovesInstruction(const ClientData &instructor_data,
                            std::list<Position> &&pos);
 
+  // Gets information about possible moves and sends it to client.
   void makeActionAndNotify(Match &match) override;
 
   void

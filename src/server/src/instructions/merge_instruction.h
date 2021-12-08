@@ -15,6 +15,7 @@ public:
                    const Position &from1_, const Position &from2_,
                    const Position &to_);
 
+  // Performs merge in board, send event log and sound.
   void makeActionAndNotify(Match &match) override;
 
   void

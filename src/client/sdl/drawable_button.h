@@ -40,6 +40,8 @@ public:
   void setAreaAndPosition(int x_, int y_, int width_, int height_);
 
   ~DrawableButton() = default;
+
+  void enablePressedStatus();
 };
 
 #endif //QUANTUM_CHESS_PROJ_DRAWABLE_BUTTON_H

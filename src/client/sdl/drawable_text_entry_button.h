@@ -37,6 +37,7 @@ public:
   bool pixelIsOnTextEntry(const PixelCoordinate &pixel);
 
   void render(const std::string &current_text);
+
 };
 
 #endif //QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_ENTRY_BUTTON_H

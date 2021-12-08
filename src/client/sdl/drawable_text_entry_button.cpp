@@ -24,18 +24,20 @@ void DrawableTextEntryButton::setAreaAndPosition(int x_, int y_, int width_,
 
 bool DrawableTextEntryButton::pixelIsOnTextEntry(
     const PixelCoordinate &pixel) {
-    is_pressed = (pixel.x() > x && pixel.x() < x + width &&
-                 pixel.y() > y && pixel.y() < y + height);
+  is_pressed = (pixel.x() > x && pixel.x() < x + width &&
+                pixel.y() > y && pixel.y() < y + height);
   return is_pressed;
 }
 
 void DrawableTextEntryButton::render(const std::string &current_text) {
+  is_pressed ? text_box.enablePressedStatus() : text_box.disablePressedStatus();
   text_box.setAreaAndPosition(x, y, width, height);
   text_box.render();
   if (current_text.empty()) {
     text.setColor('d');
     text.setText(button_name);
   } else {
+    text.setColor('w');
     text.setText(current_text);
   }
   int text_x = x + width / 2 - text.getDrawableWidth() / 2;

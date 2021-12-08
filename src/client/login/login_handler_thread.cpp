@@ -79,16 +79,14 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     for (auto &active_text_entry: active_text_entries)
       active_text_entry.get().disableTextEntry();
     //enable text entry if pressed
+    expecting_text_entry = false;
     auto it2 = active_text_entries.begin();
     while (it2 != active_text_entries.end()) {
       if (it2->get().enableTextEntryIfClicked(pixel))
-        break;
+        expecting_text_entry = true;
       ++it2;
     }
-    if (it2 != active_text_entries.end())
-      expecting_text_entry = true;
-    else
-      expecting_text_entry = false;
+//    expecting_text_entry = it2 != active_text_entries.end();
   }
 }
 

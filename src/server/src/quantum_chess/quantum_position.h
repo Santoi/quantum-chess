@@ -54,13 +54,13 @@ public:
   // Sets position.
   void setPosition(const Position &position_);
 
-  // Measures Quantum position's chessman.
+  // Measures Quantum position's chessman_.
   void measure();
 
-  // Returns true if a chessman is equal to Quantum Position one.
+  // Returns true if a chessman_ is equal to Quantum Position one.
   bool isMyChessman(const Chessman &chessman_) const;
 
-  // Returns reference to its chessman.
+  // Returns reference to its chessman_.
   const Chessman &getChessman();
 };
 

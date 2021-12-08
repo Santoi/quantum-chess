@@ -255,19 +255,17 @@ void ServerProtocol::fillPacketWithExceptionMessage(Packet &packet,
 }
 
 void ServerProtocol::fillPacketWithLoadBoardMessage(Packet &packet,
-                                                    const std::vector<char> &characters,
-                                                    const std::vector<bool> &colors,
-                                                    const std::vector<Position> &positions,
-                                                    const std::vector<double> &probabilities,
+                                                    const std::vector<
+                                                            SquareData> &data,
                                                     bool white) {
   packet.addByte(LOAD_BOARD_PREFIX);
-  packet.addByte(characters.size());
-  for (uint16_t i = 0; i < characters.size(); i++) {
-    packet.addByte(characters[i]);
-    packet.addByte(colors[i]);
-    packet.addByte(positions[i].x());
-    packet.addByte(positions[i].y());
-    uint16_t prob_int = probabilities[i] * (UINT16_MAX + 1) - 1;
+  packet.addByte(data.size());
+  for (auto &square: data) {
+    packet.addByte(square.chessman);
+    packet.addByte(square.white);
+    packet.addByte(square.position.x());
+    packet.addByte(square.position.y());
+    uint16_t prob_int = square.probability * (UINT16_MAX + 1) - 1;
     changeNumberToBigEndianAndAddToPacket(packet, prob_int);
   }
   addNumber8ToPacket(packet, white);

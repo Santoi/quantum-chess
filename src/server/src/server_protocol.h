@@ -5,7 +5,7 @@
 #include "../../common/src/packet.h"
 #include "../../common/src/protocol.h"
 #include "quantum_chess/position.h"
-//#include "match.h"
+#include "quantum_chess/square_data.h"
 #include <memory>
 #include "../../common/src/protocol.h"
 #include "../../common/src/client_data.h"
@@ -74,10 +74,7 @@ public:
   // Fills a packet with a load board message.
   void
   fillPacketWithLoadBoardMessage(Packet &packet,
-                                 const std::vector<char> &characters,
-                                 const std::vector<bool> &colors,
-                                 const std::vector<Position> &positions,
-                                 const std::vector<double> &probabilities,
+                                 const std::vector<SquareData> &data,
                                  bool white);
 
   // Fills a packet with a message with possible moves.
@@ -101,7 +98,7 @@ public:
   ClientData::Role receivePlayerRole(Socket &socket,
                                      const std::list<ClientData::Role> &roles);
 
-  // Fill packet with a message with positions that are the same chessman.
+  // Fill packet with a message with positions that are the same chessman_.
   void fillPacketWithSameChessmanInstruction(Packet &packet,
                                              const std::list<Position> &positions);
 
@@ -151,7 +148,7 @@ private:
   fillPossibleMergesInstruction(Socket &socket, const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 
-  // Creates a same chessman instruction receiving the incoming message.
+  // Creates a same chessman_ instruction receiving the incoming message.
   void
   fillSameChessmanInstruction(Socket &socket, const ClientData &client_data,
                               std::shared_ptr<Instruction> &instruct_ptr);

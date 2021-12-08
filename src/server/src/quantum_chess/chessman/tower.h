@@ -25,7 +25,7 @@ public:
 
   ~Tower() override = default;
 
-  // Returns true if chessman has not moved yet.
+  // Returns true if chessman_ has not moved yet.
   bool hasNotMovedYet();
 
   void

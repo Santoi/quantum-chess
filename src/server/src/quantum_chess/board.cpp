@@ -6,6 +6,7 @@
 #include "chessman/bishop.h"
 #include "chessman/knight.h"
 #include "chessman/pawn.h"
+#include "square_data.h"
 #include <utility>
 #include <algorithm>
 #include <memory>
@@ -32,7 +33,7 @@ void Board::addNewChessman(char chessman_, Position position_,
   for (size_t i = 0; i < ptr->positionsAmount(); i++) {
     Position position = Position(ptr->getPosition(i));
     if (board.count(Position(position)))
-      throw ChessException("there is a chessman there already");
+      throw ChessException("there is a chessman_ there already");
     board.insert(std::make_pair(Position(position),
                                 ptr));
   }
@@ -46,9 +47,9 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
     throw ChessException("it is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("there is no chessman there");
+    throw ChessException("there is no chessman_ there");
   if (chessman->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman"
+    throw ChessException("you cannot move a chessman_"
                          " of the other player");
   bool capture = chessman->move(initial, final);
   next_white = !next_white;
@@ -63,9 +64,9 @@ void Board::split(const Position &initial, const Position &pos1,
     throw ChessException("it is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("there is no chessman there");
+    throw ChessException("there is no chessman_ there");
   if (chessman->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman"
+    throw ChessException("you cannot move a chessman_"
                          " of the other player");
   chessman->split(initial, pos1, pos2);
   next_white = !next_white;
@@ -80,12 +81,12 @@ void Board::merge(const Position &initial1, const Position &initial2,
   Chessman *chessman_1 = getChessmanAt(initial1),
           *chessman_2 = getChessmanAt(initial2);
   if (!chessman_1 || !chessman_2)
-    throw ChessException("there is no chessman there");
+    throw ChessException("there is no chessman_ there");
   if (chessman_1 != chessman_2)
     throw ChessException("you re trying to merge two different chessmen");
   if (chessman_1->isWhite() != player_white ||
       chessman_2->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman of the other"
+    throw ChessException("you cannot move a chessman_ of the other"
                          " player");
   chessman_1->merge(initial1, initial2, final);
   next_white = !next_white;
@@ -136,7 +137,7 @@ Board::getEntangledOf(const Position &position1, std::list<Position> &output) {
 
 void Board::addChessmanIn(const Position &position, Chessman *chessman) {
   if (board.count(position))
-    throw ChessException("there is a chessman there already");
+    throw ChessException("there is a chessman_ there already");
   board.insert(std::pair<Position, Chessman *>(Position(position),
                                                chessman));
 }
@@ -149,9 +150,9 @@ void Board::removeChessmanOf(const Position &position) {
 void Board::addChessmanOfIn(const Position &initial, const Position &final) {
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
-    throw ChessException("there isn a chessman there");
+    throw ChessException("there isn a chessman_ there");
   if (board.count(final))
-    throw ChessException("there is a chessman there already");
+    throw ChessException("there is a chessman_ there already");
   board.erase(initial);
   board.insert(std::pair<Position, Chessman *>(final, chessman));
 }
@@ -174,20 +175,11 @@ bool Board::isThere(Chessman *chessman) {
 }
 
 void
-Board::loadVectors(std::vector<char> &characters_, std::vector<bool> &colors_,
-                   std::vector<Position> &positions_,
-                   std::vector<double> &probabilities) {
-  // TODO hacerlo un paquete solo.
-
-  characters_.reserve(board.size());
-  colors_.reserve(board.size());
-  positions_.reserve(board.size());
-  probabilities.reserve(board.size());
-  for (auto it = board.begin(); it != board.end(); ++it) {
-    characters_.push_back(it->second->charId());
-    positions_.push_back(it->first);
-    colors_.push_back(it->second->isWhite());
-    probabilities.push_back(it->second->getProbability(it->first));
+Board::loadVectorOfSquareData(std::vector<SquareData> &data) {
+  data.reserve(board.size());
+  for (auto &it: board) {
+    data.emplace_back(it.second->charId(), it.second->isWhite(), it.first,
+                      it.second->getProbability(it.first));
   }
 }
 
@@ -216,10 +208,10 @@ std::unique_ptr<Chessman> Board::createChessman(char chessman_,
       break;
     default:
       throw std::invalid_argument("that character doesnt represent any"
-                                  "chessman");
+                                  "chessman_");
   }
   if (!pointer)
-    throw std::runtime_error("cannot allocate memory for chessman");
+    throw std::runtime_error("cannot allocate memory for chessman_");
   return std::unique_ptr<Chessman>(pointer);
 }
 

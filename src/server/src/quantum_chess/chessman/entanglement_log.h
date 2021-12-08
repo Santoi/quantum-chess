@@ -46,11 +46,11 @@ public:
   void deleteEntanglementsWhichAreNotSharedBy(const QuantumPosition &pos1,
                                               const QuantumPosition &pos2);
 
-  // Returns true if a chessman is entangled more than once with a position.
+  // Returns true if a chessman_ is entangled more than once with a position.
   bool chessmanIsEntangledMoreThanOnceWithPosition(const Chessman &chessman,
                                                    const QuantumPosition &position);
 
-  // Measures entanglements of a position of a chessman.
+  // Measures entanglements of a position of a chessman_.
   void
   measureEntanglements(const Chessman &chessman,
                        const QuantumPosition &position);
@@ -62,7 +62,7 @@ public:
   // Deletes all entanglements of position.
   void deleteEntanglementsOf(const QuantumPosition &position);
 
-  // Deletes all entanglements between two chessman, starting from iterator
+  // Deletes all entanglements between two chessman_, starting from iterator
   // from.
   void
   deleteEntanglementsOfWith(std::list<Entanglement>::iterator from,
@@ -72,7 +72,7 @@ public:
   // Returns true if chessmen are entangled.
   bool areEntangled(const Chessman &chessman1, const Chessman &chessman2);
 
-  // Loads positions list with all chessmen entangled with chessman.
+  // Loads positions list with all chessmen entangled with chessman_.
   void getEntangledOf(const Chessman &chessman,
                       std::list<const Chessman *> &positions);
 };

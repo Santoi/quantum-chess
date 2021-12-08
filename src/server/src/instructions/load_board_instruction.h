@@ -1,15 +1,13 @@
 #ifndef QUANTUM_CHESS_PROJ_LOAD_BOARD_INSTRUCTION_H
 #define QUANTUM_CHESS_PROJ_LOAD_BOARD_INSTRUCTION_H
 
-#include "../../../client/position.h" // TODO: can use server's position?
+#include "../quantum_chess/position.h"
+#include "../quantum_chess/square_data.h"
 #include "instruction.h"
 #include "../../../common/src/blocking_queue.h"
 
 class LoadBoardInstruction : public Instruction {
-  std::vector<Position> positions;
-  std::vector<char> characters;
-  std::vector<bool> colors;
-  std::vector<double> probabilities;
+  std::vector<SquareData> data;
   bool white;
 
 public:

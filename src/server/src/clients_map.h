@@ -51,7 +51,7 @@ public:
   void getAvailableRoles(bool &white_available, bool &black_available);
 
   // Returns a vector with data of clients stored.
-  std::vector<ClientData> getClientsData() const;
+  void loadWithClientData(std::vector<ClientData> &vector) const;
 };
 
 

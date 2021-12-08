@@ -117,9 +117,8 @@ std::list<ClientData::Role> Match::getAvailableRoles() {
   return available_roles;
 }
 
-// TODO Pasar referencia?
-std::vector<ClientData> Match::getClientsData() const {
-  return clients_map.getClientsData();
+void Match::loadWithClientData(std::vector<ClientData> &vector) const {
+  return clients_map.loadWithClientData(vector);
 }
 
 Board &Match::getBoard() {

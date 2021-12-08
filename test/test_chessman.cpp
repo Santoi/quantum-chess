@@ -700,8 +700,6 @@ TEST(Chessman, MoveClassicWithMeasureToFakeQuantumPieceOfDifferentColor) {
   EXPECT_EQ(queen->positionsAmount(), 1);
 }
 
-
-// TODO que pasa si son del mismo palo.
 TEST(Chessman, MoveRealQPieceWithMeasureToClassicAndCaptureDifferentColor) {
   Board board(false);
   board.addNewChessman('Q', Position(1, 1), true);

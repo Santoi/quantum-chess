@@ -24,8 +24,11 @@ void
 MatchesMap::getMatchesData(
         std::map<uint16_t, std::vector<ClientData>> &data) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  for (auto &match: map)
-    data.insert(std::make_pair(match.first, match.second.getClientsData()));
+  for (auto &match: map) {
+    std::vector<ClientData> vector;
+    match.second.loadWithClientData(vector);
+    data.insert(std::make_pair(match.first, vector));
+  }
 }
 
 void MatchesMap::stopMatches() {

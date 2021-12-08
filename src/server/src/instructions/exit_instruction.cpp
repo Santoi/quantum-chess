@@ -25,9 +25,5 @@ void ExitInstruction::makeActionAndNotify(Match &match) {
 void ExitInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
                                                       Packet &packet,
                                                       const ClientData &client_receiver_data) {
-  // TODO ver cuando revise lo de matar los clientes cuando se van desconectando.
-  if (this->instructor_data.id == client_receiver_data.id)
-    return;
-  // TODO Hacer que muestre tambien el id.
   protocol.fillPacketWithExitMessage(packet, instructor_data.name);
 }

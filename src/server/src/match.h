@@ -43,7 +43,7 @@ public:
   void stop();
 
   // Returns a vector with data of clients in match.
-  std::vector<ClientData> getClientsData() const;
+  void loadWithClientData(std::vector<ClientData> &vector) const;
 
   // Deletes a client with id.
   void deleteClientWithId(uint16_t client_id);

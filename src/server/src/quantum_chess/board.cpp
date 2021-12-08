@@ -13,13 +13,13 @@
 #include <fstream>
 
 Board::Board()
-        : chessmen(), board(), next_white(true), coin(), entanglement_log(),
-          finished(false) {}
+    : chessmen(), board(), next_white(true), coin(), entanglement_log(),
+      finished(false) {}
 
 Board::Board(bool random)
-        : chessmen(), board(), next_white(true), coin(random),
-          entanglement_log(),
-          finished(false) {}
+    : chessmen(), board(), next_white(true), coin(random),
+      entanglement_log(),
+      finished(false) {}
 
 void Board::addNewChessman(char chessman_, Position position_,
                            bool white_) {
@@ -41,14 +41,14 @@ void Board::addNewChessman(char chessman_, Position position_,
 bool
 Board::move(const Position &initial, const Position &final, bool player_white) {
   if (finished)
-    throw ChessException("game over");
+    throw ChessException("GAME OVER");
   if (player_white != next_white)
     throw ChessException("it is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
     throw ChessException("there is no chessman there");
   if (chessman->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman"
+    throw ChessException("you can't move a chessman"
                          " of the other player");
   bool capture = chessman->move(initial, final);
   next_white = !next_white;
@@ -58,14 +58,14 @@ Board::move(const Position &initial, const Position &final, bool player_white) {
 void Board::split(const Position &initial, const Position &pos1,
                   const Position &pos2, bool player_white) {
   if (finished)
-    throw ChessException("game over");
+    throw ChessException("GAME OVER");
   if (player_white != next_white)
     throw ChessException("it is not your turn!");
   Chessman *chessman = getChessmanAt(initial);
   if (!chessman)
     throw ChessException("there is no chessman there");
   if (chessman->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman"
+    throw ChessException("you can't move a chessman"
                          " of the other player");
   chessman->split(initial, pos1, pos2);
   next_white = !next_white;
@@ -74,18 +74,18 @@ void Board::split(const Position &initial, const Position &pos1,
 void Board::merge(const Position &initial1, const Position &initial2,
                   const Position &final, bool player_white) {
   if (finished)
-    throw ChessException("game over");
+    throw ChessException("GAME OVER");
   if (player_white != next_white)
     throw ChessException("it is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
-          *chessman_2 = getChessmanAt(initial2);
+      *chessman_2 = getChessmanAt(initial2);
   if (!chessman_1 || !chessman_2)
     throw ChessException("there is no chessman there");
   if (chessman_1 != chessman_2)
     throw ChessException("you re trying to merge two different chessmen");
   if (chessman_1->isWhite() != player_white ||
       chessman_2->isWhite() != player_white)
-    throw ChessException("you cannot move a chessman of the other"
+    throw ChessException("you can't move a chessman of the other"
                          " player");
   chessman_1->merge(initial1, initial2, final);
   next_white = !next_white;

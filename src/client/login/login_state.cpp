@@ -7,9 +7,9 @@
 LoginState::LoginState(Login &login_,
                        ButtonSpriteRepository &button_sprite_repository,
                        TextSpriteRepository &text_sprite_repository) :
-        login(login_),
-        button_sprite_repository(button_sprite_repository),
-        text_sprite_repository(text_sprite_repository) {}
+    login(login_),
+    button_sprite_repository(button_sprite_repository),
+    text_sprite_repository(text_sprite_repository) {}
 
 void LoginState::resetPressedButtons() {
   for (auto &button: buttons_ptr)
@@ -19,24 +19,24 @@ void LoginState::resetPressedButtons() {
 ConnectingToServerState::ConnectingToServerState(Login &login_,
                                                  ButtonSpriteRepository &button_sprite_repository,
                                                  TextSpriteRepository &text_sprite_repository)
-        : LoginState(login_, button_sprite_repository, text_sprite_repository) {
+    : LoginState(login_, button_sprite_repository, text_sprite_repository) {
   text_entry_buttons_ptr.push_back(
-          std::move(make_unique<TextEntryButton>(button_sprite_repository,
-                                                 text_sprite_repository,
-                                                 "IP")));
+      make_unique<TextEntryButton>(button_sprite_repository,
+                                   text_sprite_repository,
+                                   "IP"));
   text_entry_buttons_ptr.push_back(
-          std::move(make_unique<TextEntryButton>(button_sprite_repository,
-                                                 text_sprite_repository,
-                                                 "PORT")));
+      make_unique<TextEntryButton>(button_sprite_repository,
+                                   text_sprite_repository,
+                                   "PORT"));
   text_entry_buttons_ptr.push_back(
-          std::move(make_unique<TextEntryButton>(button_sprite_repository,
-                                                 text_sprite_repository,
-                                                 "NICK NAME")));
+      make_unique<TextEntryButton>(button_sprite_repository,
+                                   text_sprite_repository,
+                                   "NICK NAME"));
   buttons_ptr.push_back(
-          std::move(make_unique<ConnectButton>(button_sprite_repository,
-                                               text_sprite_repository,
-                                               "CONNECT",
-                                               text_entry_buttons_ptr)));
+      make_unique<ConnectButton>(button_sprite_repository,
+                                 text_sprite_repository,
+                                 "CONNECT",
+                                 text_entry_buttons_ptr));
 }
 
 bool ConnectingToServerState::clientIsConnectedToMatch() {
@@ -51,14 +51,14 @@ void ConnectingToServerState::render(LoginScene &login_scene) {
 }
 
 void ConnectingToServerState::fillWithActiveButtons(
-        std::list<std::reference_wrapper<Button>> &active_buttons) {
+    std::list<std::reference_wrapper<Button>> &active_buttons) {
   for (auto &button: buttons_ptr)
     active_buttons.emplace_back(*button);
 }
 
 void ConnectingToServerState::fillWithActiveTextEntryButtons(
-        std::list<std::reference_wrapper<TextEntryButton>> &
-        active_text_entries) {
+    std::list<std::reference_wrapper<TextEntryButton>> &
+    active_text_entries) {
   for (auto &button: text_entry_buttons_ptr)
     active_text_entries.emplace_back(*button);
 }
@@ -78,9 +78,24 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
 SelectingMatchState::SelectingMatchState(Login &login_,
                                          ButtonSpriteRepository &button_sprite_repository,
                                          TextSpriteRepository &text_sprite_repository)
-        : LoginState(login_, button_sprite_repository, text_sprite_repository) {
-  login.fillVectorWithMatchButtons(buttons_ptr, button_sprite_repository,
-                                   text_sprite_repository);
+    : LoginState(login_, button_sprite_repository, text_sprite_repository) {
+  std::map<uint16_t, std::vector<ClientData>> match_info;
+  login.getListOfMatchesInfo(match_info);
+  size_t i = 0;
+  for (auto it = match_info.begin(); it != match_info.end(); ++it) {
+    buttons_ptr.push_back(
+        make_unique<PickMatchButton>(button_sprite_repository,
+                                     text_sprite_repository,
+                                     it->second,
+                                     it->first));
+    i++;
+  }
+  std::vector<ClientData> empty_clients_list;
+  buttons_ptr.push_back(
+      make_unique<PickMatchButton>(button_sprite_repository,
+                                   text_sprite_repository,
+                                   empty_clients_list,
+                                   i));
 }
 
 bool SelectingMatchState::clientIsConnectedToMatch() {
@@ -93,14 +108,14 @@ SelectingMatchState::render(LoginScene &login_renderer) {
 }
 
 void SelectingMatchState::fillWithActiveButtons(
-        std::list<std::reference_wrapper<Button>> &active_buttons) {
+    std::list<std::reference_wrapper<Button>> &active_buttons) {
   for (auto &button: buttons_ptr)
     active_buttons.emplace_back(*button);
 }
 
 void SelectingMatchState::fillWithActiveTextEntryButtons(
-        std::list<std::reference_wrapper<TextEntryButton>> &
-        active_text_entries) {
+    std::list<std::reference_wrapper<TextEntryButton>> &
+    active_text_entries) {
   //dont have text_entries_ptr
 }
 
@@ -113,15 +128,15 @@ int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
 }
 
 void SelectingRoleState::addActiveOrInactiveRoleButtonWithImages(
-        ClientData::Role role_,
-        ButtonSpriteRepository &button_repository,
-        TextSpriteRepository &text_repository,
-        std::list<ClientData::Role> &available_roles,
-        std::string &&type) {
+    ClientData::Role role_,
+    ButtonSpriteRepository &button_repository,
+    TextSpriteRepository &text_repository,
+    std::list<ClientData::Role> &available_roles,
+    std::string &&type) {
   std::unique_ptr<RoleButton> role_button_ptr;
   std::list<ClientData::Role>::iterator findIter = std::find(
-          available_roles.begin(),
-          available_roles.end(), role_);
+      available_roles.begin(),
+      available_roles.end(), role_);
   if (findIter != available_roles.end())
     role_button_ptr = make_unique<RoleButton>(button_repository,
                                               text_repository, role_,
@@ -136,7 +151,7 @@ void SelectingRoleState::addActiveOrInactiveRoleButtonWithImages(
 SelectingRoleState::SelectingRoleState(Login &login_,
                                        ButtonSpriteRepository &button_repository,
                                        TextSpriteRepository &text_repository)
-        : LoginState(login_, button_repository, text_repository) {
+    : LoginState(login_, button_repository, text_repository) {
   std::list<ClientData::Role> available_roles = login.getAvailableRoles();
   addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_WHITE,
                                           button_repository, text_repository,
@@ -161,14 +176,14 @@ SelectingRoleState::render(LoginScene &login_scene) {
 }
 
 void SelectingRoleState::fillWithActiveButtons(
-        std::list<std::reference_wrapper<Button>> &active_buttons) {
+    std::list<std::reference_wrapper<Button>> &active_buttons) {
   for (auto &button: buttons_ptr)
     active_buttons.emplace_back(*button);
 }
 
 void SelectingRoleState::fillWithActiveTextEntryButtons(
-        std::list<std::reference_wrapper<TextEntryButton>> &
-        active_text_entries) {}
+    std::list<std::reference_wrapper<TextEntryButton>> &
+    active_text_entries) {}
 
 ClientData::Role
 SelectingRoleState::getRoleFromString(const std::string &str_selected_role) {
@@ -193,8 +208,8 @@ int SelectingRoleState::processTokens(std::list<std::string> &&tokens) {
 ConnectedToMatchState::ConnectedToMatchState(Login &login_,
                                              ButtonSpriteRepository &button_sprite_repository,
                                              TextSpriteRepository &text_sprite_repository)
-        : LoginState(login_, button_sprite_repository,
-                     text_sprite_repository) {}
+    : LoginState(login_, button_sprite_repository,
+                 text_sprite_repository) {}
 
 bool ConnectedToMatchState::clientIsConnectedToMatch() {
   return true;
@@ -206,11 +221,11 @@ ConnectedToMatchState::render(LoginScene &login_scene) {
 }
 
 void ConnectedToMatchState::fillWithActiveButtons(
-        std::list<std::reference_wrapper<Button>> &active_buttons) {}
+    std::list<std::reference_wrapper<Button>> &active_buttons) {}
 
 void ConnectedToMatchState::fillWithActiveTextEntryButtons(
-        std::list<std::reference_wrapper<TextEntryButton>> &
-        active_text_entries) {}
+    std::list<std::reference_wrapper<TextEntryButton>> &
+    active_text_entries) {}
 
 int ConnectedToMatchState::processTokens(std::list<std::string> &&tokens) {
   return NO_NEXT_STATE;

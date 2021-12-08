@@ -22,11 +22,7 @@ public:
 
   void connectToServer(const std::string &ip, const std::string &port);
 
-  void fillVectorWithMatchButtons(std::vector<std::unique_ptr<Button>>& match_buttons_ptr,
-                                  ButtonSpriteRepository &button_sprite_repository,
-                                  TextSpriteRepository &text_sprite_repository);
-
-  void saveNickName(const std::string& nick_name);
+  void saveNickName(const std::string &nick_name);
 
   void sendSavedNickNameToServer();
 
@@ -41,6 +37,9 @@ public:
   void chooseMatchNumber(int match_number);
 
   ~Login() = default;
+
+  void
+  getListOfMatchesInfo(std::map<uint16_t, std::vector<ClientData>> &match_info);
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

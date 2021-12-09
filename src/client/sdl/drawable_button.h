@@ -29,7 +29,7 @@ public:
                  TextSpriteRepository &text_repository,
                  std::string &&type, std::string &&text);
 
-  void setText(std::string &&text_);
+  void setText(std::string &&text_, char color = 'w');
 
   void render();
 

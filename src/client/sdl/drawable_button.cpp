@@ -38,7 +38,8 @@ bool DrawableButton::pixelIsOnButton(const PixelCoordinate &pixel_) {
   return is_pressed;
 }
 
-void DrawableButton::setText(std::string &&text_) {
+void DrawableButton::setText(std::string &&text_, char color) {
+  text.setColor(color);
   text.setText(text_);
 }
 

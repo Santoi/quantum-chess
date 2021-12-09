@@ -6,8 +6,8 @@
 Button::Button(ButtonSpriteRepository &button_repository,
                TextSpriteRepository &text_repository, std::string &&type,
                std::string &&text)
-        : drawable(button_repository, text_repository, std::move(type),
-                   std::move(text)) {
+    : drawable(button_repository, text_repository, std::move(type),
+               std::move(text)) {
 }
 
 void Button::render() {
@@ -26,9 +26,9 @@ ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
                              TextSpriteRepository &text_repository,
                              std::string &&button_text,
                              const std::vector<std::unique_ptr<TextEntryButton>> &text_entry_buttons)
-        : Button(button_repository, text_repository, "action",
-                 std::move(button_text)),
-          text_entries_ptr(text_entry_buttons) {}
+    : Button(button_repository, text_repository, "action",
+             std::move(button_text)),
+      text_entries_ptr(text_entry_buttons) {}
 
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                         std::list<std::string> &tokens) {
@@ -44,12 +44,13 @@ PickMatchButton::PickMatchButton(ButtonSpriteRepository &button_repository,
                                  TextSpriteRepository &text_repository,
                                  std::vector<ClientData> &client_data,
                                  uint16_t match_id)
-        : Button(button_repository, text_repository, "match", ""),
-          match_id(match_id) {
+    : Button(button_repository, text_repository, "match", ""),
+      match_id(match_id) {
   std::string match_info = "#" + std::to_string(match_id) + ": ";
-  for (auto &client: client_data) {
+  std::string client_info;
+  for (auto it = client_data.begin(); it != client_data.end(); ++it) {
     char role;
-    switch (client.role) {
+    switch (it->role) {
       case ClientData::ROLE_WHITE:
         role = 'w';
         break;
@@ -62,10 +63,16 @@ PickMatchButton::PickMatchButton(ButtonSpriteRepository &button_repository,
       default:
         role = ' ';
     }
-    match_info += client.name + "#" + std::to_string(client.id) + "("
-                  + role + "), ";
+    client_info += it->name + "#" + std::to_string(it->id) + "("
+                   + role + "), ";
   }
-
+  if (client_info.empty()) {
+    match_info = "NEW GAME";
+  } else {
+    match_info += client_info;
+    match_info[-2] = '\0'; // remove the last comma
+  }
+  drawable.setText(std::move(match_info), 'k');
 }
 
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
@@ -82,9 +89,9 @@ RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
                        TextSpriteRepository &text_repository,
                        ClientData::Role role_, std::string &&type,
                        bool role_is_available_)
-        : Button(button_repository, text_repository, std::move(type), ""),
-          role(role_),
-          role_is_available(role_is_available_) {
+    : Button(button_repository, text_repository, std::move(type), ""),
+      role(role_),
+      role_is_available(role_is_available_) {
 }
 
 void RoleButton::addEnumToListOfTokens(std::list<std::string> &tokens) {

@@ -8,10 +8,10 @@
 TextEntryButton::TextEntryButton(ButtonSpriteRepository &button_repository,
                                  TextSpriteRepository &text_repository,
                                  const std::string &button_name_)
-        : text_entry(MAX_INPUT), drawable_text_button(text_repository,
-                                                      button_repository,
-                                                      button_name_),
-          expecting_text_entry(false) {}
+    : text_entry(MAX_INPUT), drawable_text_button(text_repository,
+                                                  button_repository,
+                                                  button_name_),
+      expecting_text_entry(false) {}
 
 void
 TextEntryButton::setAreaAndPosition(int x_, int y_, int width, int height) {

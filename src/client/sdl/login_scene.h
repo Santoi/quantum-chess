@@ -23,6 +23,11 @@ private:
                                       TextEntryButton &port_text_entry,
                                       TextEntryButton &name_text_entry);
 
+  // Return a reverse iterator pointing to the first button to render
+  std::reverse_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>>
+  findFirstButtonToRender(std::vector<std::unique_ptr<Button>> &match_buttons,
+                          int match_to_render);
+
 public:
 
   LoginScene() = delete;
@@ -32,17 +37,22 @@ public:
 
   void render();
 
-  void renderMatchButtons(std::vector<std::unique_ptr<Button>> &match_buttons);
+  void renderChoosingMatchButtons(
+      std::vector<std::unique_ptr<Button>> &match_buttons,
+      NextMatchesButton &next_matches_button,
+      PreviousMatchesButton &previous_matches_button, int matches_page,
+      int matches_per_page);
 
   void renderConnectedSprite(TextureSprite &texture);
 
-  void renderConnectionToServerFields(Button &connect_button,
-                                      TextEntryButton &ip_text_entry,
-                                      TextEntryButton &port_text_entry,
-                                      TextEntryButton &name_text_entry);
+  void renderConnectionToServerButtons(Button &connect_button,
+                                       TextEntryButton &ip_text_entry,
+                                       TextEntryButton &port_text_entry,
+                                       TextEntryButton &name_text_entry);
 
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
                           Button &spectator_role_button);
+
 };
 
 

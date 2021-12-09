@@ -38,11 +38,11 @@ public:
   virtual void render(LoginScene &login_scene) = 0;
 
   virtual void fillWithActiveButtons(
-          std::list<std::reference_wrapper<Button>> &active_buttons) = 0;
+      std::list<std::reference_wrapper<Button>> &active_buttons) = 0;
 
   virtual void fillWithActiveTextEntryButtons(
-          std::list<std::reference_wrapper<TextEntryButton>> &
-          active_text_entries) = 0;
+      std::list<std::reference_wrapper<TextEntryButton>> &
+      active_text_entries) = 0;
 
   virtual int processTokens(std::list<std::string> &&tokens) = 0;
 
@@ -63,11 +63,11 @@ public:
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-          std::list<std::reference_wrapper<Button>> &active_buttons) override;
+      std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-          std::list<std::reference_wrapper<TextEntryButton>> &
-          active_text_entries) override;
+      std::list<std::reference_wrapper<TextEntryButton>> &
+      active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 
@@ -75,6 +75,12 @@ public:
 };
 
 class SelectingMatchState : public LoginState {
+  NextMatchesButton next_matches_button;
+  PreviousMatchesButton previous_matches_button;
+//  RefreshButton refresh_button;
+  int matches_page;
+  int matches_per_page;
+
 public:
 
   SelectingMatchState(Login &login_,
@@ -83,14 +89,14 @@ public:
 
   bool clientIsConnectedToMatch() override;
 
-  void render(LoginScene &login_renderer) override;
+  void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-          std::list<std::reference_wrapper<Button>> &active_buttons) override;
+      std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-          std::list<std::reference_wrapper<TextEntryButton>> &
-          active_text_entries) override;
+      std::list<std::reference_wrapper<TextEntryButton>> &
+      active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 
@@ -108,11 +114,11 @@ public:
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-          std::list<std::reference_wrapper<Button>> &active_buttons) override;
+      std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-          std::list<std::reference_wrapper<TextEntryButton>> &
-          active_text_entries) override;
+      std::list<std::reference_wrapper<TextEntryButton>> &
+      active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 
@@ -120,10 +126,11 @@ public:
 
 private:
 
-  void addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_, ButtonSpriteRepository &button_repository,
+  void addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_,
+                                               ButtonSpriteRepository &button_repository,
                                                TextSpriteRepository &text_repository,
-                                               std::list<ClientData::Role>& available_roles,
-                                               std::string&& type);
+                                               std::list<ClientData::Role> &available_roles,
+                                               std::string &&type);
 
   ClientData::Role getRoleFromString(const std::string &str_selected_role);
 };
@@ -141,11 +148,11 @@ public:
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
-          std::list<std::reference_wrapper<Button>> &active_buttons) override;
+      std::list<std::reference_wrapper<Button>> &active_buttons) override;
 
   void fillWithActiveTextEntryButtons(
-          std::list<std::reference_wrapper<TextEntryButton>> &
-          active_text_entries) override;
+      std::list<std::reference_wrapper<TextEntryButton>> &
+      active_text_entries) override;
 
   int processTokens(std::list<std::string> &&tokens) override;
 

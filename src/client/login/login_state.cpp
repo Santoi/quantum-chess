@@ -4,6 +4,8 @@
 #include "unavailable_role_exception.h"
 #include <iostream>
 
+#define MATCHES_PER_PAGE 8
+
 LoginState::LoginState(Login &login_,
                        ButtonSpriteRepository &button_sprite_repository,
                        TextSpriteRepository &text_sprite_repository) :
@@ -44,10 +46,10 @@ bool ConnectingToServerState::clientIsConnectedToMatch() {
 }
 
 void ConnectingToServerState::render(LoginScene &login_scene) {
-  login_scene.renderConnectionToServerFields(*buttons_ptr[0],
-                                             *text_entry_buttons_ptr[0],
-                                             *text_entry_buttons_ptr[1],
-                                             *text_entry_buttons_ptr[2]);
+  login_scene.renderConnectionToServerButtons(*buttons_ptr[0],
+                                              *text_entry_buttons_ptr[0],
+                                              *text_entry_buttons_ptr[1],
+                                              *text_entry_buttons_ptr[2]);
 }
 
 void ConnectingToServerState::fillWithActiveButtons(
@@ -78,7 +80,12 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
 SelectingMatchState::SelectingMatchState(Login &login_,
                                          ButtonSpriteRepository &button_sprite_repository,
                                          TextSpriteRepository &text_sprite_repository)
-    : LoginState(login_, button_sprite_repository, text_sprite_repository) {
+    : LoginState(login_, button_sprite_repository, text_sprite_repository),
+      next_matches_button(button_sprite_repository, text_sprite_repository),
+      previous_matches_button(button_sprite_repository,
+                              text_sprite_repository),
+      matches_page(0),
+      matches_per_page(MATCHES_PER_PAGE) {
   std::map<uint16_t, std::vector<ClientData>> match_info;
   login.getListOfMatchesInfo(match_info);
   size_t i = 0;
@@ -103,8 +110,10 @@ bool SelectingMatchState::clientIsConnectedToMatch() {
 }
 
 void
-SelectingMatchState::render(LoginScene &login_renderer) {
-  login_renderer.renderMatchButtons(buttons_ptr);
+SelectingMatchState::render(LoginScene &login_scene) {
+  login_scene.renderChoosingMatchButtons(buttons_ptr, next_matches_button,
+                                         previous_matches_button, matches_page,
+                                         matches_per_page);
 }
 
 void SelectingMatchState::fillWithActiveButtons(
@@ -120,6 +129,8 @@ void SelectingMatchState::fillWithActiveTextEntryButtons(
 }
 
 int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
+  // TODO code 'next', 'prev' and 'refresh' button behaviour
+  // return NEXT_STATE_CONNECT_TO_MATCH;
   std::string str_match_number = tokens.front();
   int match_number = std::stoi(str_match_number);
   login.chooseMatchNumber(match_number);
@@ -215,8 +226,7 @@ bool ConnectedToMatchState::clientIsConnectedToMatch() {
   return true;
 }
 
-void
-ConnectedToMatchState::render(LoginScene &login_scene) {
+void ConnectedToMatchState::render(LoginScene &login_scene) {
 //  login_scene.renderConnectedSprite(loading_background);
 }
 

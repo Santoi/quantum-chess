@@ -1,5 +1,8 @@
 #include "login_scene.h"
 #include "../login/login_state_handler.h"
+#include <vector>
+
+#define MAX_MATCH_BUTTON_COUNT 8
 
 LoginScene::LoginScene(Window &window,
                        LoginStateHandler &login_state_handler)
@@ -42,10 +45,10 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                     button_height);
 }
 
-void LoginScene::renderConnectionToServerFields(Button &connect_button,
-                                                TextEntryButton &ip_text_entry,
-                                                TextEntryButton &port_text_entry,
-                                                TextEntryButton &name_text_entry) {
+void LoginScene::renderConnectionToServerButtons(Button &connect_button,
+                                                 TextEntryButton &ip_text_entry,
+                                                 TextEntryButton &port_text_entry,
+                                                 TextEntryButton &name_text_entry) {
   setConnectionButtonsDimensions(connect_button, ip_text_entry,
                                  port_text_entry, name_text_entry);
   ip_text_entry.render();
@@ -54,17 +57,51 @@ void LoginScene::renderConnectionToServerFields(Button &connect_button,
   connect_button.render();
 }
 
-void LoginScene::renderMatchButtons(
-    std::vector<std::unique_ptr<Button>> &match_buttons) {
+std::reverse_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>>
+LoginScene::findFirstButtonToRender(
+    std::vector<std::unique_ptr<Button>> &match_buttons,
+    int match_to_render) {
+  auto it = match_buttons.rbegin();
+  int matches = 0;
+  while (matches < match_to_render &&
+         it != match_buttons.rend()) {
+    ++it;
+    matches++;
+  }
+  return it;
+}
+
+void LoginScene::renderChoosingMatchButtons(
+    std::vector<std::unique_ptr<Button>> &match_buttons,
+    NextMatchesButton &next_matches_button,
+    PreviousMatchesButton &previous_matches_button, int matches_page,
+    int matches_per_page) {
   int width = window.getWidth();
   int height = window.getHeight();
-  int button_width = width * .9, button_height = height / 20;
+  int match_button_width = width * .9, button_height = height / 20;
+  int other_button_width = width * .2;
+
+  auto it = findFirstButtonToRender(match_buttons,
+                                    matches_page * matches_per_page);
   int i = 1;
-  for (auto it = match_buttons.rbegin(); it != match_buttons.rend(); ++it) {
-    (*it)->setAreaAndPosition(width / 2 - button_width / 2, height * i++ * .1,
-                              button_width, button_height);
+  for (; it != match_buttons.rend(); ++it) {
+    (*it)->setAreaAndPosition(width / 2 - match_button_width / 2,
+                              height * i * .1,
+                              match_button_width, button_height);
     (*it)->render();
+    if (i++ == matches_per_page) {
+      break;
+    }
   }
+  next_matches_button.setAreaAndPosition(width - other_button_width * 2,
+                                         height * i * .1, other_button_width,
+                                         button_height);
+  previous_matches_button.setAreaAndPosition(other_button_width,
+                                             height * i * .1,
+                                             other_button_width,
+                                             button_height);
+  next_matches_button.render();
+  previous_matches_button.render();
 }
 
 void LoginScene::renderConnectedSprite(TextureSprite &texture) {

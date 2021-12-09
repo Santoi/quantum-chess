@@ -98,7 +98,7 @@ public:
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                            std::list<std::string> &tokens) override;
 
-  ~NextMatchesButton() override = default;
+  ~PreviousMatchesButton() override = default;
 };
 
 class RoleButton : public Button {

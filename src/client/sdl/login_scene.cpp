@@ -79,7 +79,7 @@ void LoginScene::renderChoosingMatchButtons(
   int width = window.getWidth();
   int height = window.getHeight();
   int match_button_width = width * .9, button_height = height / 20;
-  int other_button_width = width * .2;
+  int other_button_width = width * .1;
 
   auto it = findFirstButtonToRender(match_buttons,
                                     matches_page * matches_per_page);
@@ -93,10 +93,10 @@ void LoginScene::renderChoosingMatchButtons(
       break;
     }
   }
-  next_matches_button.setAreaAndPosition(width - other_button_width * 2,
+  next_matches_button.setAreaAndPosition(width - other_button_width * 4,
                                          height * i * .1, other_button_width,
                                          button_height);
-  previous_matches_button.setAreaAndPosition(other_button_width,
+  previous_matches_button.setAreaAndPosition(other_button_width * 3,
                                              height * i * .1,
                                              other_button_width,
                                              button_height);

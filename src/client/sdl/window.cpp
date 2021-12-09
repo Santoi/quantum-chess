@@ -1,8 +1,8 @@
 #include "window.h"
 #include <SDL2pp/SDL2pp.hh>
 
-#define DEFAULT_HEIGHT 720
-#define DEFAULT_WIDTH 1080
+#define DEFAULT_HEIGHT 480
+#define DEFAULT_WIDTH 720
 
 #define WINDOW_MIN_RATIO 1.5
 

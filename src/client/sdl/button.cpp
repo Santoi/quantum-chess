@@ -85,6 +85,28 @@ bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
   return false;
 }
 
+NextMatchesButton::NextMatchesButton(
+    ButtonSpriteRepository &button_repository,
+    TextSpriteRepository &text_repository) : Button(button_repository,
+                                                    text_repository, "action",
+                                                    "NEXT") {}
+
+bool NextMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                            std::list<std::string> &tokens) {
+  return drawable.pixelIsOnButton(pixel_);
+}
+
+PreviousMatchesButton::PreviousMatchesButton(
+    ButtonSpriteRepository &button_repository,
+    TextSpriteRepository &text_repository) : Button(button_repository,
+                                                    text_repository, "action",
+                                                    "PREV") {}
+
+bool PreviousMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                                std::list<std::string> &tokens) {
+  return drawable.pixelIsOnButton(pixel_);
+}
+
 RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
                        TextSpriteRepository &text_repository,
                        ClientData::Role role_, std::string &&type,
@@ -96,11 +118,11 @@ RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
 
 void RoleButton::addEnumToListOfTokens(std::list<std::string> &tokens) {
   if (role == ClientData::ROLE_WHITE)
-    tokens.push_back("ROLE_WHITE");
+    tokens.emplace_back("ROLE_WHITE");
   else if (role == ClientData::ROLE_BLACK)
-    tokens.push_back("ROLE_BLACK");
+    tokens.emplace_back("ROLE_BLACK");
   else
-    tokens.push_back("ROLE_SPECTATOR");
+    tokens.emplace_back("ROLE_SPECTATOR");
 }
 
 

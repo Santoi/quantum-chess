@@ -66,13 +66,39 @@ public:
 
   PickMatchButton(ButtonSpriteRepository &button_repository,
                   TextSpriteRepository &text_repository,
-                  std::vector<ClientData>& client_data,
+                  std::vector<ClientData> &client_data,
                   uint16_t match_id);
 
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                            std::list<std::string> &tokens) override;
 
   ~PickMatchButton() override = default;
+};
+
+class NextMatchesButton : public Button {
+public:
+  NextMatchesButton() = delete;
+
+  NextMatchesButton(ButtonSpriteRepository &button_repository,
+                    TextSpriteRepository &text_repository);
+
+  bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                           std::list<std::string> &tokens) override;
+
+  ~NextMatchesButton() override = default;
+};
+
+class PreviousMatchesButton : public Button {
+public:
+  PreviousMatchesButton() = delete;
+
+  PreviousMatchesButton(ButtonSpriteRepository &button_repository,
+                        TextSpriteRepository &text_repository);
+
+  bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                           std::list<std::string> &tokens) override;
+
+  ~NextMatchesButton() override = default;
 };
 
 class RoleButton : public Button {
@@ -86,7 +112,7 @@ public:
 
   RoleButton(ButtonSpriteRepository &button_repository,
              TextSpriteRepository &text_repository,
-             ClientData::Role role_, std::string&& type,
+             ClientData::Role role_, std::string &&type,
              bool role_is_available_);
 
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,

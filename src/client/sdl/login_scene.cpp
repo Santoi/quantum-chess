@@ -58,12 +58,12 @@ void LoginScene::renderMatchButtons(
     std::vector<std::unique_ptr<Button>> &match_buttons) {
   int width = window.getWidth();
   int height = window.getHeight();
-  int button_width = width * .9;
-  int i = 0;
-  for (auto &button: match_buttons) {
-    button->setAreaAndPosition(width / 2 - button_width / 2, ++i * 200,
-                               0.1 * width, 0.1 * height);
-    button->render();
+  int button_width = width * .9, button_height = height / 20;
+  int i = 1;
+  for (auto it = match_buttons.rbegin(); it != match_buttons.rend(); ++it) {
+    (*it)->setAreaAndPosition(width / 2 - button_width / 2, height * i++ * .1,
+                              button_width, button_height);
+    (*it)->render();
   }
 }
 

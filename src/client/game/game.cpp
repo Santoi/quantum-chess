@@ -139,7 +139,7 @@ void Game::currentTile(const PixelCoordinate &coordinate) {
 void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
-    throw ChessException("you cannot move being spectator");
+    throw ChessException("spectators can't play");
   Position orig_, dest_;
   transformer.pixel2Position(orig, orig_, x_scale, y_scale);
   transformer.pixel2Position(dest, dest_, x_scale, y_scale);
@@ -150,7 +150,7 @@ void Game::splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
                          PixelCoordinate &to2) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
-    throw ChessException("you cannot move being spectator");
+    throw ChessException("spectators can't play");
   Position from_, to1_, to2_;
   transformer.pixel2Position(from, from_, x_scale, y_scale);
   transformer.pixel2Position(to1, to1_, x_scale, y_scale);
@@ -163,7 +163,7 @@ void Game::mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
                          PixelCoordinate &to) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
-    throw ChessException("you cannot move being spectator");
+    throw ChessException("spectators can't play");
   Position from1_, from2_, to_;
   transformer.pixel2Position(from1, from1_, x_scale, y_scale);
   transformer.pixel2Position(from2, from2_, x_scale, y_scale);

@@ -24,11 +24,11 @@ public:
 
   size_t length() const;
 
-  int getDrawableWidth() const;
+  size_t getDrawableWidth() const;
 
-  int getDrawableHeight() const;
+  size_t getDrawableHeight() const;
 
-  void render(int x, int y);
+  void render(size_t x, size_t y);
 
   void setText(const std::string &text_);
 

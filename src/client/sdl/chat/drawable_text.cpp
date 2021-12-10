@@ -21,7 +21,7 @@ DrawableText::DrawableText(DrawableText &&other) noexcept:
     color(other.color) {
 }
 
-void DrawableText::render(int x, int y) {
+void DrawableText::render(size_t x, size_t y) {
   if (!text.empty()) {
     for (auto c: text) {
       Sprite &sprite = text_sprite_repository.getChar(c, color);
@@ -35,11 +35,11 @@ size_t DrawableText::length() const {
   return text.size();
 }
 
-int DrawableText::getDrawableWidth() const {
+size_t DrawableText::getDrawableWidth() const {
   return text.size() * text_sprite_repository.getSpriteSize();
 }
 
-int DrawableText::getDrawableHeight() const {
+size_t DrawableText::getDrawableHeight() const {
   return text_sprite_repository.getSpriteSize();
 }
 

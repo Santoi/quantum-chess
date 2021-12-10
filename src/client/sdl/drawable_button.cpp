@@ -17,13 +17,14 @@ void DrawableButton::render() {
     pressed->render(x, y, width, height);
   else
     released->render(x, y, width, height);
-  int text_x = x + width / 2 - text.getDrawableWidth() / 2;
-  int text_y = y + height / 2 - text.getDrawableHeight() / 2;
+  size_t text_x = x + width / 2 - text.getDrawableWidth() / 2;
+  size_t text_y = y + height / 2 - text.getDrawableHeight() / 2;
   text.render(text_x, text_y);
 }
 
 void
-DrawableButton::setAreaAndPosition(int x_, int y_, int width_, int height_) {
+DrawableButton::setAreaAndPosition(size_t x_, size_t y_, size_t width_,
+                                   size_t height_) {
   x = x_;
   y = y_;
   width = width_;

@@ -18,10 +18,10 @@ private:
   TextureSprite *released;
   DrawableText text;
   bool is_pressed;
-  int x;
-  int y;
-  int height;
-  int width;
+  size_t x;
+  size_t y;
+  size_t height;
+  size_t width;
 
 public:
 
@@ -37,7 +37,7 @@ public:
 
   void disablePressedStatus();
 
-  void setAreaAndPosition(int x_, int y_, int width_, int height_);
+  void setAreaAndPosition(size_t x_, size_t y_, size_t width_, size_t height_);
 
   ~DrawableButton() = default;
 

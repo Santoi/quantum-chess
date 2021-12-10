@@ -57,7 +57,7 @@ SDL2pp::Surface Font::renderItalicText(const std::string &text, char color) {
   return italic_font.RenderText_Solid(text, colors[color]);
 }
 
-int Font::size() const {
+size_t Font::size() const {
   return mono_font.GetHeight();
 }
 

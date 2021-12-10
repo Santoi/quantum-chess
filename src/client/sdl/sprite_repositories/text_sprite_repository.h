@@ -17,7 +17,7 @@ public:
 
   Sprite &getChar(char character, char color);
 
-  int getSpriteSize() const;
+  size_t getSpriteSize() const;
 };
 
 

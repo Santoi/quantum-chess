@@ -31,15 +31,15 @@ SoundHandler &Window::sound_handler() {
   return sound_handler_;
 }
 
-int Window::getWidth() const {
+size_t Window::getWidth() const {
   return window_.GetDrawableWidth();
 }
 
-int Window::getHeight() const {
+size_t Window::getHeight() const {
   return window_.GetDrawableHeight();
 }
 
-void Window::setMaxHeight(int height) {
+void Window::setMaxHeight(size_t height) {
   window_.SetMaximumSize(SDL_MAX_SINT32, height);
 }
 
@@ -47,6 +47,6 @@ double Window::getMinRatio() const {
   return WINDOW_MIN_RATIO;
 }
 
-void Window::setSize(int width, int height) {
+void Window::setSize(size_t width, size_t height) {
   window_.SetSize(width, height);
 }

@@ -15,7 +15,7 @@
 #include <map>
 #include <mutex>
 
-class TextureSprite;
+class Sprite;
 
 class RemoteClientInstruction;
 
@@ -86,6 +86,8 @@ public:
   void toggleMusic();
 
   void currentTile(const PixelCoordinate &coordinate);
+
+  void setDefaultBoardWithCurrent();
 };
 
 

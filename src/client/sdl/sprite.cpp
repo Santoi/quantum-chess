@@ -4,20 +4,20 @@
 Sprite::Sprite(Renderer
                &renderer,
                const std::string &file_name,
-               int width,
-               int height
+               size_t width,
+               size_t height
 ) :
 
-        renderer(
-                renderer), sprite_(renderer.renderer(), file_name),
-        width_(width),
-        height_(height) {}
+    renderer(
+        renderer), sprite_(renderer.renderer(), file_name),
+    width_(width),
+    height_(height) {}
 
 Sprite::Sprite(Renderer
                &renderer,
                const SDL2pp::Surface &surface,
-               int width,
-               int height
+               size_t width,
+               size_t height
 ) :
 
         renderer(renderer),
@@ -25,11 +25,11 @@ Sprite::Sprite(Renderer
                 surface),
         width_(width), height_(height) {}
 
-int Sprite::width() const {
+size_t Sprite::width() const {
   return width_;
 }
 
-int Sprite::height() const {
+size_t Sprite::height() const {
   return height_;
 }
 
@@ -37,11 +37,11 @@ SDL2pp::Texture &Sprite::sprite() {
   return sprite_;
 }
 
-void Sprite::render(int x, int y) {
+void Sprite::render(size_t x, size_t y) {
   renderer.copy(*this, x, y);
 }
 
-void Sprite::render(int x, int y, int width, int height) {
+void Sprite::render(size_t x, size_t y, size_t width, size_t height) {
   width_ = width;
   height_ = height;
   renderer.copy(*this, x, y);

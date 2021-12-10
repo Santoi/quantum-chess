@@ -3,7 +3,7 @@
 
 #include "../sdl/renderer.h"
 #include "../sdl/texture_sprite.h"
-#include "../sdl/tile_sprite_repository.h"
+#include "../sdl/sprite_repositories/tile_sprite_repository.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <map>
 #include <string>

@@ -19,16 +19,16 @@ public:
   bool move(const Position &initial, const Position &final) override;
 
   void calculateMoves(const Position &initial,
-                      std::list<Position> &posible_moves)
+                      std::list<Position> &possible_moves)
   const override;
 
   ~Pawn() override = default;
 
   void calculatePossibleSplits(const Position &initial,
-                               std::list<Position> &posible_moves) override;
+                               std::list<Position> &possible_moves) override;
 
   void calculatePossibleMerges(const Position &initial,
-                               std::list<Position> &posible_moves) override;
+                               std::list<Position> &possible_moves) override;
 
   MoveValidationStatus
   checkIsAValidMove(const Position &initial, const Position &final) override;

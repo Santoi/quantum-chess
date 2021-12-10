@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <unistd.h>
 #include <exception>
+#include <memory>
 
 #include "network.h"
 #include "packet.h"
@@ -19,9 +20,18 @@ public:
   //is set to be a invalid_fd.
   Socket(Socket &&other) noexcept;
 
+  Socket &operator=(Socket &&other) noexcept;
+
+  Socket(const Socket &other) = delete;
+
+  Socket &operator=(const Socket &other) = delete;
+
   //Creates and returns a client socket using the host and service provided, connecting it
   //accordingly
   static Socket createAConnectedSocket(const char *host, const char *service);
+
+  template<typename T, typename... Args>
+  friend std::unique_ptr<T> make_unique(Args &&... args);
 
   //Creates a server socket using the host and service provided. A bind and a listen is applied to
   //the new socket, leaving it on a valid state for accepting client sockets. The server socket is

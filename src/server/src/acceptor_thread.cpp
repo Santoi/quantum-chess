@@ -4,9 +4,9 @@
 #include "lobby_thread.h"
 #include "matches_repository.h"
 
-AcceptorThread::AcceptorThread(Socket &acceptor, MatchesRepository &matches_)
-    : Thread(), socket(acceptor),
-      matches(matches_) {}
+AcceptorThread::AcceptorThread(Socket &acceptor, MatchOrganizer &matches_)
+        : Thread(), socket(acceptor),
+          matches(matches_) {}
 
 void AcceptorThread::run() {
   BlockingQueue<Socket> peer_queue;

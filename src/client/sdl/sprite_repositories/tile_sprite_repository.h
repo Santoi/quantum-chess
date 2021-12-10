@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_TILE_SPRITE_REPOSITORY_H
 
 #include <map>
-#include "texture_sprite.h"
+#include "../texture_sprite.h"
 
 class TileSpriteRepository {
 public:

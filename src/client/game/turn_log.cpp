@@ -1,7 +1,7 @@
 #include "turn_log.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
-TurnLog::TurnLog(Scene &scene) : scene(scene) {}
+TurnLog::TurnLog(GameScene &scene) : scene(scene) {}
 
 void
 TurnLog::changeTurn(bool white) {

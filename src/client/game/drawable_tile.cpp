@@ -1,5 +1,5 @@
 #include "drawable_tile.h"
-#include "../sdl/tile_sprite_repository.h"
+#include "../sdl/sprite_repositories/tile_sprite_repository.h"
 
 DrawableTile::DrawableTile(Renderer &renderer, bool black_,
                            TileSpriteRepository &repository) :

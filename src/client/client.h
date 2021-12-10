@@ -5,8 +5,17 @@
 #include "communication/remote_clients_threads.h"
 #include "../common/src/socket.h"
 #include "../common/src/blocking_queue.h"
+#include "game/game.h"
 #include "communication/remote_client_instructions.h"
+#include "sdl/handler_thread.h"
+#include "sdl/chat/text_entry.h"
+#include "sdl/login_scene.h"
+#include "sdl/game_scene.h"
 #include <string>
+
+class GameScene;
+
+class LoginScene;
 
 class Client {
 private:
@@ -14,6 +23,13 @@ private:
   BlockingQueue<RemoteClientInstruction> send;
   std::string client_nick_name;
   ClientData::Role role;
+
+  void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
+                      HandlerThread &handler, Renderer &renderer);
+
+  void loginRenderLoop(LoginScene &login_renderer, HandlerThread &login_handler,
+                       Renderer &renderer);
+
 
 public:
   Client() = default;
@@ -24,7 +40,7 @@ public:
   //false, then both remote_sender and remote_receiver threads are started, and client can receive
   //and send instruction without any synchronization. When the command "exit" is read, both sender and
   //receiver threads are joined and the execution is finished.
-  void execute(const char *host, const char *port);
+  void execute();
 
   //Se destruye el socket cliente.
   ~Client() = default;

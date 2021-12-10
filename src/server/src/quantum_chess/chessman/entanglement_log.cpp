@@ -72,6 +72,7 @@ EntanglementLog::deleteEntanglementsWhichAreNotSharedBy(
   // First for position 1
   for (auto it = log.begin(); it != log.end();) {
     if (*it == pos1) {
+      // Find entanglement of pos2 with the other position entangled in *it.
       if (find(pos2, it->getOther(pos1)) == log.end()) {
         it = log.erase(it);
         continue;
@@ -82,6 +83,7 @@ EntanglementLog::deleteEntanglementsWhichAreNotSharedBy(
   // For position 2
   for (auto it = log.begin(); it != log.end();) {
     if (*it == pos2) {
+      // Find entanglement of pos1 with the other position entangled in *it.
       if (find(pos1, it->getOther(pos2)) == log.end()) {
         it = log.erase(it);
         continue;
@@ -96,6 +98,8 @@ void EntanglementLog::measureIfEntangledWithAllPositionsInList(
   size_t list_size = list.size();
   std::map<QuantumPosition *, size_t> counters;
   for (auto &entanglement: log) {
+    // If first of entanglement is in list. Then increment the counter to
+    // the second. If not, then check for the second.
     if (std::find(list.begin(), list.end(), &entanglement.first) !=
         list.end()) {
       if (counters.count(&entanglement.second))
@@ -111,6 +115,9 @@ void EntanglementLog::measureIfEntangledWithAllPositionsInList(
     }
   }
 
+  // Iterate all the find positions entangled with any position of the list.
+  // Then if the counter is equal to the list size, it means that is entangled
+  // with all of them, so measure it.
   for (auto it = counters.begin(); it != counters.end(); ++it) {
     if (it->second == list_size) {
       deleteEntanglementsOfWith(log.begin(), (*list.begin())->getChessman(),
@@ -135,7 +142,8 @@ void EntanglementLog::measureEntanglements(const Chessman &chessman,
     } else
       ++it;
   }
-  // TODO aca puede romper.
+
+  // Measure at the end to not corrupt the log iterator.
   for (auto &to_meas: to_measure)
     to_meas->measure();
 }

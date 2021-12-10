@@ -10,18 +10,11 @@ ChessExceptionInstruction::ChessExceptionInstruction(
         message(std::move(message)) {}
 
 
-void ChessExceptionInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {
+void ChessExceptionInstruction::makeActionAndNotify(Match &match) {}
 
-  std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChessExceptionInstruction>(
-          instructor_data, std::move(this->message));
-  listening_queues.at(instructor_data.id).push(this_instruc_ptr);
-}
-
-void ChessExceptionInstruction::fillPacketWithInstructionsToSend(
+void ChessExceptionInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {
-  protocol.fillPacketWithExceptionInfo(packet, this->message);
+  protocol.fillPacketWithExceptionMessage(packet, this->message);
 }

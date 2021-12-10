@@ -8,27 +8,27 @@ PossibleMovesInstruction::PossibleMovesInstruction(const ClientData &inst_data,
         positions(std::move(pos)) {}
 
 
-void PossibleMovesInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {
+void PossibleMovesInstruction::makeActionAndNotify(Match &match) {
   std::list<Position> positions_;
   try {
-    positions_ = match.getBoard().getPossibleMovesOf(*positions.begin());
+    match.getBoard().getPossibleMovesOf(*positions.begin(),
+                                        positions_);
   }
   catch (const ChessException &e) {
-    ChessExceptionInstruction instruction(instructor_data, e.what());
-    match_updates_queue.push(
-            std::make_shared<ChessExceptionInstruction>(instruction));
+    std::shared_ptr<Instruction> error_instr =
+            std::make_shared<ChessExceptionInstruction>(instructor_data,
+                                                        e.what());
+    match.addInstrToClientListeningQueue(instructor_data.id, error_instr);
     return;
   }
-  std::shared_ptr<Instruction> this_instruc_ptr =
+  std::shared_ptr<Instruction> this_instruct_ptr =
           std::make_shared<PossibleMovesInstruction>(instructor_data,
                                                      std::move(positions_));
-  listening_queues.at(instructor_data.id).push(this_instruc_ptr);
+  match.addInstrToClientListeningQueue(instructor_data.id, this_instruct_ptr);
 }
 
 void
-PossibleMovesInstruction::fillPacketWithInstructionsToSend(
+PossibleMovesInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

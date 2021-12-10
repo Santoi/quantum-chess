@@ -4,43 +4,35 @@
 #include <vector>
 #include "match.h"
 #include "../../common/src/socket.h"
+#include "matches_map.h"
 #include <memory>
 
-class MatchesRepository {
+class MatchOrganizer {
 private:
-  uint16_t created_matches;
-  std::map<uint16_t, std::unique_ptr<Match>> ptr_matches;
-  uint16_t accepted_clients;
+  MatchesMap matches_map;
   std::ifstream &file;
 
 public:
-  //Creates a MatchesRepository, setting the number of created_matches equal to cero.
-  MatchesRepository(std::ifstream &file_);
+  explicit MatchOrganizer(std::ifstream &file_);
 
-  //Iterates over the matches vector: if any of them is active, a true is returned. If
-  //none of them is active, a false is returned.
-  bool thereAreActiveMatches();
-
-  //Iterates over the matches vector: if a match is inactive, the method pushExitInstructionToUpdatesQueue
-  //is called over the match to force its termination, and after that the match thread is joined.
+  // Joins all matches that are inactive.
   void joinInactiveMatches();
 
-  ~MatchesRepository() = default;
+  ~MatchOrganizer() = default;
 
+  // Stops all matches.
   void stopMatches();
 
+  // Add client, ask it for match and add it to match, creating if doesn't
+  // exist the selected one.
   void
   addClientToMatchCreatingIfNeeded(Socket &&client_socket);
 
+  // Join all matches.
   void joinMatches();
 
 private:
-  //Creates a new match and increases the created_matches number by one.
-  uint16_t createNewMatch();
-
-  //Following the protocol, it sends the number of games running to the remote client,
-  //and receives the client's chosen game. If the client wants to play in a new match, a new match
-  //is created.
+  // Sends matches information to client and receive the chosen one.
   uint16_t getClientChosenMatch(Socket &client_socket);
 };
 

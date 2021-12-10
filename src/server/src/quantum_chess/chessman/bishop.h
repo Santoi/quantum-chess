@@ -15,8 +15,7 @@ public:
          EntanglementLog &entanglement_log_);
 
   void calculateMoves(const Position &initial,
-                      std::list<Position> &posible_moves)
-  const override;
+                      std::list<Position> &posible_moves) const override;
 
   ~Bishop() override = default;
 };

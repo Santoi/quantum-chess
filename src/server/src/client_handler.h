@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <memory>
+#include "clients_map.h"
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
 #include "clients_threads.h"
@@ -10,6 +11,7 @@
 
 class Instruction;
 
+// Handles clients sender and receiver threads. Store client data.
 class ClientHandler {
 private:
   Socket client_socket;
@@ -21,27 +23,23 @@ private:
 public:
   ClientHandler() = delete;
 
-  //A ClientHandler is created, moving and storing the given socket. A ClientHandlersReceiver and
-  //ClientHandlersSender are also created and saved. The boolean client_is_active is set to true.
   ClientHandler(Socket &&socket,
                 BlockingQueue<Instruction> &notifications_queue,
                 BlockingQueue<Instruction> &updates_queue,
                 ClientData client_data_);
 
-  //Creates a new ClientHandler by moving the other_client's socket to the new handler, and creating
-  //the new receivers and senders respectively. The new handler saves the other_client boolean
-  //client_is_active.
   ClientHandler(ClientHandler &&other_client) noexcept;
 
-  //Starts ClientHandler's threads by calling the private start method.
+  // Starts sender and receiver threads.
   void start();
 
+  // Returns a reference to client data.
   const ClientData &getData() const;
 
-  //Joins both the handler's receiver and sender threads. Object's boolean
-  //client_is_active is set to true.
+  // Joins both the handler's receiver and sender threads.
   void join();
 
+  // Stops both thread by closing socket and closing notifications queue.
   void stop();
 
   ~ClientHandler() = default;

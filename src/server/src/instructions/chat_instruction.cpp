@@ -7,22 +7,18 @@ ChatInstruction::ChatInstruction(const ClientData &instructor_data_,
         message(std::move(message)) {}
 
 
-void ChatInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {
-  std::shared_ptr<Instruction> this_instruc_ptr = std::make_shared<ChatInstruction>(
+void ChatInstruction::makeActionAndNotify(Match &match) {
+  std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<ChatInstruction>(
           instructor_data, std::move(this->message));
-
-  for (auto &listening_queue: listening_queues)
-    listening_queue.second.push(this_instruc_ptr);
+  match.addInstrToAllListeningQueues(this_instruct_ptr);
 }
 
-void ChatInstruction::fillPacketWithInstructionsToSend(ServerProtocol &protocol,
-                                                       Packet &packet,
-                                                       const ClientData &client_receiver_data) {
+void ChatInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                                      Packet &packet,
+                                                      const ClientData &client_receiver_data) {
   // Calculate time
-  protocol.fillPacketWithChatInfo(packet, instructor_data, this->message,
-                                  getTimeStamp());
+  protocol.fillPacketWithChatMessage(packet, instructor_data, this->message,
+                                     getTimeStamp());
 }
 
 std::string ChatInstruction::getTimeStamp() {

@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_DRAWABLE_CHESSMAN_H
 
 #include "../communication/chessman_data.h"
-#include "../sdl/chessman_sprite_repository.h"
+#include "../sdl/sprite_repositories/chessman_sprite_repository.h"
 #include "../sdl/texture_sprite.h"
 #include "../sdl/renderer.h"
 #include <map>

@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_H
 
 #include "font.h"
-#include "text_sprite_repository.h"
+#include "../sprite_repositories/text_sprite_repository.h"
 #include <string>
 
 class Renderer;
@@ -17,7 +17,7 @@ class DrawableText {
 
 public:
   DrawableText(TextSpriteRepository &text_sprite_repository_,
-               std::string text, char color);
+               std::string text, char color = 'w');
 
   DrawableText(DrawableText &&other) noexcept;
 
@@ -25,11 +25,15 @@ public:
 
   size_t length() const;
 
-  int getDrawableWidth() const;
+  size_t getDrawableWidth() const;
 
-  int getDrawableHeight() const;
+  size_t getDrawableHeight() const;
 
-  void render(int x, int y);
+  void render(size_t x, size_t y);
+
+  void setText(const std::string &text_);
+
+  void setColor(char color_);
 };
 
 

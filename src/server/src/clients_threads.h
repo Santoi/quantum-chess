@@ -5,76 +5,64 @@
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
 #include "../../common/src/client_data.h"
-//#include "instructions/instruction.h"
 
 class Instruction;
 
-class ClientHandlersReceiver: public Thread {
+// Thread that receive packets from client.
+class ClientHandlersReceiver : public Thread {
 private:
-    Socket& client_socket;
-    ClientData client_data;
-    BlockingQueue<Instruction>& updates_queue;
+  Socket &client_socket;
+  ClientData client_data;
+  BlockingQueue<Instruction> &updates_queue;
 
 public:
-    ClientHandlersReceiver() = delete;
+  ClientHandlersReceiver() = delete;
 
-    //Creates a new client receiver, saving the references to the socket and updates_queue passed in
-    //the function parameters, and saves a copy of the client_id.
-    ClientHandlersReceiver(Socket& socket, const ClientData & client_data_, BlockingQueue<Instruction>&
-    updates_queue);
+  ClientHandlersReceiver(Socket &socket, const ClientData &client_data_,
+                         BlockingQueue<Instruction> &
+                         updates_queue);
 
-    //Saves the other_receiver's BlockingQueue<Instruction> reference in new client receiver, and
-    //copies the other's client_id to new receivers's client_id. It receives a reference
-    //to a valid socket.
-    ClientHandlersReceiver(ClientHandlersReceiver&& other_receiver, Socket& socket);
+  ClientHandlersReceiver(ClientHandlersReceiver &&other_receiver,
+                         Socket &socket);
 
-    //Receives from socket, following the protocol, the new instruction and pushes it to the
-    //updates_queue.
-    void receiveInstructionAndPushToQueue();
+  // Receives from socket, and pushes new instruction to the updates queue.
+  void receiveInstructionAndPushToQueue();
 
-    //Pushes to updates_queue the client's exit instruction.
-    void pushToQueueExitInstruction();
+  // Pushes an exit instruction to update queue to notify that the client left.
+  void pushToQueueExitInstruction();
 
-    ~ClientHandlersReceiver() = default;
+  ~ClientHandlersReceiver() override = default;
 
 protected:
-    //While the remote client socket is closed, the receiveInstructionAndPushToQueue method is called.
-    //After the remote client socket is closed, the client's exit instruction is pushed to queue by
-    //calling pushToQueueExitInstruction.
-    void run() override;
+  // Receive from socket and push to updates queue.
+  void run() override;
 };
 
-class ClientHandlersSender: public Thread {
+// Thread that send packets to client.
+class ClientHandlersSender : public Thread {
 private:
-    Socket& client_socket;
-    ClientData client_data;
-    BlockingQueue<Instruction>& notifications_queue;
+  Socket &client_socket;
+  ClientData client_data;
+  BlockingQueue<Instruction> &notifications_queue;
 
 public:
-    ClientHandlersSender() = delete;
-    //Creates a new client sender, saving the references to the socket, notifications_queue and
-    //data repository passed in the function parameters, and saves a copy of the
-    //client_id.
-    ClientHandlersSender(Socket& socket, BlockingQueue<Instruction>& notifications_queue, const ClientData & client_data_);
+  ClientHandlersSender() = delete;
 
-    //Saves the other_receiver's BlockingQueue, ClientDataRepository references in new client
-    //sender, and copies the other's client_id to new receivers's client_id. It receives a
-    //reference to the valid socket.
-    ClientHandlersSender(ClientHandlersSender&& other_sender, Socket& socket);
+  ClientHandlersSender(Socket &socket,
+                       BlockingQueue<Instruction> &notifications_queue,
+                       const ClientData &client_data_);
 
-    //Pops from the notifications_queue an instruction and sends, following the protocol, the
-    //necessary information to the remote client's socket.
-    void popFromQueueAndSendInstruction();
+  ClientHandlersSender(ClientHandlersSender &&other_sender, Socket &socket);
 
-    ~ClientHandlersSender() override = default;
+  // Pops instructions from notifications queue and then send it from socket.
+  void popFromQueueAndSendInstruction();
+
+  ~ClientHandlersSender() override = default;
 
 protected:
-    //Calls popFromQueueAndSendInstruction until the ExitInstruction of the corresponding client
-    //throws the runtime exception.
-    void run() override;
+  // Pop from notifications queue and send to socket.
+  void run() override;
 };
-
-
 
 
 #endif //QUANTUM_CHESS_PROJ_CLIENTS_THREADS_H

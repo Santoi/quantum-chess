@@ -10,25 +10,24 @@ Pawn::Pawn(const Position &position, bool white_, Board &board_,
         first_move(true) {}
 
 void Pawn::calculateMoves(const Position &initial,
-                          std::list<Position> &posible_moves) const {
-  posible_moves = std::list<Position>();
+                          std::list<Position> &possible_moves) const {
+  possible_moves = std::list<Position>();
   int sum = (white) ? 1 : -1;
-
 
   int i = 0, j = 0;
   if ((j = initial.y() + sum) >= 0 && j < 8)
-    posible_moves.push_back(Position(initial.x(), j));
+    possible_moves.emplace_back(initial.x(), j);
 
   if ((i = initial.x() + 1) < 8 && (j = initial.y() + sum) >= 0 && j < 8)
     if (board.getChessmanAt(Position(i, j)))
-      posible_moves.push_back(Position(i, j));
+      possible_moves.emplace_back(i, j);
 
   if ((i = initial.x() - 1) >= 0 && (j = initial.y() + sum) >= 0 && j < 8)
     if (board.getChessmanAt(Position(i, j)))
-      posible_moves.push_back(Position(i, j));
+      possible_moves.emplace_back(i, j);
 
   if ((j = initial.y() + sum * 2) >= 0 && j < 8 && first_move)
-    posible_moves.push_back(Position(initial.x(), j));
+    possible_moves.emplace_back(initial.x(), j);
 }
 
 bool Pawn::move(const Position &initial, const Position &final) {
@@ -41,15 +40,14 @@ char Pawn::charId() const {
   return 'P';
 }
 
-// TODO validate.
 void Pawn::calculatePossibleMerges(const Position &initial,
-                                   std::list<Position> &posible_moves) {
-  posible_moves = std::list<Position>();
+                                   std::list<Position> &possible_moves) {
+  possible_moves = std::list<Position>();
 }
 
 void Pawn::calculatePossibleSplits(const Position &initial,
-                                   std::list<Position> &posible_moves) {
-  posible_moves = std::list<Position>();
+                                   std::list<Position> &possible_moves) {
+  possible_moves = std::list<Position>();
 }
 
 Chessman::MoveValidationStatus

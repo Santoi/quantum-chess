@@ -23,7 +23,8 @@ ClientHandlersReceiver::ClientHandlersReceiver(
 void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
   std::shared_ptr<Instruction> ptr_instruction;
   ServerProtocol protocol;
-  protocol.fillInstructions(this->client_socket, client_data, ptr_instruction);
+  protocol.receiveAndFillInstruction(this->client_socket, client_data,
+                                     ptr_instruction);
   this->updates_queue.push(ptr_instruction);
 }
 
@@ -60,11 +61,10 @@ ClientHandlersSender::ClientHandlersSender(ClientHandlersSender &&otherSender,
 }
 
 void ClientHandlersSender::popFromQueueAndSendInstruction() {
-  std::shared_ptr<Instruction> instruc_ptr;
-  this->notifications_queue.pop(instruc_ptr);
+  auto instruct_ptr = notifications_queue.pop();
   ServerProtocol protocol;
-  protocol.sendPacketWithUpdates(this->client_socket, instruc_ptr,
-                                 client_data);
+  protocol.sendPacket(this->client_socket, instruct_ptr,
+                      client_data);
 }
 
 void ClientHandlersSender::run() {

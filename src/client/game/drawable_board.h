@@ -3,14 +3,14 @@
 
 #include "drawable_chessman.h"
 #include "drawable_tile.h"
-#include "../sdl/chessman_sprite_repository.h"
+#include "../sdl/sprite_repositories/chessman_sprite_repository.h"
 #include "../position.h"
 #include "../communication/chessman_data.h"
 #include "../sdl/texture_sprite.h"
 #include "../sdl/renderer.h"
 #include "../sdl/window.h"
 #include "../sdl/chat/drawable_text.h"
-#include "../sdl/chat/text_sprite_repository.h"
+#include "../sdl/sprite_repositories/text_sprite_repository.h"
 #include "../sdl/coordinate_transformer.h"
 #include <map>
 #include <string>
@@ -30,7 +30,7 @@ private:
   TileSpriteRepository tile_repository;
   TextSpriteRepository text_repository;
   bool current;
-  std::pair<Position, DrawableTile> current_tile;
+  std::pair<PixelCoordinate, DrawableTile> current_tile;
   std::mutex mutex;
 
 public:
@@ -63,7 +63,9 @@ public:
 
   void render(CoordinateTransformer &transformer, int width, int height);
 
-  void currentTile(const Position &pos);
+  void currentTile(const PixelCoordinate &coordinate);
+
+  void setDefaultWithCurrent();
 };
 
 

@@ -9,31 +9,32 @@ PossibleMergesInstruction::PossibleMergesInstruction(
         positions(std::move(pos)) {}
 
 
-void PossibleMergesInstruction::makeActionAndNotifyAllListeningQueues(
-        std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-        Match &match, BlockingQueue<Instruction> &match_updates_queue) {
+void PossibleMergesInstruction::makeActionAndNotify(Match &match) {
   std::list<Position> positions_;
   try {
     if (positions.size() == 1)
-      positions_ = match.getBoard().getPossibleMergesOf(*positions.begin());
+      match.getBoard().getPossibleMergesOf(*positions.begin(),
+                                           positions_);
     else
-      positions_ = match.getBoard().getPossibleMergesOf(*positions.begin(),
-                                                        *(++positions.begin()));
+      match.getBoard().getPossibleMergesOf(*positions.begin(),
+                                           *(++positions.begin()),
+                                           positions_);
   }
   catch (const ChessException &e) {
-    ChessExceptionInstruction instruction(instructor_data, e.what());
-    match_updates_queue.push(
-            std::make_shared<ChessExceptionInstruction>(instruction));
+    std::shared_ptr<Instruction> error_instr =
+            std::make_shared<ChessExceptionInstruction>(instructor_data,
+                                                        e.what());
+    match.addInstrToClientListeningQueue(instructor_data.id, error_instr);
     return;
   }
-  std::shared_ptr<Instruction> this_instruc_ptr =
+  std::shared_ptr<Instruction> this_instruct_ptr =
           std::make_shared<PossibleMergesInstruction>(instructor_data,
                                                       std::move(positions_));
-  listening_queues.at(instructor_data.id).push(this_instruc_ptr);
+  match.addInstrToClientListeningQueue(instructor_data.id, this_instruct_ptr);
 }
 
 void
-PossibleMergesInstruction::fillPacketWithInstructionsToSend(
+PossibleMergesInstruction::fillPacketWithInstructionToSend(
         ServerProtocol &protocol,
         Packet &packet,
         const ClientData &client_receiver_data) {

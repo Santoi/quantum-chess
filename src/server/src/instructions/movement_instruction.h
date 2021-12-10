@@ -14,14 +14,14 @@ public:
                       const Position &initial_,
                       const Position &final_);
 
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_queues_update) override;
+  // Performs move in board, send event log and sound if a chessman is captured.
+  void makeActionAndNotify(Match &match) override;
 
+  // Does nothing
   void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

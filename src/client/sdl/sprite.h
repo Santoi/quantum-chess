@@ -10,26 +10,26 @@ class Sprite {
 protected:
   Renderer &renderer;
   SDL2pp::Texture sprite_;
-  int width_, height_;
+  size_t width_, height_;
 
 public:
   Sprite(Renderer &renderer, const std::string &file_name,
-         int width = 0,
-         int height = 0);
+         size_t width = 0,
+         size_t height = 0);
 
   Sprite(Renderer &renderer, const SDL2pp::Surface &surface,
-         int width = 0,
-         int height = 0);
+         size_t width = 0,
+         size_t height = 0);
 
-  int width() const;
+  size_t width() const;
 
-  int height() const;
+  size_t height() const;
 
   SDL2pp::Texture &sprite();
 
-  void render(int x, int y);
+  void render(size_t x, size_t y);
 
-  void render(int x, int y, int width, int height);
+  void render(size_t x, size_t y, size_t width, size_t height);
 };
 
 

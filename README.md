@@ -68,13 +68,13 @@ Al dar un segundo clic en la posición deseada, si el movimiento es válido, la 
 De no ser valido el movimiento, se indicará un error en la zona de log de errores.
 
 <p align=center>
-    <img src="docs/images/movement.gif" alt="Movimiento" height="400"/>
+    <img src="docs/images/readme/movement.gif" alt="Movimiento" height="400"/>
 </p>
 
 Si una pieza se mueve a un casillero del color contrario, al igual que en el ajedrez clásico, la pieza será capturada.
 
 <p align=center>
-    <img src="docs/images/movement_with_capture.gif" alt="Movimiento con captura" height="400"/>
+    <img src="docs/images/readme/movement_with_capture.gif" alt="Movimiento con captura" height="400"/>
 </p>
 
 ### Fin del juego
@@ -89,7 +89,7 @@ Para realizar el split, se debe mantener presionada la tecla ```LEFT SHIFT``` y 
 
 
 <p align=center>
-    <img src="docs/images/split.gif" alt="Tablero cargado con archivo" height="400"/>
+    <img src="docs/images/readme/split.gif" alt="Tablero cargado con archivo" height="400"/>
 </p>
 
 Algunas consideraciones y limitaciones a la hora de hacer un split:
@@ -106,7 +106,7 @@ Una pieza partida podrá ser reunida de nuevo mediante el movimiento merge. Una 
 Para realizar el merge, se debe mantener presionada la tecla ```LEFT CTRL``` y hacer clic izquierdo en la pieza que se quiere mergear. Se mostrarán en marrón las casillas a donde se puede hacer un merge. Luego se debe clickear (ya no hace falta seguir apretando la tecla) y seleccionar la otra pieza con la que se quiere mergear. El color marrón cambiara a las casillas a las que ambas piezas pueden moverse. Un tercer clic en una casilla valida, efectuará el merge.
 
 <p align=center>
-    <img src="docs/images/split.gif" alt="Tablero cargado con archivo" height="400"/>
+    <img src="docs/images/readme/split.gif" alt="Tablero cargado con archivo" height="400"/>
 </p>
 
 
@@ -131,13 +131,13 @@ En el caso de que la pieza no esté realmente allí, esta desaparecerá, y se pr
 En el siguiente caso, la torre mide a la reina contraria, y como la reina estaba allí, fue capturada.
 
 <p align=center>
-    <img src="docs/images/measure_was_there.gif" alt="Medicion estaba alli" height="400"/>
+    <img src="docs/images/readme/measure_was_there.gif" alt="Medicion estaba alli" height="400"/>
 </p>
 
 En el siguiente caso, el rey mide a la torre propia, y resulta que no estaba alli, por lo que se realiza el movimiento.
 
 <p align=center>
-    <img src="docs/images/measure_wasnt_there.gif" alt="Medicion no estaba alli" height="400"/>
+    <img src="docs/images/readme/measure_wasnt_there.gif" alt="Medicion no estaba alli" height="400"/>
 </p>
 
 Si hubiera piezas entrelazadas, estas también son medidas si corresponden.
@@ -150,7 +150,7 @@ Cuando se realiza un movimiento, podría ocurrir que en el camino de la pieza, s
 A partir de aquí cuando, se mida una de las piezas entrelazadas, el destino de la otra también se definirá.
 
 <p align=center>
-    <img src="docs/images/entanglement.gif" alt="Entrelazado" height="400"/>
+    <img src="docs/images/readme/entanglement.gif" alt="Entrelazado" height="400"/>
 </p>
 
 Algunas consideraciones y limitaciones a la hora de entrelazar:
@@ -163,7 +163,7 @@ Algunas consideraciones y limitaciones a la hora de entrelazar:
 Si se hace clic derecho en una pieza, se podra observar en verde cuales son las otras partes de la pieza, y en celeste con que piezas está entrelazada.
 
 <p align=center>
-    <img src="docs/images/see.gif" alt="Enroque" height="400"/>
+    <img src="docs/images/readme/see.gif" alt="Enroque" height="400"/>
 </p>
 
 ### Enroque
@@ -174,7 +174,7 @@ El enroque permite mover en un mismo movimiento al rey y a una de las torres. Se
 * Enroque corto: se intercambian el rey y la torre de la derecha, en este caso tienen que estar vacios los dos casilleros entre el rey y la torre.  El rey queda en el casillero G1 (si se juega con blancas) y la torre en el casillero F1.
 
 <p align=center>
-    <img src="docs/images/castling.gif" alt="Enroque con entrelazado" height="400"/>
+    <img src="docs/images/readme/castling.gif" alt="Enroque con entrelazado" height="400"/>
 </p>
 
 Para hacer un enroque simplemente se debe hacer clic en la posición que el rey ocupará, cuando esté disponible.
@@ -189,13 +189,13 @@ Además, se pueden hacer movimientos de tipo cuantico mientras se enroca.
 * Podría ocurrir que en el enroque largo, al lado de la torre haya una pieza cuantica, con lo cual, como no es un casillero donde quedará una pieza del enroque, y la pieza podría estar allí o no, se enlazará la torre y el rey con esta pieza.
 
 <p align=center>
-    <img src="docs/images/entangled_castling.gif" alt="Visualizacion de piezas" height="400"/>
+    <img src="docs/images/readme/entangled_castling.gif" alt="Visualizacion de piezas" height="400"/>
 </p>
 
 * Podría hacerse un split mientras se enroca, eligiendo en el split una posición correspondiente al enroque (o ambas). Al hacer esto, la torre (o las torres, si se hizo el split en ambos enroques) quedarán entrelazadas con el rey.
 
 <p align=center>
-    <img src="docs/images/quantum_castling.gif" alt="Visualizacion de piezas" height="400"/>
+    <img src="docs/images/readme/quantum_castling.gif" alt="Visualizacion de piezas" height="400"/>
 </p>
 
 
@@ -206,7 +206,7 @@ En la zona derecha de la pantalla, se pueden visualizar 4 secciones: el log de e
 
 
  <p align=center>
-    <img src="docs/images/chat_log.png" alt="Log and chat" height="450"/>
+    <img src="docs/images/readme/chat_log.png" alt="Log and chat" height="450"/>
 </p>
 
 
@@ -217,7 +217,7 @@ En la zona derecha de la pantalla, se pueden visualizar 4 secciones: el log de e
 
 
  <p align=center>
-    <img src="docs/images/chat.gif" alt="Chat" height="450"/>
+    <img src="docs/images/readme/chat.gif" alt="Chat" height="450"/>
 </p>
 
 
@@ -263,5 +263,5 @@ Por ejemplo, si se carga un archivo como se muestra a continuación, se obtiene 
 
 
 <p align=center>
-    <img src="docs/images/example_file.png" alt="Tablero cargado con archivo" height="400"/>
+    <img src="docs/images/readme/example_file.png" alt="Tablero cargado con archivo" height="400"/>
 </p>

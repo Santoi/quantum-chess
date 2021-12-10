@@ -147,7 +147,8 @@ will result.
 If an argument supports the `<<` operator, it will be called to print the
 argument when the assertion fails. Otherwise, GoogleTest will attempt to print
 them in the best way it can—see
-[Teaching GoogleTest How to Print Your Values](../advanced.md#teaching-googletest-how-to-print-your-values).
+[Teaching GoogleTest How to Print Your Values](../advanced.md#teaching-googletest-how-to-print-your-values)
+.
 
 Arguments are always evaluated exactly once, so it's OK for the arguments to
 have side effects. However, the argument evaluation order is undefined and
@@ -268,7 +269,8 @@ comparison to make sense, the user needs to carefully choose the error bound.
 
 GoogleTest also provides assertions that use a default error bound based on
 Units in the Last Place (ULPs). To learn more about ULPs, see the article
-[Comparing Floating Point Numbers](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/).
+[Comparing Floating Point Numbers](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/)
+.
 
 ### EXPECT_FLOAT_EQ {#EXPECT_FLOAT_EQ}
 
@@ -451,7 +453,8 @@ expressions as they appear in the source code. The types `T1`, `T2`, ..., `Tn`
 can be either value types or reference types; if an argument has type `T`, it
 can be declared as either `T` or `const T&`, whichever is appropriate. For more
 about the return type `testing::AssertionResult`, see
-[Using a Function That Returns an AssertionResult](../advanced.md#using-a-function-that-returns-an-assertionresult).
+[Using a Function That Returns an AssertionResult](../advanced.md#using-a-function-that-returns-an-assertionresult)
+.
 
 As an example, see the following code:
 
@@ -529,17 +532,17 @@ process. How that happens depends on the platform and the variable
 `::testing::GTEST_FLAG(death_test_style)`, which is initialized from the
 command-line flag `--gtest_death_test_style`.
 
-*   On POSIX systems, `fork()` (or `clone()` on Linux) is used to spawn the
-    child, after which:
-    *   If the variable's value is `"fast"`, the death test statement is
-        immediately executed.
-    *   If the variable's value is `"threadsafe"`, the child process re-executes
-        the unit test binary just as it was originally invoked, but with some
-        extra flags to cause just the single death test under consideration to
-        be run.
-*   On Windows, the child is spawned using the `CreateProcess()` API, and
-    re-executes the binary to cause just the single death test under
-    consideration to be run - much like the `"threadsafe"` mode on POSIX.
+* On POSIX systems, `fork()` (or `clone()` on Linux) is used to spawn the child,
+  after which:
+    * If the variable's value is `"fast"`, the death test statement is
+      immediately executed.
+    * If the variable's value is `"threadsafe"`, the child process re-executes
+      the unit test binary just as it was originally invoked, but with some
+      extra flags to cause just the single death test under consideration to be
+      run.
+* On Windows, the child is spawned using the `CreateProcess()` API, and
+  re-executes the binary to cause just the single death test under consideration
+  to be run - much like the `"threadsafe"` mode on POSIX.
 
 Other values for the variable are illegal and will cause the death test to fail.
 Currently, the flag's default value is
@@ -565,8 +568,8 @@ EXPECT_DEATH({
 Verifies that *`statement`* causes the process to terminate with a nonzero exit
 status and produces `stderr` output that matches *`matcher`*.
 
-The parameter *`matcher`* is either a [matcher](matchers.md) for a `const
-std::string&`, or a regular expression (see
+The parameter *`matcher`* is either a [matcher](matchers.md) for
+a `const std::string&`, or a regular expression (see
 [Regular Expression Syntax](../advanced.md#regular-expression-syntax))—a bare
 string *`s`* (with no matcher) is treated as
 [`ContainsRegex(s)`](matchers.md#string-matchers), **not**
@@ -617,8 +620,8 @@ cases:
 ::testing::KilledBySignal(signal_number);
 ```
 
-The parameter *`matcher`* is either a [matcher](matchers.md) for a `const
-std::string&`, or a regular expression (see
+The parameter *`matcher`* is either a [matcher](matchers.md) for
+a `const std::string&`, or a regular expression (see
 [Regular Expression Syntax](../advanced.md#regular-expression-syntax))—a bare
 string *`s`* (with no matcher) is treated as
 [`ContainsRegex(s)`](matchers.md#string-matchers), **not**

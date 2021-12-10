@@ -11,14 +11,13 @@ public:
   PossibleMergesInstruction(const ClientData &instructor_data,
                             std::list<Position> &&pos);
 
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_queues_update) override;
+  // Gets information about possible merges and sends it to client.
+  void makeActionAndNotify(Match &match) override;
 
+  // Does nothing.
   void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData &client_receiver_data) override;
 };
 
 

@@ -15,14 +15,14 @@ public:
                    const Position &from_, const Position &to1_,
                    const Position &to2_);
 
-  void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_queues_update) override;
+  // Performs a split on the board.
+  void makeActionAndNotify(Match &match) override;
 
+  // Does nothing.
   void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

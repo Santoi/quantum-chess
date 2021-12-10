@@ -6,8 +6,7 @@
 
 class QuantumPosition;
 
-/* Clase que representa una posicion,
- * con coordenadas x e y. */
+// Represents a position in chessboard
 class Position {
   uint8_t x_, y_;
 
@@ -18,6 +17,8 @@ public:
 
   Position(const Position &orig) = default;
 
+  // Constructor from QuantumPosition object. It keeps position parameter
+  // of it
   explicit Position(const QuantumPosition &position);
 
   Position &operator=(const Position &orig) = default;
@@ -26,20 +27,19 @@ public:
 
   bool operator!=(const Position &other) const;
 
+  // Compares with Position field of QuantumPosition
   bool operator==(const QuantumPosition &other) const;
 
+  // Compares with Position field QuantumPosition
   bool operator!=(const QuantumPosition &other) const;
 
-  // Devuelve la coordenada x.
+  // Returns x coordinate
   uint8_t x() const;
 
-  // Devuelve la coordenada y.
+  // Returns y coordinate
   uint8_t y() const;
 
   friend bool operator<(const Position &a, const Position &b);
-
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const Position &position);
 
   std::string print() const;
 };

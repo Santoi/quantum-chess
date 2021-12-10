@@ -22,18 +22,18 @@ bool Chessman::move(const Position &initial, const Position &final) {
   auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                             final);
   if (final_it == posible_moves.end())
-    throw ChessException("that chessman cant do that move");
+    throw ChessException("that chessman_ cant do that move");
   moveValidationExceptionThrower(checkIsAValidMove(initial, final));
 
-  // Search path and get middle path chessman.
+  // Search path and get middle path chessman_.
   std::pair<Position, Chessman *> chessman_in_path;
   calculatePath(initial, final, path);
   getMiddlePathChessman(path, chessman_in_path);
 
   Chessman *final_chessman = board.getChessmanAt(final);
 
-  /* If initial is quantic and there is a chessman at the end, or there is a
-   * chessman at the end and this is quantic, then measure both chessmen. */
+  /* If initial is quantic and there is a chessman_ at the end, or there is a
+   * chessman_ at the end and this is quantic, then measure both chessmen. */
   if ((this->isQuantum() && final_chessman) ||
       (final_chessman && final_chessman->isQuantum())) {
     this->measure(initial);
@@ -44,7 +44,7 @@ bool Chessman::move(const Position &initial, const Position &final) {
       return false;
   }
   // Measure solved from here.
-  // If there is final chessman, then is removed of the board.
+  // If there is final chessman_, then is removed of the board.
   if (final_chessman) {
     if (final_chessman->charId() == 'K') {
       std::string color = white ? "white" : "black";
@@ -56,7 +56,7 @@ bool Chessman::move(const Position &initial, const Position &final) {
     board.pushToLog(final.print() + " was captured");
   }
 
-  // If there is a chessman in path then entangle.
+  // If there is a chessman_ in path then entangle.
   if (chessman_in_path.second) {
     entangle(initial, final, *chessman_in_path.second,
              chessman_in_path.first);
@@ -78,12 +78,12 @@ void Chessman::split(const Position &initial, const Position &final1,
   auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                             final1);
   if (final_it == posible_moves.end())
-    throw ChessException("that chessman cant do that split");
+    throw ChessException("that chessman_ cant do that split");
   moveValidationExceptionThrower(checkIsAValidSplit(initial, final1));
   final_it = std::find(posible_moves.begin(), posible_moves.end(),
                        final2);
   if (final_it == posible_moves.end())
-    throw ChessException("that chessman cant do that split");
+    throw ChessException("that chessman_ cant do that split");
   moveValidationExceptionThrower(checkIsAValidSplit(initial, final2));
 
   if (final1 == final2)
@@ -107,7 +107,8 @@ void Chessman::split(const Position &initial, const Position &final1,
                                                     this));
   entanglement_log.addEntanglementsOfTo(*initial_qp_it, *new_qp_it);
 
-  board.addChessmanOfIn(initial, final1, final2);
+  board.addChessmanOfIn(initial, final1);
+  board.addChessmanIn(final2, this);
   board.pushToLog(initial.print() + " split to " + final1.print() + " and " +
                   final2.print());
 }
@@ -123,7 +124,7 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
   auto final_it = std::find(posible_moves.begin(), posible_moves.end(),
                             final);
   if (final_it == posible_moves.end())
-    throw ChessException("that chessman cant do that merge");
+    throw ChessException("that chessman_ cant do that merge");
   moveValidationExceptionThrower(checkIsAValidMerge(initial1, final));
 
   calculateMoves(initial2, posible_moves);
@@ -131,10 +132,10 @@ void Chessman::merge(const Position &initial1, const Position &initial2,
   final_it = std::find(posible_moves.begin(), posible_moves.end(),
                        final);
   if (final_it == posible_moves.end())
-    throw ChessException("that chessman cant do that merge");
+    throw ChessException("that chessman_ cant do that merge");
   moveValidationExceptionThrower(checkIsAValidMerge(initial2, final));
 
-  // Remove chessman of final places if there.
+  // Remove chessman_ of final places if there.
   if (board.getChessmanAt(final) == this)
     board.removeChessmanOf(final);
 
@@ -173,7 +174,7 @@ void Chessman::measure(const Position &position) {
                                   positions.end(), position);
 
   if (position_qp_it == positions.end())
-    throw ChessException("chessman is not there");
+    throw ChessException("chessman_ is not there");
 
 
   // If position is the first one, then leave as only real.
@@ -206,7 +207,7 @@ void Chessman::measure(const Position &position) {
   }
 }
 
-void Chessman::measureOthers(QuantumPosition &quantum_position) {
+void Chessman::measureOthers(const QuantumPosition &quantum_position) {
   // If entangled appears only in this position, then measure.
   entanglement_log.measureEntanglements(*this, quantum_position);
 
@@ -223,7 +224,6 @@ void Chessman::measureOthers(QuantumPosition &quantum_position) {
   entanglement_log.measureIfEntangledWithAllPositionsInList(positions_to_pass);
 }
 
-// Validates if move can be done (regardless the chessman).
 Chessman::MoveValidationStatus
 Chessman::checkIsAValidMove(const Position &initial, const Position &final) {
   checkIsInBoardOrFail(initial);
@@ -248,7 +248,7 @@ Chessman::checkIsAValidMove(const Position &initial, const Position &final) {
   if (final_chessman && chessman_in_path.second)
     return MEASURING_AND_ENTANGLING;
 
-  if (chessmanIsAlreadyEntangled(chessman_in_path.second))
+  if (chessmanIsAlreadyEntangled(*chessman_in_path.second))
     return ENTANGLING_SAME_PIECE_TWO_TIMES;
 
   return OK;
@@ -306,12 +306,12 @@ Chessman::checkIsAValidMerge(const Position &initial1, const Position &final) {
 
 // TODO posible moves to list
 void Chessman::calculatePossibleMoves(const Position &initial,
-                                      std::list<Position> &posible_moves) {
-  calculateMoves(initial, posible_moves);
+                                      std::list<Position> &possible_moves) {
+  calculateMoves(initial, possible_moves);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidMove(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
@@ -319,12 +319,12 @@ void Chessman::calculatePossibleMoves(const Position &initial,
 }
 
 void Chessman::calculatePossibleSplits(const Position &initial,
-                                       std::list<Position> &posible_moves) {
-  calculateMoves(initial, posible_moves);
+                                       std::list<Position> &possible_moves) {
+  calculateMoves(initial, possible_moves);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidSplit(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
@@ -332,33 +332,32 @@ void Chessman::calculatePossibleSplits(const Position &initial,
 }
 
 void Chessman::calculatePossibleMerges(const Position &initial,
-                                       std::list<Position> &posible_moves) {
+                                       std::list<Position> &possible_moves) {
   if (getProbability(initial) == 1)
     return;
 
-  calculateMoves(initial, posible_moves);
-  posible_moves.push_back(initial);
+  calculateMoves(initial, possible_moves);
+  possible_moves.push_back(initial);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (checkIsAValidMerge(initial, *it)) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
   }
 }
 
-// TODO hacer tests de esto.
 void Chessman::calculatePossibleMerges(const Position &initial1,
                                        const Position &initial2,
-                                       std::list<Position> &posible_moves) {
+                                       std::list<Position> &possible_moves) {
   std::list<Position> aux;
-  calculatePossibleMerges(initial1, posible_moves);
+  calculatePossibleMerges(initial1, possible_moves);
   calculatePossibleMerges(initial2, aux);
 
-  for (auto it = posible_moves.begin(); it != posible_moves.end();) {
+  for (auto it = possible_moves.begin(); it != possible_moves.end();) {
     if (std::find(aux.begin(), aux.end(), *it) == aux.end()) {
-      it = posible_moves.erase(it);
+      it = possible_moves.erase(it);
       continue;
     }
     ++it;
@@ -383,7 +382,6 @@ bool Chessman::getMiddlePathChessman(const std::vector<Position> &path,
                                      std::pair<Position, Chessman *> &chessman)
 const {
   bool can_move = true;
-  // Se revisa el camino.
   for (size_t i = 0; i < path.size() - 1; i++) {
     if (auto chessman_ = board.getChessmanAt(path[i])) {
       if (!can_move || !chessman_->isQuantum() || chessman_ == this)
@@ -421,12 +419,12 @@ const QuantumPosition &Chessman::getPosition(size_t index) const {
 }
 
 void Chessman::getAllPositions(std::list<Position> &output) const {
-  for (auto &position: positions)
-    output.push_back(Position(position));
+  for (auto it = positions.begin(); it != positions.end(); ++it)
+    output.push_back(Position(*it));
 }
 
 
-size_t Chessman::countPositions() const {
+size_t Chessman::positionsAmount() const {
   return positions.size();
 }
 
@@ -434,7 +432,7 @@ void Chessman::calculatePath(const Position &initial,
                              const Position &final,
                              std::vector<Position> &path) const {
   if (initial == final)
-    ChessException("cant calculate path between same square");
+    throw ChessException("cant calculate path between same square");
   if (initial.y() == final.y())
     calculateFilePath(initial, final, path);
   else if (initial.x() == final.x())
@@ -442,7 +440,7 @@ void Chessman::calculatePath(const Position &initial,
   else if (abs((initial.x() - final.x()) / (initial.y() - final.y())) == 1)
     calculateDiagonalPath(initial, final, path);
   else
-    throw ChessException("imposible move");
+    throw ChessException("impossible move");
 }
 
 void Chessman::calculateFilePath(const Position &initial,
@@ -454,7 +452,7 @@ void Chessman::calculateFilePath(const Position &initial,
   path.reserve(7);
 
   for (uint8_t i = bottom.x() + 1; i < top.x(); i++)
-    path.push_back(Position(i, initial.y()));
+    path.emplace_back(i, initial.y());
   path.push_back(final);
 }
 
@@ -467,7 +465,7 @@ void Chessman::calculateRowPath(const Position &initial,
   path.reserve(7);
 
   for (uint8_t i = bottom.y() + 1; i < top.y(); i++)
-    path.push_back(Position(initial.x(), i));
+    path.emplace_back(initial.x(), i);
   path.push_back(final);
 }
 
@@ -482,7 +480,7 @@ void Chessman::calculateDiagonalPath(const Position &initial,
   for (int8_t i = initial.x() + sum_x, j = initial.y() + sum_y;
        i * sum_x < final.x() * sum_x && j * sum_y < final.y() * sum_y;
        i += sum_x, j += sum_y)
-    path.push_back(Position(i, j));
+    path.emplace_back(i, j);
   path.push_back(final);
 }
 
@@ -499,7 +497,7 @@ double Chessman::getProbability(Position position_) {
                       positions.end(), position_);
   if (it != positions.end())
     return it->getProb();
-  throw std::invalid_argument("chessman is not there");
+  throw std::invalid_argument("chessman_ is not there");
 }
 
 void Chessman::entangle(const Position &initial, const Position &final,
@@ -519,7 +517,7 @@ void Chessman::entangle(const Position &initial, const Position &final,
 
   if (new_initial_prob < PRECISION_PROB ||
       new_final_prob < PRECISION_PROB)
-    throw ChessException("cannot split chessman anymore");
+    throw ChessException("cannot split chessman_ anymore");
 
   /* If new quantum position created is real, then is placed at the
    * beginning of the positions list. */
@@ -549,10 +547,10 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
     case OK:
       return;
     case CHESSMAN_NOT_IN_POSITION:
-      throw ChessException("chessman is not in that position");
+      throw ChessException("chessman_ is not in that position");
     case MOVING_TO_SQUARE_WITH_SAME_PIECE:
       throw ChessException("cannot move to square with a fragment"
-                           " of the same chessman");
+                           " of the same chessman_");
     case MEASURING_AND_ENTANGLING:
       throw ChessException("cannot measure and entangle"
                            " at same time");
@@ -569,7 +567,7 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
       throw ChessException("cannot split and entangle in"
                            " the same move");
     case SPLIT_LIMIT_REACHED:
-      throw ChessException("cannot split more times that chessman");
+      throw ChessException("cannot split more times that chessman_");
     case MERGING_AND_ENTANGLING:
       throw ChessException("cannot merge and entangle in"
                            " the same move");
@@ -584,8 +582,8 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
   }
 }
 
-bool Chessman::chessmanIsAlreadyEntangled(Chessman *chessman) {
-  return entanglement_log.areEntangled(*this, *chessman);
+bool Chessman::chessmanIsAlreadyEntangled(Chessman &chessman) {
+  return entanglement_log.areEntangled(*this, chessman);
 }
 
 void Chessman::getEntangledPositions(std::list<Position> &output) {

@@ -3,12 +3,44 @@
 
 #include "../../common/src/socket.h"
 #include "../../common/src/packet.h"
-#include "instructions/instruction.h"
 #include "../../common/src/protocol.h"
-#include "match.h"
+#include "quantum_chess/position.h"
+#include "quantum_chess/square_data.h"
 #include <memory>
 #include "../../common/src/protocol.h"
 #include "../../common/src/client_data.h"
+#include <map>
+#include <list>
+
+#define POSSIBLE_MOVES_PREFIX 'a'
+#define CHAT_PREFIX 'c'
+#define LOAD_BOARD_PREFIX 'l'
+#define EXIT_PREFIX 'e'
+#define EXCEPTION_PREFIX 'x'
+#define POSSIBLE_SPLITS_PREFIX 'b'
+#define POSSIBLE_MERGES_PREFIX 'd'
+#define SAME_CHESSMAN_PREFIX 'f'
+#define ENTANGLED_CHESSMEN_PREFIX 'g'
+#define MERGE_PREFIX 'h'
+#define SPLIT_PREFIX 's'
+#define MOVE_PREFIX 'm'
+#define SOUND_PREFIX 'i'
+#define LOG_PREFIX 'j'
+
+#define POSSIBLE_MOVES_PREFIX 'a'
+#define CHAT_PREFIX 'c'
+#define LOAD_BOARD_PREFIX 'l'
+#define EXIT_PREFIX 'e'
+#define EXCEPTION_PREFIX 'x'
+#define POSSIBLE_SPLITS_PREFIX 'b'
+#define POSSIBLE_MERGES_PREFIX 'd'
+#define SAME_CHESSMAN_PREFIX 'f'
+#define ENTANGLED_CHESSMEN_PREFIX 'g'
+#define MERGE_PREFIX 'h'
+#define SPLIT_PREFIX 's'
+#define MOVE_PREFIX 'm'
+#define SOUND_PREFIX 'i'
+#define LOG_PREFIX 'j'
 
 #define POSSIBLE_MOVES_PREFIX 'a'
 #define CHAT_PREFIX 'c'
@@ -34,117 +66,128 @@ public:
 
   ServerProtocol() = default;
 
-  //Sends to the socket the number of games running max_games.
+  // Sends to socket info about running matches.
   void sendMatchesInfo(Socket &socket,
-                       const std::map<uint16_t, std::unique_ptr<Match>> &matches);
+                       const std::map<uint16_t, std::vector<ClientData>>
+                       &matches_data);
 
-  //Receives from socket the number of the chosen game and returns it.
+  // Returns number of match received from socket.
   uint16_t receiveChosenGame(Socket &socket);
 
-  //Receives from socket the remote client's nick name, storing it in the nick_name parameter.
+  //Receives from socket the remote client's nick name,
+  // storing it in the nick_name parameter.
   void getNickName(Socket &socket, std::string &nick_name);
 
-  //Receives instructions from socket following the protocol, and creates a new Instruction derived
-  //object appropiately, using the client_id and other information. By the end of the function, the
-  //instruct_ptr points to this new instruction.
-  void fillInstructions(Socket &socket, const ClientData &client_data,
-                        std::shared_ptr<Instruction> &instruct_ptr);
+  // Receives a instruction from socket, creates a new instruction according
+  // to it and stores it in insttruct_ptr.
+  void receiveAndFillInstruction(Socket &socket, const ClientData &client_data,
+                                 std::shared_ptr<Instruction> &instruct_ptr);
 
-  //Given a instruc_ptr, the function fillPacketWithInstructionsToSend is called passing the
-  //nick names repository and the client id, so that the instruction knows how to get the
-  //information that is needed to fill up the packet to be sent to the given socket.
-  void sendPacketWithUpdates(Socket &socket,
-                             std::shared_ptr<Instruction> &instruct_ptr,
-                             const ClientData &client_data);
+  // Sends a packet filled with an instruction.
+  void sendPacket(Socket &socket,
+                  std::shared_ptr<Instruction> &instruct_ptr,
+                  const ClientData &client_data);
 
-  //Following the protocol, it fills the given packet with the chat message information. This
-  //method is called by the ChatInstruction class that has the nick name and message to be
-  //passed as parameters.
-  void fillPacketWithChatInfo(Packet &packet,
-                              const ClientData &client_data,
-                              const std::string &message,
-                              const std::string &timestamp);
+  // Fills packet with a packet with a chat message.
+  void fillPacketWithChatMessage(Packet &packet,
+                                 const ClientData &client_data,
+                                 const std::string &message,
+                                 const std::string &timestamp);
 
-  //Following the protocol, it fills the given packet with the exit message information. This
-  //method is called by the ExitInstruction class that has the nick name of the person leaving
-  //the match.
-  void fillPacketWithExitInfo(Packet &packet, const std::string &nick_name);
+  // Fills a packet with an exit instruction.
+  void fillPacketWithExitMessage(Packet &packet, const std::string &nick_name);
 
-  void fillPacketWithExceptionInfo(Packet &packet, const std::string &message);
-
+  // Fills a packet with an exception message.
   void
-  fillPacketWithLoadBoardInfo(Packet &packet,
-                              const std::vector<char> &characters,
-                              const std::vector<bool> &colors,
-                              const std::vector<Position> &positions,
-                              const std::vector<double> &probabilities,
-                              bool white);
+  fillPacketWithExceptionMessage(Packet &packet, const std::string &message);
 
-  ~ServerProtocol() = default;
+  // Fills a packet with a load board message.
+  void
+  fillPacketWithLoadBoardMessage(Packet &packet,
+                                 const std::vector<SquareData> &data,
+                                 bool white);
 
+  // Fills a packet with a message with possible moves.
   void
   fillPacketWithPossibleMoves(Packet &packet,
                               const std::list<Position> &positions);
 
+  // Fills a packet with a message with possible merges.
   void fillPacketWithPossibleMerges(Packet &packet,
                                     const std::list<Position> &positions);
 
+  // Fills a packet with a message with possible splits.
   void fillPacketWithPossibleSplits(Packet &packet,
                                     const std::list<Position> &positions);
 
+  // Sends a message with available roles in list.
   void
   sendAvailableRoles(Socket &socket, const std::list<ClientData::Role> &roles);
 
+  // Receives a player selected role.
   ClientData::Role receivePlayerRole(Socket &socket,
                                      const std::list<ClientData::Role> &roles);
 
+  // Fill packet with a message with positions that are the same chessman_.
   void fillPacketWithSameChessmanInstruction(Packet &packet,
                                              const std::list<Position> &positions);
 
+  // Fills a packet with message with entangled chessmen positions.
   void fillPacketWithEntangledChessmanInstruction(Packet &packet,
                                                   const std::list<Position> &positions);
 
-  void fillPacketWithSoundInfo(Packet &packet, uint8_t sound);
+  // Fills packet with a request to play a sound.
+  void fillPacketWithSoundMessage(Packet &packet, uint8_t sound);
 
-  void fillPacketLogInstruction(Packet &packet,
-                                std::list<std::string> &log);
+  // Fills a packet with a log message.
+  void fillPacketLogMessage(Packet &packet,
+                            std::list<std::string> &log);
+
+  ~ServerProtocol() = default;
 
 private:
-  //Creates a new ChatInstruction by receiving the message from socket and the client id passed as parameter.
-  //By the end of the function, the instruc_ptr points to this new ChatInstruction object.
-  void fillChatInstructions(Socket &socket, const ClientData &client_data,
-                            std::shared_ptr<Instruction> &instruct_ptr);
+  // Creates a chat instruction receiving the incoming message.
+  void fillChatInstruction(Socket &socket, const ClientData &client_data,
+                           std::shared_ptr<Instruction> &instruct_ptr);
 
+  // Creates a movement instruction receiving the incoming message.
+  void fillMovementInstruction(Socket &socket, const ClientData &client_data,
+                               std::shared_ptr<Instruction> &instruct_ptr);
 
-  void fillMovementInstructions(Socket &socket, const ClientData &client_data,
-                                std::shared_ptr<Instruction> &instruct_ptr);
-
+  // Creates a possible moves instruction receiving the incoming message.
   void fillPossibleMovesInstruction(Socket &socket, const ClientData &data,
                                     std::shared_ptr<Instruction> &sharedPtr);
 
+  // Creates a split instruction receiving the incoming message.
   void fillSplitInstruction(Socket &socket,
                             const ClientData &client_data,
                             std::shared_ptr<Instruction> &instruct_ptr);
 
+  // Creates a merge instruction receiving the incoming message.
   void fillMergeInstruction(Socket &socket,
                             const ClientData &client_data,
                             std::shared_ptr<Instruction> &instruct_ptr);
 
+  // Creates a possible splits instruction receiving the incoming message.
   void
   fillPossibleSplitsInstruction(Socket &socket, const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 
-
+  // Creates a possible merges instruction receiving the incoming message.
   void
   fillPossibleMergesInstruction(Socket &socket, const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 
+  // Creates a same chessman_ instruction receiving the incoming message.
   void
   fillSameChessmanInstruction(Socket &socket, const ClientData &client_data,
                               std::shared_ptr<Instruction> &instruct_ptr);
 
-  void fillEntangledInstruction(Socket &socket, const ClientData &client_data,
-                                std::shared_ptr<Instruction> &instruct_ptr);
+  // Creates an entangled chessmen instruction receiving the incoming message.
+  void fillEntangledChessmenInstruction(Socket &socket,
+                                        const ClientData &client_data,
+                                        std::shared_ptr<Instruction>
+                                        &instruct_ptr);
 };
 
 

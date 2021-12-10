@@ -8,6 +8,7 @@
 #include "../server_protocol.h"
 #include "../../../common/src/blocking_queue.h"
 #include "../../../common/src/client_data.h"
+#include "../match.h"
 #include <vector>
 
 class ServerProtocol;
@@ -20,18 +21,13 @@ class Instruction {
 public:
   Instruction() = default;
 
-  //Given the list of listening queues and the client's vector, it makes the appropiate action
-  //and notifies all queues of the changes.
-  virtual void makeActionAndNotifyAllListeningQueues(
-          std::map<uint16_t, BlockingQueue<Instruction>> &listening_queues,
-          Match &match,
-          BlockingQueue<Instruction> &match_updates_queue) = 0;
+  // Performs the instruction action and notifies
+  virtual void makeActionAndNotify(Match &match) = 0;
 
-  //The derived Instruction class asks the protocol to fill the given packet with the information
-  //accordingly.
+  // Loads a packet with instruction to be sent to client.
   virtual void
-  fillPacketWithInstructionsToSend(ServerProtocol &protocol, Packet &packet,
-                                   const ClientData &client_receiver_data) = 0;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData &client_receiver_data) = 0;
 
   virtual ~Instruction() = default;
 };

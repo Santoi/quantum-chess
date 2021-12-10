@@ -130,41 +130,6 @@ void Client::execute() {
   receiver_thread.join();
 }
 
-bool Client::readCommand() {
-  std::string line;
-  std::string op;
-  std::getline(std::cin, line);
-  std::istringstream iss(line);
-
-  iss >> op;
-  if (op == "q" || op == "Q")
-    return true;
-
-  if (op == "c") {
-    std::string message, temp_message;
-    while (!iss.eof()) {
-      iss >> temp_message;
-      message += temp_message + " ";
-    }
-    send.push(std::make_shared<RemoteClientChatInstruction>(
-            message));
-
-  }
-
-  if (op == "m" || op == "M") {
-    int y1 = 0, y2 = 0;
-    char x1 = 0, x2 = 0;
-    iss >> x1 >> y1 >> x2 >> y2;
-    if (x1 < 'A' || x1 > 'H' || x2 < 'A' || x2 > 'H')
-      throw ChessException("posicion invalida");
-
-    send.push(std::make_shared<RemoteClientMoveInstruction>(
-            Position((uint8_t) x1 - 'A', (uint8_t) y1),
-            Position((uint8_t) x2 - 'A', (uint8_t) y2)));
-  }
-  return false;
-}
-
 
 
 

@@ -18,8 +18,7 @@ void RemoteClientSender::run() {
   ClientProtocol protocol;
   try {
     while (true) {
-      std::shared_ptr<RemoteClientInstruction> instruction;
-      send_queue.pop(instruction);
+      auto instruction = send_queue.pop();
       protocol.sendInstruction(client_socket, instruction);
     }
   }

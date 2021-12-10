@@ -16,10 +16,6 @@ void Thread::join() {
   this->thread.join();
 }
 
-bool Thread::isJoinable() {
-  return thread.joinable();
-}
-
 void Thread::runCatchingExceptions() {
   try {
     run();

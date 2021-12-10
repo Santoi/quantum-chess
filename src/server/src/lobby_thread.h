@@ -5,19 +5,31 @@
 #include "../../common/src/socket.h"
 #include "../../common/src/blocking_queue.h"
 #include "matches_repository.h"
+#include "client_connection_thread.h"
 
-#define MAX_GAMES 5
-
-class LobbyThread: public Thread {
+// Thread that push sockets of new clients from a blocking queue and creates
+// and handles threads of clients connections. It also handles closed matches.
+class LobbyThread : public Thread {
 private:
-    BlockingQueue<Socket> & queue;
-    MatchesRepository & matches;
+  BlockingQueue<Socket> &queue;
+  MatchOrganizer &matches;
+  std::list<ClientConnectionThread> client_connection_threads;
+
+private:
+  // Stop all client connection threads and join them.
+  void stopAndJoinClientConnectionThreads();
+
+  // Checks what client connection threads finished, joins and deletes them.
+  void joinInactiveClientConnectionThreads();
 
 protected:
-    void run() override;
+  // Pushes from a blocking queue with new client sockets, creates individual
+  // connection threads for new connections and stops and joins them. Also
+  // delete and joins finished matches.
+  void run() override;
 
 public:
-    LobbyThread(BlockingQueue<Socket> & queue_, MatchesRepository & matches);
+  explicit LobbyThread(BlockingQueue<Socket> &queue_, MatchOrganizer &matches_);
 };
 
 

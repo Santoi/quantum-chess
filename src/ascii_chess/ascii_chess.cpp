@@ -7,7 +7,7 @@
 AsciiChess::AsciiChess() : board() {}
 
 void AsciiChess::execute() {
-  std::ifstream file("default.txt");
+  std::ifstream file("boards/default.txt");
   board.load(file);
   draw();
   while (true) {
@@ -63,7 +63,7 @@ bool AsciiChess::readCommand() {
       throw ChessException("posicion invalida");
 
     board.move(Position((uint8_t) x1 - 'A', (uint8_t) y1),
-               Position((uint8_t) x2 - 'A', (uint8_t) y2), false);
+               Position((uint8_t) x2 - 'A', (uint8_t) y2), board.isNextWhite());
   }
   return false;
 }

@@ -56,8 +56,6 @@ void QuantumPosition::setProb(double prob_) {
   prob = prob_;
 }
 
-*/
-
 void QuantumPosition::measure() {
   if (chessman)
     chessman->measure(Position(*this));

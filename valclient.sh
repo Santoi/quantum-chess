@@ -1,2 +1,1 @@
-valgrind ./build/src/client/client "$1" "$2"
-
+valgrind ./build/src/client/client

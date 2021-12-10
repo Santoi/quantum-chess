@@ -21,13 +21,14 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                                 TextEntryButton &ip_text_entry,
                                                 TextEntryButton &port_text_entry,
                                                 TextEntryButton &name_text_entry) {
-  int width = window.getWidth();
-  int height = window.getHeight();
-  int button_height = height / 15;
-  int ip_button_width = width / 3, port_button_width = width / 10,
+  size_t width = window.getWidth();
+  size_t height = window.getHeight();
+  size_t button_height = height / 15;
+  size_t ip_button_width = width / 3, port_button_width = width / 10,
       nick_button_width = width / 3, connect_button_width = width / 4;
-  int ip_button_x_pos = (width - ip_button_width) / 2 - port_button_width * 1.1;
-  int port_button_x_pos = width / 2 + port_button_width * 1.1;
+  size_t ip_button_x_pos =
+      (width - ip_button_width) / 2 - port_button_width * 1.1;
+  size_t port_button_x_pos = width / 2 + port_button_width * 1.1;
 
   ip_text_entry.setAreaAndPosition(ip_button_x_pos,
                                    button_height,
@@ -111,16 +112,16 @@ void LoginScene::renderChoosingMatchButtons(
 }
 
 void LoginScene::renderConnectedSprite(TextureSprite &texture) {
-  int width = window.getWidth();
-  int height = window.getHeight();
+  size_t width = window.getWidth();
+  size_t height = window.getHeight();
   texture.render(10, 10, width * 0.9, height * 0.9);
 }
 
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
                                     Button &spectator_role_button) {
-  int width = window.getWidth();
-  int height = window.getHeight();
+  size_t width = window.getWidth();
+  size_t height = window.getHeight();
   white_role_button.setAreaAndPosition(100, 100, 0.2 * height, 0.2 * width);
   white_role_button.render();
   black_role_button.setAreaAndPosition(250, 100, 0.2 * height, 0.2 * width);

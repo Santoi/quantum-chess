@@ -114,18 +114,27 @@ void LoginScene::renderChoosingMatchButtons(
 void LoginScene::renderConnectedSprite(TextureSprite &texture) {
   size_t width = window.getWidth();
   size_t height = window.getHeight();
-  texture.render(10, 10, width * 0.9, height * 0.9);
+  texture.render(0, 0, width, height);
 }
 
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
                                     Button &spectator_role_button) {
   size_t width = window.getWidth();
-  size_t height = window.getHeight();
-  white_role_button.setAreaAndPosition(100, 100, 0.2 * height, 0.2 * width);
+  size_t button_height = width * .1, button_width = width * .1;
+  size_t delta_x = width * .01;
+  white_role_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
+                                       button_height * 2,
+                                       button_width,
+                                       button_height);
+  black_role_button.setAreaAndPosition(width / 2 - button_width / 2 + delta_x,
+                                       button_height * 2,
+                                       button_width, button_height);
+  spectator_role_button.setAreaAndPosition(width / 2 + button_width + delta_x,
+                                           button_height * 2,
+                                           button_width,
+                                           button_height);
   white_role_button.render();
-  black_role_button.setAreaAndPosition(250, 100, 0.2 * height, 0.2 * width);
   black_role_button.render();
-  spectator_role_button.setAreaAndPosition(400, 100, 0.2 * height, 0.2 * width);
   spectator_role_button.render();
 }

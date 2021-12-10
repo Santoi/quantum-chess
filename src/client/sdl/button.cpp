@@ -14,7 +14,8 @@ void Button::render() {
   drawable.render();
 }
 
-void Button::setAreaAndPosition(int x, int y, int width, int height) {
+void
+Button::setAreaAndPosition(size_t x, size_t y, size_t width, size_t height) {
   drawable.setAreaAndPosition(x, y, width, height);
 }
 
@@ -89,22 +90,50 @@ NextMatchesButton::NextMatchesButton(
     ButtonSpriteRepository &button_repository,
     TextSpriteRepository &text_repository) : Button(button_repository,
                                                     text_repository, "action",
-                                                    "NEXT") {}
+                                                    "") {
+  drawable.setText("NEXT", 'k');
+}
 
 bool NextMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                             std::list<std::string> &tokens) {
-  return drawable.pixelIsOnButton(pixel_);
+  bool clicked = drawable.pixelIsOnButton(pixel_);
+  if (clicked)
+    tokens.emplace_back("NEXT");
+  return clicked;
 }
 
 PreviousMatchesButton::PreviousMatchesButton(
     ButtonSpriteRepository &button_repository,
     TextSpriteRepository &text_repository) : Button(button_repository,
                                                     text_repository, "action",
-                                                    "PREV") {}
+                                                    "") {
+  drawable.setText("PREV", 'k');
+}
 
 bool PreviousMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                                 std::list<std::string> &tokens) {
-  return drawable.pixelIsOnButton(pixel_);
+  bool clicked = drawable.pixelIsOnButton(pixel_);
+  if (clicked)
+    tokens.emplace_back("PREV");
+  return clicked;
+}
+
+RefreshMatchesButton::RefreshMatchesButton(
+    ButtonSpriteRepository &button_repository,
+    TextSpriteRepository &text_repository) : Button(button_repository,
+                                                    text_repository, "action",
+                                                    "") {
+  drawable.setText("REFRESH", 'k');
+}
+
+bool RefreshMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                               std::list<std::string> &tokens) {
+  bool clicked = drawable.pixelIsOnButton(pixel_);
+  if (clicked) {
+    std::string refresh_signal = std::to_string(UINT16_MAX);
+    tokens.emplace_back(std::move(refresh_signal));
+  }
+  return clicked;
 }
 
 RoleButton::RoleButton(ButtonSpriteRepository &button_repository,

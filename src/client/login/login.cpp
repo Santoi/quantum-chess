@@ -21,6 +21,12 @@ void Login::getListOfMatchesInfo(
   match_info = protocol.receiveMatchesInfo(*client_socket_ptr);
 }
 
+void
+Login::refreshMatches() {
+  ClientProtocol protocol;
+  protocol.sendChosenGame(*client_socket_ptr, UINT16_MAX);
+}
+
 Socket Login::getClientSocket() {
   return std::move(*client_socket_ptr);
 }

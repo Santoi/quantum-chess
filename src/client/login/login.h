@@ -40,6 +40,8 @@ public:
 
   void
   getListOfMatchesInfo(std::map<uint16_t, std::vector<ClientData>> &match_info);
+
+  void refreshMatches();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

@@ -14,6 +14,7 @@
 #define NEXT_STATE_SELECTING_ROLE 2
 #define NEXT_STATE_CONNECTED_TO_MATCH 3
 #define NO_NEXT_STATE 0
+#define KEEP_STATE -1
 
 class LoginScene;
 
@@ -77,9 +78,9 @@ public:
 class SelectingMatchState : public LoginState {
   NextMatchesButton next_matches_button;
   PreviousMatchesButton previous_matches_button;
-//  RefreshButton refresh_button;
-  int matches_page;
-  int matches_per_page;
+  RefreshMatchesButton refresh_matches_button;
+  size_t matches_page;
+  size_t matches_per_page;
 
 public:
 

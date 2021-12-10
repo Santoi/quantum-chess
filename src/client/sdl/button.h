@@ -31,7 +31,7 @@ public:
 
   void render();
 
-  void setAreaAndPosition(int x, int y, int width, int height);
+  void setAreaAndPosition(size_t x, size_t y, size_t width, size_t height);
 
   void resetButton();
 
@@ -99,6 +99,19 @@ public:
                            std::list<std::string> &tokens) override;
 
   ~PreviousMatchesButton() override = default;
+};
+
+class RefreshMatchesButton : public Button {
+public:
+  RefreshMatchesButton() = delete;
+
+  RefreshMatchesButton(ButtonSpriteRepository &button_repository,
+                       TextSpriteRepository &text_repository);
+
+  bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                           std::list<std::string> &tokens) override;
+
+  ~RefreshMatchesButton() override = default;
 };
 
 class RoleButton : public Button {

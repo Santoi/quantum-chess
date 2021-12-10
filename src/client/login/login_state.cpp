@@ -84,6 +84,7 @@ SelectingMatchState::SelectingMatchState(Login &login_,
       next_matches_button(button_sprite_repository, text_sprite_repository),
       previous_matches_button(button_sprite_repository,
                               text_sprite_repository),
+      refresh_matches_button(button_sprite_repository, text_sprite_repository),
       matches_page(0),
       matches_per_page(MATCHES_PER_PAGE) {
   std::map<uint16_t, std::vector<ClientData>> match_info;
@@ -112,7 +113,8 @@ bool SelectingMatchState::clientIsConnectedToMatch() {
 void
 SelectingMatchState::render(LoginScene &login_scene) {
   login_scene.renderChoosingMatchButtons(buttons_ptr, next_matches_button,
-                                         previous_matches_button, matches_page,
+                                         previous_matches_button,
+                                         refresh_matches_button, matches_page,
                                          matches_per_page);
 }
 
@@ -120,6 +122,9 @@ void SelectingMatchState::fillWithActiveButtons(
     std::list<std::reference_wrapper<Button>> &active_buttons) {
   for (auto &button: buttons_ptr)
     active_buttons.emplace_back(*button);
+  active_buttons.emplace_back(next_matches_button);
+  active_buttons.emplace_back(previous_matches_button);
+  active_buttons.emplace_back(refresh_matches_button);
 }
 
 void SelectingMatchState::fillWithActiveTextEntryButtons(
@@ -129,13 +134,27 @@ void SelectingMatchState::fillWithActiveTextEntryButtons(
 }
 
 int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
-  // TODO code 'next', 'prev' and 'refresh' button behaviour
-  // return NEXT_STATE_CONNECT_TO_MATCH;
-  std::string str_match_number = tokens.front();
-  int match_number = std::stoi(str_match_number);
-  login.chooseMatchNumber(match_number);
-  login.sendSavedNickNameToServer();
-  return NEXT_STATE_SELECTING_ROLE;
+  int next_state = NEXT_STATE_SELECTING_ROLE;
+  std::string clicked_button = tokens.front();
+  if (clicked_button == "NEXT") {
+    if (buttons_ptr.size() > (matches_page + 1) * matches_per_page)
+      matches_page++;
+    next_state = KEEP_STATE;
+  } else if (clicked_button == "PREV") {
+    if (matches_page > 0)
+      matches_page--;
+    next_state = KEEP_STATE;
+  } else {
+    int match_number = std::stoi(clicked_button);
+    if (match_number == UINT16_MAX) {
+      login.refreshMatches();
+      next_state = NEXT_STATE_CONNECT_TO_MATCH;
+    } else {
+      login.chooseMatchNumber(match_number);
+      login.sendSavedNickNameToServer();
+    }
+  }
+  return next_state;
 }
 
 void SelectingRoleState::addActiveOrInactiveRoleButtonWithImages(

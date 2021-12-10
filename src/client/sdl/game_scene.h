@@ -8,6 +8,7 @@
 #include "chat/drawable_chat_message.h"
 #include "scene.h"
 #include "sprite_repositories/button_sprite_repository.h"
+#include "drawable_text_entry_button.h"
 
 
 class Window;
@@ -20,11 +21,12 @@ private:
   DrawableContainer<DrawableText> log;
   DrawableContainer<DrawableText> error_log;
   DrawableContainer<DrawableText> turn_log;
-  DrawableContainer<DrawableText> current_message;
+  DrawableTextEntryButton current_message;
   CoordinateTransformer transformer;
   std::mutex mutex;
   TextSpriteRepository &text_repository;
   ButtonSpriteRepository &button_repository;
+  std::string current_message_text;
 
 public:
   GameScene(Window &window, DrawableBoard &board, Font &font,
@@ -48,11 +50,15 @@ public:
 
   void addErrorLogMessage(std::string text);
 
-  void addCurrentMessage(std::string text);
+  void addCurrentMessage(const std::string &text);
 
   void addTurnLogMessage(std::string text);
 
   void clearErrorLog();
+
+  bool wasChatClicked(PixelCoordinate &pixel);
+
+  void disableChat();
 };
 
 

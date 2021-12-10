@@ -22,6 +22,10 @@ public:
 
   void addMessage(uint16_t client_id, std::string nickname, std::string message,
                   std::string timestamp);
+
+  bool enableIfPixelIsInChat(PixelCoordinate &pixel);
+
+  void disable();
 };
 
 

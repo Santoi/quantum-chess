@@ -22,7 +22,9 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
       chat(MAX_CHAT_MESSAGES),
       log(MAX_LOG_MESSAGES), error_log(
         MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
-      current_message(1), transformer(), mutex(),
+      current_message(text_repository, button_repository, "CHAT HERE"),
+      transformer(),
+      mutex(),
       text_repository(text_repository),
       button_repository(button_repository) {}
 
@@ -59,10 +61,9 @@ void GameScene::addTurnLogMessage(std::string text) {
   turn_log.addDrawable(std::move(msg));
 }
 
-void GameScene::addCurrentMessage(std::string text) {
+void GameScene::addCurrentMessage(const std::string &text) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  DrawableText msg(text_repository, text, 'w');
-  current_message.addDrawable(std::move(msg));
+  current_message_text = text;
 }
 
 void GameScene::render() {
@@ -75,7 +76,10 @@ void GameScene::render() {
   turn_log.render(width - CHAT_WIDTH, font.size() * 2);
   log.render(width - CHAT_WIDTH, height / 2 - font.size() * 5);
   chat.render(width - CHAT_WIDTH, height - font.size() * 5);
-  current_message.render(width - CHAT_WIDTH, height - font.size() * 2);
+  current_message.setAreaAndPosition(width - CHAT_WIDTH,
+                                     height - font.size() * 2, CHAT_WIDTH,
+                                     font.size() * 2);
+  current_message.render(current_message_text);
 }
 
 int GameScene::getChatWidth() {
@@ -96,4 +100,14 @@ int GameScene::getChessWidth() {
 int GameScene::getChessHeight() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return window.getHeight();
+}
+
+bool GameScene::wasChatClicked(PixelCoordinate &pixel) {
+  return current_message.pixelIsOnTextEntry(pixel);
+}
+
+void GameScene::disableChat() {
+  // hack, chat is never there
+  PixelCoordinate p(0, 0);
+  current_message.pixelIsOnTextEntry(p);
 }

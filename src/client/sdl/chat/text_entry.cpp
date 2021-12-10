@@ -34,7 +34,7 @@ void TextEntry::disableEntry() {
   SDL_StopTextInput();
 }
 
-std::string &TextEntry::getText() {
+std::string TextEntry::getText() const {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return text;
 }

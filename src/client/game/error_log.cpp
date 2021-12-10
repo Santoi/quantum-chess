@@ -1,7 +1,7 @@
 #include "error_log.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
-ErrorLog::ErrorLog(Scene &scene) : scene(scene) {}
+ErrorLog::ErrorLog(GameScene &scene) : scene(scene) {}
 
 void
 ErrorLog::addMessage(std::string message) {

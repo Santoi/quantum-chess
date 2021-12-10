@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <utility>
-#include "text_sprite_repository.h"
+#include "../sprite_repositories/text_sprite_repository.h"
 
 #define SCALE_FACTOR 10
 #define RENDER_HEIGHT_SCALE_FACTOR 28
@@ -21,7 +21,7 @@ DrawableText::DrawableText(DrawableText &&other) noexcept:
     color(other.color) {
 }
 
-void DrawableText::render(int x, int y) {
+void DrawableText::render(size_t x, size_t y) {
   if (!text.empty()) {
     for (auto c: text) {
       Sprite &sprite = text_sprite_repository.getChar(c, color);
@@ -35,10 +35,18 @@ size_t DrawableText::length() const {
   return text.size();
 }
 
-int DrawableText::getDrawableWidth() const {
+size_t DrawableText::getDrawableWidth() const {
   return text.size() * text_sprite_repository.getSpriteSize();
 }
 
-int DrawableText::getDrawableHeight() const {
+size_t DrawableText::getDrawableHeight() const {
   return text_sprite_repository.getSpriteSize();
+}
+
+void DrawableText::setText(const std::string &text_) {
+  text = text_;
+}
+
+void DrawableText::setColor(char color_) {
+  color = color_;
 }

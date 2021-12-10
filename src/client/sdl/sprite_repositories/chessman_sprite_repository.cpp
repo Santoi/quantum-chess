@@ -1,5 +1,5 @@
 #include "chessman_sprite_repository.h"
-#include "texture_sprite.h"
+#include "../texture_sprite.h"
 
 ChessmanSpriteRepository::ChessmanSpriteRepository(Renderer &renderer)
     : chessmen(), fills() {

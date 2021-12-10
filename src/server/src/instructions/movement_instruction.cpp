@@ -8,8 +8,8 @@
 MovementInstruction::MovementInstruction(const ClientData &instructor_data,
                                          const Position &initial_,
                                          const Position &final_) :
-        instructor_data(instructor_data),
-        initial(initial_), final(final_) {}
+    instructor_data(instructor_data),
+    initial(initial_), final(final_) {}
 
 
 void MovementInstruction::makeActionAndNotify(Match &match) {

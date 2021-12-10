@@ -2,16 +2,15 @@
 #define QUANTUM_CHESS_PROJ_EVENT_HANDLER_THREAD_H
 
 #include "../game/game.h"
+#include "handler_thread.h"
 #include "../game/drawable_board.h"
 #include "../../common/src/thread.h"
 #include "chat/text_entry.h"
 #include <SDL2/SDL.h>
-#include <atomic>
 
-class EventHandlerThread : public Thread {
+class EventHandlerThread : public HandlerThread {
 private:
   Window &window;
-  std::atomic<bool> open;
   Game &game;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;

@@ -24,15 +24,15 @@ public:
 
   SoundHandler &sound_handler();
 
-  int getWidth() const;
+  size_t getWidth() const;
 
-  int getHeight() const;
+  size_t getHeight() const;
 
   double getMinRatio() const;
 
-  void setMaxHeight(int height);
+  void setMaxHeight(size_t height);
 
-  void setSize(int width, int height);
+  void setSize(size_t width, size_t height);
 };
 
 

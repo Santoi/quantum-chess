@@ -8,7 +8,7 @@
 class TextEntry {
   uint8_t limit;
   std::string text;
-  std::mutex mutex;
+  mutable std::mutex mutex;
 
 public:
   explicit TextEntry(uint8_t limit = UINT8_MAX);
@@ -27,7 +27,7 @@ public:
 
   void clear();
 
-  std::string &getText();
+  std::string getText() const;
 
   ~TextEntry() = default;
 };

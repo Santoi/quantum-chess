@@ -18,11 +18,12 @@ DrawableBoard::DrawableBoard(Window &window, const std::string &image,
         tile_repository(renderer),
         text_repository(renderer, font),
         current(false),
-        current_tile(std::make_pair<Position, DrawableTile>(Position(),
-                                                            DrawableTile(
-                                                                    renderer,
-                                                                    true,
-                                                                    tile_repository))) {
+        current_tile(
+                std::make_pair<PixelCoordinate, DrawableTile>(PixelCoordinate(),
+                                                              DrawableTile(
+                                                                      renderer,
+                                                                      true,
+                                                                      tile_repository))) {
   background.setBlendMode(SDL_BLENDMODE_BLEND);
   background.setAlpha(BACKGROUND_TRANSPARENCY);
   current_tile.second.loadTile(TileSpriteRepository::TILE_SELECTED);
@@ -51,7 +52,6 @@ DrawableBoard::DrawableBoard(Window &window, const std::string &image,
   }
 }
 
-// TODO borrar
 void DrawableBoard::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &it: board) {
@@ -103,10 +103,17 @@ void DrawableBoard::mergeTile(const Position &pos) {
     board.at(pos).loadTile(TileSpriteRepository::TILE_MERGE);
 }
 
-void DrawableBoard::currentTile(const Position &pos) {
+void DrawableBoard::currentTile(const PixelCoordinate &coordinate) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  current_tile.first = pos;
+  current_tile.first = coordinate;
   current = true;
+}
+
+void DrawableBoard::setDefaultWithCurrent() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  for (auto &it: board) {
+    it.second.loadTile(TileSpriteRepository::TILE_DEFAULT);
+  }
 }
 
 void DrawableBoard::setDefault() {

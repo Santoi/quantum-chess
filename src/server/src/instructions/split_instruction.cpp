@@ -9,14 +9,14 @@ SplitInstruction::SplitInstruction(const ClientData &instructor_data,
                                    const Position &from_,
                                    const Position &to1_,
                                    const Position &to2_) :
-        instructor_data(instructor_data),
-        from(from_), to1(to1_), to2(to2_) {}
+    instructor_data(instructor_data),
+    from(from_), to1(to1_), to2(to2_) {}
 
 
 void SplitInstruction::makeActionAndNotify(Match &match) {
   try {
     if (instructor_data.role == ClientData::ROLE_SPECTATOR)
-      throw ChessException("you cannot move been spectator");
+      throw ChessException("spectators can't play");
     match.getBoard().split(from, to1, to2,
                            instructor_data.role == ClientData::ROLE_WHITE);
   }

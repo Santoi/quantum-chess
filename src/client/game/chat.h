@@ -5,23 +5,27 @@
 
 #include "../../common/src/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
 
 #define MAX_MESSAGES 10
 
 class Chat {
 private:
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  Scene &scene;
+  GameScene &scene;
 
 public:
   explicit Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
-                Scene &scene);
+                GameScene &scene);
 
   void sendMessage(const std::string &message);
 
   void addMessage(uint16_t client_id, std::string nickname, std::string message,
                   std::string timestamp);
+
+  bool enableIfPixelIsInChat(PixelCoordinate &pixel);
+
+  void disable();
 };
 
 

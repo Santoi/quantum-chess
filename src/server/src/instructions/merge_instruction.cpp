@@ -9,14 +9,14 @@ MergeInstruction::MergeInstruction(const ClientData &instructor_data,
                                    const Position &from1_,
                                    const Position &from2_,
                                    const Position &to_) :
-        instructor_data(instructor_data),
-        from1(from1_), from2(from2_), to(to_) {}
+    instructor_data(instructor_data),
+    from1(from1_), from2(from2_), to(to_) {}
 
 
 void MergeInstruction::makeActionAndNotify(Match &match) {
   try {
     if (instructor_data.role == ClientData::ROLE_SPECTATOR)
-      throw ChessException("you cannot move been spectator");
+      throw ChessException("spectators can't play");
     match.getBoard().merge(from1, from2, to,
                            instructor_data.role == ClientData::ROLE_WHITE);
   }

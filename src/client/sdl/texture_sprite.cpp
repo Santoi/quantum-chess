@@ -10,20 +10,21 @@ TextureSprite::TextureSprite(Renderer &renderer, const std::string &file_name,
                              int height) : Sprite(renderer, file_name,
                                                   width, height) {}
 
-void TextureSprite::render(int x_src, int y_src, int x, int y, int width_src,
-                           int height_src, int width, int height) {
+void TextureSprite::render(size_t x_src, size_t y_src, size_t x, size_t y,
+                           size_t width_src,
+                           size_t height_src, size_t width, size_t height) {
   width_ = width;
   height_ = height;
   renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
 }
 
-void TextureSprite::render(int x, int y, int width, int height) {
+void TextureSprite::render(size_t x, size_t y, size_t width, size_t height) {
   width_ = width;
   height_ = height;
   renderer.copy(*this, x, y);
 }
 
-void TextureSprite::render(int x, int y) {
+void TextureSprite::render(size_t x, size_t y) {
   renderer.copy(*this, x, y);
 }
 

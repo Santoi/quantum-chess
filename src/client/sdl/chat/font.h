@@ -26,7 +26,7 @@ public:
 
   SDL2pp::Surface renderItalicText(const std::string &text, char color = 'w');
 
-  int size() const;
+  size_t size() const;
 
   std::list<char> getColors() const;
 };

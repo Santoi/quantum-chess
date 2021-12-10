@@ -6,7 +6,8 @@
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
                                        Chat &chat_, TextEntry &text_entry)
-    : window(window), open(true), game(game), text_entry(text_entry),
+    : HandlerThread(true), window(window), game(game),
+      text_entry(text_entry),
       split(false), merge(false),
       first_click(false), second_click(false), penultimate_click(),
       last_click(), chat(chat_) {}
@@ -49,6 +50,7 @@ void EventHandlerThread::handleKeyDown() {
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
       text_entry.disableEntry();
+      chat.disable();
       game.setDefaultBoard();
       first_click = false;
       second_click = false;
@@ -109,13 +111,13 @@ void EventHandlerThread::handleKeyUp() {
 void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
-    if (!game.isPixelInBoard(pixel)) {
-      // TODO notify user
+    if (chat.enableIfPixelIsInChat(pixel)) {
       text_entry.enableEntry();
       return;
     }
-    if (text_entry.isEnabled()) {
-      text_entry.disableEntry();
+    text_entry.disableEntry();
+
+    if (!game.isPixelInBoard(pixel)) {
       return;
     }
 
@@ -171,7 +173,7 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       merge = false;
     }
   }
-  catch (const ChessException &e) {
+  catch(const ChessException &e) {
     std::cerr << e.what() << std::endl;
   }
 }

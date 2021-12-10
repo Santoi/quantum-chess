@@ -30,6 +30,6 @@ Sprite &TextSpriteRepository::getChar(char character, char color) {
   return color_chars.at(color).at(character);
 }
 
-int TextSpriteRepository::getSpriteSize() const {
+size_t TextSpriteRepository::getSpriteSize() const {
   return font.size();
 }

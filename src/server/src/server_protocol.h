@@ -27,6 +27,21 @@
 #define SOUND_PREFIX 'i'
 #define LOG_PREFIX 'j'
 
+#define POSSIBLE_MOVES_PREFIX 'a'
+#define CHAT_PREFIX 'c'
+#define LOAD_BOARD_PREFIX 'l'
+#define EXIT_PREFIX 'e'
+#define EXCEPTION_PREFIX 'x'
+#define POSSIBLE_SPLITS_PREFIX 'b'
+#define POSSIBLE_MERGES_PREFIX 'd'
+#define SAME_CHESSMAN_PREFIX 'f'
+#define ENTANGLED_CHESSMEN_PREFIX 'g'
+#define MERGE_PREFIX 'h'
+#define SPLIT_PREFIX 's'
+#define MOVE_PREFIX 'm'
+#define SOUND_PREFIX 'i'
+#define LOG_PREFIX 'j'
+
 class Instruction;
 
 class Match;

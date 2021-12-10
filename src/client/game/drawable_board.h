@@ -64,6 +64,8 @@ public:
   void render(CoordinateTransformer &transformer, int width, int height);
 
   void currentTile(const Position &pos);
+
+  void setDefaultWithCurrent();
 };
 
 

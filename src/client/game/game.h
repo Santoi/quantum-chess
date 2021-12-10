@@ -86,6 +86,8 @@ public:
   void toggleMusic();
 
   void currentTile(const PixelCoordinate &coordinate);
+
+  void setDefaultBoardWithCurrent();
 };
 
 

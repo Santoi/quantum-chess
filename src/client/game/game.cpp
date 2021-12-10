@@ -40,8 +40,13 @@ void Game::setDefaultBoard() {
   board.setDefault();
 }
 
+void Game::setDefaultBoardWithCurrent() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  board.setDefaultWithCurrent();
+}
+
 void Game::moveTiles(const std::list<Position> &positions) {
-  setDefaultBoard();
+  setDefaultBoardWithCurrent();
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.moveTile(position);
@@ -116,14 +121,14 @@ void Game::quantumTiles(const std::list<Position> &positions) {
 }
 
 void Game::splitTiles(const std::list<Position> &positions) {
-  setDefaultBoard();
+  setDefaultBoardWithCurrent();
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.splitTile(position);
 }
 
 void Game::mergeTiles(const std::list<Position> &positions) {
-  setDefaultBoard();
+  setDefaultBoardWithCurrent();
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (const Position &position: positions)
     board.mergeTile(position);
@@ -173,7 +178,7 @@ void Game::mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
 }
 
 void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
-  setDefaultBoard();
+  setDefaultBoardWithCurrent();
   std::lock_guard<std::mutex> lock_guard(mutex);
   board.load(chessman_data_vector);
 }

@@ -14,6 +14,7 @@ private:
   Game &game;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;
+  bool help_screen_is_being_rendered;
   PixelCoordinate penultimate_click;
   PixelCoordinate last_click;
   SDL_Event event;

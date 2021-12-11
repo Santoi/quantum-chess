@@ -9,7 +9,9 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game,
     : HandlerThread(true), window(window), game(game),
       text_entry(text_entry),
       split(false), merge(false),
-      first_click(false), second_click(false), penultimate_click(),
+      first_click(false), second_click(false),
+      help_screen_is_being_rendered(false),
+      penultimate_click(),
       last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
@@ -204,9 +206,16 @@ void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
 }
 
 void EventHandlerThread::handleTextInput(const std::string &text) {
-  if (text_entry.isEnabled())
-    if (!text_entry.concat(text)) {
-      chat.sendMessage(text_entry.getText());
-      text_entry.clear();
-    }
+  if (text_entry.isEnabled()) {
+      if (!text_entry.concat(text)) {
+          chat.sendMessage(text_entry.getText());
+          text_entry.clear();
+      }
+  } else if (text.front() == 'h') {
+      if (help_screen_is_being_rendered)
+          
+      else
+
+  }
+
 }

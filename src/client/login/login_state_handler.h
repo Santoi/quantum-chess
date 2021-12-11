@@ -47,6 +47,8 @@ public:
   std::string getClientNickName();
 
   ~LoginStateHandler() = default;
+
+    void resetPressedButtons();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_HANDLER_H

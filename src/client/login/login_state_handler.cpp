@@ -108,3 +108,8 @@ Socket LoginStateHandler::getClientSocket() {
 std::string LoginStateHandler::getClientNickName() {
   return login.getClientNickName();
 }
+
+void LoginStateHandler::resetPressedButtons() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  current_state->resetPressedButtons();
+}

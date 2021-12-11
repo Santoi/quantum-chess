@@ -26,7 +26,8 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
       transformer(), render_help_screen(false),
       mutex(),
       text_repository(text_repository),
-      button_repository(button_repository) {}
+      button_repository(button_repository),
+      help_sprite(&button_repository.getPressed("help")) {}
 
 void
 GameScene::addChatMessage(const std::string &nickname, const std::string &id,
@@ -68,7 +69,8 @@ void GameScene::addCurrentMessage(const std::string &text) {
 
 
 void GameScene::renderHelpScreen() {
-
+  int width = window.getWidth(), height = window.getHeight();
+  help_sprite->render(0, 0, width, height);
 }
 
 void GameScene::renderGame() {

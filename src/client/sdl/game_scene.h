@@ -27,6 +27,7 @@ private:
   std::mutex mutex;
   TextSpriteRepository &text_repository;
   ButtonSpriteRepository &button_repository;
+  TextureSprite* help_sprite;
   std::string current_message_text;
 
   void renderHelpScreen();

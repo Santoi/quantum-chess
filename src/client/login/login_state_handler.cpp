@@ -2,6 +2,7 @@
 #include "../../common/src/unique_ptr.h"
 #include "../../common/src/network_address_info_exception.h"
 #include "unavailable_role_exception.h"
+#include "invalid_nick_name_exception.h"
 
 LoginStateHandler::LoginStateHandler(Login &login,
                                      ButtonSpriteRepository &button_repository,
@@ -73,6 +74,14 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
     current_state->resetPressedButtons();
     std::cerr << "Error: " << error.what() << std::endl;
     return;
+  } catch(const InvalidNickNameException &error) {
+      SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                               "ERROR",
+                               error.what(),
+                               nullptr);
+      current_state->resetPressedButtons();
+      std::cerr << "Error: " << error.what() << std::endl;
+      return;
   } catch(const std::exception &e) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",

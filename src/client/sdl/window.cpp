@@ -3,15 +3,23 @@
 
 #define WINDOW_MIN_RATIO 1.5
 
+#ifndef QCHESS_PATH
+#define QCHESS_PATH ""
+#endif
+
+#define ICON_PATH "resources/icons/quantum_logo.png"
+
 Window::Window(int width, int height) :
-        sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO),
-        mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096),
-        window_("Quantum Chess",
-                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                width, height,
-                SDL_WINDOW_RESIZABLE),
-        renderer_(window_),
-        sound_handler_(mixer) {
+    sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO),
+    mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096),
+    window_("Quantum Chess",
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            width, height,
+            SDL_WINDOW_RESIZABLE),
+    renderer_(window_),
+    sound_handler_(mixer) {
+  SDL2pp::Surface icon(QCHESS_PATH ICON_PATH);
+  window_.SetIcon(icon);
   window_.SetMinimumSize(width, height);
   window_.SetMaximumSize(SDL_MAX_SINT32, width / WINDOW_MIN_RATIO);
 }

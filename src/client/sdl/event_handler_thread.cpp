@@ -213,10 +213,10 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
           text_entry.clear();
       }
   } else if (text.front() == 'h') {
-    //  if (help_screen_is_being_rendered)
-
-      //else
-
+     if (help_screen_is_being_rendered)
+        game_scene.stopRenderingHelpScreen();
+     else
+        game_scene.startRenderingHelpScreen();
   }
 
 }

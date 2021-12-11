@@ -23,6 +23,7 @@ private:
   DrawableContainer<DrawableText> turn_log;
   DrawableTextEntryButton current_message;
   CoordinateTransformer transformer;
+  bool render_help_screen;
   std::mutex mutex;
   TextSpriteRepository &text_repository;
   ButtonSpriteRepository &button_repository;
@@ -59,6 +60,10 @@ public:
   bool wasChatClicked(PixelCoordinate &pixel);
 
   void disableChat();
+
+    void stopRenderingHelpScreen();
+
+    void startRenderingHelpScreen();
 };
 
 

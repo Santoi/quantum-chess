@@ -24,10 +24,12 @@ private:
   ClientData::Role role;
 
   void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
-                      HandlerThread &handler, Renderer &renderer);
+                      HandlerThread &handler, Renderer &renderer,
+                      uint8_t frame_rate);
 
-  void loginRenderLoop(LoginScene &login_renderer, HandlerThread &login_handler,
-                       Renderer &renderer);
+  void loginRenderLoop(LoginScene &login_renderer,
+                       HandlerThread &login_handler, Renderer &renderer,
+                       uint8_t frame_rate);
 
 
 public:

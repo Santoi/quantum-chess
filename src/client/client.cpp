@@ -16,17 +16,20 @@
 #include "game/chess_log.h"
 #include "game/error_log.h"
 #include "game/turn_log.h"
+#include "config_file.h"
 #include <SDL2pp/Mixer.hh>
 #include <iostream>
 #include <sstream>
 #include <memory>
 
-#define FRAME_RATE 60
 #define FONT_SIZE 10
 #define MAX_CHAR_ENTRY 29
 
 void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
-                            HandlerThread &handler, Renderer &renderer) {
+                            HandlerThread &handler, Renderer &renderer,
+                            uint8_t frame_rate) {
+  if (frame_rate == 0)
+    frame_rate = 10;
   while (handler.isOpen()) {
     // Timing: calculate difference between this and previous frame
     // in milliseconds
@@ -44,14 +47,16 @@ void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
     uint32_t after_render_ticks = SDL_GetTicks();
     uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
-    if (frame_delta < 1000 / FRAME_RATE)
-      SDL_Delay(1000 / FRAME_RATE);
+    if (frame_delta < 1000 / frame_rate)
+      SDL_Delay(1000 / frame_rate);
   }
 }
 
 void Client::loginRenderLoop(LoginScene &login_renderer,
-                             HandlerThread &login_handler,
-                             Renderer &renderer) {
+                             HandlerThread &login_handler, Renderer &renderer,
+                             uint8_t frame_rate) {
+  if (frame_rate == 0)
+    frame_rate = 10;
   while (login_handler.isOpen()) {
     // Timing: calculate difference between this and previous frame
     // in milliseconds
@@ -64,14 +69,18 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
     uint32_t frame_delta = after_render_ticks - before_render_ticks;
 
     // Frame limiter: sleep for a little bit to not eat 100% of CPU
-    if (frame_delta < 1000 / FRAME_RATE)
-      SDL_Delay(1000 / FRAME_RATE);
+    if (frame_delta < 1000 / frame_rate)
+      SDL_Delay(1000 / frame_rate);
   }
 }
 
 // TODO modularizar
 void Client::execute() {
-  Window window;
+  std::ifstream config_file("config.txt");
+  ConfigFile config(config_file);
+  Window window(std::stoi(config.getValue("res_width")),
+                std::stoi(config.getValue("res_height")));
+  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
   Renderer &renderer = window.renderer();
   Font font(FONT_SIZE);
   ButtonSpriteRepository button_sprite_repository(renderer);
@@ -83,7 +92,7 @@ void Client::execute() {
   LoginHandlerThread login_handler(login, login_state_handler);
 
   login_handler.start();
-  loginRenderLoop(login_scene, login_handler, renderer);
+  loginRenderLoop(login_scene, login_handler, renderer, frame_rate);
   login_handler.join();
 
   if (login_handler.was_closed())
@@ -115,7 +124,7 @@ void Client::execute() {
   // comment if you dont want to go crazy while debugging.
   //sound_handler.playMusic();
 
-  gameRenderLoop(scene, game, text_entry, event_handler, renderer);
+  gameRenderLoop(scene, game, text_entry, event_handler, renderer, frame_rate);
 
   received.close();
   send.close();

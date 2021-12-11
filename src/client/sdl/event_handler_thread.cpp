@@ -4,10 +4,11 @@
 #include <iostream>
 #include <list>
 
-EventHandlerThread::EventHandlerThread(Window &window, Game &game,
+EventHandlerThread::EventHandlerThread(Window &window, Game &game_,
+                                       GameScene &game_scene_,
                                        Chat &chat_, TextEntry &text_entry)
-    : HandlerThread(true), window(window), game(game),
-      text_entry(text_entry),
+    : HandlerThread(true), window(window), game(game_),
+      game_scene(game_scene_), text_entry(text_entry),
       split(false), merge(false),
       first_click(false), second_click(false),
       help_screen_is_being_rendered(false),
@@ -212,9 +213,9 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
           text_entry.clear();
       }
   } else if (text.front() == 'h') {
-      if (help_screen_is_being_rendered)
-          
-      else
+    //  if (help_screen_is_being_rendered)
+
+      //else
 
   }
 

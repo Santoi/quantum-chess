@@ -115,7 +115,7 @@ void Client::execute() {
 
   ActionThread action_thread(received, game, chat, chess_log, error_log,
                              turn_log);
-  EventHandlerThread event_handler(window, game, chat, text_entry);
+  EventHandlerThread event_handler(window, game, scene, chat, text_entry);
 
   receiver_thread.start();
   sender_thread.start();

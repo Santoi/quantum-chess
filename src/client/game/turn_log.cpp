@@ -4,9 +4,21 @@
 TurnLog::TurnLog(GameScene &scene) : scene(scene) {}
 
 void
-TurnLog::changeTurn(bool white) {
+TurnLog::changeTurn(bool white, ClientData::Role role) {
   std::string message = white ? "White" : "Black";
-  scene.addTurnLogMessage(message + " plays");
+  message += " plays - You ";
+  switch (role) {
+    case ClientData::ROLE_WHITE:
+      message += "white";
+      break;
+    case ClientData::ROLE_BLACK:
+      message += "black";
+      break;
+    case ClientData::ROLE_SPECTATOR:
+      message += "spectator";
+      break;
+  }
+  scene.addTurnLogMessage(message);
 }
 
 

@@ -71,9 +71,6 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
 
 // TODO modularizar
 void Client::execute() {
-  // welcomeClientAndAskForNickName();
-  // Socket socket = Socket::createAConnectedSocket(host, port);
-
   Window window;
   Renderer &renderer = window.renderer();
   Font font(FONT_SIZE);
@@ -94,7 +91,7 @@ void Client::execute() {
 
   // if we are here the client is connected to a match
   Socket socket = login.getClientSocket();
-  client_nick_name = login.getClientNickName();//TODO borrar
+  role = login.getRole();
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 

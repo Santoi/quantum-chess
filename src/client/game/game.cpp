@@ -215,3 +215,8 @@ DrawableBoard &Game::getBoard() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return board;
 }
+
+ClientData::Role Game::getPlayerRole() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return role;
+}

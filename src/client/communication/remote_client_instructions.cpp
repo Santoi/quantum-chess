@@ -64,7 +64,7 @@ void RemoteClientLoadBoardInstruction::makeAction(Game &game, Chat &chat,
                                                   ErrorLog &error_log,
                                                   TurnLog &turn_log) {
   game.load(chessman_data_vector);
-  turn_log.changeTurn(next_white);
+  turn_log.changeTurn(next_white, game.getPlayerRole());
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(

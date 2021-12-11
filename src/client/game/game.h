@@ -88,6 +88,8 @@ public:
   void currentTile(const PixelCoordinate &coordinate);
 
   void setDefaultBoardWithCurrent();
+
+  ClientData::Role getPlayerRole();
 };
 
 

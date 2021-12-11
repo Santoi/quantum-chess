@@ -4,8 +4,8 @@ set(This ascii-chess)
 
 project(${This} C CXX)
 
-set(Headers ascii_chess.h)
-set(Sources ascii_chess.cpp main.cpp)
+file(GLOB Sources "*.cpp")
+file(GLOB Headers "*.h")
 
 add_executable(${This} ${Sources} ${Headers})
 

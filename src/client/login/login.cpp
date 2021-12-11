@@ -1,7 +1,7 @@
 #include "login.h"
 #include "../communication/client_protocol.h"
-#include "../../common/src/client_data.h"
-#include "../../common/src/unique_ptr.h"
+#include "../../common/client_data.h"
+#include "../../common/unique_ptr.h"
 #include <iostream>
 
 Login::Login()

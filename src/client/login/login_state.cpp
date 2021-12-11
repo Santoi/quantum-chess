@@ -1,6 +1,6 @@
 #include "login_state.h"
-#include "../../common/src/unique_ptr.h"
-#include "../../common/src/client_data.h"
+#include "../../common/unique_ptr.h"
+#include "../../common/client_data.h"
 #include "unavailable_role_exception.h"
 #include "invalid_nick_name_exception.h"
 #include <iostream>

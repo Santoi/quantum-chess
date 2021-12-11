@@ -3,7 +3,7 @@
 #include <utility>
 #include "window.h"
 #include "sprite_repositories/chessman_sprite_repository.h"
-#include "../game/drawable_board.h"
+#include "drawables/drawable_board.h"
 
 
 #define MAX_CHAT_MESSAGES 9

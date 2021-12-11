@@ -3,13 +3,14 @@
 #include <vector>
 
 #define MAX_MATCH_BUTTON_COUNT 8
+#define BACKGROUND_SPRITE "resources/sprites/background/login-background.jpg"
 
 LoginScene::LoginScene(Window &window,
                        LoginStateHandler &login_state_handler)
     :
     Scene(window),
     login_state_handler(login_state_handler),
-    background(window.renderer(), "img/login-background.jpg", window.getWidth(),
+    background(window.renderer(), BACKGROUND_SPRITE, window.getWidth(),
                window.getHeight()) {}
 
 void LoginScene::render() {

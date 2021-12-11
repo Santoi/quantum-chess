@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <vector>
-#include "../src/server/src/quantum_chess/board.h"
+#include "../src/server/quantum_chess/board.h"
 
 TEST(Board, FiftyFiftyWithSameObject) {
   int runs = 100000;

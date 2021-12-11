@@ -3,9 +3,9 @@
 
 #include "../game/game.h"
 #include "handler_thread.h"
-#include "../game/drawable_board.h"
-#include "../../common/src/thread.h"
-#include "chat/text_entry.h"
+#include "drawables/drawable_board.h"
+#include "../../common/thread.h"
+#include "../logic/text_entry.h"
 #include <SDL2/SDL.h>
 
 class EventHandlerThread : public HandlerThread {

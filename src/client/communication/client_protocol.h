@@ -2,10 +2,10 @@
 #define QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H
 
 #include <string>
-#include "../../common/src/socket.h"
-#include "../../common/src/protocol.h"
+#include "../../common/socket.h"
+#include "../../common/protocol.h"
 #include "remote_client_instructions.h"
-#include "../../common/src/client_data.h"
+#include "../../common/client_data.h"
 #include <memory>
 
 #define POSSIBLE_MOVES_PREFIX 'a'

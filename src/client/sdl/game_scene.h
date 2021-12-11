@@ -3,12 +3,12 @@
 
 #include "sprite_repositories/text_sprite_repository.h"
 #include "sprite_repositories/chessman_sprite_repository.h"
-#include "../game/drawable_chess.h"
-#include "chat/drawable_container.h"
-#include "chat/drawable_chat_message.h"
+#include "drawables/drawable_chess.h"
+#include "drawables/drawable_container.h"
+#include "drawables/drawable_chat_message.h"
 #include "scene.h"
 #include "sprite_repositories/button_sprite_repository.h"
-#include "drawable_text_entry_button.h"
+#include "drawables/drawable_text_entry_button.h"
 
 
 class Window;

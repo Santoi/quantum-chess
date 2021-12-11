@@ -1,6 +1,6 @@
 #include "remote_client_instructions.h"
 #include "client_protocol.h"
-#include "../position.h"
+#include "../game/position.h"
 #include "../game/game.h"
 #include "../game/chat.h"
 #include "../game/error_log.h"
@@ -15,16 +15,16 @@ void RemoteClientInstruction::fillPacketWithInstructionsToSend(Packet &packet,
 }
 
 RemoteClientChatInstruction::RemoteClientChatInstruction(std::string message_) :
-        client_id(0), nickname(), message(message_), timestamp() {}
+    client_id(0), nickname(), message(message_), timestamp() {}
 
 
 RemoteClientChatInstruction::RemoteClientChatInstruction(uint16_t client_id,
                                                          std::string nick_name,
                                                          std::string message,
                                                          std::string timestamp)
-        : client_id(client_id), nickname(std::move(nick_name)),
-          message(std::move(message)),
-          timestamp(std::move(timestamp)) {
+    : client_id(client_id), nickname(std::move(nick_name)),
+      message(std::move(message)),
+      timestamp(std::move(timestamp)) {
 }
 
 void RemoteClientChatInstruction::makeAction(Game &game, Chat &chat,
@@ -42,8 +42,8 @@ RemoteClientChatInstruction::fillPacketWithInstructionsToSend(Packet &packet,
 
 // TODO hacer como los del chat
 RemoteClientExitMessageInstruction::RemoteClientExitMessageInstruction(
-        const std::string &nick_name)
-        : nickname(nick_name) {
+    const std::string &nick_name)
+    : nickname(nick_name) {
 }
 
 void RemoteClientExitMessageInstruction::makeAction(Game &game, Chat &chat,
@@ -55,9 +55,9 @@ void RemoteClientExitMessageInstruction::makeAction(Game &game, Chat &chat,
 }
 
 RemoteClientLoadBoardInstruction::RemoteClientLoadBoardInstruction(
-        std::vector<ChessmanData> &&chessman_data_vector_, bool next_white_) :
-        chessman_data_vector(std::move(chessman_data_vector_)),
-        next_white(next_white_) {}
+    std::vector<ChessmanData> &&chessman_data_vector_, bool next_white_) :
+    chessman_data_vector(std::move(chessman_data_vector_)),
+    next_white(next_white_) {}
 
 void RemoteClientLoadBoardInstruction::makeAction(Game &game, Chat &chat,
                                                   ChessLog &chess_log,
@@ -68,8 +68,8 @@ void RemoteClientLoadBoardInstruction::makeAction(Game &game, Chat &chat,
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(
-        const Position &initial_,
-        const Position &final_) : initial(initial_), final(final_) {}
+    const Position &initial_,
+    const Position &final_) : initial(initial_), final(final_) {}
 
 void RemoteClientMoveInstruction::makeAction(Game &game, Chat &chat,
                                              ChessLog &chess_log,
@@ -83,8 +83,8 @@ RemoteClientMoveInstruction::fillPacketWithInstructionsToSend(Packet &packet,
 }
 
 RemoteClientExceptionInstruction::RemoteClientExceptionInstruction(
-        const std::string &message)
-        : message(message) {}
+    const std::string &message)
+    : message(message) {}
 
 void RemoteClientExceptionInstruction::makeAction(Game &game, Chat &chat,
                                                   ChessLog &chess_log,
@@ -94,12 +94,12 @@ void RemoteClientExceptionInstruction::makeAction(Game &game, Chat &chat,
 }
 
 void RemoteClientExceptionInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet, ClientProtocol &protocol) {
+    Packet &packet, ClientProtocol &protocol) {
 }
 
 RemoteClientPossibleMovesInstruction::RemoteClientPossibleMovesInstruction
-        (std::list<Position> &&positions_) :
-        positions(std::move(positions_)) {}
+    (std::list<Position> &&positions_) :
+    positions(std::move(positions_)) {}
 
 void RemoteClientPossibleMovesInstruction::makeAction(Game &game, Chat &chat,
                                                       ChessLog &chess_log,
@@ -110,14 +110,14 @@ void RemoteClientPossibleMovesInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientPossibleMovesInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet,
-        ClientProtocol &protocol) {
+    Packet &packet,
+    ClientProtocol &protocol) {
   protocol.fillPacketWithPossibleMovesMessage(packet, *positions.begin());
 }
 
 RemoteClientPossibleSplitsInstruction::RemoteClientPossibleSplitsInstruction
-        (std::list<Position> &&positions_) :
-        positions(std::move(positions_)) {}
+    (std::list<Position> &&positions_) :
+    positions(std::move(positions_)) {}
 
 void RemoteClientPossibleSplitsInstruction::makeAction(Game &game, Chat &chat,
                                                        ChessLog &chess_log,
@@ -128,15 +128,15 @@ void RemoteClientPossibleSplitsInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientPossibleSplitsInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet,
-        ClientProtocol &protocol) {
+    Packet &packet,
+    ClientProtocol &protocol) {
   protocol.fillPacketWithPossibleSplitsMessage(packet, *positions.begin());
 }
 
 RemoteClientPossibleMergesInstruction::RemoteClientPossibleMergesInstruction
-        (std::list<Position>
-         &&positions_) :
-        positions(std::move(positions_)) {}
+    (std::list<Position>
+     &&positions_) :
+    positions(std::move(positions_)) {}
 
 void RemoteClientPossibleMergesInstruction::makeAction(Game &game, Chat &chat,
                                                        ChessLog &chess_log,
@@ -147,8 +147,8 @@ void RemoteClientPossibleMergesInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientPossibleMergesInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet,
-        ClientProtocol &protocol) {
+    Packet &packet,
+    ClientProtocol &protocol) {
   if (positions.size() == 1)
     protocol.fillPacketWithPossibleMergesMessage(packet, *positions.begin());
   else if (positions.size() == 2)
@@ -158,8 +158,8 @@ RemoteClientPossibleMergesInstruction::fillPacketWithInstructionsToSend(
 
 
 RemoteClientSplitInstruction::RemoteClientSplitInstruction(
-        const Position &from_, const Position &to1_, const Position &to2_)
-        : from(from_), to1(to1_), to2(to2_) {}
+    const Position &from_, const Position &to1_, const Position &to2_)
+    : from(from_), to1(to1_), to2(to2_) {}
 
 void RemoteClientSplitInstruction::makeAction(Game &game, Chat &chat,
                                               ChessLog &chess_log,
@@ -173,8 +173,8 @@ RemoteClientSplitInstruction::fillPacketWithInstructionsToSend(Packet &packet,
 }
 
 RemoteClientMergeInstruction::RemoteClientMergeInstruction(
-        const Position &from1_, const Position &from2_, const Position &to_)
-        : from1(from1_), from2(from2_), to(to_) {}
+    const Position &from1_, const Position &from2_, const Position &to_)
+    : from1(from1_), from2(from2_), to(to_) {}
 
 void RemoteClientMergeInstruction::makeAction(Game &game, Chat &chat,
                                               ChessLog &chess_log,
@@ -189,8 +189,8 @@ RemoteClientMergeInstruction::fillPacketWithInstructionsToSend(Packet &packet,
 
 
 RemoteClientSameChessmanInstruction::RemoteClientSameChessmanInstruction
-        (std::list<Position> &&positions_) :
-        positions(std::move(positions_)) {}
+    (std::list<Position> &&positions_) :
+    positions(std::move(positions_)) {}
 
 void RemoteClientSameChessmanInstruction::makeAction(Game &game, Chat &chat,
                                                      ChessLog &chess_log,
@@ -201,14 +201,14 @@ void RemoteClientSameChessmanInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientSameChessmanInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet,
-        ClientProtocol &protocol) {
+    Packet &packet,
+    ClientProtocol &protocol) {
   protocol.fillPacketWithSameChessmanInstruction(packet, *positions.begin());
 }
 
 RemoteClientEntangledChessmanInstruction::RemoteClientEntangledChessmanInstruction
-        (std::list<Position>
-         &&positions_) : positions(std::move(positions_)) {}
+    (std::list<Position>
+     &&positions_) : positions(std::move(positions_)) {}
 
 void
 RemoteClientEntangledChessmanInstruction::makeAction(Game &game, Chat &chat,
@@ -220,14 +220,14 @@ RemoteClientEntangledChessmanInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientEntangledChessmanInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet,
-        ClientProtocol &protocol) {
+    Packet &packet,
+    ClientProtocol &protocol) {
   protocol.fillPacketWithEntangledChessmanInstruction(packet,
                                                       *positions.begin());
 }
 
 RemoteClientSoundInstruction::RemoteClientSoundInstruction(uint8_t sound_) :
-        sound(sound_) {}
+    sound(sound_) {}
 
 void RemoteClientSoundInstruction::makeAction(Game &game, Chat &chat,
                                               ChessLog &chess_log,
@@ -248,12 +248,12 @@ void RemoteClientSoundInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientSoundInstruction::fillPacketWithInstructionsToSend(
-        Packet &packet,
-        ClientProtocol &protocol) {}
+    Packet &packet,
+    ClientProtocol &protocol) {}
 
 RemoteClientLogInstruction::RemoteClientLogInstruction(
-        std::list<std::string> &&log_)
-        : log(std::move(log_)) {
+    std::list<std::string> &&log_)
+    : log(std::move(log_)) {
 }
 
 void RemoteClientLogInstruction::makeAction(Game &game, Chat &chat,

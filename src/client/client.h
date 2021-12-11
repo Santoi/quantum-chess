@@ -3,12 +3,12 @@
 
 #include "game/game.h"
 #include "communication/remote_clients_threads.h"
-#include "../common/src/socket.h"
-#include "../common/src/blocking_queue.h"
+#include "../common/socket.h"
+#include "../common/blocking_queue.h"
 #include "game/game.h"
 #include "communication/remote_client_instructions.h"
 #include "sdl/handler_thread.h"
-#include "sdl/chat/text_entry.h"
+#include "logic/text_entry.h"
 #include "sdl/login_scene.h"
 #include "sdl/game_scene.h"
 #include <string>

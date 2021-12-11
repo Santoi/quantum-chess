@@ -2,8 +2,8 @@
 #include "client_protocol.h"
 #include <iostream>
 #include "remote_client_instructions.h"
-#include "../../common/src/blocking_queue.h"
-#include "../../common/src/socket_closed.h"
+#include "../../common/blocking_queue.h"
+#include "../../common/socket_closed.h"
 
 RemoteClientSender::RemoteClientSender(Socket &client_socket,
                                        BlockingQueue<RemoteClientInstruction> &send_queue_)

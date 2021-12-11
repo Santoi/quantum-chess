@@ -2,9 +2,9 @@
 #define QUANTUM_CHESS_PROJ_LOGIN_H
 
 #include "../sdl/pixel_coordinate.h"
-#include "../../common/src/blocking_queue.h"
-#include "../../common/src/socket.h"
-#include "../sdl/button.h"
+#include "../../common/blocking_queue.h"
+#include "../../common/socket.h"
+#include "../logic/button.h"
 #include <memory>
 #include <vector>
 #include <mutex>

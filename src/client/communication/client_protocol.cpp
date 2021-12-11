@@ -1,13 +1,13 @@
-#include "../../common/src/packet.h"
+#include "../../common/packet.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 
 #include <utility>
-#include "../../common/src/unique_ptr.h"
+#include "../../common/unique_ptr.h"
 #include "client_protocol.h"
-#include "../../common/src/client_data.h"
+#include "../../common/client_data.h"
 #include "chessman_data.h"
-#include "../../common/src/socket_closed.h"
+#include "../../common/socket_closed.h"
 
 std::map<uint16_t, std::vector<ClientData>>
 ClientProtocol::receiveMatchesInfo(Socket &socket) {

@@ -4,8 +4,8 @@
 #include "../sdl/login_scene.h"
 #include "../sdl/texture_sprite.h"
 #include "login.h"
-#include "../sdl/button.h"
-#include "../sdl/text_entry_button.h"
+#include "../logic/button.h"
+#include "../logic/text_entry_button.h"
 #include <atomic>
 #include <vector>
 #include <memory>

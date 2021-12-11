@@ -3,9 +3,9 @@
 
 #include "window.h"
 #include "../login/login_state.h"
-#include "button.h"
-#include "chat/drawable_container.h"
-#include "text_entry_button.h"
+#include "../logic/button.h"
+#include "drawables/drawable_container.h"
+#include "../logic/text_entry_button.h"
 #include "scene.h"
 #include "../login/login_state_handler.h"
 

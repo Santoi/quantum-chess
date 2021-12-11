@@ -101,14 +101,6 @@ void LoginStateHandler::render(LoginScene &login_scene) {
   current_state->render(login_scene);
 }
 
-Socket LoginStateHandler::getClientSocket() {
-  return login.getClientSocket();
-}
-
-std::string LoginStateHandler::getClientNickName() {
-  return login.getClientNickName();
-}
-
 void LoginStateHandler::resetPressedButtons() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->resetPressedButtons();

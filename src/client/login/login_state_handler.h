@@ -41,11 +41,7 @@ public:
   void processTokens(std::list<std::string> &&tokens);
 
   void render(LoginScene &login_scene);
-
-  Socket getClientSocket();
-
-  std::string getClientNickName();
-
+  
   ~LoginStateHandler() = default;
 
     void resetPressedButtons();

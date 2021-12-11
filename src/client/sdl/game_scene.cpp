@@ -66,8 +66,12 @@ void GameScene::addCurrentMessage(const std::string &text) {
   current_message_text = text;
 }
 
-void GameScene::render() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
+
+void GameScene::renderHelpScreen() {
+
+}
+
+void GameScene::renderGame() {
   int width = window.getWidth(), height = window.getHeight();
 
   chess.render(transformer, width - CHAT_WIDTH, height);
@@ -77,9 +81,17 @@ void GameScene::render() {
   log.render(width - CHAT_WIDTH, height / 2 - font.size() * 5);
   chat.render(width - CHAT_WIDTH, height - font.size() * 5);
   current_message.setAreaAndPosition(width - CHAT_WIDTH,
-                                     height - font.size() * 2, CHAT_WIDTH,
-                                     font.size() * 2);
+                                       height - font.size() * 2, CHAT_WIDTH,
+                                       font.size() * 2);
   current_message.render(current_message_text);
+}
+
+void GameScene::render() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (render_help_screen)
+      renderHelpScreen();
+  else
+      renderGame();
 }
 
 int GameScene::getChatWidth() {

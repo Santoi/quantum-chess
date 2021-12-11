@@ -29,6 +29,10 @@ private:
   ButtonSpriteRepository &button_repository;
   std::string current_message_text;
 
+  void renderHelpScreen();
+
+  void renderGame();
+
 public:
   GameScene(Window &window, DrawableBoard &board, Font &font,
             TextSpriteRepository &text_repository,
@@ -61,9 +65,9 @@ public:
 
   void disableChat();
 
-    void stopRenderingHelpScreen();
+  void stopRenderingHelpScreen();
 
-    void startRenderingHelpScreen();
+  void startRenderingHelpScreen();
 };
 
 

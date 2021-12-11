@@ -141,8 +141,17 @@ RoleButton::RoleButton(ButtonSpriteRepository &button_repository,
                        ClientData::Role role_, std::string &&type,
                        bool role_is_available_)
     : Button(button_repository, text_repository, std::move(type), ""),
-      role(role_),
+      role(role_), unavailable_role_sprite(&button_repository.getPressed("unavailable_role")),
       role_is_available(role_is_available_) {
+}
+
+void RoleButton::render() {
+    Button::render();
+    if (!role_is_available) {
+        size_t x, y, width, height;
+        drawable.getAreaAndPosition(x, y, width, height);
+        unavailable_role_sprite->render(x, y, width, height);
+    }
 }
 
 void RoleButton::addEnumToListOfTokens(std::list<std::string> &tokens) {

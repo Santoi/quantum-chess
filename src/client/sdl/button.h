@@ -29,7 +29,7 @@ public:
   virtual bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                                    std::list<std::string> &tokens) = 0;
 
-  void render();
+  virtual void render();
 
   void setAreaAndPosition(size_t x, size_t y, size_t width, size_t height);
 
@@ -117,6 +117,7 @@ public:
 class RoleButton : public Button {
 private:
   const ClientData::Role role;
+  TextureSprite* unavailable_role_sprite;
   bool role_is_available;
 
 public:
@@ -130,6 +131,8 @@ public:
 
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                            std::list<std::string> &tokens) override;
+
+  void render() override;
 
   ~RoleButton() override = default;
 

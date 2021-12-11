@@ -34,7 +34,7 @@ private:
   std::mutex mutex;
 
 public:
-  DrawableBoard(Window &window, const std::string &image, int width, int height,
+  DrawableBoard(Window &window, int width, int height,
                 Font &font);
 
   ~DrawableBoard() = default;

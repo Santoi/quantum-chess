@@ -13,26 +13,30 @@
 #define PURPLE {0x80, 0x00, 0x80}
 #define TEAL {0x00, 0xff, 0xff}
 
-#define PATH "resources/fonts/"
+#ifndef QCHESS_PATH
+#define QCHESS_PATH ""
+#endif
+#define BUTTONS_PATH "resources/fonts/"
 
 Font::Font(int ptx, int index)
-    : ttf(), regular_font(PATH "font-regular.ttf", ptx, index),
-      mono_font(PATH "erusfont.pcf", ptx, index),
-      bold_font(PATH "erusfontbold.pcf", ptx, index),
-      italic_font(PATH "font-italic.ttf", ptx, index) {
+        : ttf(),
+          regular_font(QCHESS_PATH BUTTONS_PATH "font-regular.ttf", ptx, index),
+          mono_font(QCHESS_PATH BUTTONS_PATH "erusfont.pcf", ptx, index),
+          bold_font(QCHESS_PATH BUTTONS_PATH "erusfontbold.pcf", ptx, index),
+          italic_font(QCHESS_PATH BUTTONS_PATH "font-italic.ttf", ptx, index) {
   colors = {
-      {'k', BLACK},
-      {'w', WHITE},
-      {'r', RED},
-      {'g', GREEN},
-      {'b', BLUE},
-      {'y', YELLOW},
-      {'n', NAVY},
-      {'f', FUCHSIA},
-      {'l', LIME},
-      {'p', PURPLE},
-      {'d', GRAY},
-      {'t', TEAL},
+          {'k', BLACK},
+          {'w', WHITE},
+          {'r', RED},
+          {'g', GREEN},
+          {'b', BLUE},
+          {'y', YELLOW},
+          {'n', NAVY},
+          {'f', FUCHSIA},
+          {'l', LIME},
+          {'p', PURPLE},
+          {'d', GRAY},
+          {'t', TEAL},
   };
 }
 

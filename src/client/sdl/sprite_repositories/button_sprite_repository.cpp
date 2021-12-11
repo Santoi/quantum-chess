@@ -1,22 +1,25 @@
 #include "button_sprite_repository.h"
 
-#define PATH "resources/sprites/button/"
+#ifndef QCHESS_PATH
+#define QCHESS_PATH ""
+#endif
+#define BUTTONS_PATH "resources/sprites/button/"
 
 ButtonSpriteRepository::ButtonSpriteRepository(Renderer &renderer)
-    : pressed(), released() {
+        : pressed(), released() {
   loadPressed(renderer);
   loadReleased(renderer);
 }
 
 void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"text",             PATH "text-button-pressed.png"},
-      {"action",           PATH "button-pressed.png"},
-      {"match",            PATH "button-pressed.png"},
-      {"role_white",       PATH "available_white_role.png"},
-      {"role_black",       PATH "available_black_role.png"},
-      {"role_spectator",   PATH "spectator_role.png"},
-      {"unavailable_role", PATH "unavailable_role_layer.png"}
+          {"text",             QCHESS_PATH BUTTONS_PATH "text-button-pressed.png"},
+          {"action",           QCHESS_PATH BUTTONS_PATH "button-pressed.png"},
+          {"match",            QCHESS_PATH BUTTONS_PATH "button-pressed.png"},
+          {"role_white",       QCHESS_PATH BUTTONS_PATH "available_white_role.png"},
+          {"role_black",       QCHESS_PATH BUTTONS_PATH "available_black_role.png"},
+          {"role_spectator",   QCHESS_PATH BUTTONS_PATH "spectator_role.png"},
+          {"unavailable_role", QCHESS_PATH BUTTONS_PATH "unavailable_role_layer.png"}
   };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,
@@ -28,13 +31,13 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
 
 void ButtonSpriteRepository::loadReleased(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"text",             PATH "text-button-released.png"},
-      {"action",           PATH "button-released.png"},
-      {"match",            PATH "button-released.png"},
-      {"role_white",       PATH "available_white_role.png"},
-      {"role_black",       PATH "available_black_role.png"},
-      {"role_spectator",   PATH "spectator_role.png"},
-      {"unavailable_role", PATH "unavailable_role_layer.png"}
+          {"text",             QCHESS_PATH BUTTONS_PATH "text-button-released.png"},
+          {"action",           QCHESS_PATH BUTTONS_PATH "button-released.png"},
+          {"match",            QCHESS_PATH BUTTONS_PATH "button-released.png"},
+          {"role_white",       QCHESS_PATH BUTTONS_PATH "available_white_role.png"},
+          {"role_black",       QCHESS_PATH BUTTONS_PATH "available_black_role.png"},
+          {"role_spectator",   QCHESS_PATH BUTTONS_PATH "spectator_role.png"},
+          {"unavailable_role", QCHESS_PATH BUTTONS_PATH "unavailable_role_layer.png"}
   };
   for (auto &pair: images) {
     TextureSprite released_(renderer, pair.second,

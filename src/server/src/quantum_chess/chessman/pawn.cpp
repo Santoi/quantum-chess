@@ -59,6 +59,9 @@ Pawn::checkIsAValidMove(const Position &initial, const Position &final) {
   if (final.x() == initial.x() && board.getChessmanAt(final) &&
       board.getChessmanAt(final)->isWhite() != white)
     return PAWN_CANT_EAT_LIKE_THAT;
+  if (final.x() != initial.x() && board.getChessmanAt(final) &&
+      board.getChessmanAt(final)->isWhite() == white)
+    return PAWN_CANT_MEASURE_LIKE_THAT;
   std::vector<Position> path;
   std::pair<Position, Chessman *> chessman_in_path;
   calculatePath(initial, final, path);

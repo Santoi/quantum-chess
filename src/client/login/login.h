@@ -14,9 +14,9 @@ class Login {
 private:
   std::unique_ptr<Socket> client_socket_ptr;
   std::string client_nick_name;
+  ClientData::Role role;
 
 public:
-
   Login();
 
   void connectToServer(const std::string &ip, const std::string &port);
@@ -39,6 +39,8 @@ public:
 
   void
   getListOfMatchesInfo(std::map<uint16_t, std::vector<ClientData>> &match_info);
+
+  ClientData::Role getRole();
 
   void refreshMatches();
 };

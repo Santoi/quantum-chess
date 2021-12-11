@@ -43,8 +43,9 @@ bool Chessman::move(const Position &initial, const Position &final) {
          && final_chessman->white == white))
       return false;
   }
-  // Measure solved from here.
+  // Measure solved from here, final_chessman is loaded again.
   // If there is final chessman_, then is removed of the board.
+  final_chessman = board.getChessmanAt(final);
   if (final_chessman) {
     if (final_chessman->charId() == 'K') {
       std::string color = white ? "white" : "black";
@@ -579,6 +580,8 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
       throw ChessException("pawn cannot merge");
     case PAWN_CANT_EAT_LIKE_THAT:
       throw ChessException("pawn cannot eat like that");
+    case PAWN_CANT_MEASURE_LIKE_THAT:
+      throw ChessException("pawn cannot measure like that");
   }
 }
 

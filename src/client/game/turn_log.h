@@ -16,7 +16,7 @@ private:
 public:
   explicit TurnLog(GameScene &scene);
 
-  void changeTurn(bool white);
+  void changeTurn(bool white, ClientData::Role role);
 };
 
 

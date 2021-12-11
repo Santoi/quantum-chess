@@ -8,13 +8,13 @@ ButtonSpriteRepository::ButtonSpriteRepository(Renderer &renderer)
 
 void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"text",   "img/buttons/text-button-pressed.png"},
-      {"action", "img/buttons/button-pressed.png"},
-      {"match",  "img/buttons/button-pressed.png"},
-      {"role_white", "img/buttons/available_white_role.png"},
-      {"role_black", "img/buttons/available_black_role.png"},
-      {"role_spectator", "img/buttons/spectator_role.png"},
-      {"unavailable_role", "img/buttons/unnavailable_role_layer.png"}
+      {"text",             "img/buttons/text-button-pressed.png"},
+      {"action",           "img/buttons/button-pressed.png"},
+      {"match",            "img/buttons/button-pressed.png"},
+      {"role_white",       "img/buttons/available_white_role.png"},
+      {"role_black",       "img/buttons/available_black_role.png"},
+      {"role_spectator",   "img/buttons/spectator_role.png"},
+      {"unavailable_role", "img/buttons/unavailable_role_layer.png"}
   };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,
@@ -26,13 +26,13 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
 
 void ButtonSpriteRepository::loadReleased(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"text",   "img/buttons/text-button-released.png"},
-      {"action", "img/buttons/button-released.png"},
-      {"match",  "img/buttons/button-released.png"},
-      {"role_white", "img/buttons/available_white_role.png"},
-      {"role_black", "img/buttons/available_black_role.png"},
-      {"role_spectator", "img/buttons/spectator_role.png"},
-      {"unavailable_role", "img/buttons/unnavailable_role_layer.png"}
+      {"text",             "img/buttons/text-button-released.png"},
+      {"action",           "img/buttons/button-released.png"},
+      {"match",            "img/buttons/button-released.png"},
+      {"role_white",       "img/buttons/available_white_role.png"},
+      {"role_black",       "img/buttons/available_black_role.png"},
+      {"role_spectator",   "img/buttons/spectator_role.png"},
+      {"unavailable_role", "img/buttons/unavailable_role_layer.png"}
   };
   for (auto &pair: images) {
     TextureSprite released_(renderer, pair.second,

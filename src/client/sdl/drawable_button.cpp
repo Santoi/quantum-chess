@@ -51,3 +51,11 @@ void DrawableButton::disablePressedStatus() {
 void DrawableButton::enablePressedStatus() {
   is_pressed = true;
 }
+
+void DrawableButton::getAreaAndPosition(size_t& x_, size_t& y_, size_t& width_,
+                        size_t& height_) {
+    x_ = x;
+    y_ = y;
+    width_ = width;
+    height_ = height;
+}

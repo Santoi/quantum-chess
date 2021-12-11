@@ -2,6 +2,7 @@
 #include "../../common/src/unique_ptr.h"
 #include "../../common/src/client_data.h"
 #include "unavailable_role_exception.h"
+#include "invalid_nick_name_exception.h"
 #include <iostream>
 
 #define MATCHES_PER_PAGE 8
@@ -71,8 +72,11 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
   tokens.pop_front();
   std::string port = tokens.front();
   tokens.pop_front();
-  login.connectToServer(ip, port);
   std::string nick_name = tokens.front();
+  size_t length = nick_name.size();
+  if (length < MIN_NICK_NAME_LENGTH || length > MAX_NICK_NAME_LENGTH)
+      throw InvalidNickNameException();
+  login.connectToServer(ip, port);
   login.saveNickName(nick_name);
   return NEXT_STATE_CONNECT_TO_MATCH;
 }

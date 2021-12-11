@@ -29,10 +29,12 @@ void LoginHandlerThread::run() {
       case SDL_MOUSEBUTTONUP:
         if (event.button.button == SDL_BUTTON_LEFT)
           handleMouseButtonLeft();
+        break;
       case SDL_MOUSEBUTTONDOWN:
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
-          handleMouseButtonLeft(mouse);
+            handleMouseButtonLeft(mouse);
+        break;
     }
   }
   open = false;
@@ -64,11 +66,7 @@ void LoginHandlerThread::handleTextInput(const std::string &new_text) {
 }
 
 void LoginHandlerThread::handleMouseButtonLeft() {
-  std::list<std::reference_wrapper<Button>> active_buttons;
-  login_state_handler.fillWithActiveButtons(active_buttons);
-  for (auto it = active_buttons.begin(); it != active_buttons.end(); ++it) {
-    it->get().resetButton();
-  }
+  login_state_handler.resetPressedButtons();
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
@@ -83,7 +81,7 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     ++it;
   }
   if (it != active_buttons.end()) {
-    login_state_handler.processTokens(std::move(tokens));
+      login_state_handler.processTokens(std::move(tokens));
     return;
   }
   //first disable all text entries

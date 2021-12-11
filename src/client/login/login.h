@@ -12,7 +12,6 @@
 
 class Login {
 private:
-  std::mutex mutex;
   std::unique_ptr<Socket> client_socket_ptr;
   std::string client_nick_name;
 

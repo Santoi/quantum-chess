@@ -13,18 +13,13 @@
 #define PURPLE {0x80, 0x00, 0x80}
 #define TEAL {0x00, 0xff, 0xff}
 
+#define PATH "resources/fonts/"
 
 Font::Font(int ptx, int index)
-    : ttf(), regular_font("fonts/font-regular.ttf", ptx,
-                          index),
-      mono_font("fonts/erusfont.pcf",
-                ptx,
-                index),
-      bold_font("fonts/erusfontbold.pcf",
-                ptx, index),
-      italic_font(
-          "fonts/font-italic.ttf", ptx,
-          index) {
+    : ttf(), regular_font(PATH "font-regular.ttf", ptx, index),
+      mono_font(PATH "erusfont.pcf", ptx, index),
+      bold_font(PATH "erusfontbold.pcf", ptx, index),
+      italic_font(PATH "font-italic.ttf", ptx, index) {
   colors = {
       {'k', BLACK},
       {'w', WHITE},

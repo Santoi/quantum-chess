@@ -1,6 +1,6 @@
 #include "button_sprite_repository.h"
 
-#define PATH "resources/sprites/button"
+#define PATH "resources/sprites/button/"
 
 ButtonSpriteRepository::ButtonSpriteRepository(Renderer &renderer)
     : pressed(), released() {

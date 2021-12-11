@@ -1,7 +1,7 @@
 #include "tile_sprite_repository.h"
 #include "../drawables/drawable_tile.h"
 
-#define PATH "resources/sprites/board"
+#define PATH "resources/sprites/board/"
 
 TileSpriteRepository::TileSpriteRepository(Renderer &renderer) : white_tiles(),
                                                                  black_tiles() {

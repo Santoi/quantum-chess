@@ -17,12 +17,11 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game_,
       last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
-  while (true) {
+  while (open) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
         open = false;
-        return;
       case SDL_WINDOWEVENT:
         handleWindowChange(event.window);
         break;

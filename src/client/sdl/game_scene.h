@@ -3,7 +3,7 @@
 
 #include "sprite_repositories/text_sprite_repository.h"
 #include "sprite_repositories/chessman_sprite_repository.h"
-#include "drawables/drawable_chess.h"
+#include "drawables/drawable_board.h"
 #include "drawables/drawable_container.h"
 #include "drawables/drawable_chat_message.h"
 #include "scene.h"

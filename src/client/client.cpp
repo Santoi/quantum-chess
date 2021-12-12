@@ -164,14 +164,12 @@ void Client::execute() {
   if (login_was_closed)
     return;
 
- // bool keep_playing = true;
- // while (keep_playing) {
+  bool keep_playing = true;
+  while (keep_playing) {
   // if we are here the client is connected to a match
-  Socket socket = login.getClientSocket();
-  role = login.getRole();
-  handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
+    Socket socket = login.getClientSocket();
+    role = login.getRole();
+    handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
                 window, renderer, font, frame_rate);
- // }
-
-
+  }
 }

@@ -255,3 +255,7 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
       }
   }
 }
+
+bool EventHandlerThread::keepPlaying() {
+  return keep_playing;
+}

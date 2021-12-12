@@ -136,7 +136,7 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
                                            button_height * 2,
                                            button_width,
                                            button_height);
-  return_button.setAreaAndPosition(100, 100, 50, 20);
+  return_button.setAreaAndPosition(10, 20, 554/2, 234/2);
   white_role_button.render();
   black_role_button.render();
   spectator_role_button.render();

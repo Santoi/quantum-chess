@@ -16,7 +16,8 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
       {"role_white",       PATH "available_white_role.png"},
       {"role_black",       PATH "available_black_role.png"},
       {"role_spectator",   PATH "spectator_role.png"},
-      {"unavailable_role", PATH "unavailable_role_layer.png"}
+      {"unavailable_role", PATH "unavailable_role_layer.png"},
+      {"return", PATH "return.png"}
   };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,
@@ -34,7 +35,9 @@ void ButtonSpriteRepository::loadReleased(Renderer &renderer) {
       {"role_white",       PATH "available_white_role.png"},
       {"role_black",       PATH "available_black_role.png"},
       {"role_spectator",   PATH "spectator_role.png"},
-      {"unavailable_role", PATH "unavailable_role_layer.png"}
+      {"unavailable_role", PATH "unavailable_role_layer.png"},
+      {"return", PATH "return.png"}
+
   };
   for (auto &pair: images) {
     TextureSprite released_(renderer, pair.second,

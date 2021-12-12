@@ -119,8 +119,11 @@ void LoginStateHandler::resetPressedButtons() {
 }
 
 bool LoginStateHandler::loginIsNeeded() {
-  std::cout << "Im checking" << std::endl;
   bool connected_to_match = clientIsConnectedToMatch();
-  std::cout << "DONE" << std::endl;
   return (!connected_to_match && continue_playing);
+}
+
+bool LoginStateHandler::continuePlaying() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return continue_playing;
 }

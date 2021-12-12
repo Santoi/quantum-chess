@@ -49,6 +49,8 @@ public:
   void resetPressedButtons();
 
   bool loginIsNeeded();
+
+    bool continuePlaying();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_HANDLER_H

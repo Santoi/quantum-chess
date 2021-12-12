@@ -104,7 +104,8 @@ void joinThreads(RemoteClientSender& sender_thread, RemoteClientReceiver& receiv
   receiver_thread.join();
 }
 
-void Client::closeBlockingQueues() {
+void closeBlockingQueues(BlockingQueue<RemoteClientInstruction>& received,
+                         BlockingQueue<RemoteClientInstruction>& send) {
   received.close();
   send.close();
 }
@@ -112,6 +113,8 @@ void Client::closeBlockingQueues() {
 void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
                         TextSpriteRepository& text_sprite_repository, Window& window,
                         Renderer& renderer, Font& font, uint8_t frame_rate) {
+  BlockingQueue<RemoteClientInstruction> received;
+  BlockingQueue<RemoteClientInstruction> send;
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 
@@ -135,7 +138,7 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
 
   gameRenderLoop(scene, game, text_entry, event_handler, renderer, frame_rate);
 
-  closeBlockingQueues();
+  closeBlockingQueues(received, send);
 
   receiver_thread.notifySocketClosed();
   socket.shutdownAndClose();

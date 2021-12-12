@@ -19,8 +19,6 @@ class LoginScene;
 
 class Client {
 private:
-  BlockingQueue<RemoteClientInstruction> received;
-  BlockingQueue<RemoteClientInstruction> send;
   ClientData::Role role;
 
   void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
@@ -38,7 +36,6 @@ private:
   void handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
                             TextSpriteRepository& text_sprite_repository, Window& window,
                             Renderer& renderer, Font& font, uint8_t frame_rate);
-  void closeBlockingQueues();
 
   void handleSelectAnotherMatchOrQuit(Login& login,
                                       ButtonSpriteRepository& button_sprite_repository,

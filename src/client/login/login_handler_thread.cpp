@@ -12,7 +12,8 @@ LoginHandlerThread::LoginHandlerThread(Login &login,
     was_closed_(false) {}
 
 void LoginHandlerThread::run() {
-  while (!(login_state_handler.clientIsConnectedToMatch())) {
+  while (!(login_state_handler.clientIsConnectedToMatch()) &&
+          login_state_handler.continuePlaying()) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:

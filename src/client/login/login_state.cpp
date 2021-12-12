@@ -14,7 +14,7 @@ LoginState::LoginState(Login &login_,
     button_sprite_repository(button_sprite_repository),
     text_sprite_repository(text_sprite_repository) {}
 
-void LoginState::resetPressedButtons() {
+void LoginState::resetAllButtonsToNotPressedState() {
   for (auto &button: buttons_ptr)
     button->resetButton();
 }

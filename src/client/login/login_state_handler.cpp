@@ -42,7 +42,7 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
     int aux = current_state->processTokens(std::move(tokens));
     usleep(500000);
     std::lock_guard<std::mutex> lock_guard(mutex);
-    if (aux != KEEP_STATE)
+    if (aux != KEEP_STATE && aux != STOP_PLAYING)
       current_state.reset();
     switch (aux) {
       case NEXT_STATE_CONNECT_TO_MATCH:
@@ -65,6 +65,8 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
         break;
       case STOP_PLAYING:
         continue_playing = false;
+        std::cout << "stop playin!!" << std::endl;
+        break;
       default:
         break;
     }
@@ -116,7 +118,9 @@ void LoginStateHandler::resetPressedButtons() {
   current_state->resetPressedButtons();
 }
 
-bool LoginStateHandler::continuePlaying() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
-  return continue_playing;
+bool LoginStateHandler::loginIsNeeded() {
+  std::cout << "Im checking" << std::endl;
+  bool connected_to_match = clientIsConnectedToMatch();
+  std::cout << "DONE" << std::endl;
+  return (!connected_to_match && continue_playing);
 }

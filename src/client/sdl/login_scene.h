@@ -52,7 +52,7 @@ public:
                                        TextEntryButton &name_text_entry);
 
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
-                          Button &spectator_role_button);
+                          Button &spectator_role_button, Button& return_button);
 
 };
 

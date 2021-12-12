@@ -209,7 +209,8 @@ void
 SelectingRoleState::render(LoginScene &login_scene) {
   login_scene.renderRolesButtons(*buttons_ptr[0],
                                  *buttons_ptr[1],
-                                 *buttons_ptr[2]);
+                                 *buttons_ptr[2],
+                                 *buttons_ptr[3]);
 }
 
 void SelectingRoleState::fillWithActiveButtons(

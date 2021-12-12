@@ -120,7 +120,8 @@ void LoginScene::renderConnectedSprite(TextureSprite &texture) {
 
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
-                                    Button &spectator_role_button) {
+                                    Button &spectator_role_button,
+                                    Button &return_button) {
   size_t width = window.getWidth();
   size_t button_height = width * .1, button_width = width * .1;
   size_t delta_x = width * .01;
@@ -135,7 +136,9 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
                                            button_height * 2,
                                            button_width,
                                            button_height);
+  return_button.setAreaAndPosition(100, 100, 50, 20);
   white_role_button.render();
   black_role_button.render();
   spectator_role_button.render();
+  return_button.render();
 }

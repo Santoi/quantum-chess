@@ -32,12 +32,6 @@ void LoginStateHandler::fillWithActiveTextEntryButtons(
   current_state->fillWithActiveTextEntryButtons(active_text_entries);
 }
 
-void LoginStateHandler::returnToSelectingMatchState() {
-  login.reconnectToServer();
-  current_state = make_unique<SelectingMatchState>(login, button_repository,
-                                                   text_repository);
-}
-
 void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
   try {
     int aux = current_state->processTokens(std::move(tokens));
@@ -47,6 +41,9 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
       current_state.reset();
     switch (aux) {
       case NEXT_STATE_CONNECT_TO_MATCH:
+      case RETURN_TO_SELECTING_MATCH_STATE:
+        if (aux == RETURN_TO_SELECTING_MATCH_STATE)
+            login.reconnectToServer();
         current_state = make_unique<SelectingMatchState>(login,
                                                          button_repository,
                                                          text_repository);
@@ -61,8 +58,6 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
                                                            button_repository,
                                                            text_repository);
         break;
-      case RETURN_TO_SELECTING_MATCH_STATE:
-        returnToSelectingMatchState();
       default:
         break;
     }

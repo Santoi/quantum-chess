@@ -24,10 +24,12 @@ private:
   DrawableTextEntryButton current_message;
   CoordinateTransformer transformer;
   bool render_help_screen;
+  bool render_leave_match_screen;
   std::mutex mutex;
   TextSpriteRepository &text_repository;
   ButtonSpriteRepository &button_repository;
   TextureSprite* help_sprite;
+  TextureSprite* leave_sprite;
   std::string current_message_text;
 
   void renderHelpScreen();
@@ -69,6 +71,8 @@ public:
   void stopRenderingHelpScreen();
 
   void startRenderingHelpScreen();
+
+    void renderLeaveMatchScreen();
 };
 
 

@@ -24,10 +24,11 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
         MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
       current_message(text_repository, button_repository, "CHAT HERE"),
       transformer(), render_help_screen(false),
-      mutex(),
+      render_leave_match_screen(false), mutex(),
       text_repository(text_repository),
       button_repository(button_repository),
-      help_sprite(&button_repository.getPressed("help")) {}
+      help_sprite(&button_repository.getPressed("help")),
+      leave_sprite(&button_repository.getPressed("leave")) {}
 
 void
 GameScene::addChatMessage(const std::string &nickname, const std::string &id,
@@ -67,6 +68,11 @@ void GameScene::addCurrentMessage(const std::string &text) {
   current_message_text = text;
 }
 
+void GameScene::renderLeaveMatchScreen() {
+  int width = window.getWidth(), height = window.getHeight();
+  leave_sprite->render(0, 0, width, height);
+}
+
 
 void GameScene::renderHelpScreen() {
   int width = window.getWidth(), height = window.getHeight();
@@ -90,10 +96,12 @@ void GameScene::renderGame() {
 
 void GameScene::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  if (render_help_screen)
+  if (!render_help_screen && !render_leave_match_screen)
+      renderGame();
+  else if (render_help_screen)
       renderHelpScreen();
   else
-      renderGame();
+      renderLeaveMatchScreen();
 }
 
 int GameScene::getChatWidth() {

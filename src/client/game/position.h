@@ -6,6 +6,7 @@
 
 // Represents a tile position inside the board
 // Bottom right is (0, 0) and top left is (BOUND, BOUND)
+// -1 position is used to draw the board's coordinates
 class Position {
 private:
   int8_t x_ = 0;
@@ -37,6 +38,8 @@ public:
   friend std::ostream &operator<<(std::ostream &os,
                                   const Position &position);
 
+  // Returns true if the coordinate sum is even
+  // Used to set the board's color
   bool isEven() const;
 };
 

@@ -31,7 +31,7 @@ DrawableButton::setAreaAndPosition(size_t x_, size_t y_, size_t width_,
   height = height_;
 }
 
-bool DrawableButton::pixelIsOnButton(const PixelCoordinate &pixel_) {
+bool DrawableButton::isPixelOnButton(const PixelCoordinate &pixel_) {
   is_pressed = (pixel_.x() > (unsigned) (x) &&
                 pixel_.x() < (unsigned) (x + width) &&
                 pixel_.y() > (unsigned) (y) &&
@@ -52,10 +52,10 @@ void DrawableButton::enablePressedStatus() {
   is_pressed = true;
 }
 
-void DrawableButton::getAreaAndPosition(size_t& x_, size_t& y_, size_t& width_,
-                        size_t& height_) {
-    x_ = x;
-    y_ = y;
-    width_ = width;
-    height_ = height;
+void DrawableButton::getAreaAndPosition(size_t &x_, size_t &y_, size_t &width_,
+                                        size_t &height_) {
+  x_ = x;
+  y_ = y;
+  width_ = width;
+  height_ = height;
 }

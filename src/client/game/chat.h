@@ -18,13 +18,17 @@ public:
   explicit Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
                 GameScene &scene);
 
+  // Send chat message to the Server by pushing it into the send queue
   void sendMessage(const std::string &message);
 
+  // Add message to the chat. Shows nick mane, ID, server's timestamp and msg
   void addMessage(uint16_t client_id, std::string nickname, std::string message,
                   std::string timestamp);
 
+  // Enables text input from user if pixel is inside the text box
   bool enableIfPixelIsInChat(PixelCoordinate &pixel);
 
+  // Disable input from user
   void disable();
 };
 

@@ -16,6 +16,7 @@ private:
 public:
   explicit TurnLog(GameScene &scene);
 
+  // Shows whose turn it is and player's role in game chat
   void changeTurn(bool white, ClientData::Role role);
 };
 

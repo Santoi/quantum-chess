@@ -39,33 +39,35 @@ public:
 
   ~DrawableBoard() = default;
 
-  void render();
-
-  std::map<const Position, DrawableTile> getTiles();
-
-  std::map<const Position, DrawableChessman> getChessmen();
-
-  TextureSprite &getBackground();
-
+  // Replace current chessmen with the chessmen vector in their new positions
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
+  // Set the given position's tile as a move tile
   void moveTile(const Position &pos);
 
+  // Set the given position's tile as a quantum tile
   void quantumTile(const Position &pos);
 
+  // Set the given position's tile as an entangled tile
   void entangledTile(const Position &pos);
 
+  // Set the given position's tile as a split tile
   void splitTile(const Position &pos);
 
+  // Set the given position's tile as a merge tile
   void mergeTile(const Position &pos);
 
-  void setDefault();
-
-  void render(CoordinateTransformer &transformer, int width, int height);
-
+  // Set the selected tile as selected
   void currentTile(const PixelCoordinate &coordinate);
 
+  // Set the default tiles
+  void setDefault();
+
+  // Set the default tiles, except for the current tiles
   void setDefaultWithCurrent();
+
+  // Render the current board
+  void render(CoordinateTransformer &transformer, int width, int height);
 };
 
 

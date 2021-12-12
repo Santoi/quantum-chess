@@ -33,7 +33,7 @@ ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
 
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                         std::list<std::string> &tokens) {
-  if (drawable.pixelIsOnButton(pixel_)) {
+  if (drawable.isPixelOnButton(pixel_)) {
     for (const auto &text_entry: text_entries_ptr)
       tokens.push_back((*text_entry).getText());
     return true;
@@ -78,7 +78,7 @@ PickMatchButton::PickMatchButton(ButtonSpriteRepository &button_repository,
 
 bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                           std::list<std::string> &tokens) {
-  if (drawable.pixelIsOnButton(pixel_)) {
+  if (drawable.isPixelOnButton(pixel_)) {
     std::string str_match_number = std::to_string(match_id);
     tokens.push_back(std::move(str_match_number));
     return true;
@@ -96,7 +96,7 @@ NextMatchesButton::NextMatchesButton(
 
 bool NextMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                             std::list<std::string> &tokens) {
-  bool clicked = drawable.pixelIsOnButton(pixel_);
+  bool clicked = drawable.isPixelOnButton(pixel_);
   if (clicked)
     tokens.emplace_back("NEXT");
   return clicked;
@@ -112,7 +112,7 @@ PreviousMatchesButton::PreviousMatchesButton(
 
 bool PreviousMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                                 std::list<std::string> &tokens) {
-  bool clicked = drawable.pixelIsOnButton(pixel_);
+  bool clicked = drawable.isPixelOnButton(pixel_);
   if (clicked)
     tokens.emplace_back("PREV");
   return clicked;
@@ -128,7 +128,7 @@ RefreshMatchesButton::RefreshMatchesButton(
 
 bool RefreshMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                                std::list<std::string> &tokens) {
-  bool clicked = drawable.pixelIsOnButton(pixel_);
+  bool clicked = drawable.isPixelOnButton(pixel_);
   if (clicked) {
     std::string refresh_signal = std::to_string(UINT16_MAX);
     tokens.emplace_back(std::move(refresh_signal));
@@ -167,7 +167,7 @@ void RoleButton::addEnumToListOfTokens(std::list<std::string> &tokens) {
 
 bool RoleButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                      std::list<std::string> &tokens) {
-  if (drawable.pixelIsOnButton(pixel_)) {
+  if (drawable.isPixelOnButton(pixel_)) {
     if (role_is_available)
       addEnumToListOfTokens(tokens);
     return true;

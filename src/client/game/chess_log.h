@@ -16,6 +16,7 @@ private:
 public:
   explicit ChessLog(GameScene &scene);
 
+  // Add a log message to the chat
   void addMessage(std::string message);
 };
 

@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include "../../common/src/blocking_queue.h"
+#include "../../common/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
 #include  "../sdl/game_scene.h"
 

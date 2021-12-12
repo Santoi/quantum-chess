@@ -1,11 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_REMOTE_CLIENTS_THREADS_H
 #define QUANTUM_CHESS_PROJ_REMOTE_CLIENTS_THREADS_H
 
-#include "../../common/src/thread.h"
+#include "../../common/thread.h"
 #include <string>
-#include "../../common/src/socket.h"
+#include "../../common/socket.h"
 #include "remote_client_instructions.h"
-#include "../../common/src/blocking_queue.h"
+#include "../../common/blocking_queue.h"
 
 class RemoteClientSender : public Thread {
 private:

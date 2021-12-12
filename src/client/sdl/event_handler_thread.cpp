@@ -1,5 +1,5 @@
 #include "event_handler_thread.h"
-#include "../../common/src/chess_exception.h"
+#include "../../common/chess_exception.h"
 #include "../game/chat.h"
 #include <iostream>
 #include <list>

@@ -1,6 +1,6 @@
 #include "login_state_handler.h"
-#include "../../common/src/unique_ptr.h"
-#include "../../common/src/network_address_info_exception.h"
+#include "../../common/unique_ptr.h"
+#include "../../common/network_address_info_exception.h"
 #include "unavailable_role_exception.h"
 #include "invalid_nick_name_exception.h"
 

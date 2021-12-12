@@ -2,15 +2,15 @@
 #define QUANTUM_CHESS_PROJ_GAME_H
 
 #include <vector>
-#include "drawable_board.h"
+#include "../sdl/drawables/drawable_board.h"
 #include "../sdl/window.h"
 #include "../sdl/pixel_coordinate.h"
 #include "../sdl/sprite.h"
 #include "../sdl/coordinate_transformer.h"
 #include "../communication/remote_client_instructions.h"
-#include "../../common/src/blocking_queue.h"
-#include "../../common/src/client_data.h"
-#include "../sdl/sound/sound_handler.h"
+#include "../../common/blocking_queue.h"
+#include "../../common/client_data.h"
+#include "../sdl/sound_handler.h"
 #include <list>
 #include <map>
 #include <mutex>
@@ -88,6 +88,8 @@ public:
   void currentTile(const PixelCoordinate &coordinate);
 
   void setDefaultBoardWithCurrent();
+
+  ClientData::Role getPlayerRole();
 };
 
 

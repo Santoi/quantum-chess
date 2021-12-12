@@ -4,9 +4,9 @@
 #include <string>
 #include <list>
 #include <vector>
-#include "../position.h"
-#include "../ascii/ascii_board.h"
-#include "../../common/src/packet.h"
+#include "../game/position.h"
+#include "../../ascii_chess/ascii_board.h"
+#include "../../common/packet.h"
 #include "client_protocol.h"
 #include "chessman_data.h"
 #include "../game/game.h"
@@ -106,7 +106,7 @@ public:
   RemoteClientLoadBoardInstruction() = delete;
 
   RemoteClientLoadBoardInstruction(
-          std::vector<ChessmanData> &&chessman_data_vector_, bool next_white_);
+      std::vector<ChessmanData> &&chessman_data_vector_, bool next_white_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -217,7 +217,7 @@ public:
   RemoteClientSplitInstruction() = delete;
 
   RemoteClientSplitInstruction(
-          const Position &from, const Position &to1, const Position &to2);
+      const Position &from, const Position &to1, const Position &to2);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -238,7 +238,7 @@ public:
   RemoteClientMergeInstruction() = delete;
 
   RemoteClientMergeInstruction(
-          const Position &from1_, const Position &from2_, const Position &to_);
+      const Position &from1_, const Position &from2_, const Position &to_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -270,7 +270,7 @@ public:
 };
 
 class RemoteClientEntangledChessmanInstruction
-        : public RemoteClientInstruction {
+    : public RemoteClientInstruction {
   std::list<Position> positions;
 
 public:
@@ -290,7 +290,7 @@ public:
 };
 
 class RemoteClientSoundInstruction
-        : public RemoteClientInstruction {
+    : public RemoteClientInstruction {
   uint8_t sound;
 
 public:
@@ -309,7 +309,7 @@ public:
 };
 
 class RemoteClientLogInstruction
-        : public RemoteClientInstruction {
+    : public RemoteClientInstruction {
   std::list<std::string> log;
 
 public:

@@ -3,9 +3,9 @@
 
 #include "window.h"
 #include "../login/login_state.h"
-#include "button.h"
-#include "chat/drawable_container.h"
-#include "text_entry_button.h"
+#include "../logic/button.h"
+#include "drawables/drawable_container.h"
+#include "../logic/text_entry_button.h"
 #include "scene.h"
 #include "../login/login_state_handler.h"
 
@@ -23,8 +23,8 @@ private:
                                       TextEntryButton &port_text_entry,
                                       TextEntryButton &name_text_entry);
 
-  // Return a reverse iterator pointing to the first button to render
-  std::reverse_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>>
+  // Return an iterator pointing to the first button to render
+  __gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
   findFirstButtonToRender(std::vector<std::unique_ptr<Button>> &match_buttons,
                           size_t match_to_render);
 

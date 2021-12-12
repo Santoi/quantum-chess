@@ -1,6 +1,8 @@
 #include "chessman_sprite_repository.h"
 #include "../texture_sprite.h"
 
+#define PATH "resources/sprites/chessman/"
+
 ChessmanSpriteRepository::ChessmanSpriteRepository(Renderer &renderer)
     : chessmen(), fills() {
   loadFills(renderer);
@@ -18,18 +20,18 @@ TextureSprite &ChessmanSpriteRepository::getFill(const std::string &string) {
 
 void ChessmanSpriteRepository::loadFills(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"tb", "img/black_tower_quantum.png"},
-      {"tw", "img/white_tower_quantum.png"},
-      {"hb", "img/black_knight_quantum.png"},
-      {"hw", "img/white_knight_quantum.png"},
-      {"bb", "img/black_bishop_quantum.png"},
-      {"bw", "img/white_bishop_quantum.png"},
-      {"kb", "img/black_king_quantum.png"},
-      {"kw", "img/white_king_quantum.png"},
-      {"qb", "img/black_queen_quantum.png"},
-      {"qw", "img/white_queen_quantum.png"},
-      {"pb", "img/black_pawn_quantum.png"},
-      {"pw", "img/white_pawn_quantum.png"}
+      {"tb", PATH "black_tower_quantum.png"},
+      {"tw", PATH "white_tower_quantum.png"},
+      {"hb", PATH "black_knight_quantum.png"},
+      {"hw", PATH "white_knight_quantum.png"},
+      {"bb", PATH "black_bishop_quantum.png"},
+      {"bw", PATH "white_bishop_quantum.png"},
+      {"kb", PATH "black_king_quantum.png"},
+      {"kw", PATH "white_king_quantum.png"},
+      {"qb", PATH "black_queen_quantum.png"},
+      {"qw", PATH "white_queen_quantum.png"},
+      {"pb", PATH "black_pawn_quantum.png"},
+      {"pw", PATH "white_pawn_quantum.png"}
   };
   for (auto &pair: images) {
     TextureSprite fill(renderer, pair.second,
@@ -41,18 +43,18 @@ void ChessmanSpriteRepository::loadFills(Renderer &renderer) {
 
 void ChessmanSpriteRepository::loadChessmen(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"tb", "img/black_tower.png"},
-      {"tw", "img/white_tower.png"},
-      {"hb", "img/black_knight.png"},
-      {"hw", "img/white_knight.png"},
-      {"bb", "img/black_bishop.png"},
-      {"bw", "img/white_bishop.png"},
-      {"kb", "img/black_king.png"},
-      {"kw", "img/white_king.png"},
-      {"qb", "img/black_queen.png"},
-      {"qw", "img/white_queen.png"},
-      {"pb", "img/black_pawn.png"},
-      {"pw", "img/white_pawn.png"}
+      {"tb", PATH "black_tower.png"},
+      {"tw", PATH "white_tower.png"},
+      {"hb", PATH "black_knight.png"},
+      {"hw", PATH "white_knight.png"},
+      {"bb", PATH "black_bishop.png"},
+      {"bw", PATH "white_bishop.png"},
+      {"kb", PATH "black_king.png"},
+      {"kw", PATH "white_king.png"},
+      {"qb", PATH "black_queen.png"},
+      {"qw", PATH "white_queen.png"},
+      {"pb", PATH "black_pawn.png"},
+      {"pw", PATH "white_pawn.png"}
   };
   for (auto &pair: images) {
     TextureSprite chessman(renderer, pair.second,

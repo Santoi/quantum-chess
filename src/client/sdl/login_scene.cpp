@@ -3,13 +3,14 @@
 #include <vector>
 
 #define MAX_MATCH_BUTTON_COUNT 8
+#define BACKGROUND_SPRITE "resources/sprites/background/login-background.jpg"
 
 LoginScene::LoginScene(Window &window,
                        LoginStateHandler &login_state_handler)
     :
     Scene(window),
     login_state_handler(login_state_handler),
-    background(window.renderer(), "img/login-background.jpg", window.getWidth(),
+    background(window.renderer(), BACKGROUND_SPRITE, window.getWidth(),
                window.getHeight()) {}
 
 void LoginScene::render() {
@@ -58,14 +59,14 @@ void LoginScene::renderConnectionToServerButtons(Button &connect_button,
   connect_button.render();
 }
 
-std::reverse_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>>
+__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
 LoginScene::findFirstButtonToRender(
     std::vector<std::unique_ptr<Button>> &match_buttons,
     size_t match_to_render) {
-  auto it = match_buttons.rbegin();
+  auto it = match_buttons.begin();
   size_t matches = 0;
   while (matches < match_to_render &&
-         it != match_buttons.rend()) {
+         it != match_buttons.end()) {
     ++it;
     matches++;
   }
@@ -86,7 +87,7 @@ void LoginScene::renderChoosingMatchButtons(
   auto it = findFirstButtonToRender(match_buttons,
                                     matches_page * matches_per_page);
   size_t i = 1;
-  for (; it != match_buttons.rend(); ++it) {
+  for (; it != match_buttons.end(); ++it) {
     (*it)->setAreaAndPosition(width / 2 - match_button_width / 2,
                               height * i * .1,
                               match_button_width, button_height);

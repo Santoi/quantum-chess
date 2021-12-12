@@ -2,7 +2,7 @@
 #define QUANTUM_CHESS_PROJ_TEXT_SPRITE_REPOSITORY_H
 
 #include <map>
-#include "../chat/font.h"
+#include "../font.h"
 #include "../renderer.h"
 #include "../sprite.h"
 

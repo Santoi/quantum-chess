@@ -1,6 +1,6 @@
 #include "login_handler_thread.h"
-#include "../sdl/button.h"
-#include "../sdl/text_entry_button.h"
+#include "../logic/button.h"
+#include "../logic/text_entry_button.h"
 #include <list>
 
 LoginHandlerThread::LoginHandlerThread(Login &login,
@@ -33,7 +33,7 @@ void LoginHandlerThread::run() {
       case SDL_MOUSEBUTTONDOWN:
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
-            handleMouseButtonLeft(mouse);
+          handleMouseButtonLeft(mouse);
         break;
     }
   }
@@ -81,7 +81,7 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
     ++it;
   }
   if (it != active_buttons.end()) {
-      login_state_handler.processTokens(std::move(tokens));
+    login_state_handler.processTokens(std::move(tokens));
     return;
   }
   //first disable all text entries

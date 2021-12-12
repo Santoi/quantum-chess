@@ -1,7 +1,7 @@
 #ifndef QUANTUM_CHESS_PROJ_HANDLER_THREAD_H
 #define QUANTUM_CHESS_PROJ_HANDLER_THREAD_H
 
-#include "../../common/src/thread.h"
+#include "../../common/thread.h"
 #include <atomic>
 
 class HandlerThread: public Thread {

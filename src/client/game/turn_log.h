@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include "../../common/src/blocking_queue.h"
+#include "../../common/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
 #include  "../sdl/game_scene.h"
 
@@ -16,7 +16,7 @@ private:
 public:
   explicit TurnLog(GameScene &scene);
 
-  void changeTurn(bool white);
+  void changeTurn(bool white, ClientData::Role role);
 };
 
 

@@ -1,6 +1,6 @@
 #include "login_state.h"
-#include "../../common/src/unique_ptr.h"
-#include "../../common/src/client_data.h"
+#include "../../common/unique_ptr.h"
+#include "../../common/client_data.h"
 #include "unavailable_role_exception.h"
 #include "invalid_nick_name_exception.h"
 #include <iostream>
@@ -75,7 +75,7 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
   std::string nick_name = tokens.front();
   size_t length = nick_name.size();
   if (length < MIN_NICK_NAME_LENGTH || length > MAX_NICK_NAME_LENGTH)
-      throw InvalidNickNameException();
+    throw InvalidNickNameException();
   login.connectToServer(ip, port);
   login.saveNickName(nick_name);
   return NEXT_STATE_CONNECT_TO_MATCH;
@@ -91,23 +91,21 @@ SelectingMatchState::SelectingMatchState(Login &login_,
       refresh_matches_button(button_sprite_repository, text_sprite_repository),
       matches_page(0),
       matches_per_page(MATCHES_PER_PAGE) {
+  std::vector<ClientData> empty_clients_list;
+  buttons_ptr.push_back(
+      make_unique<PickMatchButton>(button_sprite_repository,
+                                   text_sprite_repository,
+                                   empty_clients_list,
+                                   0));
   std::map<uint16_t, std::vector<ClientData>> match_info;
   login.getListOfMatchesInfo(match_info);
-  size_t i = 0;
   for (auto it = match_info.begin(); it != match_info.end(); ++it) {
     buttons_ptr.push_back(
         make_unique<PickMatchButton>(button_sprite_repository,
                                      text_sprite_repository,
                                      it->second,
                                      it->first));
-    i++;
   }
-  std::vector<ClientData> empty_clients_list;
-  buttons_ptr.push_back(
-      make_unique<PickMatchButton>(button_sprite_repository,
-                                   text_sprite_repository,
-                                   empty_clients_list,
-                                   i));
 }
 
 bool SelectingMatchState::clientIsConnectedToMatch() {
@@ -154,7 +152,7 @@ int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
       login.refreshMatches();
       next_state = NEXT_STATE_CONNECT_TO_MATCH;
     } else {
-      login.chooseMatchNumber(match_number);
+      login.sendChosenMatchToServer(match_number);
       login.sendSavedNickNameToServer();
     }
   }
@@ -186,7 +184,7 @@ SelectingRoleState::SelectingRoleState(Login &login_,
                                        ButtonSpriteRepository &button_repository,
                                        TextSpriteRepository &text_repository)
     : LoginState(login_, button_repository, text_repository) {
-  std::list<ClientData::Role> available_roles = login.getAvailableRoles();
+  std::list<ClientData::Role> available_roles = login.getAvailableRolesFromServer();
   addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_WHITE,
                                           button_repository, text_repository,
                                           available_roles, "role_white");
@@ -235,7 +233,7 @@ int SelectingRoleState::processTokens(std::list<std::string> &&tokens) {
     throw UnavailableRoleException();
   std::string str_selected_role = tokens.front();
   ClientData::Role selected_role = getRoleFromString(str_selected_role);
-  login.sendChosenRole(selected_role);
+  login.saveAndSendChosenRoleToServer(selected_role);
   return NEXT_STATE_CONNECTED_TO_MATCH;
 }
 

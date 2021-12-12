@@ -2,10 +2,12 @@
 #define QUANTUM_CHESS_PROJ_WINDOW_H
 
 #include "renderer.h"
-#include "sound/sound_handler.h"
+#include "sound_handler.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <mutex>
 
+#define DEFAULT_HEIGHT 480
+#define DEFAULT_WIDTH 720
 
 class Window {
 private:
@@ -16,7 +18,7 @@ private:
   SoundHandler sound_handler_;
 
 public:
-  Window();
+  Window(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 
   SDL2pp::Window &window();
 

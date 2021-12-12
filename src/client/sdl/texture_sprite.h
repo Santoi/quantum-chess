@@ -1,12 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 #define QUANTUM_CHESS_PROJ_TEXTURE_SPRITE_H
 
-#include "renderer.h"
 #include "sprite.h"
 #include <SDL2pp/SDL2pp.hh>
 #include <string>
 
-#define DEFAULT_SPRITE "img/default.png"
+#define DEFAULT_SPRITE "resources/sprites/default.png"
 
 class Renderer;
 

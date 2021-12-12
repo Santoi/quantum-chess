@@ -237,6 +237,8 @@ SelectingRoleState::getRoleFromString(const std::string &str_selected_role) {
 int SelectingRoleState::processTokens(std::list<std::string> &&tokens) {
   if (tokens.empty())
     throw UnavailableRoleException();
+  if (tokens.front() == "return")
+    return RETURN_TO_SELECTING_MATCH_STATE;
   std::string str_selected_role = tokens.front();
   ClientData::Role selected_role = getRoleFromString(str_selected_role);
   login.sendChosenRole(selected_role);

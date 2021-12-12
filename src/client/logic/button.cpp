@@ -186,9 +186,8 @@ ReturnToMatchSelectionButton::ReturnToMatchSelectionButton(ButtonSpriteRepositor
 bool ReturnToMatchSelectionButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                          std::list<std::string> &tokens)  {
     if (drawable.pixelIsOnButton(pixel_)) {
-        for (int i = 0; i < 2; i++)
-            tokens.emplace_back("return");
-        return true;
+        tokens.emplace_back("return");
+            return true;
     }
     return false;
 }

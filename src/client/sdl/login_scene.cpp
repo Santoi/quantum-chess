@@ -144,8 +144,8 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
 }
 
 void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button) {
-  yes_button.setAreaAndPosition(100, 100, 50, 50);
-  no_button.setAreaAndPosition(100, 100, 50, 50);
+  yes_button.setAreaAndPosition(200, 100, 50, 50);
+  no_button.setAreaAndPosition(400, 100, 50, 50);
   yes_button.render();
   no_button.render();
 }

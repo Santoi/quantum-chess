@@ -159,8 +159,6 @@ void Client::handleSelectAnotherMatchOrQuit(Login& login,
   keep_playing = login_state_handler.continuePlaying();
 }
 
-
-// TODO modularizar
 void Client::execute() {
   std::ifstream config_file("config.txt");
   ConfigFile config(config_file);
@@ -189,8 +187,9 @@ void Client::execute() {
     handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
                 window, renderer, font, frame_rate);
     handleSelectAnotherMatchOrQuit(login, button_sprite_repository,
-                                   text_sprite_repository, keep_playing,
-                                   login_was_closed);
+                                   text_sprite_repository, window,
+                                   renderer, frame_rate,
+                                   keep_playing, login_was_closed);
     if (login_was_closed)
       return;
   }

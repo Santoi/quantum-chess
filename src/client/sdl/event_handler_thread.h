@@ -37,8 +37,6 @@ public:
 
   // Event loop
   void run() override;
-
-  bool isOpen();
 };
 
 

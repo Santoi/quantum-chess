@@ -42,10 +42,6 @@ void EventHandlerThread::run() {
   }
 }
 
-bool EventHandlerThread::isOpen() {
-  return open;
-}
-
 void EventHandlerThread::handleKeyDown() {
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {

@@ -26,10 +26,16 @@ void LoginStateHandler::fillWithActiveButtons(
 }
 
 void LoginStateHandler::fillWithActiveTextEntryButtons(
-    std::list<std::reference_wrapper<TextEntryButton>> &
-    active_text_entries) {
+  std::list<std::reference_wrapper<TextEntryButton>> &
+  active_text_entries) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->fillWithActiveTextEntryButtons(active_text_entries);
+}
+
+void LoginStateHandler::returnToSelectingMatchState() {
+  login.reconnectToServer();
+  current_state = make_unique<SelectingMatchState>(login, button_repository,
+                                                   text_repository);
 }
 
 void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
@@ -55,6 +61,8 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
                                                            button_repository,
                                                            text_repository);
         break;
+      case RETURN_TO_SELECTING_MATCH_STATE:
+        returnToSelectingMatchState();
       default:
         break;
     }

@@ -44,7 +44,11 @@ public:
   
   ~LoginStateHandler() = default;
 
-    void resetPressedButtons();
+  void resetPressedButtons();
+
+private:
+
+  void returnToSelectingMatchState();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_HANDLER_H

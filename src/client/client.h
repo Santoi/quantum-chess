@@ -35,7 +35,8 @@ private:
 
   void handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
                             TextSpriteRepository& text_sprite_repository, Window& window,
-                            Renderer& renderer, Font& font, uint8_t frame_rate);
+                            Renderer& renderer, Font& font, uint8_t frame_rate,
+                            bool& game_quitted);
 
   void handleSelectAnotherMatchOrQuit(Login& login,
                                       ButtonSpriteRepository& button_sprite_repository,

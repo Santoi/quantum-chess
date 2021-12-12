@@ -112,7 +112,8 @@ void closeBlockingQueues(BlockingQueue<RemoteClientInstruction>& received,
 
 void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
                         TextSpriteRepository& text_sprite_repository, Window& window,
-                        Renderer& renderer, Font& font, uint8_t frame_rate) {
+                        Renderer& renderer, Font& font, uint8_t frame_rate,
+                        bool& game_quitted) {
   BlockingQueue<RemoteClientInstruction> received;
   BlockingQueue<RemoteClientInstruction> send;
   RemoteClientSender sender_thread(socket, send);
@@ -143,6 +144,7 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
   receiver_thread.notifySocketClosed();
   socket.shutdownAndClose();
   joinThreads(sender_thread, receiver_thread, action_thread, event_handler);
+  game_quitted = event_handler.clientQuitted();
 }
 
 void Client::handleSelectAnotherMatchOrQuit(Login& login,
@@ -187,8 +189,11 @@ void Client::execute() {
   // if we are here the client is connected to a match.
     Socket socket = login.getClientSocket();
     role = login.getRole();
+    bool game_quitted = false;
     handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
-                window, renderer, font, frame_rate);
+                window, renderer, font, frame_rate, game_quitted);
+    if (game_quitted)
+      return;
     handleSelectAnotherMatchOrQuit(login, button_sprite_repository,
                                    text_sprite_repository, window,
                                    renderer, frame_rate,

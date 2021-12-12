@@ -71,6 +71,19 @@ void EventHandlerThread::handleKeyDown() {
       split = false;
       break;
     }
+    case SDLK_h: {
+      if (!text_entry.isEnabled()) {
+          std::cout << "h!" << std::endl;
+         if (help_screen_is_being_rendered) {
+           game_scene.stopRenderingHelpScreen();
+           help_screen_is_being_rendered = false;
+         } else {
+           game_scene.startRenderingHelpScreen();
+           help_screen_is_being_rendered = true;
+         }
+      }
+      break;
+    }
     case SDLK_n: {
       if (!text_entry.isEnabled())
         game.toggleSounds();
@@ -212,11 +225,5 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
           chat.sendMessage(text_entry.getText());
           text_entry.clear();
       }
-  } else if (text.front() == 'h') {
-     if (help_screen_is_being_rendered)
-        game_scene.stopRenderingHelpScreen();
-     else
-        game_scene.startRenderingHelpScreen();
   }
-
 }

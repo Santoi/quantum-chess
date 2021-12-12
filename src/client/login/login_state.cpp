@@ -93,21 +93,18 @@ SelectingMatchState::SelectingMatchState(Login &login_,
       matches_per_page(MATCHES_PER_PAGE) {
   std::map<uint16_t, std::vector<ClientData>> match_info;
   login.getListOfMatchesInfo(match_info);
-  size_t i = 0;
-  for (auto it = match_info.begin(); it != match_info.end(); ++it) {
+  for (auto it = match_info.begin(); it != match_info.end(); ++it)
     buttons_ptr.push_back(
         make_unique<PickMatchButton>(button_sprite_repository,
                                      text_sprite_repository,
                                      it->second,
                                      it->first));
-    i++;
-  }
   std::vector<ClientData> empty_clients_list;
   buttons_ptr.push_back(
       make_unique<PickMatchButton>(button_sprite_repository,
                                    text_sprite_repository,
                                    empty_clients_list,
-                                   i));
+                                   0));
 }
 
 bool SelectingMatchState::clientIsConnectedToMatch() {

@@ -154,4 +154,20 @@ public:
     ~ReturnToMatchSelectionButton() override = default;
 };
 
+class OptionButton: public Button {
+private:
+    std::string option;
+
+public:
+    OptionButton(ButtonSpriteRepository &button_repository,
+                                 TextSpriteRepository &text_repository,
+                                 std::string &&text, std::string &&option);
+
+    bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                             std::list<std::string> &tokens) override;
+
+    ~OptionButton() override = default;
+};
+
+
 #endif //QUANTUM_CHESS_PROJ_BUTTON_H

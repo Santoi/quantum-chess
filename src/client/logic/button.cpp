@@ -191,3 +191,16 @@ bool ReturnToMatchSelectionButton::fillTokensIfClicked(const PixelCoordinate &pi
     }
     return false;
 }
+
+OptionButton::OptionButton(ButtonSpriteRepository &button_repository,
+                           TextSpriteRepository &text_repository,
+                           std::string &&text, std::string &&option)
+             :Button(button_repository, text_repository, "option",
+                     std::move(text)), option(std::move(option)) {
+}
+
+bool OptionButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                         std::list<std::string> &tokens)  {
+  tokens.emplace_back(option);
+}
+

@@ -195,12 +195,16 @@ bool ReturnToMatchSelectionButton::fillTokensIfClicked(const PixelCoordinate &pi
 OptionButton::OptionButton(ButtonSpriteRepository &button_repository,
                            TextSpriteRepository &text_repository,
                            std::string &&text, std::string &&option)
-             :Button(button_repository, text_repository, "option",
+             :Button(button_repository, text_repository, "action",
                      std::move(text)), option(std::move(option)) {
 }
 
 bool OptionButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                          std::list<std::string> &tokens)  {
-  tokens.emplace_back(option);
+  if (drawable.pixelIsOnButton(pixel_)) {
+    tokens.emplace_back(option);
+    return true;
+  }
+  return false;
 }
 

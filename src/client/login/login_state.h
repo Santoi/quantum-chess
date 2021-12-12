@@ -14,6 +14,7 @@
 #define NEXT_STATE_SELECTING_ROLE 2
 #define NEXT_STATE_CONNECTED_TO_MATCH 3
 #define RETURN_TO_SELECTING_MATCH_STATE -2
+#define STOP_PLAYING -5
 #define NO_NEXT_STATE 0
 #define KEEP_STATE -1
 
@@ -159,6 +160,28 @@ public:
   int processTokens(std::list<std::string> &&tokens) override;
 
   ~ConnectedToMatchState() override = default;
+};
+
+class ChooseToKeepPlayingState : public LoginState {
+
+public:
+    ChooseToKeepPlayingState(Login& login, ButtonSpriteRepository &button_sprite_repository,
+            TextSpriteRepository &text_sprite_repository);
+
+    bool clientIsConnectedToMatch() override;
+
+    void render(LoginScene &login_scene) override;
+
+    void fillWithActiveButtons(
+            std::list<std::reference_wrapper<Button>> &active_buttons) override;
+
+    void fillWithActiveTextEntryButtons(
+            std::list<std::reference_wrapper<TextEntryButton>> &
+            active_text_entries) override;
+
+    int processTokens(std::list<std::string> &&tokens) override;
+
+    ~ChooseToKeepPlayingState() override = default;
 };
 
 

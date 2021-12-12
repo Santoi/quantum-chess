@@ -266,3 +266,43 @@ void ConnectedToMatchState::fillWithActiveTextEntryButtons(
 int ConnectedToMatchState::processTokens(std::list<std::string> &&tokens) {
   return NO_NEXT_STATE;
 }
+
+ChooseToKeepPlayingState::ChooseToKeepPlayingState(Login& login_,
+                                                   ButtonSpriteRepository &button_sprite_repository,
+                                                   TextSpriteRepository &text_sprite_repository)
+                         :LoginState(login_, button_sprite_repository, text_sprite_repository) {
+  buttons_ptr.push_back(std::move(
+          make_unique<OptionButton>(button_sprite_repository,
+                                      text_sprite_repository, "YES", "yes")));
+  buttons_ptr.push_back(std::move(
+          make_unique<OptionButton>(button_sprite_repository,
+                                    text_sprite_repository, "NO", "no")));
+}
+
+bool ChooseToKeepPlayingState::clientIsConnectedToMatch() {
+  return false;
+}
+
+void ChooseToKeepPlayingState::render(LoginScene &login_scene) {
+
+}
+
+void ChooseToKeepPlayingState::fillWithActiveButtons(
+        std::list<std::reference_wrapper<Button>> &active_buttons) {
+  for (auto &button: buttons_ptr)
+    active_buttons.emplace_back(*button);
+}
+
+void ChooseToKeepPlayingState::fillWithActiveTextEntryButtons(
+        std::list<std::reference_wrapper<TextEntryButton>> &
+        active_text_entries) {
+  //dont have any text entries
+}
+
+int ChooseToKeepPlayingState::processTokens(std::list<std::string> &&tokens) {
+  if (tokens.front() == "yes")
+    return RETURN_TO_SELECTING_MATCH_STATE;
+  else
+    return STOP_PLAYING;
+}
+

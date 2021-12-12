@@ -39,6 +39,13 @@ private:
                             TextSpriteRepository& text_sprite_repository, Window& window,
                             Renderer& renderer, Font& font, uint8_t frame_rate);
   void closeBlockingQueues();
+
+  void handleSelectAnotherMatchOrQuit(Login& login,
+                                      ButtonSpriteRepository& button_sprite_repository,
+                                      TextSpriteRepository& text_sprite_repository,
+                                      Window& window, Renderer& renderer,
+                                      uint8_t frame_rate, bool& keep_playing,
+                                      bool& login_was_closed);
 public:
   Client() = default;
 

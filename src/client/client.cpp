@@ -78,7 +78,7 @@ void Client::handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprit
                       TextSpriteRepository& text_sprite_repository, Window& window,
                       Renderer& renderer, uint8_t frame_rate, bool& login_was_closed) {
   LoginStateHandler login_state_handler(login, button_sprite_repository,
-                                        text_sprite_repository);
+                                        text_sprite_repository, false);
   LoginScene login_scene(window, login_state_handler);
   LoginHandlerThread login_handler(login, login_state_handler);
 
@@ -142,6 +142,23 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
   joinThreads(sender_thread, receiver_thread, action_thread, event_handler);
 }
 
+void Client::handleSelectAnotherMatchOrQuit(Login& login,
+                                            ButtonSpriteRepository& button_sprite_repository,
+                                            TextSpriteRepository& text_sprite_repository,
+                                            Window& window, Renderer& renderer,
+                                            uint8_t frame_rate, bool& keep_playing,
+                                            bool& login_was_closed) {
+  LoginStateHandler login_state_handler(login, button_sprite_repository,
+                                        text_sprite_repository, true);
+  LoginScene login_scene(window, login_state_handler);
+  LoginHandlerThread login_handler(login, login_state_handler);
+  login_handler.start();
+  loginRenderLoop(login_scene, login_handler, renderer, frame_rate);
+  login_handler.join();
+  login_was_closed = login_handler.was_closed();
+  keep_playing = login_state_handler.continuePlaying();
+}
+
 
 // TODO modularizar
 void Client::execute() {
@@ -166,10 +183,15 @@ void Client::execute() {
 
   bool keep_playing = true;
   while (keep_playing) {
-  // if we are here the client is connected to a match
+  // if we are here the client is connected to a match.
     Socket socket = login.getClientSocket();
     role = login.getRole();
     handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
                 window, renderer, font, frame_rate);
+    handleSelectAnotherMatchOrQuit(login, button_sprite_repository,
+                                   text_sprite_repository, keep_playing,
+                                   login_was_closed);
+    if (login_was_closed)
+      return;
   }
 }

@@ -12,8 +12,7 @@ LoginHandlerThread::LoginHandlerThread(Login &login,
     was_closed_(false) {}
 
 void LoginHandlerThread::run() {
-  while (!(login_state_handler.clientIsConnectedToMatch()) &&
-          login_state_handler.continuePlaying()) {
+  while (login_state_handler.loginIsNeeded()) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
@@ -33,11 +32,14 @@ void LoginHandlerThread::run() {
         break;
       case SDL_MOUSEBUTTONDOWN:
         SDL_MouseButtonEvent mouse = event.button;
-        if (mouse.button == SDL_BUTTON_LEFT)
+        if (mouse.button == SDL_BUTTON_LEFT) {
           handleMouseButtonLeft(mouse);
+          std::cout << "handled" << std::endl;
+        }
         break;
     }
   }
+  std::cout << "closing..." << std::endl;
   open = false;
 }
 
@@ -83,6 +85,7 @@ void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   }
   if (it != active_buttons.end()) {
     login_state_handler.processTokens(std::move(tokens));
+    std::cout << "done processing" << std::endl;
     return;
   }
   //first disable all text entries

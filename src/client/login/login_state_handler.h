@@ -28,7 +28,8 @@ public:
 
   explicit LoginStateHandler(Login &login,
                              ButtonSpriteRepository &button_repository,
-                             TextSpriteRepository &text_repository);
+                             TextSpriteRepository &text_repository,
+                             bool login_has_connected_to_server);
 
   bool clientIsConnectedToMatch();
 

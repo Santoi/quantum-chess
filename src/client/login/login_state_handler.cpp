@@ -6,13 +6,17 @@
 
 LoginStateHandler::LoginStateHandler(Login &login,
                                      ButtonSpriteRepository &button_repository,
-                                     TextSpriteRepository &text_repository)
+                                     TextSpriteRepository &text_repository,
+                                     bool login_has_connected_to_server)
     : login(login),
       button_repository(button_repository),
-      text_repository(text_repository),
-      current_state(
-          make_unique<ConnectingToServerState>(login, button_repository,
-                                               text_repository)) {}
+      text_repository(text_repository) {
+  if (!login_has_connected_to_server)
+    current_state = make_unique<ConnectingToServerState>(login, button_repository,
+                                                 text_repository);
+}
+
+
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
   std::lock_guard<std::mutex> lock_guard(mutex);

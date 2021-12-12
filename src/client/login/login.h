@@ -45,6 +45,8 @@ public:
   ClientData::Role getRole();
 
   void refreshMatches();
+
+    void reconnectToServer();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

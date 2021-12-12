@@ -68,3 +68,11 @@ ClientData::Role Login::getRole() {
   return role;
 }
 
+void Login::reconnectToServer() {
+  client_socket_ptr->shutdownAndClose();
+  const char *ip_ptr = ip.c_str();
+  const char *port_ptr = port.c_str();
+  client_socket_ptr = make_unique<Socket>(
+            (Socket::createAConnectedSocket(ip_ptr, port_ptr)));
+}
+

@@ -54,6 +54,7 @@ public:
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
                           Button &spectator_role_button, Button& return_button);
 
+  void renderLeaveMatchOptionButtons(Button& button, Button& button1);
 };
 
 

@@ -142,3 +142,10 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
   spectator_role_button.render();
   return_button.render();
 }
+
+void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button) {
+  yes_button.setAreaAndPosition(100, 100, 50, 50);
+  no_button.setAreaAndPosition(100, 100, 50, 50);
+  yes_button.render();
+  no_button.render();
+}

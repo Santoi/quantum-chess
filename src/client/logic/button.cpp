@@ -174,3 +174,21 @@ bool RoleButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
   }
   return false;
 }
+
+ReturnToMatchSelectionButton::ReturnToMatchSelectionButton(ButtonSpriteRepository &button_repository,
+                                                           TextSpriteRepository &text_repository,
+                                                           std::string &&button_text)
+                            :Button(button_repository, text_repository, "return",
+                                    std::move(button_text))
+                            {
+}
+
+bool ReturnToMatchSelectionButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                         std::list<std::string> &tokens)  {
+    if (drawable.pixelIsOnButton(pixel_)) {
+        for (int i = 0; i < 2; i++)
+            tokens.emplace_back("return");
+        return true;
+    }
+    return false;
+}

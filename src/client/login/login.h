@@ -15,7 +15,7 @@ private:
   std::unique_ptr<Socket> client_socket_ptr;
   std::string ip;
   std::string port;
-  const std::string client_nick_name;
+  std::string client_nick_name;
   ClientData::Role role;
 
 public:

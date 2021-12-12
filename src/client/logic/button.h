@@ -140,4 +140,18 @@ private:
   void addEnumToListOfTokens(std::list<std::string> &tokens);
 };
 
+class ReturnToMatchSelectionButton: public Button {
+
+public:
+
+    ReturnToMatchSelectionButton(ButtonSpriteRepository &button_repository,
+                                 TextSpriteRepository &text_repository,
+                                 std::string &&button_text);
+
+    bool fillTokensIfClicked(const PixelCoordinate &pixel_,
+                             std::list<std::string> &tokens) override;
+
+    ~ReturnToMatchSelectionButton() override = default;
+};
+
 #endif //QUANTUM_CHESS_PROJ_BUTTON_H

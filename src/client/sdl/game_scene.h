@@ -73,6 +73,10 @@ public:
   void startRenderingHelpScreen();
 
     void renderLeaveMatchScreen();
+
+    void stopRenderingLeaveScreen();
+
+    void startRenderingLeaveScreen();
 };
 
 

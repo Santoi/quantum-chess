@@ -12,6 +12,7 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game_,
       split(false), merge(false),
       first_click(false), second_click(false),
       help_screen_is_being_rendered(false),
+      leave_screen_is_being_rendered(false),
       penultimate_click(),
       last_click(), chat(chat_) {}
 
@@ -70,6 +71,8 @@ void EventHandlerThread::handleKeyDown() {
     case SDLK_h: {
       if (!text_entry.isEnabled()) {
           std::cout << "h!" << std::endl;
+         if (leave_screen_is_being_rendered)
+             return;
          if (help_screen_is_being_rendered) {
            game_scene.stopRenderingHelpScreen();
            help_screen_is_being_rendered = false;
@@ -79,6 +82,21 @@ void EventHandlerThread::handleKeyDown() {
          }
       }
       break;
+    }
+    case SDLK_r: {
+      if (!text_entry.isEnabled()) {
+          std::cout << "r!" << std::endl;
+          if (help_screen_is_being_rendered)
+              return;
+          if (leave_screen_is_being_rendered) {
+            game_scene.stopRenderingLeaveScreen();
+            leave_screen_is_being_rendered = false;
+          } else {
+            game_scene.startRenderingLeaveScreen();
+            leave_screen_is_being_rendered = true;
+          }
+      }
+        break;
     }
     case SDLK_n: {
       if (!text_entry.isEnabled())

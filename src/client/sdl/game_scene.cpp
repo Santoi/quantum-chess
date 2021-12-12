@@ -96,7 +96,7 @@ void GameScene::renderGame() {
 
 void GameScene::render() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  if (!render_help_screen && !render_leave_match_screen)
+  if (!render_help_screen && !render_leave_match_screen) //most likely case
       renderGame();
   else if (render_help_screen)
       renderHelpScreen();
@@ -141,5 +141,19 @@ void GameScene::stopRenderingHelpScreen() {
 
 void GameScene::startRenderingHelpScreen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
+  if (render_leave_match_screen)
+      return;
   render_help_screen = true;
+}
+
+void GameScene::stopRenderingLeaveScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  render_leave_match_screen = false;
+}
+
+void GameScene::startRenderingLeaveScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (render_help_screen)
+      return;
+  render_leave_match_screen = true;
 }

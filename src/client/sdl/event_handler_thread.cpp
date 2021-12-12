@@ -13,6 +13,7 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game_,
       first_click(false), second_click(false),
       help_screen_is_being_rendered(false),
       leave_screen_is_being_rendered(false),
+      client_quitted(false),
       penultimate_click(),
       last_click(), chat(chat_) {}
 
@@ -22,6 +23,7 @@ void EventHandlerThread::run() {
     switch (event.type) {
       case SDL_QUIT:
         open = false;
+        client_quitted = true;
         break;
       case SDL_WINDOWEVENT:
         handleWindowChange(event.window);
@@ -254,4 +256,8 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
           text_entry.clear();
       }
   }
+}
+
+bool EventHandlerThread::clientQuitted() {
+  return client_quitted;
 }

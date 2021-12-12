@@ -88,6 +88,26 @@ void Client::handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprit
   login_was_closed = login_handler.was_closed();
 }
 
+void startThreads(RemoteClientSender& sender_thread, RemoteClientReceiver& receiver_thread,
+                  ActionThread& action_thread, EventHandlerThread& event_handler) {
+  sender_thread.start();
+  receiver_thread.start();
+  action_thread.start();
+  event_handler.start();
+}
+
+void joinThreads(RemoteClientSender& sender_thread, RemoteClientReceiver& receiver_thread,
+                 ActionThread& action_thread, EventHandlerThread& event_handler) {
+  action_thread.join();
+  event_handler.join();
+  sender_thread.join();
+  receiver_thread.join();
+}
+
+void Client::closeBlockingQueues() {
+  received.close();
+  send.close();
+}
 
 void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
                         TextSpriteRepository& text_sprite_repository, Window& window,
@@ -108,23 +128,18 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
                              turn_log);
   EventHandlerThread event_handler(window, game, scene, chat, text_entry);
 
-  receiver_thread.start();
-  sender_thread.start();
-  action_thread.start();
-  event_handler.start();
+  startThreads(sender_thread, receiver_thread, action_thread, event_handler);
+
   // comment if you dont want to go crazy while debugging.
   //sound_handler.playMusic();
 
   gameRenderLoop(scene, game, text_entry, event_handler, renderer, frame_rate);
 
-  received.close();
-  send.close();
+  closeBlockingQueues();
+
   receiver_thread.notifySocketClosed();
   socket.shutdownAndClose();
-  action_thread.join();
-  event_handler.join();
-  sender_thread.join();
-  receiver_thread.join();
+  joinThreads(sender_thread, receiver_thread, action_thread, event_handler);
 }
 
 

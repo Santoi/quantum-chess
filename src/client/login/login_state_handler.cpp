@@ -10,13 +10,14 @@ LoginStateHandler::LoginStateHandler(Login &login,
                                      bool login_has_connected_to_server)
     : login(login),
       button_repository(button_repository),
-      text_repository(text_repository) {
+      text_repository(text_repository), continue_playing(true) {
   if (!login_has_connected_to_server)
     current_state = make_unique<ConnectingToServerState>(login, button_repository,
-                                                 text_repository);
+                                                         text_repository);
+  else
+    current_state = make_unique<ChooseToKeepPlayingState>(login, button_repository,
+                                                          text_repository);
 }
-
-
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -62,6 +63,8 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
                                                            button_repository,
                                                            text_repository);
         break;
+      case STOP_PLAYING:
+        continue_playing = false;
       default:
         break;
     }
@@ -111,4 +114,9 @@ void LoginStateHandler::render(LoginScene &login_scene) {
 void LoginStateHandler::resetPressedButtons() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->resetPressedButtons();
+}
+
+bool LoginStateHandler::continuePlaying() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return continue_playing;
 }

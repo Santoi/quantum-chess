@@ -21,6 +21,7 @@ protected:
   ButtonSpriteRepository &button_repository;
   TextSpriteRepository &text_repository;
   std::unique_ptr<LoginState> current_state;
+  bool continue_playing;
   std::mutex mutex;
 
 public:
@@ -46,6 +47,8 @@ public:
   ~LoginStateHandler() = default;
 
   void resetPressedButtons();
+
+    bool continuePlaying();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_HANDLER_H

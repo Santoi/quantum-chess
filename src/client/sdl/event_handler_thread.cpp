@@ -35,6 +35,8 @@ void EventHandlerThread::run() {
         handleKeyUp();
         break;
       case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
+        if (help_screen_is_being_rendered)
+          break;
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
           handleMouseButtonLeft(mouse);

@@ -103,6 +103,15 @@ void EventHandlerThread::handleKeyDown() {
       }
       break;
     }
+    case SDLK_y: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "y!" << std::endl;
+        if (!leave_screen_is_being_rendered)
+          return;
+        open = false;
+      }
+      break;
+    }
     case SDLK_n: {
       if (!text_entry.isEnabled())
         game.toggleSounds();

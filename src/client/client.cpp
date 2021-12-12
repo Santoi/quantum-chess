@@ -88,30 +88,10 @@ void Client::handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprit
   login_was_closed = login_handler.was_closed();
 }
 
-// TODO modularizar
-void Client::execute() {
-  std::ifstream config_file("config.txt");
-  ConfigFile config(config_file);
-  Window window(std::stoi(config.getValue("res_width")),
-                std::stoi(config.getValue("res_height")));
 
-  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
-  Renderer &renderer = window.renderer();
-  Font font(FONT_SIZE);
-  ButtonSpriteRepository button_sprite_repository(renderer);
-  TextSpriteRepository text_sprite_repository(renderer, font);
-
-  Login login;
-  bool login_was_closed;
-  handleFirstLogin(login, button_sprite_repository,
-                   text_sprite_repository, window,
-                   renderer, frame_rate, login_was_closed);
-  if (login_was_closed)
-    return;
-
-  // if we are here the client is connected to a match
-  Socket socket = login.getClientSocket();
-  role = login.getRole();
+void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
+                        TextSpriteRepository& text_sprite_repository, Window& window,
+                        Renderer& renderer, Font& font, uint8_t frame_rate) {
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 
@@ -148,5 +128,35 @@ void Client::execute() {
 }
 
 
+// TODO modularizar
+void Client::execute() {
+  std::ifstream config_file("config.txt");
+  ConfigFile config(config_file);
+  Window window(std::stoi(config.getValue("res_width")),
+                std::stoi(config.getValue("res_height")));
+
+  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
+  Renderer &renderer = window.renderer();
+  Font font(FONT_SIZE);
+  ButtonSpriteRepository button_sprite_repository(renderer);
+  TextSpriteRepository text_sprite_repository(renderer, font);
+
+  Login login;
+  bool login_was_closed;
+  handleFirstLogin(login, button_sprite_repository,
+                   text_sprite_repository, window,
+                   renderer, frame_rate, login_was_closed);
+  if (login_was_closed)
+    return;
+
+ // bool keep_playing = true;
+ // while (keep_playing) {
+  // if we are here the client is connected to a match
+  Socket socket = login.getClientSocket();
+  role = login.getRole();
+  handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
+                window, renderer, font, frame_rate);
+ // }
 
 
+}

@@ -19,7 +19,8 @@ private:
 public:
   Login();
 
-  //Creates a socket using the given ip and port.
+  //Creates a socket using the given ip and port. If either of them
+  //are invalid, exception NetworkAddressInfoException is thrown.
   void connectToServer(const std::string &ip, const std::string &port);
 
   void saveNickName(const std::string &nick_name);

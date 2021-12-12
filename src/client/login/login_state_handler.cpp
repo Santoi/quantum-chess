@@ -101,7 +101,7 @@ void LoginStateHandler::render(LoginScene &login_scene) {
   current_state->render(login_scene);
 }
 
-void LoginStateHandler::resetPressedButtons() {
+void LoginStateHandler::resetAllButtonsToNotPressedState() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->resetAllButtonsToNotPressedState();
 }

@@ -23,8 +23,8 @@ private:
                                       TextEntryButton &port_text_entry,
                                       TextEntryButton &name_text_entry);
 
-  // Return a reverse iterator pointing to the first button to render
-  std::reverse_iterator<__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>>
+  // Return an iterator pointing to the first button to render
+  __gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
   findFirstButtonToRender(std::vector<std::unique_ptr<Button>> &match_buttons,
                           size_t match_to_render);
 

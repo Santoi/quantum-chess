@@ -4,12 +4,15 @@
 #include <iostream>
 #include <list>
 
-EventHandlerThread::EventHandlerThread(Window &window, Game &game,
+EventHandlerThread::EventHandlerThread(Window &window, Game &game_,
+                                       GameScene &game_scene_,
                                        Chat &chat_, TextEntry &text_entry)
-    : HandlerThread(true), window(window), game(game),
-      text_entry(text_entry),
+    : HandlerThread(true), window(window), game(game_),
+      game_scene(game_scene_), text_entry(text_entry),
       split(false), merge(false),
-      first_click(false), second_click(false), penultimate_click(),
+      first_click(false), second_click(false),
+      help_screen_is_being_rendered(false),
+      penultimate_click(),
       last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
@@ -62,6 +65,19 @@ void EventHandlerThread::handleKeyDown() {
     case SDLK_LCTRL: {
       merge = true;
       split = false;
+      break;
+    }
+    case SDLK_h: {
+      if (!text_entry.isEnabled()) {
+          std::cout << "h!" << std::endl;
+         if (help_screen_is_being_rendered) {
+           game_scene.stopRenderingHelpScreen();
+           help_screen_is_being_rendered = false;
+         } else {
+           game_scene.startRenderingHelpScreen();
+           help_screen_is_being_rendered = true;
+         }
+      }
       break;
     }
     case SDLK_n: {
@@ -200,9 +216,10 @@ void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
 }
 
 void EventHandlerThread::handleTextInput(const std::string &text) {
-  if (text_entry.isEnabled())
-    if (!text_entry.concat(text)) {
-      chat.sendMessage(text_entry.getText());
-      text_entry.clear();
-    }
+  if (text_entry.isEnabled()) {
+      if (!text_entry.concat(text)) {
+          chat.sendMessage(text_entry.getText());
+          text_entry.clear();
+      }
+  }
 }

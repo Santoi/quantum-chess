@@ -152,7 +152,7 @@ int SelectingMatchState::processTokens(std::list<std::string> &&tokens) {
       login.refreshMatches();
       next_state = NEXT_STATE_CONNECT_TO_MATCH;
     } else {
-      login.chooseMatchNumber(match_number);
+      login.sendChosenMatchToServer(match_number);
       login.sendSavedNickNameToServer();
     }
   }
@@ -184,7 +184,7 @@ SelectingRoleState::SelectingRoleState(Login &login_,
                                        ButtonSpriteRepository &button_repository,
                                        TextSpriteRepository &text_repository)
     : LoginState(login_, button_repository, text_repository) {
-  std::list<ClientData::Role> available_roles = login.getAvailableRoles();
+  std::list<ClientData::Role> available_roles = login.getAvailableRolesFromServer();
   addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_WHITE,
                                           button_repository, text_repository,
                                           available_roles, "role_white");
@@ -233,7 +233,7 @@ int SelectingRoleState::processTokens(std::list<std::string> &&tokens) {
     throw UnavailableRoleException();
   std::string str_selected_role = tokens.front();
   ClientData::Role selected_role = getRoleFromString(str_selected_role);
-  login.sendChosenRole(selected_role);
+  login.saveAndSendChosenRoleToServer(selected_role);
   return NEXT_STATE_CONNECTED_TO_MATCH;
 }
 

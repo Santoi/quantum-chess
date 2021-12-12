@@ -22,6 +22,7 @@ void EventHandlerThread::run() {
     switch (event.type) {
       case SDL_QUIT:
         open = false;
+        break;
       case SDL_WINDOWEVENT:
         handleWindowChange(event.window);
         break;

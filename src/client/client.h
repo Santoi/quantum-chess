@@ -31,7 +31,9 @@ private:
                        HandlerThread &login_handler, Renderer &renderer,
                        uint8_t frame_rate);
 
-
+  void handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprite_repository,
+                                  TextSpriteRepository& text_sprite_repository, Window& window,
+                                  Renderer& renderer, uint8_t frame_rate, bool& login_was_closed);
 public:
   Client() = default;
 

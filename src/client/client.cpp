@@ -74,18 +74,9 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
   }
 }
 
-// TODO modularizar
-void Client::execute() {
-  std::ifstream config_file("config.txt");
-  ConfigFile config(config_file);
-  Window window(std::stoi(config.getValue("res_width")),
-                std::stoi(config.getValue("res_height")));
-  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
-  Renderer &renderer = window.renderer();
-  Font font(FONT_SIZE);
-  ButtonSpriteRepository button_sprite_repository(renderer);
-  TextSpriteRepository text_sprite_repository(renderer, font);
-  Login login;
+void Client::handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprite_repository,
+                      TextSpriteRepository& text_sprite_repository, Window& window,
+                      Renderer& renderer, uint8_t frame_rate, bool& login_was_closed) {
   LoginStateHandler login_state_handler(login, button_sprite_repository,
                                         text_sprite_repository);
   LoginScene login_scene(window, login_state_handler);
@@ -94,8 +85,28 @@ void Client::execute() {
   login_handler.start();
   loginRenderLoop(login_scene, login_handler, renderer, frame_rate);
   login_handler.join();
+  login_was_closed = login_handler.was_closed();
+}
 
-  if (login_handler.was_closed())
+// TODO modularizar
+void Client::execute() {
+  std::ifstream config_file("config.txt");
+  ConfigFile config(config_file);
+  Window window(std::stoi(config.getValue("res_width")),
+                std::stoi(config.getValue("res_height")));
+
+  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
+  Renderer &renderer = window.renderer();
+  Font font(FONT_SIZE);
+  ButtonSpriteRepository button_sprite_repository(renderer);
+  TextSpriteRepository text_sprite_repository(renderer, font);
+
+  Login login;
+  bool login_was_closed;
+  handleFirstLogin(login, button_sprite_repository,
+                   text_sprite_repository, window,
+                   renderer, frame_rate, login_was_closed);
+  if (login_was_closed)
     return;
 
   // if we are here the client is connected to a match

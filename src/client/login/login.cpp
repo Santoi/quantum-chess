@@ -9,10 +9,12 @@ Login::Login()
 }
 
 void Login::connectToServer(const std::string &ip_, const std::string &port_) {
-  const char *ip = ip_.c_str();
-  const char *port = port_.c_str();
+  const char *ip_ptr = ip_.c_str();
+  const char *port_ptr = port_.c_str();
   client_socket_ptr = make_unique<Socket>(
-          (Socket::createAConnectedSocket(ip, port)));
+          (Socket::createAConnectedSocket(ip_ptr, port_ptr)));
+  ip = ip_;
+  port = port_;
 }
 
 void Login::getListOfMatchesInfo(

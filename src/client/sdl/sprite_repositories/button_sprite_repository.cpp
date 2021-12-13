@@ -1,7 +1,7 @@
 #include "button_sprite_repository.h"
 
 #define PATH "resources/sprites/button/"
-
+#define PATH_IMAGES "resources/sprites/"
 ButtonSpriteRepository::ButtonSpriteRepository(Renderer &renderer)
     : pressed(), released() {
   loadPressed(renderer);
@@ -18,8 +18,9 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
       {"role_spectator",   PATH "spectator_role.png"},
       {"unavailable_role", PATH "unavailable_role_layer.png"},
       {"return", PATH "return.png"},
-      {"help", "resources/sprites/help_image.png"},
-      {"leave", "resources/sprites/leave_match_question.png"}
+      {"help", PATH_IMAGES "help_image.png"},
+      {"leave", PATH_IMAGES "leave_match_question.png"},
+      {"coronation", PATH_IMAGES "coronation_image.png"}
   };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,

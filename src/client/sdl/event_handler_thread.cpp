@@ -69,8 +69,10 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_f: {
-      if (!text_entry.isEnabled())
+      if (!text_entry.isEnabled()) {
+        merge = split = first_click = second_click = false;
         game.flipBoard();
+      }
       break;
     }
     case SDLK_n: {

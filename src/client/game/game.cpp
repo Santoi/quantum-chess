@@ -227,5 +227,6 @@ ClientData::Role Game::getPlayerRole() {
 }
 
 void Game::flipBoard() {
+  setDefaultBoard();
   transformer.flip();
 }

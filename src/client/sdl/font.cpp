@@ -1,4 +1,6 @@
 #include "font.h"
+#include <string>
+#include <list>
 
 #define BLACK {0x00, 0x00, 0x00}
 #define WHITE {0xff, 0xff, 0xff}

@@ -11,6 +11,8 @@
 #include "../../common/client_data.h"
 #include <map>
 #include <list>
+#include <string>
+#include <vector>
 
 #define POSSIBLE_MOVES_PREFIX 'a'
 #define CHAT_PREFIX 'c'
@@ -63,7 +65,6 @@ class Match;
 
 class ServerProtocol : public Protocol {
 public:
-
   ServerProtocol() = default;
 
   // Sends to socket info about running matches.
@@ -129,12 +130,14 @@ public:
                                      const std::list<ClientData::Role> &roles);
 
   // Fill packet with a message with positions that are the same chessman_.
-  void fillPacketWithSameChessmanInstruction(Packet &packet,
-                                             const std::list<Position> &positions);
+  void
+  fillPacketWithSameChessmanInstruction(Packet &packet,
+                                        const std::list<Position> &positions);
 
   // Fills a packet with message with entangled chessmen positions.
   void fillPacketWithEntangledChessmanInstruction(Packet &packet,
-                                                  const std::list<Position> &positions);
+                                                  const std::list<Position>
+                                                  &positions);
 
   // Fills packet with a request to play a sound.
   void fillPacketWithSoundMessage(Packet &packet, uint8_t sound);

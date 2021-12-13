@@ -2,6 +2,7 @@
 #include "../sdl/font.h"
 #include "../sdl/drawables/drawable_text.h"
 #include "../sdl/drawables/drawable_text_entry_button.h"
+#include <string>
 
 #define MAX_INPUT 20
 

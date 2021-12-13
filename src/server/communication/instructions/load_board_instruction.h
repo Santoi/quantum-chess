@@ -5,6 +5,7 @@
 #include "../../quantum_chess/client_data.h"
 #include "instruction.h"
 #include "../../../common/blocking_queue.h"
+#include <vector>
 
 class LoadBoardInstruction : public Instruction {
   std::vector<SquareData> data;
@@ -18,7 +19,8 @@ public:
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 
   ~LoadBoardInstruction() override = default;
 };

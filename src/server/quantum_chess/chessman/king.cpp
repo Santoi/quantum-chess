@@ -1,4 +1,6 @@
 #include <vector>
+#include <utility>
+#include <list>
 #include <string>
 #include "king.h"
 #include "tower.h"
@@ -7,8 +9,8 @@
 
 King::King(const Position &position, bool white_, Board &board_,
            EntanglementLog &entanglement_log_) :
-        Chessman(position, white_, board_, entanglement_log_),
-        first_move(true), first_line(white ? 0 : 7) {}
+    Chessman(position, white_, board_, entanglement_log_),
+    first_move(true), first_line(white ? 0 : 7) {}
 
 void King::calculateMoves(const Position &initial,
                           std::list<Position> &posible_moves)
@@ -92,8 +94,9 @@ void King::split(const Position &initial, const Position &final1,
           final2 == Position(5, first_line))
         throw ChessException("tower is going to occupy that square");
       splitWithCastling(final1, final2);
-    } else
+    } else {
       Chessman::split(initial, final1, final2);
+    }
   } else {
     Chessman::split(initial, final1, final2);
   }
@@ -202,7 +205,7 @@ void King::splitWithCastling(const Position &final1, const Position &final2) {
 
 void
 King::longCastling(
-        const std::_List_iterator<QuantumPosition> &position_to_castle) {
+    const std::_List_iterator<QuantumPosition> &position_to_castle) {
   Tower *tower = (Tower *) board.getChessmanAt(Position(0, first_line));
   // Move tower.
   tower->move(Position(0, first_line), Position(3, first_line));
@@ -220,7 +223,7 @@ King::longCastling(
 }
 
 void King::shortCastling(
-        const std::_List_iterator<QuantumPosition> &position_to_castle) {
+    const std::_List_iterator<QuantumPosition> &position_to_castle) {
   Tower *tower = (Tower *) board.getChessmanAt(Position(7, first_line));
   tower->move(Position(7, first_line), Position(5, first_line));
   position_to_castle->setPosition(Position(6, first_line));

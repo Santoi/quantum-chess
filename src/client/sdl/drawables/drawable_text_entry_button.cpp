@@ -1,6 +1,7 @@
 #include "drawable_text_entry_button.h"
 
 #include <utility>
+#include <string>
 
 DrawableTextEntryButton::DrawableTextEntryButton(
     TextSpriteRepository &text_repository,

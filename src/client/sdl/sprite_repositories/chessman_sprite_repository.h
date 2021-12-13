@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_CHESSMAN_SPRITE_REPOSITORY_H
 
 #include <map>
+#include <string>
 #include "../texture_sprite.h"
 
 class ChessmanSpriteRepository {

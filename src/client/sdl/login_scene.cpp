@@ -18,10 +18,11 @@ void LoginScene::render() {
   login_state_handler.render(*this);
 }
 
-void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
-                                                TextEntryButton &ip_text_entry,
-                                                TextEntryButton &port_text_entry,
-                                                TextEntryButton &name_text_entry) {
+void
+LoginScene::setConnectionButtonsDimensions(Button &connect_button,
+                                           TextEntryButton &ip_text_entry,
+                                           TextEntryButton &port_text_entry,
+                                           TextEntryButton &name_text_entry) {
   size_t width = window.getWidth();
   size_t height = window.getHeight();
   size_t button_height = height / 15;
@@ -47,10 +48,11 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                     button_height);
 }
 
-void LoginScene::renderConnectionToServerButtons(Button &connect_button,
-                                                 TextEntryButton &ip_text_entry,
-                                                 TextEntryButton &port_text_entry,
-                                                 TextEntryButton &name_text_entry) {
+void
+LoginScene::renderConnectionToServerButtons(Button &connect_button,
+                                            TextEntryButton &ip_text_entry,
+                                            TextEntryButton &port_text_entry,
+                                            TextEntryButton &name_text_entry) {
   setConnectionButtonsDimensions(connect_button, ip_text_entry,
                                  port_text_entry, name_text_entry);
   ip_text_entry.render();
@@ -59,7 +61,8 @@ void LoginScene::renderConnectionToServerButtons(Button &connect_button,
   connect_button.render();
 }
 
-__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
+__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *,
+    std::vector<std::unique_ptr<Button>>>
 LoginScene::findFirstButtonToRender(
     std::vector<std::unique_ptr<Button>> &match_buttons,
     size_t match_to_render) {

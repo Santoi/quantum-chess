@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <list>
 #include "chessman.h"
 #include "../position.h"
 
@@ -15,11 +16,11 @@ private:
 
   // Performs a long castling, moving king and left tower.
   void longCastling(
-          const std::_List_iterator<QuantumPosition> &position_to_castle);
+      const std::_List_iterator<QuantumPosition> &position_to_castle);
 
   // Performs a short castling, moving king and right tower.
   void shortCastling(
-          const std::_List_iterator<QuantumPosition> &position_to_castle);
+      const std::_List_iterator<QuantumPosition> &position_to_castle);
 
   // Returns true if a long castling can be done.
   bool checkLongCastling() const;
@@ -47,8 +48,6 @@ public:
         const Position &final2) override;
 
   ~King() override = default;
-
-
 };
 
 

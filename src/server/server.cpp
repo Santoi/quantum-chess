@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <string>
 
 Server::Server(const char *host, const char *service)
     : acceptor_socket(Socket::createAListeningSocket(host, service)) {

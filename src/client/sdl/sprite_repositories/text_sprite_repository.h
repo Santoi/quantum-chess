@@ -5,6 +5,7 @@
 #include "../font.h"
 #include "../renderer.h"
 #include "../sprite.h"
+#include <list>
 
 class TextSpriteRepository {
   std::map<char, std::map<char, Sprite>> color_chars;

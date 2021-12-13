@@ -34,7 +34,6 @@ public:
   void render(int x, int y);
 
   int getDrawableHeight() const;
-
 };
 
 

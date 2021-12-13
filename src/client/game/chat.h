@@ -6,6 +6,7 @@
 #include "../../common/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
 #include  "../sdl/game_scene.h"
+#include <string>
 
 #define MAX_MESSAGES 10
 

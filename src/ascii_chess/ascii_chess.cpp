@@ -16,7 +16,7 @@ void AsciiChess::execute() {
         break;
       draw();
     }
-    catch (const ChessException &e) {
+    catch(const ChessException &e) {
       std::cerr << "Error: " << e.what() << std::endl;
     }
   }

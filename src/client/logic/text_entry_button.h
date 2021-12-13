@@ -15,34 +15,26 @@ private:
   bool expecting_text_entry;
 
 public:
-
   TextEntryButton() = delete;
 
   TextEntryButton(ButtonSpriteRepository &button_repository,
                   TextSpriteRepository &text_repository,
                   const std::string &button_name_);
 
-  //Calls drawable_text_button's method that has same name with same
-  //parameters.
   void setAreaAndPosition(int x_, int y_, int width, int height);
 
-  //Checks if pixel is on text entry: if it is, expectig_text_entry is set to true
-  //and a true is returned. Else a false is returned.
+  // Checks if pixel is on text entry
   bool enableTextEntryIfClicked(const PixelCoordinate &pixel);
 
-  //Concats text to text entry if expecting_text_entry is true.
+  //Concat text to text entry if expecting_text_entry is true.
   void concatIfEnabled(const std::string &text_);
 
-  //Backspace text entry if expecting_text_entry is true.
   void backspaceIfEnabled();
 
-  //Returns text entry's current text.
   std::string getText() const;
 
-  //Sets expecting_text_entry to false.
   void disableTextEntry();
 
-  //Calls drawable_text_button's render method.
   void render();
 };
 

@@ -2,6 +2,9 @@
 #include "../sdl/drawables/drawable_button.h"
 #include "../../common/client_data.h"
 #include <iostream>
+#include <string>
+#include <list>
+#include <vector>
 
 Button::Button(ButtonSpriteRepository &button_repository,
                TextSpriteRepository &text_repository, std::string &&type,
@@ -26,10 +29,11 @@ void Button::resetButtonToNotPressedState() {
 ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
                              TextSpriteRepository &text_repository,
                              std::string &&button_text,
-                             const std::vector<std::unique_ptr<TextEntryButton>> &text_entry_buttons)
-    : Button(button_repository, text_repository, "action",
-             std::move(button_text)),
-      text_entries_ptr(text_entry_buttons) {}
+                             const std::vector<std::unique_ptr<TextEntryButton>>
+                             &text_entry_buttons) :
+    Button(button_repository, text_repository, "action",
+           std::move(button_text)),
+    text_entries_ptr(text_entry_buttons) {}
 
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                         std::list<std::string> &tokens) {
@@ -110,8 +114,9 @@ PreviousMatchesButton::PreviousMatchesButton(
   drawable.setText("PREV", 'k');
 }
 
-bool PreviousMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
-                                                std::list<std::string> &tokens) {
+bool
+PreviousMatchesButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
+                                           std::list<std::string> &tokens) {
   bool clicked = drawable.isPixelOnButton(pixel_);
   if (clicked)
     tokens.emplace_back("PREV");

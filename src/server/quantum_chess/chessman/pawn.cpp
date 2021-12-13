@@ -1,4 +1,5 @@
 #include <vector>
+#include <list>
 #include <string>
 #include <utility>
 #include "pawn.h"
@@ -6,8 +7,8 @@
 
 Pawn::Pawn(const Position &position, bool white_, Board &board_,
            EntanglementLog &entanglement_log_) :
-        Chessman(position, white_, board_, entanglement_log_),
-        first_move(true) {}
+    Chessman(position, white_, board_, entanglement_log_),
+    first_move(true) {}
 
 void Pawn::calculateMoves(const Position &initial,
                           std::list<Position> &possible_moves) const {
@@ -53,7 +54,7 @@ void Pawn::calculatePossibleSplits(const Position &initial,
 Chessman::MoveValidationStatus
 Pawn::checkIsAValidMove(const Position &initial, const Position &final) {
   Chessman::MoveValidationStatus status =
-          Chessman::checkIsAValidMove(initial, final);
+      Chessman::checkIsAValidMove(initial, final);
   if (status)
     return status;
   if (final.x() == initial.x() && board.getChessmanAt(final) &&

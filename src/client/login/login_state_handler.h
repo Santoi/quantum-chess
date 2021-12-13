@@ -6,6 +6,8 @@
 #include "../sdl/renderer.h"
 #include <memory>
 #include <mutex>
+#include <string>
+#include <list>
 
 class LoginScene;
 
@@ -35,19 +37,19 @@ public:
 
   //Calls current state's same name method.
   void fillWithActiveButtons(
-          std::list<std::reference_wrapper<Button>> &active_buttons);
+      std::list<std::reference_wrapper<Button>> &active_buttons);
 
   //Calls current state's same name method.
   void fillWithActiveTextEntryButtons(
-          std::list<std::reference_wrapper<TextEntryButton>> &active_text_entries);
+      std::list<std::reference_wrapper<TextEntryButton>>
+      &active_text_entries);
 
-  //It calls current state's processTokens method and handles its return int (or exception
-  //throwing) accordingly.
+  //It calls current state's processTokens method and handles the return value
   void processTokens(std::list<std::string> &&tokens);
 
   //Calls current state's same method with same parameter.
   void render(LoginScene &login_scene);
-  
+
   ~LoginStateHandler() = default;
 
   //Calls current state's same name method.

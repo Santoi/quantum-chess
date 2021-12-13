@@ -6,6 +6,7 @@
 #include <map>
 #include <utility>
 #include <string>
+#include <vector>
 
 #define BACKGROUND_TRANSPARENCY 0.4
 

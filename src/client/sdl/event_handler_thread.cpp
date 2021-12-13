@@ -3,6 +3,7 @@
 #include "../game/chat.h"
 #include <iostream>
 #include <list>
+#include <string>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
                                        Chat &chat_, TextEntry &text_entry)

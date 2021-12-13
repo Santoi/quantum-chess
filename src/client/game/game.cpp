@@ -8,6 +8,8 @@
 #include <mutex>
 #include <utility>
 #include <list>
+#include <string>
+#include <vector>
 
 #define BOARD_H_MIN_LIMIT .1
 #define BOARD_H_MAX_LIMIT .9

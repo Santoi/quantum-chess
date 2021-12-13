@@ -10,14 +10,11 @@ DrawableChessman::DrawableChessman(Renderer &renderer,
     fill(&repository.getFill(data.chessman)),
     probability(data.probability) {}
 
-DrawableChessman::DrawableChessman(DrawableChessman &&other) noexcept: renderer(
-    other.renderer),
-                                                                       sprite_(
-                                                                           other.sprite_),
-                                                                       fill(
-                                                                           other.fill),
-                                                                       probability(
-                                                                           other.probability) {}
+DrawableChessman::DrawableChessman(DrawableChessman &&other) noexcept:
+    renderer(other.renderer),
+    sprite_(other.sprite_),
+    fill(other.fill),
+    probability(other.probability) {}
 
 DrawableChessman &
 DrawableChessman::operator=(DrawableChessman &&other) noexcept {

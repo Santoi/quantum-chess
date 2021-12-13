@@ -2,6 +2,8 @@
 #include "server_protocol.h"
 #include <algorithm>
 #include "../../common/unique_ptr.h"
+#include <map>
+#include <vector>
 
 #define REFRESH UINT16_MAX
 

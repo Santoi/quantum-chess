@@ -3,6 +3,10 @@
 #include "../../common/client_data.h"
 #include "../../common/unique_ptr.h"
 #include <iostream>
+#include <map>
+#include <string>
+#include <list>
+#include <vector>
 
 Login::Login()
     : client_socket_ptr(nullptr) {

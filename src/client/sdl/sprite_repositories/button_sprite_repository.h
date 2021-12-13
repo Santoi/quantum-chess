@@ -3,6 +3,7 @@
 
 #include "../texture_sprite.h"
 #include <map>
+#include <string>
 
 class ButtonSpriteRepository {
   std::map<std::string, TextureSprite> pressed;

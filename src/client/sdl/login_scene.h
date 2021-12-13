@@ -8,6 +8,7 @@
 #include "../logic/text_entry_button.h"
 #include "scene.h"
 #include "../login/login_state_handler.h"
+#include <vector>
 
 class LoginStateHandler;
 
@@ -24,7 +25,8 @@ private:
                                       TextEntryButton &name_text_entry);
 
   // Return an iterator pointing to the first button to render
-  __gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
+  __gnu_cxx::__normal_iterator<std::unique_ptr<Button> *,
+      std::vector<std::unique_ptr<Button>>>
   findFirstButtonToRender(std::vector<std::unique_ptr<Button>> &match_buttons,
                           size_t match_to_render);
 

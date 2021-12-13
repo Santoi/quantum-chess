@@ -5,6 +5,8 @@
 #include <vector>
 #include <stack>
 #include <memory>
+#include <string>
+#include <list>
 #include "position.h"
 #include "chessman/chessman.h"
 #include "pseudo_random_coin.h"
@@ -64,8 +66,8 @@ public:
   void getPossibleMergesOf(const Position &position,
                            std::list<Position> &output);
 
-  // Loads in output possible merges of two chessman_ in position (possible moves
-  // that share both).
+  // Loads in output possible merges of two chessman_ in position
+  // (possible moves that share both).
   void
   getPossibleMergesOf(const Position &position1, const Position &position2,
                       std::list<Position> &output);
@@ -78,7 +80,7 @@ public:
   void
   getEntangledOf(const Position &position1, std::list<Position> &output);
 
-  // Returns a pointer to chessman_ in position. Returns nullptr if there isnt
+  // Returns a pointer to chessman_ in position. Returns nullptr if there isn't
   // a chessman_.
   Chessman *getChessmanAt(const Position &position);
 

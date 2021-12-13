@@ -12,6 +12,9 @@
 #include <memory>
 #include <sstream>
 #include <fstream>
+#include <string>
+#include <list>
+#include <vector>
 
 Board::Board()
     : chessmen(), board(), next_white(true), coin(), entanglement_log(),

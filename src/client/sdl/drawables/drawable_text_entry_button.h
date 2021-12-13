@@ -24,7 +24,6 @@ private:
   uint32_t height;
 
 public:
-
   DrawableTextEntryButton() = delete;
 
   DrawableTextEntryButton(TextSpriteRepository &text_repository,

@@ -7,6 +7,7 @@
 #include "../../common/thread.h"
 #include "../logic/text_entry.h"
 #include <SDL2/SDL.h>
+#include <string>
 
 class EventHandlerThread : public HandlerThread {
 private:

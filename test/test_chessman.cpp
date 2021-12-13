@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <vector>
+#include <list>
 #include "../src/server/quantum_chess/board.h"
 #include "../src/server/quantum_chess/chessman/tower.h"
 #include "../src/server/quantum_chess/chessman/tower.h"

@@ -8,13 +8,13 @@
 #include "../sdl/pixel_coordinate.h"
 #include <SDL2/SDL.h>
 #include <atomic>
+#include <string>
 
 class LoginHandlerThread : public HandlerThread {
 private:
   Login &login;
   LoginStateHandler &login_state_handler;
-  PixelCoordinate last_click;
-  SDL_Event event{};
+  SDL_Event event;
   bool expecting_text_entry;
   bool was_closed_;
 
@@ -36,7 +36,6 @@ public:
   bool was_closed() const;
 
 private:
-
   void handleTextInput(const std::string &input);
 
   void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);

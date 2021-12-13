@@ -1,5 +1,6 @@
 #include "chat.h"
 #include  "../sdl/game_scene.h"
+#include <string>
 
 Chat::Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
            GameScene &scene)

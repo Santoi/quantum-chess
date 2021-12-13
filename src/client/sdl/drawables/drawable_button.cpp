@@ -1,5 +1,5 @@
 #include "drawable_button.h"
-#include "../sprite_repositories/button_sprite_repository.h"
+#include <string>
 
 DrawableButton::DrawableButton(ButtonSpriteRepository &button_repository,
                                TextSpriteRepository &text_repository,

@@ -4,7 +4,7 @@
 #include "window.h"
 #include "sprite_repositories/chessman_sprite_repository.h"
 #include "drawables/drawable_board.h"
-
+#include <string>
 
 #define MAX_CHAT_MESSAGES 9
 #define MAX_LOG_MESSAGES 13

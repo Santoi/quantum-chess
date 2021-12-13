@@ -19,7 +19,6 @@ protected:
   DrawableButton drawable;
 
 public:
-
   Button() = delete;
 
   Button(ButtonSpriteRepository &button_repository,
@@ -55,11 +54,11 @@ public:
   ConnectButton(ButtonSpriteRepository &button_repository,
                 TextSpriteRepository &text_repository,
                 std::string &&button_text,
-                const std::vector<std::unique_ptr<TextEntryButton>> &text_entry_buttons);
+                const std::vector<std::unique_ptr<TextEntryButton>>
+                &text_entry_buttons);
 
-  //If pixel is on button, it adds to the tokens list the content of each text_entry_buttons
-  //in the same order as they are in the vector and a true is returned.
-  //Else nothing happens with tokens list and a false is returned.
+  //If pixel is on button, it adds to the tokens list the content of each text
+  // entry button and true is returned, otherwise return false
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                            std::list<std::string> &tokens) override;
 
@@ -71,7 +70,6 @@ private:
   uint16_t match_id;
 
 public:
-
   PickMatchButton() = delete;
 
   //PickMatchButton is created with a vector of client data and a match id.
@@ -91,7 +89,6 @@ public:
 
 class NextMatchesButton : public Button {
 public:
-
   NextMatchesButton() = delete;
 
   NextMatchesButton(ButtonSpriteRepository &button_repository,
@@ -145,10 +142,9 @@ private:
   bool role_is_available;
 
 public:
-
   RoleButton() = delete;
 
-  //Creates a RoleButton that has the given role, and the role_is_available boolean.
+  //Creates a RoleButton that has the given role
   RoleButton(ButtonSpriteRepository &button_repository,
              TextSpriteRepository &text_repository,
              ClientData::Role role_, std::string &&type,
@@ -156,11 +152,11 @@ public:
 
   //If pixel is on button, role as string is added to the list of tokens
   //as a string and a true is returned.
-  //Else nothing happens with tokens list and a false is returned.
+  //Else nothing happens with tokens list and false is returned.
   bool fillTokensIfClicked(const PixelCoordinate &pixel_,
                            std::list<std::string> &tokens) override;
 
-  //Renders drawable as usual. If role_is_available == true, nothing else is
+  //Renders drawable as usual. If role is available, nothing else is
   //rendered. Else, an additional layer is rendered over the drawable
   //to signal unavailability.
   void render() override;

@@ -9,6 +9,7 @@ void SoundInstruction::makeActionAndNotify(Match &match) {}
 void
 SoundInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
                                                   Packet &packet,
-                                                  const ClientData &client_receiver_data) {
+                                                  const ClientData
+                                                  &client_receiver_data) {
   protocol.fillPacketWithSoundMessage(packet, sound);
 }

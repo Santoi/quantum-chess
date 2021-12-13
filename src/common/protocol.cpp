@@ -1,5 +1,6 @@
 #include "protocol.h"
 #include "socket_closed.h"
+#include <string>
 
 void Protocol::addStringAndItsLengthToPacket(Packet &packet,
                                              const std::string &string) {

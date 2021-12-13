@@ -3,6 +3,7 @@
 
 
 #include "../game/position.h"
+#include <string>
 
 typedef struct ChessmanData {
   const Position position;

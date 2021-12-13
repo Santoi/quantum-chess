@@ -1,12 +1,13 @@
 #include <vector>
 #include <string>
+#include <list>
 #include "chessman.h"
 #include "tower.h"
 
 Tower::Tower(const Position &position, bool white_, Board &board_,
              EntanglementLog &entanglement_log_) :
-        Chessman(position, white_, board_, entanglement_log_),
-        first_move(true) {}
+    Chessman(position, white_, board_, entanglement_log_),
+    first_move(true) {}
 
 void Tower::calculateMoves(const Position &initial,
                            std::list<Position> &possible_moves)

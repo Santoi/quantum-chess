@@ -72,17 +72,17 @@ protected:
                              std::vector<Position> &path) const;
 
   // Returns true if path can be walked (there is at the most one quantum
-  // chessman_) and saves a pointer to the chessman_ in a pair with its position.
+  // chessman_) and saves a pointer to the chessman_ in a pair with its position
   // Doesnt' check last position.
   bool getMiddlePathChessman(const std::vector<Position> &path,
                              std::pair<Position,
-                                     Chessman *> &chessman) const;
+                                 Chessman *> &chessman) const;
 
   // Returns true if path can be walked. It checks last position, and boolean
   // final_same_color_free states if it's ok to be a chessman_ of same color
   // or different color in the final position.
   bool checkFreePath(const std::vector<Position> &path, std::pair<Position,
-          Chessman *> &chessman_in_path, bool final_same_color_free) const;
+      Chessman *> &chessman_in_path, bool final_same_color_free) const;
 
   // Returns true if chessman_ is already entangled.
   bool chessmanIsAlreadyEntangled(Chessman &chessman);

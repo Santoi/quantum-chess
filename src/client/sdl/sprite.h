@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_SPRITE_H
 
 #include "renderer.h"
+#include <string>
 #include <SDL2pp/SDL2pp.hh>
 
 class Renderer;

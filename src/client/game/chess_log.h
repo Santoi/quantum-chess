@@ -1,11 +1,11 @@
 #ifndef QUANTUM_CHESS_PROJ_CHESS_LOG_H
 #define QUANTUM_CHESS_PROJ_CHESS_LOG_H
 
-#include <utility>
-
 #include "../../common/blocking_queue.h"
 #include "../communication/remote_client_instructions.h"
 #include  "../sdl/game_scene.h"
+#include <string>
+#include <utility>
 
 #define MAX_MESSAGES 10
 

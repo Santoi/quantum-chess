@@ -9,6 +9,8 @@
 #include <vector>
 #include <mutex>
 #include <string>
+#include <map>
+#include <list>
 
 class Login {
 private:

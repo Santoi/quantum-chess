@@ -1,4 +1,5 @@
 #include "clients_map.h"
+#include <vector>
 
 ClientsMap::ClientsMap() : clients(), listening_queues(), mutex() {}
 
@@ -9,7 +10,7 @@ ClientsMap::addNewClient(Socket &&socket,
   std::lock_guard<std::mutex> lock_guard(mutex);
   BlockingQueue<Instruction> new_listening_queue;
   listening_queues.insert(
-          std::make_pair(client_data.id, std::move(new_listening_queue)));
+      std::make_pair(client_data.id, std::move(new_listening_queue)));
   ClientHandler client(std::move(socket),
                        listening_queues.at(client_data.id),
                        match_updates,
@@ -39,14 +40,15 @@ void ClientsMap::deleteClient(uint16_t client_id) {
 }
 
 void ClientsMap::pushInstrToClientListeningQueue(uint16_t client_id,
-                                                 std::shared_ptr<Instruction> &instr_ptr) {
+                                                 std::shared_ptr<Instruction>
+                                                 &instr_ptr) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   listening_queues.at(client_id).push(instr_ptr);
 }
 
 void
 ClientsMap::addInstrToAllListeningQueues(
-        std::shared_ptr<Instruction> &instr_ptr) {
+    std::shared_ptr<Instruction> &instr_ptr) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &listening_queue: listening_queues)
     listening_queue.second.push(instr_ptr);

@@ -4,6 +4,10 @@
 #include "unavailable_role_exception.h"
 #include "invalid_nick_name_exception.h"
 #include <iostream>
+#include <map>
+#include <vector>
+#include <string>
+#include <list>
 
 #define MATCHES_PER_PAGE 8
 
@@ -19,9 +23,10 @@ void LoginState::resetAllButtonsToNotPressedState() {
     button->resetButtonToNotPressedState();
 }
 
-ConnectingToServerState::ConnectingToServerState(Login &login_,
-                                                 ButtonSpriteRepository &button_sprite_repository,
-                                                 TextSpriteRepository &text_sprite_repository)
+ConnectingToServerState::
+ConnectingToServerState(Login &login_,
+                        ButtonSpriteRepository &button_sprite_repository,
+                        TextSpriteRepository &text_sprite_repository)
     : LoginState(login_, button_sprite_repository, text_sprite_repository) {
   text_entry_buttons_ptr.push_back(
       make_unique<TextEntryButton>(button_sprite_repository,
@@ -67,7 +72,8 @@ void ConnectingToServerState::fillWithActiveTextEntryButtons(
 }
 
 int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
-  std::string ip = tokens.front(); //tokens strings has the same order as how TextEntryButton are in the list
+  //tokens strings has the same order as how TextEntryButton are in the list
+  std::string ip = tokens.front();
   //(first the ip string, second the port string)
   tokens.pop_front();
   std::string port = tokens.front();
@@ -81,9 +87,10 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
   return NEXT_STATE_CONNECT_TO_MATCH;
 }
 
-SelectingMatchState::SelectingMatchState(Login &login_,
-                                         ButtonSpriteRepository &button_sprite_repository,
-                                         TextSpriteRepository &text_sprite_repository)
+SelectingMatchState::
+SelectingMatchState(Login &login_,
+                    ButtonSpriteRepository &button_sprite_repository,
+                    TextSpriteRepository &text_sprite_repository)
     : LoginState(login_, button_sprite_repository, text_sprite_repository),
       next_matches_button(button_sprite_repository, text_sprite_repository),
       previous_matches_button(button_sprite_repository,
@@ -180,11 +187,12 @@ void SelectingRoleState::addActiveOrInactiveRoleButtonWithImages(
   buttons_ptr.push_back(std::move(role_button_ptr));
 }
 
-SelectingRoleState::SelectingRoleState(Login &login_,
-                                       ButtonSpriteRepository &button_repository,
-                                       TextSpriteRepository &text_repository)
+SelectingRoleState::
+SelectingRoleState(Login &login_,
+                   ButtonSpriteRepository &button_repository,
+                   TextSpriteRepository &text_repository)
     : LoginState(login_, button_repository, text_repository) {
-  std::list<ClientData::Role> available_roles = login.getAvailableRolesFromServer();
+  auto available_roles = login.getAvailableRolesFromServer();
   addActiveOrInactiveRoleButtonWithImages(ClientData::ROLE_WHITE,
                                           button_repository, text_repository,
                                           available_roles, "role_white");
@@ -237,9 +245,10 @@ int SelectingRoleState::processTokens(std::list<std::string> &&tokens) {
   return NEXT_STATE_CONNECTED_TO_MATCH;
 }
 
-ConnectedToMatchState::ConnectedToMatchState(Login &login_,
-                                             ButtonSpriteRepository &button_sprite_repository,
-                                             TextSpriteRepository &text_sprite_repository)
+ConnectedToMatchState::
+ConnectedToMatchState(Login &login_,
+                      ButtonSpriteRepository &button_sprite_repository,
+                      TextSpriteRepository &text_sprite_repository)
     : LoginState(login_, button_sprite_repository,
                  text_sprite_repository) {}
 

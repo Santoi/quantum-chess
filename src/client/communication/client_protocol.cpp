@@ -1,7 +1,9 @@
-#include "../../common/packet.h"
+#include <string>
 #include <unistd.h>
 #include <arpa/inet.h>
-
+#include <map>
+#include <vector>
+#include <list>
 #include <utility>
 #include "../../common/unique_ptr.h"
 #include "client_protocol.h"
@@ -101,31 +103,35 @@ void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
   packet.addByte(to.y());
 }
 
-void ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
-                                                        const Position &position) {
+void
+ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
+                                                   const Position &position) {
   packet.addByte(POSSIBLE_MOVES_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
-                                                         const Position &position) {
+void
+ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
+                                                    const Position &position) {
   packet.addByte(POSSIBLE_SPLITS_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
-                                                         const Position &position) {
+void
+ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
+                                                    const Position &position) {
   packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 1);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
-                                                         const Position &position1,
-                                                         const Position &position2) {
+void
+ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
+                                                    const Position &position1,
+                                                    const Position &position2) {
   packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 2);
   addNumber8ToPacket(packet, position1.x());
@@ -134,31 +140,35 @@ void ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
   addNumber8ToPacket(packet, position2.y());
 }
 
-void ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
-                                                           Position &position) {
+void
+ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
+                                                      Position &position) {
   packet.addByte(SAME_CHESSMAN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
-                                                                Position &position) {
+void
+ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                                           Position &position) {
   packet.addByte(ENTANGLED_CHESSMEN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
 
-void ClientProtocol::sendInstruction(Socket &socket,
-                                     std::shared_ptr<RemoteClientInstruction> &instruction) {
+void ClientProtocol::
+sendInstruction(Socket &socket,
+                std::shared_ptr<RemoteClientInstruction> &instruction) {
   Packet packet;
   instruction->fillPacketWithInstructionsToSend(packet, *this);
   socket.send(packet);
 }
 
-void ClientProtocol::fillChatInstruction(Socket &socket,
-                                         std::shared_ptr<RemoteClientInstruction> &
-                                         ptr_instruction) {
+void
+ClientProtocol::fillChatInstruction(Socket &socket,
+                                    std::shared_ptr<RemoteClientInstruction> &
+                                    ptr_instruction) {
   std::string nick_name;
   uint16_t client_id;
   std::string message;
@@ -173,17 +183,19 @@ void ClientProtocol::fillChatInstruction(Socket &socket,
                                                              timestamp);
 }
 
-void ClientProtocol::fillExitInstruction(Socket &socket,
-                                         std::shared_ptr<RemoteClientInstruction> &
-                                         ptr_instruction) {
+void
+ClientProtocol::fillExitInstruction(Socket &socket,
+                                    std::shared_ptr<RemoteClientInstruction> &
+                                    ptr_instruction) {
   std::string nick_name;
   this->getMessageFromSocket(socket, nick_name);
   ptr_instruction = make_unique<RemoteClientExitMessageInstruction>(nick_name);
 }
 
-void ClientProtocol::fillLoadBoardInstruction(Socket &socket,
-                                              std::shared_ptr<RemoteClientInstruction> &
-                                              ptr_instruction) {
+void ClientProtocol::
+fillLoadBoardInstruction(Socket &socket,
+                         std::shared_ptr<RemoteClientInstruction> &
+                         ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::vector<ChessmanData> chessman_data_vector;
   chessman_data_vector.reserve(amount);
@@ -207,14 +219,18 @@ void ClientProtocol::fillLoadBoardInstruction(Socket &socket,
 }
 
 void ClientProtocol::fillShortLogInstruction(Socket &socket,
-                                             std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+                                             std::shared_ptr<
+                                                 RemoteClientInstruction>
+                                             &ptr_instruction) {
   std::string message;
   this->getMessageFromSocket(socket, message);
   ptr_instruction = make_unique<RemoteClientExceptionInstruction>(message);
 }
 
-void ClientProtocol::fillPossibleMovesInstruction(Socket &socket,
-                                                  std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::
+fillPossibleMovesInstruction(Socket &socket,
+                             std::shared_ptr<RemoteClientInstruction>
+                             &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -227,8 +243,10 @@ void ClientProtocol::fillPossibleMovesInstruction(Socket &socket,
       std::move(posible_moves));
 }
 
-void ClientProtocol::fillPossibleSplitsInstruction(Socket &socket,
-                                                   std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::
+fillPossibleSplitsInstruction(Socket &socket,
+                              std::shared_ptr<RemoteClientInstruction>
+                              &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -242,7 +260,9 @@ void ClientProtocol::fillPossibleSplitsInstruction(Socket &socket,
 }
 
 void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
-                                                   std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+                                                   std::shared_ptr<
+                                                       RemoteClientInstruction>
+                                                   &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -255,8 +275,10 @@ void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
       std::move(posible_moves));
 }
 
-void ClientProtocol::fillSameChessmanInstruction(Socket &socket,
-                                                 std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::
+fillSameChessmanInstruction(Socket &socket,
+                            std::shared_ptr<RemoteClientInstruction>
+                            &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -269,8 +291,10 @@ void ClientProtocol::fillSameChessmanInstruction(Socket &socket,
       std::move(posible_moves));
 }
 
-void ClientProtocol::fillEntangledChessmanInstruction(Socket &socket,
-                                                      std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::
+fillEntangledChessmanInstruction(Socket &socket,
+                                 std::shared_ptr<RemoteClientInstruction>
+                                 &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
   std::list<Position> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
@@ -283,15 +307,18 @@ void ClientProtocol::fillEntangledChessmanInstruction(Socket &socket,
       std::move(posible_moves));
 }
 
-void ClientProtocol::fillSoundInstruction(Socket &socket,
-                                          std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+void ClientProtocol::
+fillSoundInstruction(Socket &socket,
+                     std::shared_ptr<RemoteClientInstruction>
+                     &ptr_instruction) {
   uint8_t sound = getNumber8FromSocket(socket);
   ptr_instruction = std::make_shared<RemoteClientSoundInstruction>(sound);
 }
 
 
-void ClientProtocol::fillLogInstruction(Socket &socket,
-                                        std::shared_ptr<RemoteClientInstruction> &ptr) {
+void ClientProtocol::
+fillLogInstruction(Socket &socket,
+                   std::shared_ptr<RemoteClientInstruction> &ptr) {
   std::list<std::string> log;
   uint16_t amount = getNumber16FromSocket(socket);
   for (uint16_t i = 0; i < amount; i++) {
@@ -302,9 +329,10 @@ void ClientProtocol::fillLogInstruction(Socket &socket,
   ptr = std::make_shared<RemoteClientLogInstruction>(std::move(log));
 }
 
-void ClientProtocol::receiveInstruction(Socket &socket,
-                                        std::shared_ptr<RemoteClientInstruction> &
-                                        ptr_instruction) {
+void
+ClientProtocol::receiveInstruction(Socket &socket,
+                                   std::shared_ptr<RemoteClientInstruction> &
+                                   ptr_instruction) {
   Packet packet;
   socket.receive(packet, 1);
   if (packet.size() != 1)

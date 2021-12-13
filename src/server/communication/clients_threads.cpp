@@ -9,15 +9,15 @@ ClientHandlersReceiver::ClientHandlersReceiver(Socket &socket,
                                                const ClientData &client_data_,
                                                BlockingQueue<Instruction> &
                                                updates_queue)
-        : client_socket(socket), client_data(client_data_),
-          updates_queue(updates_queue) {
+    : client_socket(socket), client_data(client_data_),
+      updates_queue(updates_queue) {
 }
 
 ClientHandlersReceiver::ClientHandlersReceiver(
-        ClientHandlersReceiver &&otherReceiver, Socket &socket)
-        : Thread(std::move(otherReceiver)), client_socket(socket),
-          client_data(otherReceiver.client_data),
-          updates_queue(otherReceiver.updates_queue) {
+    ClientHandlersReceiver &&otherReceiver, Socket &socket)
+    : Thread(std::move(otherReceiver)), client_socket(socket),
+      client_data(otherReceiver.client_data),
+      updates_queue(otherReceiver.updates_queue) {
 }
 
 void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
@@ -29,8 +29,7 @@ void ClientHandlersReceiver::receiveInstructionAndPushToQueue() {
 }
 
 void ClientHandlersReceiver::pushToQueueExitInstruction() {
-  std::shared_ptr<Instruction> exit_instruction = std::make_shared<ExitInstruction>(
-          client_data);
+  auto exit_instruction = std::make_shared<ExitInstruction>(client_data);
   this->updates_queue.push(exit_instruction);
 }
 
@@ -39,25 +38,26 @@ void ClientHandlersReceiver::run() {
     while (true)
       this->receiveInstructionAndPushToQueue();
   }
-  catch (const SocketClosed &error) {
+  catch(const SocketClosed &error) {
     std::cerr << "Client id " << client_data.id << " " << error.what()
               << std::endl;
     this->pushToQueueExitInstruction();
   }
 }
 
-ClientHandlersSender::ClientHandlersSender(Socket &socket,
-                                           BlockingQueue<Instruction> &notifications_queue,
-                                           const ClientData &client_data_)
-        : client_socket(socket), client_data(client_data_),
-          notifications_queue(notifications_queue) {
+ClientHandlersSender::
+ClientHandlersSender(Socket &socket,
+                     BlockingQueue<Instruction> &notifications_queue,
+                     const ClientData &client_data_)
+    : client_socket(socket), client_data(client_data_),
+      notifications_queue(notifications_queue) {
 }
 
 
 ClientHandlersSender::ClientHandlersSender(ClientHandlersSender &&otherSender,
                                            Socket &socket)
-        : client_socket(socket), client_data(otherSender.client_data),
-          notifications_queue(otherSender.notifications_queue) {
+    : client_socket(socket), client_data(otherSender.client_data),
+      notifications_queue(otherSender.notifications_queue) {
 }
 
 void ClientHandlersSender::popFromQueueAndSendInstruction() {
@@ -72,5 +72,5 @@ void ClientHandlersSender::run() {
     while (true)
       this->popFromQueueAndSendInstruction();
   }
-  catch (const BlockingQueueClosed &e) {}
+  catch(const BlockingQueueClosed &e) {}
 }

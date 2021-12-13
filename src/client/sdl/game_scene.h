@@ -9,6 +9,7 @@
 #include "scene.h"
 #include "sprite_repositories/button_sprite_repository.h"
 #include "drawables/drawable_text_entry_button.h"
+#include <string>
 
 
 class Window;

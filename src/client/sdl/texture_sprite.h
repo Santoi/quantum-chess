@@ -13,7 +13,7 @@ class TextureSprite : public Sprite {
 public:
   explicit TextureSprite(Renderer &renderer,
                          const std::string &file_name = DEFAULT_SPRITE,
-                         int width = 0, int height = 0);
+                         size_t width = 0, size_t height = 0);
 
   TextureSprite(TextureSprite &&other) = default;
 

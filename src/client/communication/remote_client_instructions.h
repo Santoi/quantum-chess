@@ -41,13 +41,11 @@ public:
   fillPacketWithInstructionsToSend(Packet &packet,
                                    ClientProtocol &protocol);
 
-  //A RemoteClientInstruction derived class needs to implement the virtual method makeAction.
   virtual void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
              TurnLog &turn_log) = 0;
 
   virtual ~RemoteClientInstruction() = default;
-
 };
 
 class RemoteClientChatInstruction : public RemoteClientInstruction {
@@ -67,7 +65,7 @@ public:
                               std::string message,
                               std::string timestamp);
 
-  RemoteClientChatInstruction(std::string message_);
+  explicit RemoteClientChatInstruction(std::string message_);
 
   //Prints to stdout "instructor_nick_name sends message"
   void
@@ -88,7 +86,7 @@ public:
 
   //Creates a RemoteClientExitMessageInstruction saving the nick_name of the
   // person leaving passed as function parameters.
-  RemoteClientExitMessageInstruction(const std::string &nick_name);
+  explicit RemoteClientExitMessageInstruction(const std::string &nick_name);
 
   //Prints to stdout "instructor_nick_name left the game"
   void
@@ -140,7 +138,7 @@ class RemoteClientExceptionInstruction : public RemoteClientInstruction {
 public:
   RemoteClientExceptionInstruction() = delete;
 
-  RemoteClientExceptionInstruction(const std::string &message);
+  explicit RemoteClientExceptionInstruction(const std::string &message);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -158,7 +156,8 @@ class RemoteClientPossibleMovesInstruction : public RemoteClientInstruction {
 public:
   RemoteClientPossibleMovesInstruction() = delete;
 
-  RemoteClientPossibleMovesInstruction(std::list<Position> &&positions_);
+  explicit RemoteClientPossibleMovesInstruction(
+      std::list<Position> &&positions_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -296,7 +295,7 @@ class RemoteClientSoundInstruction
 public:
   RemoteClientSoundInstruction() = delete;
 
-  RemoteClientSoundInstruction(uint8_t sound_);
+  explicit RemoteClientSoundInstruction(uint8_t sound_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -315,7 +314,7 @@ class RemoteClientLogInstruction
 public:
   RemoteClientLogInstruction() = delete;
 
-  RemoteClientLogInstruction(std::list<std::string> &&log_);
+  explicit RemoteClientLogInstruction(std::list<std::string> &&log_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,

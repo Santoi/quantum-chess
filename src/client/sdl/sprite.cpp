@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include "sprite.h"
+#include <string>
 
 Sprite::Sprite(Renderer
                &renderer,
@@ -20,10 +21,10 @@ Sprite::Sprite(Renderer
                size_t height
 ) :
 
-        renderer(renderer),
-        sprite_(renderer.renderer(),
-                surface),
-        width_(width), height_(height) {}
+    renderer(renderer),
+    sprite_(renderer.renderer(),
+            surface),
+    width_(width), height_(height) {}
 
 size_t Sprite::width() const {
   return width_;

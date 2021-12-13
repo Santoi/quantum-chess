@@ -1,21 +1,23 @@
 #include "chat_instruction.h"
 #include "../../../common/blocking_queue.h"
+#include <string>
 
 ChatInstruction::ChatInstruction(const ClientData &instructor_data_,
                                  std::string &&message) :
-        instructor_data(instructor_data_),
-        message(std::move(message)) {}
+    instructor_data(instructor_data_),
+    message(std::move(message)) {}
 
 
 void ChatInstruction::makeActionAndNotify(Match &match) {
-  std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<ChatInstruction>(
-          instructor_data, std::move(this->message));
+  auto this_instruct_ptr = std::make_shared<ChatInstruction>(
+      instructor_data, std::move(this->message));
   match.addInstrToAllListeningQueues(this_instruct_ptr);
 }
 
-void ChatInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
-                                                      Packet &packet,
-                                                      const ClientData &client_receiver_data) {
+void ChatInstruction::
+fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                Packet &packet,
+                                const ClientData &client_receiver_data) {
   // Calculate time
   protocol.fillPacketWithChatMessage(packet, instructor_data, this->message,
                                      getTimeStamp());

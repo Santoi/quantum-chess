@@ -7,6 +7,9 @@
 #include "remote_client_instructions.h"
 #include "../../common/client_data.h"
 #include <memory>
+#include <map>
+#include <list>
+#include <vector>
 
 #define POSSIBLE_MOVES_PREFIX 'a'
 #define CHAT_PREFIX 'c'
@@ -46,7 +49,8 @@ public:
   // After the function ends, the ptr_instruction points to a valid instruction
   // that can be executed calling the makeAction instruction
   void receiveInstruction(Socket &socket,
-                          std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                          std::shared_ptr<RemoteClientInstruction>
+                          &ptr_instruction);
 
   void sendInstruction(Socket &socket,
                        std::shared_ptr<RemoteClientInstruction> &instruction);
@@ -105,28 +109,36 @@ private:
                            ptr_instruction);
 
   void fillLoadBoardInstruction(Socket &socket,
-                                std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                                std::shared_ptr<RemoteClientInstruction>
+                                &ptr_instruction);
 
   void fillShortLogInstruction(Socket &socket,
-                               std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                               std::shared_ptr<RemoteClientInstruction>
+                               &instruction);
 
   void fillPossibleMovesInstruction(Socket &socket,
-                                    std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                                    std::shared_ptr<RemoteClientInstruction>
+                                    &ptr_instruction);
 
   void fillPossibleSplitsInstruction(Socket &socket,
-                                     std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                                     std::shared_ptr<RemoteClientInstruction>
+                                     &ptr_instruction);
 
   void fillPossibleMergesInstruction(Socket &socket,
-                                     std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                                     std::shared_ptr<RemoteClientInstruction>
+                                     &ptr_instruction);
 
   void fillSameChessmanInstruction(Socket &socket,
-                                   std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                                   std::shared_ptr<RemoteClientInstruction>
+                                   &ptr_instruction);
 
   void fillEntangledChessmanInstruction(Socket &socket,
-                                        std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                                        std::shared_ptr<RemoteClientInstruction>
+                                        &ptr_instruction);
 
   void fillSoundInstruction(Socket &socket,
-                            std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
+                            std::shared_ptr<RemoteClientInstruction>
+                            &ptr_instruction);
 
   void fillLogInstruction(Socket &socket,
                           std::shared_ptr<RemoteClientInstruction> &ptr);

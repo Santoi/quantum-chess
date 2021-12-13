@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_POSSIBLE_SPLITS_INSTRUCTION_H
 
 #include "instruction.h"
+#include <list>
 
 class PossibleSplitsInstruction : public Instruction {
   const ClientData &instructor_data;
@@ -16,7 +17,8 @@ public:
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

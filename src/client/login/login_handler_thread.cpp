@@ -66,7 +66,7 @@ void LoginHandlerThread::handleTextInput(const std::string &new_text) {
 }
 
 void LoginHandlerThread::handleMouseButtonLeft() {
-  login_state_handler.resetPressedButtons();
+  login_state_handler.resetAllButtonsToNotPressedState();
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {

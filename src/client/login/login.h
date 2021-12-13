@@ -19,21 +19,24 @@ private:
 public:
   Login();
 
+  //Creates a socket using the given ip and port. If either of them
+  //are invalid, exception NetworkAddressInfoException is thrown.
   void connectToServer(const std::string &ip, const std::string &port);
 
   void saveNickName(const std::string &nick_name);
 
   void sendSavedNickNameToServer();
 
+  //Return moved socket.
   Socket getClientSocket();
 
   std::string getClientNickName();
 
-  std::list<ClientData::Role> getAvailableRoles();
+  std::list<ClientData::Role> getAvailableRolesFromServer();
 
-  void sendChosenRole(ClientData::Role role_);
+  void saveAndSendChosenRoleToServer(ClientData::Role role_);
 
-  void chooseMatchNumber(int match_number);
+  void sendChosenMatchToServer(int match_number);
 
   ~Login() = default;
 
@@ -42,6 +45,7 @@ public:
 
   ClientData::Role getRole();
 
+  //Sends to server the refresh matches instruction.
   void refreshMatches();
 };
 

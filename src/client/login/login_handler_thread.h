@@ -21,13 +21,18 @@ private:
 public:
   LoginHandlerThread() = delete;
 
+  //Creates LoginHandlerThread setting was_closed_ = false,
+  //expecting_text_entry = false and parent's attribute open = true.
   LoginHandlerThread(Login &login, LoginStateHandler &login_state_handler);
 
-  // Event loop
+  //Does event loop while client is not connected to match. After finishing loop
+  //open is set to false. If loop was not finished because client closed window,
+  //open is set to false and was_closed is set to true.
   void run() override;
 
   ~LoginHandlerThread() override = default;
 
+  //Returns was_closed boolean.
   bool was_closed() const;
 
 private:

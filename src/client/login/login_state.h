@@ -34,8 +34,10 @@ public:
              ButtonSpriteRepository &button_sprite_repository,
              TextSpriteRepository &text_sprite_repository);
 
+  //Returns a boolean according to the derived State.
   virtual bool clientIsConnectedToMatch() = 0;
 
+  //Derived State renders, via login_scene, its potential buttons and text entries.
   virtual void render(LoginScene &login_scene) = 0;
 
   virtual void fillWithActiveButtons(
@@ -45,11 +47,14 @@ public:
       std::list<std::reference_wrapper<TextEntryButton>> &
       active_text_entries) = 0;
 
+  //Derived State processes list of tokens, potentially communicating with the
+  //server via login attribute.
+  //It returns a int according to the next state.
   virtual int processTokens(std::list<std::string> &&tokens) = 0;
 
   virtual ~LoginState() = default;
 
-  void resetPressedButtons();
+  void resetAllButtonsToNotPressedState();
 };
 
 class ConnectingToServerState : public LoginState {
@@ -59,8 +64,10 @@ public:
                           ButtonSpriteRepository &button_sprite_repository,
                           TextSpriteRepository &text_sprite_repository);
 
+  //Returns false.
   bool clientIsConnectedToMatch() override;
 
+  //Renders connect button and ip, port and nick name text fields.
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
@@ -70,6 +77,10 @@ public:
       std::list<std::reference_wrapper<TextEntryButton>> &
       active_text_entries) override;
 
+  //It pops from the list of tokens in the following order: ip, port and nickname.
+  //If nickname is not valid (see InvalidNickNameException) this exception is thrown.
+  //It calls login method connectToServer (check its documentation for possible exception
+  //throwing). It returns NEXT_STATE_CONNECT_TO_MATCH macro.
   int processTokens(std::list<std::string> &&tokens) override;
 
   ~ConnectingToServerState() override = default;
@@ -88,8 +99,11 @@ public:
                       ButtonSpriteRepository &button_sprite_repository,
                       TextSpriteRepository &text_sprite_repository);
 
+  //Returns false.
   bool clientIsConnectedToMatch() override;
 
+  //Renders upto matches_per_page PickMatchButtons, along with theNextMatchesButton,
+  //PreviousMatchesButton and RefreshMatchesButton.
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
@@ -99,6 +113,17 @@ public:
       std::list<std::reference_wrapper<TextEntryButton>> &
       active_text_entries) override;
 
+  //If tokens.front is equal to "NEXT" and there are buttons in the next page,
+  //then matches_page is incremented.
+  //If it is equal to "PREV" and current matches_page is not the first page, then
+  //matches_page is decremented.
+  //For all of this four cases the KEEP_STATE macro is returned.
+  //Else, tokens.front is considered to be a number. If this number equals UINT16_MAX
+  //login method refreshMatches() is called and macro NEXT_STATE_CONNECT_TO_MATCH
+  //is returned.
+  //Finally, if number (k) is different than UINT16_MAX then login methods
+  //sendChosenMatchToServer(k) and sendSavedNickNameToServer are called and macro
+  //NEXT_STATE_SELECTING_ROLE is returned.
   int processTokens(std::list<std::string> &&tokens) override;
 
   ~SelectingMatchState() override = default;
@@ -110,8 +135,10 @@ public:
   SelectingRoleState(Login &login_, ButtonSpriteRepository &button_repository,
                      TextSpriteRepository &text_repository);
 
+  //Returns false.
   bool clientIsConnectedToMatch() override;
 
+  //Renders all 3 role buttons.
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
@@ -121,12 +148,19 @@ public:
       std::list<std::reference_wrapper<TextEntryButton>> &
       active_text_entries) override;
 
+  //If tokens is empty then exception UnavailableRoleException is thrown.
+  //Else tokens.front is considered to be the selected role: it is transformed
+  //from string to enum and sent to server via login method saveAndSendChosenRoleToServer.
+  //Macro NEXT_STATE_CONNECTED_TO_MATCH is returned.
   int processTokens(std::list<std::string> &&tokens) override;
 
-  ~SelectingRoleState() = default;
+  ~SelectingRoleState() override = default;
 
 private:
 
+  //Creates and adds RoleButton to list of buttons according to if role_ is in
+  //the available_roles list. Type string denotes the key to access the button image
+  //in the button repository.
   void addActiveOrInactiveRoleButtonWithImages(ClientData::Role role_,
                                                ButtonSpriteRepository &button_repository,
                                                TextSpriteRepository &text_repository,
@@ -144,8 +178,10 @@ public:
                         ButtonSpriteRepository &button_sprite_repository,
                         TextSpriteRepository &text_sprite_repository);
 
+  //Returns true.
   bool clientIsConnectedToMatch() override;
 
+  //Renders nothing.
   void render(LoginScene &login_scene) override;
 
   void fillWithActiveButtons(
@@ -155,6 +191,7 @@ public:
       std::list<std::reference_wrapper<TextEntryButton>> &
       active_text_entries) override;
 
+  //Automatically returns NO_NEXT_STATE macro.
   int processTokens(std::list<std::string> &&tokens) override;
 
   ~ConnectedToMatchState() override = default;

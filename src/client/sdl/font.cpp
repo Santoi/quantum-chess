@@ -13,17 +13,14 @@
 #define PURPLE {0x80, 0x00, 0x80}
 #define TEAL {0x00, 0xff, 0xff}
 
-#ifndef QCHESS_PATH
-#define QCHESS_PATH ""
-#endif
 #define BUTTONS_PATH "resources/fonts/"
 
 Font::Font(int ptx, int index)
         : ttf(),
-          regular_font(QCHESS_PATH BUTTONS_PATH "font-regular.ttf", ptx, index),
-          mono_font(QCHESS_PATH BUTTONS_PATH "erusfont.pcf", ptx, index),
-          bold_font(QCHESS_PATH BUTTONS_PATH "erusfontbold.pcf", ptx, index),
-          italic_font(QCHESS_PATH BUTTONS_PATH "font-italic.ttf", ptx, index) {
+          regular_font(BUTTONS_PATH "font-regular.ttf", ptx, index),
+          mono_font(BUTTONS_PATH "erusfont.pcf", ptx, index),
+          bold_font(BUTTONS_PATH "erusfontbold.pcf", ptx, index),
+          italic_font(BUTTONS_PATH "font-italic.ttf", ptx, index) {
   colors = {
           {'k', BLACK},
           {'w', WHITE},

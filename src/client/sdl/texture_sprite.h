@@ -5,10 +5,6 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <string>
 
-#ifndef QCHESS_PATH
-#define QCHESS_PATH ""
-#endif
-
 #define DEFAULT_SPRITE "resources/sprites/default.png"
 
 class Renderer;
@@ -16,8 +12,7 @@ class Renderer;
 class TextureSprite : public Sprite {
 public:
   explicit TextureSprite(Renderer &renderer,
-                         const std::string &file_name = QCHESS_PATH
-                                                        DEFAULT_SPRITE,
+                         const std::string &file_name = DEFAULT_SPRITE,
                          int width = 0, int height = 0);
 
   TextureSprite(TextureSprite &&other) = default;

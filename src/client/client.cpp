@@ -25,10 +25,6 @@
 #define FONT_SIZE 10
 #define MAX_CHAR_ENTRY 29
 
-#ifndef QCHESS_PATH
-#define QCHESS_PATH ""
-#endif
-
 #define CONFIG_PATH "config_files/client_config.txt"
 
 void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
@@ -82,7 +78,7 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
 
 // TODO modularizar
 void Client::execute() {
-  std::ifstream config_file(QCHESS_PATH CONFIG_PATH);
+  std::ifstream config_file(CONFIG_PATH);
   ConfigFile config(config_file);
   Window window(std::stoi(config.getValue("res_width")),
                 std::stoi(config.getValue("res_height")));

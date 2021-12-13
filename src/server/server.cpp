@@ -6,10 +6,6 @@
 #include <thread>
 #include <fstream>
 
-#ifndef QCHESS_PATH
-#define QCHESS_PATH ""
-#endif
-
 #define BOARDS_PATH "boards/"
 
 Server::Server(const char *host, const char *service)
@@ -17,7 +13,7 @@ Server::Server(const char *host, const char *service)
 }
 
 void Server::execute(const std::string &filename) {
-  std::string filename_ = QCHESS_PATH BOARDS_PATH + filename;
+  std::string filename_ = BOARDS_PATH + filename;
   std::ifstream file(filename_);
   if (!file.is_open())
     throw std::invalid_argument("file doesnt exist");

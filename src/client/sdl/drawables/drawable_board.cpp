@@ -9,15 +9,12 @@
 
 #define BACKGROUND_TRANSPARENCY 0.4
 
-#ifndef QCHESS_PATH
-#define QCHESS_PATH ""
-#endif
 #define BACKGROUND_SPRITE "resources/sprites/background/stars.jpg"
 
 DrawableBoard::DrawableBoard(Window &window, int width, int height,
                              Font &font) :
         renderer(window.renderer()),
-        background(window.renderer(), QCHESS_PATH BACKGROUND_SPRITE, width,
+        background(window.renderer(), BACKGROUND_SPRITE, width,
                    height),
         chessmen(), board(), positions(),
         chessman_repository(renderer),

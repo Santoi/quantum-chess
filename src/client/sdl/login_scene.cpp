@@ -4,9 +4,6 @@
 
 #define MAX_MATCH_BUTTON_COUNT 8
 
-#ifndef QCHESS_PATH
-#define QCHESS_PATH ""
-#endif
 #define BACKGROUND_SPRITE "resources/sprites/background/login-background.jpg"
 
 LoginScene::LoginScene(Window &window,
@@ -14,7 +11,7 @@ LoginScene::LoginScene(Window &window,
         :
         Scene(window),
         login_state_handler(login_state_handler),
-        background(window.renderer(), QCHESS_PATH BACKGROUND_SPRITE,
+        background(window.renderer(), BACKGROUND_SPRITE,
                    window.getWidth(),
                    window.getHeight()) {}
 

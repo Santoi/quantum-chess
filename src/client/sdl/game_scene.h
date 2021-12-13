@@ -89,6 +89,8 @@ public:
   bool renderingHelpScreen();
 
   bool renderingLeaveMatchScreen();
+
+    bool renderingCoronationScreen();
 };
 
 

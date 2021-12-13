@@ -187,3 +187,7 @@ bool GameScene::renderingLeaveMatchScreen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return render_leave_match_screen;
 }
+
+bool GameScene::renderingCoronationScreen() {
+  return render_coronation_screen;
+}

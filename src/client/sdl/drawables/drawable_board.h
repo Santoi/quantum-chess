@@ -30,11 +30,11 @@ private:
   TileSpriteRepository tile_repository;
   TextSpriteRepository text_repository;
   bool current;
-  std::pair<PixelCoordinate, DrawableTile> current_tile;
+  std::pair<Position, DrawableTile> current_tile;
   std::mutex mutex;
 
 public:
-  DrawableBoard(Window &window, const std::string &image, int width, int height,
+  DrawableBoard(Window &window, int width, int height,
                 Font &font);
 
   ~DrawableBoard() = default;
@@ -63,7 +63,7 @@ public:
 
   void render(CoordinateTransformer &transformer, int width, int height);
 
-  void currentTile(const PixelCoordinate &coordinate);
+  void currentTile(const Position &position);
 
   void setDefaultWithCurrent();
 };

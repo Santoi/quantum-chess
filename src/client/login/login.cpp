@@ -5,7 +5,7 @@
 #include <iostream>
 
 Login::Login()
-        : client_socket_ptr(nullptr) {
+    : client_socket_ptr(nullptr) {
 }
 
 void Login::connectToServer(const std::string &ip_, const std::string &port_) {
@@ -18,7 +18,7 @@ void Login::connectToServer(const std::string &ip_, const std::string &port_) {
 }
 
 void Login::getListOfMatchesInfo(
-        std::map<uint16_t, std::vector<ClientData>> &match_info) {
+    std::map<uint16_t, std::vector<ClientData>> &match_info) {
   ClientProtocol protocol;
   match_info = protocol.receiveMatchesInfo(*client_socket_ptr);
 }

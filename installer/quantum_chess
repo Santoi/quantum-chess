@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /usr/local/share/quantum_chess
+/usr/local/bin/__quantum_chess

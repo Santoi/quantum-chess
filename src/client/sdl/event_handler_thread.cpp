@@ -71,6 +71,13 @@ void EventHandlerThread::handleKeyDown() {
       split = false;
       break;
     }
+    case SDLK_f: {
+      if (!text_entry.isEnabled()) {
+        first_click = second_click = false;
+        game.flipBoard();
+      }
+      break;
+    }
     case SDLK_h: {
       if (!text_entry.isEnabled()) {
           std::cout << "h!" << std::endl;

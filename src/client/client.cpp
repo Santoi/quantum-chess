@@ -25,6 +25,8 @@
 #define FONT_SIZE 10
 #define MAX_CHAR_ENTRY 29
 
+#define CONFIG_PATH "config_files/client_config.txt"
+
 void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
                             HandlerThread &handler, Renderer &renderer,
                             uint8_t frame_rate) {
@@ -119,9 +121,10 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 
-  Game game(window, send, role, font);
+  CoordinateTransformer coordinate_transformer;
+  Game game(window, send, role, font, coordinate_transformer);
   GameScene scene(window, game.getBoard(), font, text_sprite_repository,
-                  button_sprite_repository);
+                  button_sprite_repository, coordinate_transformer);
   Chat chat(send, scene);
   ChessLog chess_log(scene);
   ErrorLog error_log(scene);
@@ -165,15 +168,20 @@ void Client::handleSelectAnotherMatchOrQuit(Login& login,
 }
 
 void Client::execute() {
+  std::cout << "1" << std::endl;
   std::ifstream config_file("config.txt");
+  std::cout << "2" << std::endl;
   ConfigFile config(config_file);
+  std::cout << "3" << std::endl;
   Window window(std::stoi(config.getValue("res_width")),
                 std::stoi(config.getValue("res_height")));
-
+  std::cout << "4" << std::endl;
   uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
   Renderer &renderer = window.renderer();
   Font font(FONT_SIZE);
+  std::cout << "No creado" << std::endl;
   ButtonSpriteRepository button_sprite_repository(renderer);
+  std::cout << "Creado" << std::endl;
   TextSpriteRepository text_sprite_repository(renderer, font);
 
   Login login;

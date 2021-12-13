@@ -17,13 +17,14 @@
 
 GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
                      TextSpriteRepository &text_repository,
-                     ButtonSpriteRepository &button_repository)
+                     ButtonSpriteRepository &button_repository,
+                     CoordinateTransformer &transformer_)
     : Scene(window), font(font), chess(board),
       chat(MAX_CHAT_MESSAGES),
       log(MAX_LOG_MESSAGES), error_log(
         MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
       current_message(text_repository, button_repository, "CHAT HERE"),
-      transformer(), render_help_screen(false),
+      transformer(transformer_), render_help_screen(false),
       render_leave_match_screen(false), mutex(),
       text_repository(text_repository),
       button_repository(button_repository),

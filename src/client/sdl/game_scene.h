@@ -22,7 +22,7 @@ private:
   DrawableContainer<DrawableText> error_log;
   DrawableContainer<DrawableText> turn_log;
   DrawableTextEntryButton current_message;
-  CoordinateTransformer transformer;
+  CoordinateTransformer &transformer;
   bool render_help_screen;
   bool render_leave_match_screen;
   std::mutex mutex;
@@ -39,7 +39,8 @@ private:
 public:
   GameScene(Window &window, DrawableBoard &board, Font &font,
             TextSpriteRepository &text_repository,
-            ButtonSpriteRepository &button_repository);
+            ButtonSpriteRepository &button_repository,
+            CoordinateTransformer &transformer_);
 
   void render() override;
 
@@ -72,15 +73,15 @@ public:
 
   void startRenderingHelpScreen();
 
-    void renderLeaveMatchScreen();
+  void renderLeaveMatchScreen();
 
-    void stopRenderingLeaveScreen();
+  void stopRenderingLeaveScreen();
 
-    void startRenderingLeaveScreen();
+  void startRenderingLeaveScreen();
 
-    bool renderingHelpScreen();
+  bool renderingHelpScreen();
 
-    bool renderingLeaveMatchScreen();
+  bool renderingLeaveMatchScreen();
 };
 
 

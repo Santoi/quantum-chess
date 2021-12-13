@@ -75,7 +75,7 @@ int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
   std::string nick_name = tokens.front();
   size_t length = nick_name.size();
   if (length < MIN_NICK_NAME_LENGTH || length > MAX_NICK_NAME_LENGTH)
-      throw InvalidNickNameException();
+    throw InvalidNickNameException();
   login.connectToServer(ip, port);
   login.saveNickName(nick_name);
   return NEXT_STATE_CONNECT_TO_MATCH;
@@ -91,6 +91,12 @@ SelectingMatchState::SelectingMatchState(Login &login_,
       refresh_matches_button(button_sprite_repository, text_sprite_repository),
       matches_page(0),
       matches_per_page(MATCHES_PER_PAGE) {
+  std::vector<ClientData> empty_clients_list;
+  buttons_ptr.push_back(
+      make_unique<PickMatchButton>(button_sprite_repository,
+                                   text_sprite_repository,
+                                   empty_clients_list,
+                                   0));
   std::map<uint16_t, std::vector<ClientData>> match_info;
   login.getListOfMatchesInfo(match_info);
   for (auto it = match_info.begin(); it != match_info.end(); ++it)
@@ -99,12 +105,6 @@ SelectingMatchState::SelectingMatchState(Login &login_,
                                      text_sprite_repository,
                                      it->second,
                                      it->first));
-  std::vector<ClientData> empty_clients_list;
-  buttons_ptr.push_back(
-      make_unique<PickMatchButton>(button_sprite_repository,
-                                   text_sprite_repository,
-                                   empty_clients_list,
-                                   0));
 }
 
 bool SelectingMatchState::clientIsConnectedToMatch() {
@@ -195,7 +195,7 @@ SelectingRoleState::SelectingRoleState(Login &login_,
                                           available_roles, "role_spectator");
   buttons_ptr.emplace_back(std::move(
           make_unique<ReturnToMatchSelectionButton>(button_repository,
-                                                     text_repository,"RETURN")));
+                                                     text_repository,"action")));
 }
 
 bool SelectingRoleState::clientIsConnectedToMatch() {

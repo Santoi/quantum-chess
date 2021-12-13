@@ -27,7 +27,7 @@ ClientProtocol::receiveMatchesInfo(Socket &socket) {
       client_data_vector.push_back(std::move(data));
     }
     matches_info.insert(
-            std::make_pair(match_id, std::move(client_data_vector)));
+        std::make_pair(match_id, std::move(client_data_vector)));
   }
   return matches_info;
 }
@@ -203,7 +203,7 @@ void ClientProtocol::fillLoadBoardInstruction(Socket &socket,
   }
   bool white = getNumber8FromSocket(socket);
   ptr_instruction = make_unique<RemoteClientLoadBoardInstruction>(
-          std::move(chessman_data_vector), white);
+      std::move(chessman_data_vector), white);
 }
 
 void ClientProtocol::fillShortLogInstruction(Socket &socket,
@@ -224,7 +224,7 @@ void ClientProtocol::fillPossibleMovesInstruction(Socket &socket,
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientPossibleMovesInstruction>(
-          std::move(posible_moves));
+      std::move(posible_moves));
 }
 
 void ClientProtocol::fillPossibleSplitsInstruction(Socket &socket,
@@ -238,7 +238,7 @@ void ClientProtocol::fillPossibleSplitsInstruction(Socket &socket,
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientPossibleSplitsInstruction>(
-          std::move(posible_moves));
+      std::move(posible_moves));
 }
 
 void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
@@ -252,7 +252,7 @@ void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientPossibleMergesInstruction>(
-          std::move(posible_moves));
+      std::move(posible_moves));
 }
 
 void ClientProtocol::fillSameChessmanInstruction(Socket &socket,
@@ -266,7 +266,7 @@ void ClientProtocol::fillSameChessmanInstruction(Socket &socket,
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientSameChessmanInstruction>(
-          std::move(posible_moves));
+      std::move(posible_moves));
 }
 
 void ClientProtocol::fillEntangledChessmanInstruction(Socket &socket,
@@ -280,7 +280,7 @@ void ClientProtocol::fillEntangledChessmanInstruction(Socket &socket,
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientEntangledChessmanInstruction>(
-          std::move(posible_moves));
+      std::move(posible_moves));
 }
 
 void ClientProtocol::fillSoundInstruction(Socket &socket,

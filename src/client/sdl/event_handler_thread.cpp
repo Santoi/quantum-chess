@@ -119,7 +119,7 @@ void EventHandlerThread::handleKeyDown() {
         std::cout << "s!" << std::endl;
         if (!game_scene.renderingLeaveMatchScreen())
           return;
-        //game.surrender()
+        game.surrender()
       }
       break;
     }

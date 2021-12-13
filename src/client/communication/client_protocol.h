@@ -22,6 +22,7 @@
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
 #define LOG_PREFIX 'j'
+#define SURRENDER_PREFIX 'z'
 
 class RemoteClientInstruction;
 
@@ -85,6 +86,8 @@ public:
 
   void fillPacketWithMergeMessage(Packet &packet, const Position &from1,
                                   const Position &from2, const Position &to);
+
+  void fillPacketWithSurrenderMessage(Packet &packet);
 
 private:
   //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick

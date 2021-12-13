@@ -148,6 +148,9 @@ void ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
   addNumber8ToPacket(packet, position.y());
 }
 
+void ClientProtocol::fillPacketWithSurrenderMessage(Packet &packet) {
+  packet.addByte(SURRENDER_PREFIX);
+}
 
 void ClientProtocol::sendInstruction(Socket &socket,
                                      std::shared_ptr<RemoteClientInstruction> &instruction) {

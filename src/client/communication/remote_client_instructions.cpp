@@ -270,4 +270,14 @@ void
 RemoteClientLogInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                              ClientProtocol &protocol) {}
 
+void
+RemoteClientSurrenderInstruction::makeAction(Game &game, Chat &chat,
+                                             ChessLog &chess_log,
+                                             ErrorLog &error_log,
+                                             TurnLog &turn_log) {
+}
 
+void RemoteClientSurrenderInstruction::fillPacketWithInstructionsToSend(Packet &packet,
+                                      ClientProtocol &protocol) {
+  protocol.fillPacketWithSurrenderMessage(packet);
+}

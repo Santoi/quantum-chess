@@ -163,6 +163,8 @@ public:
 };
 
 class ChooseToKeepPlayingState : public LoginState {
+private:
+    TextureSprite *question_sprite;
 
 public:
     ChooseToKeepPlayingState(Login& login, ButtonSpriteRepository &button_sprite_repository,

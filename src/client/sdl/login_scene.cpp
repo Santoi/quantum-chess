@@ -138,16 +138,31 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
                                            button_height * 2,
                                            button_width,
                                            button_height);
-  return_button.setAreaAndPosition(10, 20, 554/2, 234/2);
+  return_button.setAreaAndPosition(width / 2 - button_width / 2 + delta_x,
+                                   button_height * 4,
+                                   button_width,
+                                   button_height / 2);
   white_role_button.render();
   black_role_button.render();
   spectator_role_button.render();
   return_button.render();
 }
 
-void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button) {
-  yes_button.setAreaAndPosition(200, 100, 50, 50);
-  no_button.setAreaAndPosition(400, 100, 50, 50);
+void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button,
+                                               TextureSprite& question_text) {
+  size_t width = window.getWidth();
+  size_t button_height = width * .1, button_width = width * .1;
+  size_t delta_x = width * .01;
+
+  yes_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
+                                button_height * 2,
+                                button_width,
+                                button_height);
+  no_button.setAreaAndPosition(width / 2 + button_width + delta_x,
+                               button_height * 2,
+                               button_width,
+                               button_height);
   yes_button.render();
   no_button.render();
+  question_text.render(0, 0, width, width * 0.2);
 }

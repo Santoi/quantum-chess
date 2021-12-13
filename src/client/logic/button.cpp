@@ -80,7 +80,6 @@ bool PickMatchButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                           std::list<std::string> &tokens) {
   if (drawable.pixelIsOnButton(pixel_)) {
     std::string str_match_number = std::to_string(match_id);
-    std::cout << "sending" << str_match_number << std::endl;
     tokens.push_back(std::move(str_match_number));
     return true;
   }

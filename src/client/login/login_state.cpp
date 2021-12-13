@@ -270,7 +270,8 @@ int ConnectedToMatchState::processTokens(std::list<std::string> &&tokens) {
 ChooseToKeepPlayingState::ChooseToKeepPlayingState(Login& login_,
                                                    ButtonSpriteRepository &button_sprite_repository,
                                                    TextSpriteRepository &text_sprite_repository)
-                         :LoginState(login_, button_sprite_repository, text_sprite_repository) {
+                         :LoginState(login_, button_sprite_repository, text_sprite_repository),
+                          question_sprite(&button_sprite_repository.getPressed("keep_playing")){
   buttons_ptr.push_back(std::move(
           make_unique<OptionButton>(button_sprite_repository,
                                       text_sprite_repository, "YES", "yes")));
@@ -285,7 +286,7 @@ bool ChooseToKeepPlayingState::clientIsConnectedToMatch() {
 
 void ChooseToKeepPlayingState::render(LoginScene &login_scene) {
   login_scene.renderLeaveMatchOptionButtons(*buttons_ptr[0],
-                                            *buttons_ptr[1]);
+                                            *buttons_ptr[1], *question_sprite);
 }
 
 void ChooseToKeepPlayingState::fillWithActiveButtons(

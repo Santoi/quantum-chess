@@ -21,7 +21,10 @@ Game::Game(Window &window,
         board(window, x_scale, y_scale, font),
         send_queue(send_queue_), transformer(transformer_), mutex(),
         role(role_),
-        sound_handler(window.sound_handler()) {}
+        sound_handler(window.sound_handler()) {
+  if (role == ClientData::ROLE_BLACK)
+    flipBoard();
+}
 
 void Game::setScale(int x_scale_, int y_scale_) {
   std::lock_guard<std::mutex> lock_guard(mutex);

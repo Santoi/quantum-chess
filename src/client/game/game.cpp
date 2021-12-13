@@ -15,10 +15,12 @@
 
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_, Font &font) :
+           ClientData::Role role_, Font &font,
+           CoordinateTransformer &transformer_) :
         x_scale(window.getWidth()), y_scale(window.getHeight()),
         board(window, x_scale, y_scale, font),
-        send_queue(send_queue_), mutex(), role(role_),
+        send_queue(send_queue_), transformer(transformer_), mutex(),
+        role(role_),
         sound_handler(window.sound_handler()) {}
 
 void Game::setScale(int x_scale_, int y_scale_) {
@@ -138,9 +140,7 @@ void Game::currentTile(const PixelCoordinate &coordinate) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   Position position;
   transformer.pixel2Position(coordinate, position, x_scale, y_scale);
-  PixelCoordinate new_coordinate;
-  transformer.position2Pixel(position, new_coordinate, x_scale, y_scale);
-  board.currentTile(new_coordinate);
+  board.currentTile(position);
 }
 
 void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
@@ -219,4 +219,9 @@ DrawableBoard &Game::getBoard() {
 ClientData::Role Game::getPlayerRole() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return role;
+}
+
+void Game::flipBoard() {
+  setDefaultBoard();
+  transformer.flip();
 }

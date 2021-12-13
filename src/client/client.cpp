@@ -104,9 +104,10 @@ void Client::execute() {
   RemoteClientSender sender_thread(socket, send);
   RemoteClientReceiver receiver_thread(socket, received);
 
-  Game game(window, send, role, font);
+  CoordinateTransformer coordinate_transformer;
+  Game game(window, send, role, font, coordinate_transformer);
   GameScene scene(window, game.getBoard(), font, text_sprite_repository,
-                  button_sprite_repository);
+                  button_sprite_repository, coordinate_transformer);
   Chat chat(send, scene);
   ChessLog chess_log(scene);
   ErrorLog error_log(scene);

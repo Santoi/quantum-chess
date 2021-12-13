@@ -24,7 +24,7 @@ private:
   int x_scale, y_scale;
   DrawableBoard board;
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  CoordinateTransformer transformer;
+  CoordinateTransformer &transformer;
   std::mutex mutex;
   ClientData::Role role;
   SoundHandler &sound_handler;
@@ -32,7 +32,8 @@ private:
 public:
   Game(Window &window,
        BlockingQueue<RemoteClientInstruction> &send_queue_,
-       ClientData::Role role_, Font &font);
+       ClientData::Role role_, Font &font,
+       CoordinateTransformer &coordinate_transformer_);
 
   void setScale(int x_scale_, int y_scale_);
 
@@ -90,6 +91,8 @@ public:
   void setDefaultBoardWithCurrent();
 
   ClientData::Role getPlayerRole();
+
+  void flipBoard();
 };
 
 

@@ -12,6 +12,7 @@
 #include "instructions/same_chessman_instruction.h"
 #include "instructions/entangled_chessman_instruction.h"
 #include "instructions/merge_instruction.h"
+#include "instructions/surrender_instruction.h"
 #include "../../common/socket_closed.h"
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -191,7 +192,10 @@ void ServerProtocol::fillEntangledChessmenInstruction(Socket &socket,
                                                                 std::move(
                                                                         positions));
 }
-
+void ServerProtocol::fillSurrenderInstruction(Socket &socket, const ClientData &data,
+                                              std::shared_ptr<Instruction> &instruc_ptr) {
+  instruc_ptr = std::make_shared<SurrenderInstruction>(data);
+}
 
 void
 ServerProtocol::receiveAndFillInstruction(Socket &socket,
@@ -232,6 +236,8 @@ ServerProtocol::receiveAndFillInstruction(Socket &socket,
     case MERGE_PREFIX:
       fillMergeInstruction(socket, client_data, instruct_ptr);
       break;
+    case SURRENDER_PREFIX:
+      fillSurrenderInstruction(socket, client_data, instruct_ptr);
     default:
       throw std::runtime_error("invalid message received");
   }
@@ -349,12 +355,12 @@ void ServerProtocol::fillPacketWithSoundMessage(Packet &packet, uint8_t sound) {
   addNumber8ToPacket(packet, sound);
 }
 
-
-
-
-
-
-
-
-
+void ServerProtocol::fillPacketWithSurrenderMessage(Packet &packet,
+                                                    const ClientData &client_data,
+                                                    std::string timestamp) {
+  packet.addByte(SURRENDER_PREFIX);
+  changeNumberToBigEndianAndAddToPacket(packet, client_data.id);
+  addStringAndItsLengthToPacket(packet, client_data.name);
+  addStringAndItsLengthToPacket(packet, timestamp);
+}
 

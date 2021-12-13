@@ -56,6 +56,7 @@
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
 #define LOG_PREFIX 'j'
+#define SURRENDER_PREFIX 'z'
 
 class Instruction;
 
@@ -145,6 +146,9 @@ public:
 
   ~ServerProtocol() = default;
 
+    void
+    fillPacketWithSurrenderMessage(Packet &packet, const ClientData &data, std::string time_stamp);
+
 private:
   // Creates a chat instruction receiving the incoming message.
   void fillChatInstruction(Socket &socket, const ClientData &client_data,
@@ -188,6 +192,9 @@ private:
                                         const ClientData &client_data,
                                         std::shared_ptr<Instruction>
                                         &instruct_ptr);
+
+    void fillSurrenderInstruction(Socket &socket, const ClientData &data,
+                                  std::shared_ptr<Instruction> &instruc_ptr);
 };
 
 

@@ -111,6 +111,17 @@ void EventHandlerThread::handleKeyDown() {
       }
       break;
     }
+    case SDLK_q:
+    case SDLK_b:
+    case SDLK_k:
+    case SDLK_t: {
+      if (!text_entry.isEnabled()) {
+        if (!game_scene.renderingCoronationScreen())
+          return;
+        game.coronatePawnTo(event.key.keysym.sym);
+      }
+      break;
+    }
     case SDLK_n: {
       if (!text_entry.isEnabled())
         game.toggleSounds();

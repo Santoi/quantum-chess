@@ -114,6 +114,24 @@ void EventHandlerThread::handleKeyDown() {
       }
       break;
     }
+    case SDLK_s: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "s!" << std::endl;
+        if (!game_scene.renderingLeaveMatchScreen())
+          return;
+        //game.surrender()
+      }
+      break;
+    }
+    case SDLK_o: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "o!" << std::endl;
+        if (!game_scene.renderingLeaveMatchScreen())
+          return;
+        //game.request tie()
+      }
+      break;
+    }
     case SDLK_BACKSPACE: {
       if (text_entry.isEnabled())
         text_entry.backspace();

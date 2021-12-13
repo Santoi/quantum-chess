@@ -305,6 +305,19 @@ void ClientProtocol::fillLogInstruction(Socket &socket,
   ptr = std::make_shared<RemoteClientLogInstruction>(std::move(log));
 }
 
+void ClientProtocol::fillSurrenderInstruction(Socket &socket,
+                                              std::shared_ptr<RemoteClientInstruction> &ptr_instruction) {
+  std::string nick_name;
+  uint16_t client_id;
+  std::string timestamp;
+  client_id = getNumber16FromSocket(socket);
+  getMessageFromSocket(socket, nick_name);
+  getMessageFromSocket(socket, timestamp);
+  ptr_instruction = make_unique<RemoteClientSurrenderInstruction>(client_id,
+                                                             nick_name,
+                                                             timestamp);
+}
+
 void ClientProtocol::receiveInstruction(Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction> &
                                         ptr_instruction) {
@@ -347,5 +360,7 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case LOG_PREFIX:
       fillLogInstruction(socket, ptr_instruction);
       break;
+    case SURRENDER_PREFIX:
+      fillSurrenderInstruction(socket, ptr_instruction);
   }
 }

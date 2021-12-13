@@ -270,11 +270,20 @@ void
 RemoteClientLogInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                              ClientProtocol &protocol) {}
 
+RemoteClientSurrenderInstruction::RemoteClientSurrenderInstruction(uint16_t client_id,
+                                                                const std::string &nick_name_,
+                                                                const std::string &time_stamp_)
+                                                                :client_id(client_id),
+                                                                 nick_name(nick_name_),
+                                                                 time_stamp(time_stamp_) {
+}
+
 void
 RemoteClientSurrenderInstruction::makeAction(Game &game, Chat &chat,
                                              ChessLog &chess_log,
                                              ErrorLog &error_log,
                                              TurnLog &turn_log) {
+  //Put in log ?
 }
 
 void RemoteClientSurrenderInstruction::fillPacketWithInstructionsToSend(Packet &packet,

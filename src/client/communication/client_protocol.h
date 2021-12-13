@@ -130,6 +130,9 @@ private:
 
   void fillLogInstruction(Socket &socket,
                           std::shared_ptr<RemoteClientInstruction> &ptr);
+
+  void fillSurrenderInstruction(Socket &socket,
+                                std::shared_ptr<RemoteClientInstruction> &sharedPtr);
 };
 
 #endif //QUANTUM_CHESS_PROJ_CLIENT_PROTOCOL_H

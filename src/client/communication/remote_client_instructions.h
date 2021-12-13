@@ -329,11 +329,16 @@ public:
 
 class RemoteClientSurrenderInstruction
         : public RemoteClientInstruction {
-    std::list<std::string> log;
+    const uint16_t client_id;
+    const std::string nick_name;
+    const std::string time_stamp;
 
 public:
     RemoteClientSurrenderInstruction() = default;
 
+    RemoteClientSurrenderInstruction(uint16_t client_id,
+                                     const std::string &nick_name,
+                                     const std::string &time_stamp);
     void
     makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
                TurnLog &turn_log);

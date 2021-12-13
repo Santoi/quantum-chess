@@ -28,7 +28,8 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
       text_repository(text_repository),
       button_repository(button_repository),
       help_sprite(&button_repository.getPressed("help")),
-      leave_sprite(&button_repository.getPressed("leave")) {}
+      leave_sprite(&button_repository.getPressed("leave")),
+      coronation_sprite(&button_repository.getPressed("coronation")) {}
 
 void
 GameScene::addChatMessage(const std::string &nickname, const std::string &id,
@@ -70,7 +71,7 @@ void GameScene::addCurrentMessage(const std::string &text) {
 
 void GameScene::renderCoronationScreen() {
   int width = window.getWidth(), height = window.getHeight();
-  leave_sprite->render(0, 0, width, height);
+  coronation_sprite->render(0, 0, width, height);
 }
 
 

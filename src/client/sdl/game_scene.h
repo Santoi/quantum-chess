@@ -31,6 +31,7 @@ private:
   ButtonSpriteRepository &button_repository;
   TextureSprite* help_sprite;
   TextureSprite* leave_sprite;
+  TextureSprite* coronation_sprite;
   std::string current_message_text;
 
   void renderHelpScreen();

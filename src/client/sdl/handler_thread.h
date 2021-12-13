@@ -4,23 +4,19 @@
 #include "../../common/thread.h"
 #include <atomic>
 
-class HandlerThread: public Thread {
+class HandlerThread : public Thread {
 protected:
-    std::atomic<bool> open;
+  std::atomic<bool> open;
 
 public:
-    HandlerThread();
+  HandlerThread();
 
-    HandlerThread(bool open_);
+  explicit HandlerThread(bool open_);
 
-    //Returns open boolean.
-    bool isOpen();
+  // Tells if thread is active
+  bool isOpen();
 
-    ~HandlerThread() = default;
-
-private:
-
-    virtual void run() = 0;
+  ~HandlerThread() override = default;
 };
 
 #endif //QUANTUM_CHESS_PROJ_HANDLER_THREAD_H

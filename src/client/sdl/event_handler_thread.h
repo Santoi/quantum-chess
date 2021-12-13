@@ -19,17 +19,33 @@ private:
   SDL_Event event;
   Chat &chat;
 
+  // Toggle music, sounds or special move options according to the pressed key
   void handleKeyDown();
 
+  // Toggle special move options according to the key
   void handleKeyUp();
 
+  // Handle chessman movement, splitting and merging if click is on the board
+  // Otherwise handle chat input
   void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
 
+  // Handle entangled and quantum chessmen relations
   void handleMouseButtonRight(SDL_MouseButtonEvent &mouse);
 
+  // Resize the game window
   void handleWindowChange(SDL_WindowEvent &window_event);
 
+  // Read text input if enabled
   void handleTextInput(const std::string &text);
+
+  // Setup movement, split and merge first click
+  void handleUserFirstClick(PixelCoordinate &pixel);
+
+  // Setup movement, split and merge second click
+  void handleUserSecondClick(PixelCoordinate &pixel);
+
+  // Setup split and merge third click
+  void handleUserThirdClick(PixelCoordinate &pixel);
 
 public:
   explicit EventHandlerThread(Window &window, Game &game,
@@ -37,8 +53,6 @@ public:
 
   // Event loop
   void run() override;
-
-  bool isOpen();
 };
 
 

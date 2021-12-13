@@ -21,7 +21,7 @@ TextEntryButton::setAreaAndPosition(int x_, int y_, int width, int height) {
 
 bool TextEntryButton::enableTextEntryIfClicked(const PixelCoordinate &pixel_) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  if (drawable_text_button.pixelIsOnTextEntry(pixel_)) {
+  if (drawable_text_button.isPixelOnTextEntry(pixel_)) {
     expecting_text_entry = true;
     text_entry.enableEntry();
     return true;

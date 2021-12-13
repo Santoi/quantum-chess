@@ -112,12 +112,6 @@ void LoginScene::renderChoosingMatchButtons(
   refresh_matches_button.render();
 }
 
-void LoginScene::renderConnectedSprite(TextureSprite &texture) {
-  size_t width = window.getWidth();
-  size_t height = window.getHeight();
-  texture.render(0, 0, width, height);
-}
-
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
                                     Button &spectator_role_button) {

@@ -19,25 +19,21 @@ public:
 
   TextureSprite &operator=(TextureSprite &&other) noexcept;
 
-  // Render the current sprite from (x, y) to (x + width, y + height)
+  // Render the source area from the original sprite
+  // from (x, y) to (x + width, y + height)
   void render(size_t x_src, size_t y_src, size_t x, size_t y,
               size_t width_src, size_t height_src, size_t width, size_t height);
 
-  void render(size_t x, size_t y, size_t width, size_t height);
+  void render(size_t x, size_t y, size_t width, size_t height) override;
 
-  void render(size_t x, size_t y);
+  void render(size_t x, size_t y) override;
 
+  // Set blend mode to be able to set alpha
   void setBlendMode(int blendMode);
 
   void setAlpha(float alpha);
 
-  float getAlpha() const;
-
-  int getImageWidth() const;
-
   int getImageHeight() const;
-
-  void loadImage(const std::string &file_name, int width = 0, int height = 0);
 
   ~TextureSprite();
 };

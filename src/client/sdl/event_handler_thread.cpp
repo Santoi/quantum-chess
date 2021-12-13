@@ -42,10 +42,6 @@ void EventHandlerThread::run() {
   }
 }
 
-bool EventHandlerThread::isOpen() {
-  return open;
-}
-
 void EventHandlerThread::handleKeyDown() {
   switch (event.key.keysym.sym) {
     case SDLK_ESCAPE: {
@@ -126,52 +122,19 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       Position pos(0, i);
       coords.push_back(pos);
     }
+
     if (!first_click) { // actually, if this is the first click
-      game.currentTile(pixel);
-      if (split)
-        game.askSplitTiles(pixel);
-      else if (merge)
-        game.askMergeTiles(pixel);
-      else
-        game.askMoveTiles(pixel);
-      first_click = true;
-      last_click = pixel;
+      handleUserFirstClick(pixel);
       return;
     }
 
     if (!second_click) { // actually, if this is the second click
-      if (split) {
-        penultimate_click = last_click;
-        last_click = pixel;
-        second_click = true;
-      } else if (merge) {
-        penultimate_click = last_click;
-        game.askMergeTiles(pixel, last_click);
-        last_click = pixel;
-        second_click = true;
-      } else {
-        game.moveChessman(last_click, pixel);
-        game.setDefaultBoard();
-        first_click = false;
-      }
+      handleUserSecondClick(pixel);
       return;
     }
 
     // third click
-    if (split) {
-      game.splitChessman(penultimate_click, last_click, pixel);
-      game.setDefaultBoard();
-      first_click = false;
-      second_click = false;
-      split = false;
-    }
-    if (merge) {
-      game.mergeChessman(penultimate_click, last_click, pixel);
-      game.setDefaultBoard();
-      first_click = false;
-      second_click = false;
-      merge = false;
-    }
+    handleUserThirdClick(pixel);
   }
   catch(const ChessException &e) {
     std::cerr << e.what() << std::endl;
@@ -209,4 +172,50 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
       chat.sendMessage(text_entry.getText());
       text_entry.clear();
     }
+}
+
+void EventHandlerThread::handleUserFirstClick(PixelCoordinate &pixel) {
+  game.currentTile(pixel);
+  if (split)
+    game.askSplitTiles(pixel);
+  else if (merge)
+    game.askMergeTiles(pixel);
+  else
+    game.askMoveTiles(pixel);
+  first_click = true;
+  last_click = pixel;
+}
+
+void EventHandlerThread::handleUserSecondClick(PixelCoordinate &pixel) {
+  if (split) {
+    penultimate_click = last_click;
+    last_click = pixel;
+    second_click = true;
+  } else if (merge) {
+    penultimate_click = last_click;
+    game.askMergeTiles(pixel, last_click);
+    last_click = pixel;
+    second_click = true;
+  } else {
+    game.moveChessman(last_click, pixel);
+    game.setDefaultBoard();
+    first_click = false;
+  }
+}
+
+void EventHandlerThread::handleUserThirdClick(PixelCoordinate &pixel) {
+  if (split) {
+    game.splitChessman(penultimate_click, last_click, pixel);
+    game.setDefaultBoard();
+    first_click = false;
+    second_click = false;
+    split = false;
+  }
+  if (merge) {
+    game.mergeChessman(penultimate_click, last_click, pixel);
+    game.setDefaultBoard();
+    first_click = false;
+    second_click = false;
+    merge = false;
+  }
 }

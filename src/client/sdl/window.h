@@ -18,7 +18,7 @@ private:
   SoundHandler sound_handler_;
 
 public:
-  Window(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
+  explicit Window(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 
   SDL2pp::Window &window();
 

@@ -29,12 +29,11 @@ private:
                           size_t match_to_render);
 
 public:
-
   LoginScene() = delete;
 
-  LoginScene(Window &window,
-             LoginStateHandler &login_state_handler);
+  LoginScene(Window &window, LoginStateHandler &login_state_handler);
 
+  // Render the current login state scene
   void render();
 
   void renderChoosingMatchButtons(
@@ -44,8 +43,6 @@ public:
       RefreshMatchesButton &refresh_matches_button, size_t matches_page,
       size_t matches_per_page);
 
-  void renderConnectedSprite(TextureSprite &texture);
-
   void renderConnectionToServerButtons(Button &connect_button,
                                        TextEntryButton &ip_text_entry,
                                        TextEntryButton &port_text_entry,
@@ -53,7 +50,6 @@ public:
 
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
                           Button &spectator_role_button);
-
 };
 
 

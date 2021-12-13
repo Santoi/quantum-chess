@@ -87,11 +87,6 @@ int GameScene::getChatWidth() {
   return CHAT_WIDTH;
 }
 
-int GameScene::getChatHeight() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
-  return window.getHeight();
-}
-
 int GameScene::getChessWidth() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return window.getWidth() - CHAT_WIDTH;
@@ -103,11 +98,11 @@ int GameScene::getChessHeight() {
 }
 
 bool GameScene::wasChatClicked(PixelCoordinate &pixel) {
-  return current_message.pixelIsOnTextEntry(pixel);
+  return current_message.isPixelOnTextEntry(pixel);
 }
 
 void GameScene::disableChat() {
   // hack, chat is never there
   PixelCoordinate p(0, 0);
-  current_message.pixelIsOnTextEntry(p);
+  current_message.isPixelOnTextEntry(p);
 }

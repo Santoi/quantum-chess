@@ -29,21 +29,22 @@ class ClientProtocol : public Protocol {
 public:
   ClientProtocol() = default;
 
-  //Given the client socket, it returns the number of games running in server.
+  //Given the client socket, it returns the number of games running in server
   std::map<uint16_t, std::vector<ClientData>>
   receiveMatchesInfo(Socket &socket);
 
-  //It sends to the client socket the game_number received as parameter.
+  //It sends to the client socket the game_number received as parameter
   void sendChosenGame(Socket &socket, uint16_t game_number);
 
-  //It sends to the client socket the client's nick_name, following the protocol.
+  //It sends to the client socket the client's nick_name, following the protocol
   void sendClientsNickName(Socket &socket, std::string &nick_name);
 
   void fillPacketWithChatMessage(Packet &packet, const std::string &message);
 
-  //Following the protocol, it receives from socket the information necessary to create the
-  //appropiate RemoteClientInstruction. After the function ends, the ptr_instruction points to a
-  //valid instruction that can be executed calling the makeAction instruction.
+  //Following the protocol, it receives from socket the information necessary
+  // to create the appropriate RemoteClientInstruction.
+  // After the function ends, the ptr_instruction points to a valid instruction
+  // that can be executed calling the makeAction instruction
   void receiveInstruction(Socket &socket,
                           std::shared_ptr<RemoteClientInstruction> &ptr_instruction);
 
@@ -87,16 +88,18 @@ public:
                                   const Position &from2, const Position &to);
 
 private:
-  //Gets necessary information to create the RemoteClientChatInstruction (the instructor's nick
-  //name and the corresponding message). After the function ends, the ptr_instruction points to this
-  //new ChatInstruction.
+  // Gets necessary information to create the RemoteClientChatInstruction
+  // (the instructor's nickname and the corresponding message)
+  // After the function ends, the ptr_instruction points to this
+  // new ChatInstruction
   void fillChatInstruction(Socket &socket,
                            std::shared_ptr<RemoteClientInstruction> &
                            ptr_instruction);
 
-  //Gets necessary information to create the RemoteClientExitMessageInstruction (the instructor's nick
-  //name, this is, the person that left the match). After the function ends, the ptr_instruction
-  //points to this new ExitInstruction.
+  // Gets necessary information to create the RemoteClientExitMessageInstruction
+  // (the instructor's nickname, this is, the person that left the match)
+  // After the function ends, the ptr_instruction points to this
+  // new ExitInstruction
   void fillExitInstruction(Socket &socket,
                            std::shared_ptr<RemoteClientInstruction> &
                            ptr_instruction);

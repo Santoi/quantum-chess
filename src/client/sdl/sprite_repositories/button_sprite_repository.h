@@ -8,15 +8,19 @@ class ButtonSpriteRepository {
   std::map<std::string, TextureSprite> pressed;
   std::map<std::string, TextureSprite> released;
 
+  // Load all pressed button sprites
   void loadPressed(Renderer &renderer);
 
+  // Load all released button sprites
   void loadReleased(Renderer &renderer);
 
 public:
   explicit ButtonSpriteRepository(Renderer &renderer);
 
+  // Get the sprite matched to string
   TextureSprite &getPressed(const std::string &string);
 
+  // Get the sprite matched to string
   TextureSprite &getReleased(const std::string &string);
 };
 

@@ -344,5 +344,7 @@ void ClientProtocol::receiveInstruction(Socket &socket,
     case LOG_PREFIX:
       fillLogInstruction(socket, ptr_instruction);
       break;
+    default:
+      break;
   }
 }

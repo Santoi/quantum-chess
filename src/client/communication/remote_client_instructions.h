@@ -60,8 +60,8 @@ private:
 public:
   RemoteClientChatInstruction() = delete;
 
-  //Creates a RemoteClientChatInstruction saving the nick_name and message passed as function
-  //parameters.
+  //Creates a RemoteClientChatInstruction saving the nick_name
+  // and message passed as function parameters.
   RemoteClientChatInstruction(uint16_t client_id,
                               std::string nick_name,
                               std::string message,
@@ -86,8 +86,8 @@ class RemoteClientExitMessageInstruction : public RemoteClientInstruction {
 public:
   RemoteClientExitMessageInstruction() = delete;
 
-  //Creates a RemoteClientExitMessageInstruction saving the nick_name of the person leaving
-  //passed as function parameters.
+  //Creates a RemoteClientExitMessageInstruction saving the nick_name of the
+  // person leaving passed as function parameters.
   RemoteClientExitMessageInstruction(const std::string &nick_name);
 
   //Prints to stdout "instructor_nick_name left the game"

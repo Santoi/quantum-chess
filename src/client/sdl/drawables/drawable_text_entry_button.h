@@ -34,10 +34,13 @@ public:
   void setAreaAndPosition(int x_, int y_, int width_,
                           int height_);
 
-  bool pixelIsOnTextEntry(const PixelCoordinate &pixel);
+  // Sets and returns pressed state regarding if the pixel is on the button
+  bool isPixelOnTextEntry(const PixelCoordinate &pixel);
 
+  // Render the input text inside the button,
+  // or a default text if input is empty
   void render(const std::string &current_text);
-
 };
+
 
 #endif //QUANTUM_CHESS_PROJ_DRAWABLE_TEXT_ENTRY_BUTTON_H

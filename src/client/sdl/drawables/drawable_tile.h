@@ -16,6 +16,7 @@ private:
   bool black;
 
 public:
+  // Load the requested tile from the sprite repository
   void loadTile(TileSpriteRepository::TileType type);
 
   DrawableTile(Renderer &renderer, bool black_,
@@ -27,6 +28,7 @@ public:
 
   DrawableTile &operator=(const DrawableTile &other) = default;
 
+  // Render the tile type
   void render(int x, int y);
 };
 

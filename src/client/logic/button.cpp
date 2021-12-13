@@ -19,7 +19,7 @@ Button::setAreaAndPosition(size_t x, size_t y, size_t width, size_t height) {
   drawable.setAreaAndPosition(x, y, width, height);
 }
 
-void Button::resetButton() {
+void Button::resetButtonToNotPressedState() {
   drawable.disablePressedStatus();
 }
 

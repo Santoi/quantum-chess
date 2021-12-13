@@ -16,7 +16,7 @@ LoginState::LoginState(Login &login_,
 
 void LoginState::resetAllButtonsToNotPressedState() {
   for (auto &button: buttons_ptr)
-    button->resetButton();
+    button->resetButtonToNotPressedState();
 }
 
 ConnectingToServerState::ConnectingToServerState(Login &login_,

@@ -222,3 +222,7 @@ ClientData::Role Game::getPlayerRole() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return role;
 }
+
+void Game::coronatePawnTo(char piece) {
+
+}

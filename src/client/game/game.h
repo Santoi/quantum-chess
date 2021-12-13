@@ -90,6 +90,8 @@ public:
   void setDefaultBoardWithCurrent();
 
   ClientData::Role getPlayerRole();
+
+  void coronatePawnTo(char piece);
 };
 
 

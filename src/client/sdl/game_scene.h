@@ -15,51 +15,74 @@ class Window;
 
 class GameScene : public Scene {
 private:
-  Font &font;
-  DrawableBoard &chess;
-  DrawableContainer<DrawableChatMessage> chat;
-  DrawableContainer<DrawableText> log;
-  DrawableContainer<DrawableText> error_log;
-  DrawableContainer<DrawableText> turn_log;
-  DrawableTextEntryButton current_message;
-  CoordinateTransformer &transformer;
-  std::mutex mutex;
-  TextSpriteRepository &text_repository;
-  ButtonSpriteRepository &button_repository;
-  std::string current_message_text;
+    Font &font;
+    DrawableBoard &chess;
+    DrawableContainer<DrawableChatMessage> chat;
+    DrawableContainer<DrawableText> log;
+    DrawableContainer<DrawableText> error_log;
+    DrawableContainer<DrawableText> turn_log;
+    DrawableTextEntryButton current_message;
+    CoordinateTransformer& transformer;
+    bool render_help_screen;
+    bool render_leave_match_screen;
+    std::mutex mutex;
+    TextSpriteRepository &text_repository;
+    ButtonSpriteRepository &button_repository;
+    TextureSprite* help_sprite;
+    TextureSprite* leave_sprite;
+    std::string current_message_text;
+
+    void renderHelpScreen();
+
+    void renderLeaveMatchScreen();
+
+    void renderGame();
 
 public:
-  GameScene(Window &window, DrawableBoard &board, Font &font,
-            TextSpriteRepository &text_repository,
-            ButtonSpriteRepository &button_repository,
-            CoordinateTransformer &transformer_);
+    GameScene(Window &window, DrawableBoard &board, Font &font,
+              bool client_is_spectator,
+              TextSpriteRepository &text_repository,
+              ButtonSpriteRepository &button_repository,
+              CoordinateTransformer &transformer_);
 
-  void render() override;
+    void render() override;
 
-  int getChatWidth();
+    int getChatWidth();
 
-  int getChatHeight();
+    int getChatHeight();
 
-  int getChessWidth();
+    int getChessWidth();
 
-  int getChessHeight();
+    int getChessHeight();
 
-  void addChatMessage(const std::string &nickname, const std::string &id,
-                      const std::string &timestamp, const std::string &message);
+    void addChatMessage(const std::string &nickname, const std::string &id,
+                        const std::string &timestamp, const std::string &message);
 
-  void addLogMessage(std::string text);
+    void addLogMessage(std::string text);
 
-  void addErrorLogMessage(std::string text);
+    void addErrorLogMessage(std::string text);
 
-  void addCurrentMessage(const std::string &text);
+    void addCurrentMessage(const std::string &text);
 
-  void addTurnLogMessage(std::string text);
+    void addTurnLogMessage(std::string text);
 
-  void clearErrorLog();
+    void clearErrorLog();
 
-  bool wasChatClicked(PixelCoordinate &pixel);
+    bool wasChatClicked(PixelCoordinate &pixel);
 
-  void disableChat();
+    void disableChat();
+
+    void stopRenderingHelpScreen();
+
+    void startRenderingHelpScreen();
+
+    void stopRenderingLeaveScreen();
+
+    void startRenderingLeaveScreen();
+
+    bool renderingHelpScreen();
+
+    bool renderingLeaveMatchScreen();
 };
 
 

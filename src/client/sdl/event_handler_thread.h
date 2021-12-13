@@ -8,10 +8,14 @@
 #include "../logic/text_entry.h"
 #include <SDL2/SDL.h>
 
+
+class GameScene;
+
 class EventHandlerThread : public HandlerThread {
 private:
   Window &window;
   Game &game;
+  GameScene &game_scene;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;
   PixelCoordinate penultimate_click;
@@ -33,6 +37,7 @@ private:
 
 public:
   explicit EventHandlerThread(Window &window, Game &game,
+                              GameScene &game_scene,
                               Chat &chat_, TextEntry &text_entry);
 
   // Event loop

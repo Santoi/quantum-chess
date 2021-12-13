@@ -16,6 +16,7 @@
 #define CHAT_WIDTH 300
 
 GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
+                     bool client_is_spectator,
                      TextSpriteRepository &text_repository,
                      ButtonSpriteRepository &button_repository,
                      CoordinateTransformer &transformer_)
@@ -25,9 +26,16 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
                 MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
           current_message(text_repository, button_repository, "CHAT HERE"),
           transformer(transformer_),
+          render_help_screen(false), render_leave_match_screen(false),
           mutex(),
           text_repository(text_repository),
-          button_repository(button_repository) {}
+          button_repository(button_repository),
+          help_sprite(&button_repository.getPressed("help")) {
+  if (client_is_spectator)
+    leave_sprite = &button_repository.getPressed("spectator_leave");
+  else
+    leave_sprite = &button_repository.getPressed("player_leave");
+}
 
 void
 GameScene::addChatMessage(const std::string &nickname, const std::string &id,
@@ -67,8 +75,17 @@ void GameScene::addCurrentMessage(const std::string &text) {
   current_message_text = text;
 }
 
-void GameScene::render() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
+void GameScene::renderLeaveMatchScreen() {
+  int width = window.getWidth(), height = window.getHeight();
+  leave_sprite->render(0, 0, width, height);
+}
+
+void GameScene::renderHelpScreen() {
+  int width = window.getWidth(), height = window.getHeight();
+  help_sprite->render(0, 0, width, height);
+}
+
+void GameScene::renderGame() {
   int width = window.getWidth(), height = window.getHeight();
 
   chess.render(transformer, width - CHAT_WIDTH, height);
@@ -81,6 +98,16 @@ void GameScene::render() {
                                      height - font.size() * 2, CHAT_WIDTH,
                                      font.size() * 2);
   current_message.render(current_message_text);
+}
+
+void GameScene::render() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (!render_help_screen && !render_leave_match_screen) //most likely case
+    renderGame();
+  else if (render_help_screen)
+    renderHelpScreen();
+  else
+    renderLeaveMatchScreen();
 }
 
 int GameScene::getChatWidth() {
@@ -111,4 +138,38 @@ void GameScene::disableChat() {
   // hack, chat is never there
   PixelCoordinate p(0, 0);
   current_message.pixelIsOnTextEntry(p);
+}
+
+void GameScene::stopRenderingHelpScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  render_help_screen = false;
+}
+
+void GameScene::startRenderingHelpScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (render_leave_match_screen)
+    return;
+  render_help_screen = true;
+}
+
+void GameScene::stopRenderingLeaveScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  render_leave_match_screen = false;
+}
+
+void GameScene::startRenderingLeaveScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (render_help_screen)
+    return;
+  render_leave_match_screen = true;
+}
+
+bool GameScene::renderingHelpScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return render_help_screen;
+}
+
+bool GameScene::renderingLeaveMatchScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return render_leave_match_screen;
 }

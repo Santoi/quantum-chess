@@ -5,8 +5,10 @@
 #include <list>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
+                                       GameScene &game_scene,
                                        Chat &chat_, TextEntry &text_entry)
         : HandlerThread(true), window(window), game(game),
+          game_scene(game_scene),
           text_entry(text_entry),
           split(false), merge(false),
           first_click(false), second_click(false), penultimate_click(),
@@ -83,6 +85,33 @@ void EventHandlerThread::handleKeyDown() {
     case SDLK_m: {
       if (!text_entry.isEnabled())
         game.toggleMusic();
+      break;
+    }
+    case SDLK_r: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "r!" << std::endl;
+        if (game_scene.renderingHelpScreen())
+          return;
+        game_scene.startRenderingLeaveScreen();
+      }
+      break;
+    }
+    case SDLK_c: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "c!" << std::endl;
+        if (!game_scene.renderingLeaveMatchScreen())
+          return;
+        game_scene.stopRenderingLeaveScreen();
+      }
+      break;
+    }
+    case SDLK_y: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "y!" << std::endl;
+        if (!game_scene.renderingLeaveMatchScreen())
+          return;
+        open = false;
+      }
       break;
     }
     case SDLK_BACKSPACE: {

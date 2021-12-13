@@ -65,7 +65,6 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
         break;
       case STOP_PLAYING:
         continue_playing = false;
-        std::cout << "stop playin!!" << std::endl;
         break;
       default:
         break;

@@ -195,7 +195,7 @@ SelectingRoleState::SelectingRoleState(Login &login_,
                                           available_roles, "role_spectator");
   buttons_ptr.emplace_back(std::move(
           make_unique<ReturnToMatchSelectionButton>(button_repository,
-                                                     text_repository,"action")));
+                                                     text_repository,"RETURN")));
 }
 
 bool SelectingRoleState::clientIsConnectedToMatch() {

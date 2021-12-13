@@ -168,20 +168,14 @@ void Client::handleSelectAnotherMatchOrQuit(Login& login,
 }
 
 void Client::execute() {
-  std::cout << "1" << std::endl;
-  std::ifstream config_file("config.txt");
-  std::cout << "2" << std::endl;
+  std::ifstream config_file(CONFIG_PATH);
   ConfigFile config(config_file);
-  std::cout << "3" << std::endl;
   Window window(std::stoi(config.getValue("res_width")),
                 std::stoi(config.getValue("res_height")));
-  std::cout << "4" << std::endl;
   uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
   Renderer &renderer = window.renderer();
   Font font(FONT_SIZE);
-  std::cout << "No creado" << std::endl;
   ButtonSpriteRepository button_sprite_repository(renderer);
-  std::cout << "Creado" << std::endl;
   TextSpriteRepository text_sprite_repository(renderer, font);
 
   Login login;

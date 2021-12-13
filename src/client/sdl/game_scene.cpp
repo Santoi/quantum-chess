@@ -157,3 +157,13 @@ void GameScene::startRenderingLeaveScreen() {
       return;
   render_leave_match_screen = true;
 }
+
+bool GameScene::renderingHelpScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return render_help_screen;
+}
+
+bool GameScene::renderingLeaveMatchScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return render_leave_match_screen;
+}

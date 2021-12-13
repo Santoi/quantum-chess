@@ -11,8 +11,6 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game_,
       game_scene(game_scene_), text_entry(text_entry),
       split(false), merge(false),
       first_click(false), second_click(false),
-      help_screen_is_being_rendered(false),
-      leave_screen_is_being_rendered(false),
       client_quitted(false),
       penultimate_click(),
       last_click(), chat(chat_) {}
@@ -38,7 +36,8 @@ void EventHandlerThread::run() {
         handleKeyUp();
         break;
       case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
-        if (help_screen_is_being_rendered || leave_screen_is_being_rendered)
+        if (game_scene.renderingHelpScreen() ||
+            game_scene.renderingLeaveMatchScreen())
           break;
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
@@ -75,42 +74,38 @@ void EventHandlerThread::handleKeyDown() {
     case SDLK_h: {
       if (!text_entry.isEnabled()) {
           std::cout << "h!" << std::endl;
-         if (leave_screen_is_being_rendered)
+         if (game_scene.renderingLeaveMatchScreen())
              return;
-         if (help_screen_is_being_rendered) {
+         if (game_scene.renderingHelpScreen())
            game_scene.stopRenderingHelpScreen();
-           help_screen_is_being_rendered = false;
-         } else {
+         else
            game_scene.startRenderingHelpScreen();
-           help_screen_is_being_rendered = true;
-         }
       }
       break;
     }
     case SDLK_r: {
       if (!text_entry.isEnabled()) {
           std::cout << "r!" << std::endl;
-          if (help_screen_is_being_rendered || leave_screen_is_being_rendered)
+          if (game_scene.renderingHelpScreen() ||
+              game_scene.renderingLeaveMatchScreen())
               return;
           game_scene.startRenderingLeaveScreen();
-          leave_screen_is_being_rendered = true;
       }
       break;
     }
     case SDLK_c: {
       if (!text_entry.isEnabled()) {
         std::cout << "c!" << std::endl;
-        if (!leave_screen_is_being_rendered)
+        if (!game_scene.renderingLeaveMatchScreen())
            return;
         game_scene.stopRenderingLeaveScreen();
-        leave_screen_is_being_rendered = false;
       }
       break;
     }
     case SDLK_y: {
       if (!text_entry.isEnabled()) {
         std::cout << "y!" << std::endl;
-        if (!leave_screen_is_being_rendered)
+        if (!game_scene.renderingLeaveMatchScreen())
           return;
         open = false;
       }

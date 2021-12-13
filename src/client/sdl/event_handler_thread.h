@@ -17,7 +17,6 @@ private:
   GameScene &game_scene;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;
-  bool help_screen_is_being_rendered, leave_screen_is_being_rendered;
   bool client_quitted;
   PixelCoordinate penultimate_click;
   PixelCoordinate last_click;

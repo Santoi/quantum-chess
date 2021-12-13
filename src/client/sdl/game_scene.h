@@ -25,6 +25,7 @@ private:
   CoordinateTransformer transformer;
   bool render_help_screen;
   bool render_leave_match_screen;
+  bool render_coronation_screen;
   std::mutex mutex;
   TextSpriteRepository &text_repository;
   ButtonSpriteRepository &button_repository;
@@ -33,6 +34,10 @@ private:
   std::string current_message_text;
 
   void renderHelpScreen();
+
+  void renderLeaveMatchScreen();
+
+  void renderCoronationScreen();
 
   void renderGame();
 
@@ -72,15 +77,17 @@ public:
 
   void startRenderingHelpScreen();
 
-    void renderLeaveMatchScreen();
+  void stopRenderingLeaveScreen();
 
-    void stopRenderingLeaveScreen();
+  void startRenderingLeaveScreen();
 
-    void startRenderingLeaveScreen();
+  void startRenderingCoronationScreen();
 
-    bool renderingHelpScreen();
+  void stopRenderingCoronationScreen();
 
-    bool renderingLeaveMatchScreen();
+  bool renderingHelpScreen();
+
+  bool renderingLeaveMatchScreen();
 };
 
 

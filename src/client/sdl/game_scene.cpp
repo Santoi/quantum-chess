@@ -68,6 +68,12 @@ void GameScene::addCurrentMessage(const std::string &text) {
   current_message_text = text;
 }
 
+void GameScene::renderCoronationScreen() {
+  int width = window.getWidth(), height = window.getHeight();
+  leave_sprite->render(0, 0, width, height);
+}
+
+
 void GameScene::renderLeaveMatchScreen() {
   int width = window.getWidth(), height = window.getHeight();
   leave_sprite->render(0, 0, width, height);
@@ -100,8 +106,10 @@ void GameScene::render() {
       renderGame();
   else if (render_help_screen)
       renderHelpScreen();
-  else
+  else if (render_leave_match_screen)
       renderLeaveMatchScreen();
+  else
+      renderCoronationScreen();
 }
 
 int GameScene::getChatWidth() {
@@ -141,7 +149,7 @@ void GameScene::stopRenderingHelpScreen() {
 
 void GameScene::startRenderingHelpScreen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  if (render_leave_match_screen)
+  if (render_leave_match_screen || render_coronation_screen)
       return;
   render_help_screen = true;
 }
@@ -153,9 +161,20 @@ void GameScene::stopRenderingLeaveScreen() {
 
 void GameScene::startRenderingLeaveScreen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  if (render_help_screen)
+  if (render_help_screen || render_coronation_screen)
       return;
   render_leave_match_screen = true;
+}
+void GameScene::startRenderingCoronationScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  render_help_screen = false;
+  render_leave_match_screen = false;
+  render_coronation_screen = true; 
+}
+
+void GameScene::stopRenderingCoronationScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  render_coronation_screen = false;
 }
 
 bool GameScene::renderingHelpScreen() {

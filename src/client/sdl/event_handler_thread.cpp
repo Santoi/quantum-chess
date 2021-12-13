@@ -37,7 +37,8 @@ void EventHandlerThread::run() {
         break;
       case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
         if (game_scene.renderingHelpScreen() ||
-            game_scene.renderingLeaveMatchScreen())
+            game_scene.renderingLeaveMatchScreen() ||
+            game_scene.renderingCoronationScreen())
           break;
         SDL_MouseButtonEvent mouse = event.button;
         if (mouse.button == SDL_BUTTON_LEFT)
@@ -119,6 +120,7 @@ void EventHandlerThread::handleKeyDown() {
         if (!game_scene.renderingCoronationScreen())
           return;
         game.coronatePawnTo(event.key.keysym.sym);
+        game_scene.stopRenderingCoronationScreen();
       }
       break;
     }

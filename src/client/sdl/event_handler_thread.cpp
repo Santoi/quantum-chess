@@ -120,7 +120,7 @@ void EventHandlerThread::handleKeyDown() {
         if (!game_scene.renderingCoronationScreen())
           return;
         game.coronatePawnTo(event.key.keysym.sym);
-        game_scene.stopRenderingCoronationScreen();
+        game_scene.stopRenderingCoronationScreen(); 
       }
       break;
     }

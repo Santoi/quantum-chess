@@ -13,6 +13,7 @@ public:
 
     HandlerThread(bool open_);
 
+    //Returns open boolean.
     bool isOpen();
 
     ~HandlerThread() = default;

@@ -145,9 +145,7 @@ void Game::currentTile(const PixelCoordinate &coordinate) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   Position position;
   transformer.pixel2Position(coordinate, position, x_scale, y_scale);
-  PixelCoordinate new_coordinate;
-  transformer.position2Pixel(position, new_coordinate, x_scale, y_scale);
-  board.currentTile(new_coordinate);
+  board.currentTile(position);
 }
 
 void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {

@@ -18,17 +18,20 @@ DrawableBoard::DrawableBoard(Window &window, const std::string &image,
         tile_repository(renderer),
         text_repository(renderer, font),
         current(false),
-        current_tile(
-                std::make_pair<PixelCoordinate, DrawableTile>(PixelCoordinate(),
-                                                              DrawableTile(
-                                                                      renderer,
-                                                                      true,
-                                                                      tile_repository))) {
-  background.setBlendMode(SDL_BLENDMODE_BLEND);
+        current_tile(std::make_pair(Position(0, 0),
+                                    DrawableTile(renderer, true,
+                                                 tile_repository))
+
+        ) {
+  background.
+          setBlendMode(SDL_BLENDMODE_BLEND);
   background.setAlpha(BACKGROUND_TRANSPARENCY);
-  current_tile.second.loadTile(TileSpriteRepository::TILE_SELECTED);
-  // Board initialize
-  for (size_t i = 0; i < 8; i++) {
+  current_tile.second.
+          loadTile(TileSpriteRepository::TILE_SELECTED);
+// Board initialize
+  for (
+          size_t i = 0;
+          i < 8; i++) {
     std::string num(std::to_string(i + 1));
     char c = 'A' + i;
     char l[] = {c, '\0'};
@@ -37,17 +40,25 @@ DrawableBoard::DrawableBoard(Window &window, const std::string &image,
     DrawableText letters(text_repository, letter, 't');
     Position row(-1, i);
     Position column(i, -1);
-    positions.insert(
-            std::pair<const Position, DrawableText>(row, std::move(numbers)));
-    positions.insert(
+    positions.
+            insert(
+            std::pair<const Position, DrawableText>(row, std::move(numbers))
+    );
+    positions.
+            insert(
             std::pair<const Position, DrawableText>(column,
-                                                    std::move(letters)));
-    for (size_t j = 0; j < 8; j++) {
+                                                    std::move(letters))
+    );
+    for (
+            size_t j = 0;
+            j < 8; j++) {
       const Position position(i, j);
       DrawableTile tile(renderer, position.isEven(), tile_repository);
-      board.insert(std::pair<const Position, DrawableTile>(position,
-                                                           std::move(
-                                                                   tile)));
+      board.
+              insert(std::pair<const Position, DrawableTile>(position,
+                                                             std::move(
+                                                                     tile))
+      );
     }
   }
 }
@@ -103,9 +114,9 @@ void DrawableBoard::mergeTile(const Position &pos) {
     board.at(pos).loadTile(TileSpriteRepository::TILE_MERGE);
 }
 
-void DrawableBoard::currentTile(const PixelCoordinate &coordinate) {
+void DrawableBoard::currentTile(const Position &position) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  current_tile.first = coordinate;
+  current_tile.first = position;
   current = true;
 }
 
@@ -148,8 +159,11 @@ void DrawableBoard::render(CoordinateTransformer &transformer, int width,
     tile.second.render(pixel.x(), pixel.y());
   }
   background.render(0, 0, width, height);
-  if (current)
-    current_tile.second.render(current_tile.first.x(), current_tile.first.y());
+  if (current) {
+    PixelCoordinate pixel(0, 0);
+    transformer.position2Pixel(current_tile.first, pixel, width, height);
+    current_tile.second.render(pixel.x(), pixel.y());
+  }
   for (auto &position: positions) {
     PixelCoordinate pixel(0, 0);
     transformer.position2Pixel(position.first, pixel, width, height);

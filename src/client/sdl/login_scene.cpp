@@ -3,15 +3,17 @@
 #include <vector>
 
 #define MAX_MATCH_BUTTON_COUNT 8
+
 #define BACKGROUND_SPRITE "resources/sprites/background/login-background.jpg"
 
 LoginScene::LoginScene(Window &window,
                        LoginStateHandler &login_state_handler)
-    :
-    Scene(window),
-    login_state_handler(login_state_handler),
-    background(window.renderer(), BACKGROUND_SPRITE, window.getWidth(),
-               window.getHeight()) {}
+        :
+        Scene(window),
+        login_state_handler(login_state_handler),
+        background(window.renderer(), BACKGROUND_SPRITE,
+                   window.getWidth(),
+                   window.getHeight()) {}
 
 void LoginScene::render() {
   background.render(0, 0, window.getWidth(), window.getHeight());
@@ -26,9 +28,9 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
   size_t height = window.getHeight();
   size_t button_height = height / 15;
   size_t ip_button_width = width / 3, port_button_width = width / 10,
-      nick_button_width = width / 3, connect_button_width = width / 4;
+          nick_button_width = width / 3, connect_button_width = width / 4;
   size_t ip_button_x_pos =
-      (width - ip_button_width) / 2 - port_button_width * 1.1;
+          (width - ip_button_width) / 2 - port_button_width * 1.1;
   size_t port_button_x_pos = width / 2 + port_button_width * 1.1;
 
   ip_text_entry.setAreaAndPosition(ip_button_x_pos,
@@ -74,11 +76,11 @@ LoginScene::findFirstButtonToRender(
 }
 
 void LoginScene::renderChoosingMatchButtons(
-    std::vector<std::unique_ptr<Button>> &match_buttons,
-    NextMatchesButton &next_matches_button,
-    PreviousMatchesButton &previous_matches_button,
-    RefreshMatchesButton &refresh_matches_button, size_t matches_page,
-    size_t matches_per_page) {
+        std::vector<std::unique_ptr<Button>> &match_buttons,
+        NextMatchesButton &next_matches_button,
+        PreviousMatchesButton &previous_matches_button,
+        RefreshMatchesButton &refresh_matches_button, size_t matches_page,
+        size_t matches_per_page) {
   size_t width = window.getWidth();
   size_t height = window.getHeight();
   size_t match_button_width = width * .9, button_height = height / 20;

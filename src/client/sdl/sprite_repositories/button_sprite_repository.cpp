@@ -1,22 +1,22 @@
 #include "button_sprite_repository.h"
 
-#define PATH "resources/sprites/button/"
+#define BUTTONS_PATH "resources/sprites/button/"
 
 ButtonSpriteRepository::ButtonSpriteRepository(Renderer &renderer)
-    : pressed(), released() {
+        : pressed(), released() {
   loadPressed(renderer);
   loadReleased(renderer);
 }
 
 void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"text",             PATH "text-button-pressed.png"},
-      {"action",           PATH "button-pressed.png"},
-      {"match",            PATH "button-pressed.png"},
-      {"role_white",       PATH "available_white_role.png"},
-      {"role_black",       PATH "available_black_role.png"},
-      {"role_spectator",   PATH "spectator_role.png"},
-      {"unavailable_role", PATH "unavailable_role_layer.png"}
+          {"text",             BUTTONS_PATH "text-button-pressed.png"},
+          {"action",           BUTTONS_PATH "button-pressed.png"},
+          {"match",            BUTTONS_PATH "button-pressed.png"},
+          {"role_white",       BUTTONS_PATH "available_white_role.png"},
+          {"role_black",       BUTTONS_PATH "available_black_role.png"},
+          {"role_spectator",   BUTTONS_PATH "spectator_role.png"},
+          {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"}
   };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,
@@ -28,13 +28,13 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
 
 void ButtonSpriteRepository::loadReleased(Renderer &renderer) {
   std::map<std::string, std::string> images = {
-      {"text",             PATH "text-button-released.png"},
-      {"action",           PATH "button-released.png"},
-      {"match",            PATH "button-released.png"},
-      {"role_white",       PATH "available_white_role.png"},
-      {"role_black",       PATH "available_black_role.png"},
-      {"role_spectator",   PATH "spectator_role.png"},
-      {"unavailable_role", PATH "unavailable_role_layer.png"}
+          {"text",             BUTTONS_PATH "text-button-released.png"},
+          {"action",           BUTTONS_PATH "button-released.png"},
+          {"match",            BUTTONS_PATH "button-released.png"},
+          {"role_white",       BUTTONS_PATH "available_white_role.png"},
+          {"role_black",       BUTTONS_PATH "available_black_role.png"},
+          {"role_spectator",   BUTTONS_PATH "spectator_role.png"},
+          {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"}
   };
   for (auto &pair: images) {
     TextureSprite released_(renderer, pair.second,

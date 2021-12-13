@@ -12,14 +12,13 @@ int main(int argc, char *argv[]) {
       board_filename = "default.txt";
     else
       board_filename = argv[2];
-    board_filename = "boards/" + board_filename;
     Server server(nullptr, argv[1]);
     server.execute(board_filename);
   }
-  catch (const std::exception &e) {
+  catch(const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;
   }
-  catch (...) {
+  catch(...) {
     std::cerr << "Error desconocido" << std::endl;
   }
 

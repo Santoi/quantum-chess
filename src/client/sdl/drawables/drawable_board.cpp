@@ -9,10 +9,13 @@
 
 #define BACKGROUND_TRANSPARENCY 0.4
 
-DrawableBoard::DrawableBoard(Window &window, const std::string &image,
-                             int width, int height, Font &font) :
+#define BACKGROUND_SPRITE "resources/sprites/background/stars.jpg"
+
+DrawableBoard::DrawableBoard(Window &window, int width, int height,
+                             Font &font) :
         renderer(window.renderer()),
-        background(window.renderer(), image, width, height),
+        background(window.renderer(), BACKGROUND_SPRITE, width,
+                   height),
         chessmen(), board(), positions(),
         chessman_repository(renderer),
         tile_repository(renderer),

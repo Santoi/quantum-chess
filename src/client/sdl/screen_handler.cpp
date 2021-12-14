@@ -29,6 +29,7 @@ void ScreenHandler::toggleHelpScreen() {
 
 
 void ScreenHandler::toggleLeaveScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_help_screen)
     return;
   render_leave_match_screen = !render_leave_match_screen;

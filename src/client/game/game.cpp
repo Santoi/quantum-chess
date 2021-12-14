@@ -15,15 +15,18 @@
 #define BOARD_H_MAX_LIMIT .9
 #define BOARD_W_H_RATIO .4
 
-#define BACKGROUND_SPRITE "resources/sprites/background/stars.jpg"
-
 Game::Game(Window &window,
            BlockingQueue<RemoteClientInstruction> &send_queue_,
-           ClientData::Role role_, Font &font) :
-    x_scale(window.getWidth()), y_scale(window.getHeight()),
-    board(window, BACKGROUND_SPRITE, x_scale, y_scale, font),
-    send_queue(send_queue_), mutex(), role(role_),
-    sound_handler(window.sound_handler()) {}
+           ClientData::Role role_, Font &font,
+           CoordinateTransformer &transformer_) :
+        x_scale(window.getWidth()), y_scale(window.getHeight()),
+        board(window, x_scale, y_scale, font),
+        send_queue(send_queue_), transformer(transformer_), mutex(),
+        role(role_),
+        sound_handler(window.sound_handler()) {
+  if (role == ClientData::ROLE_BLACK)
+    flipBoard();
+}
 
 void Game::setScale(int x_scale_, int y_scale_) {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -90,7 +93,7 @@ void Game::askMergeTiles(const PixelCoordinate &coords1,
   positions.push_back(position1);
   positions.push_back(position2);
   send_queue.push(std::make_shared<RemoteClientPossibleMergesInstruction>(
-      std::move(positions)));
+          std::move(positions)));
 }
 
 void
@@ -143,9 +146,7 @@ void Game::currentTile(const PixelCoordinate &coordinate) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position;
   transformer.pixel2Position(coordinate, position, x_scale, y_scale);
-  PixelCoordinate new_coordinate;
-  transformer.position2Pixel(position, new_coordinate, x_scale, y_scale);
-  board.currentTile(new_coordinate);
+  board.currentTile(position);
 }
 
 void
@@ -170,7 +171,7 @@ Game::splitChessman(const PixelCoordinate &from, const PixelCoordinate &to1,
   transformer.pixel2Position(to1, to1_, x_scale, y_scale);
   transformer.pixel2Position(to2, to2_, x_scale, y_scale);
   send_queue.push(
-      std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
+          std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
 }
 
 void
@@ -184,7 +185,7 @@ Game::mergeChessman(const PixelCoordinate &from1, const PixelCoordinate &from2,
   transformer.pixel2Position(from2, from2_, x_scale, y_scale);
   transformer.pixel2Position(to, to_, x_scale, y_scale);
   send_queue.push(
-      std::make_shared<RemoteClientMergeInstruction>(from1_, from2_, to_));
+          std::make_shared<RemoteClientMergeInstruction>(from1_, from2_, to_));
 }
 
 void Game::load(std::vector<ChessmanData> &chessman_data_vector) {
@@ -227,4 +228,9 @@ DrawableBoard &Game::getBoard() {
 ClientData::Role Game::getPlayerRole() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return role;
+}
+
+void Game::flipBoard() {
+  setDefaultBoard();
+  transformer.flip();
 }

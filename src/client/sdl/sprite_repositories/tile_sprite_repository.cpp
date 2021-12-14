@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#define PATH "resources/sprites/board/"
+#define BOARD_PATH "resources/sprites/board/"
 
 TileSpriteRepository::TileSpriteRepository(Renderer &renderer) : white_tiles(),
                                                                  black_tiles() {
@@ -20,13 +20,13 @@ TileSpriteRepository::getTile(TileSpriteRepository::TileType type, bool black) {
 
 void TileSpriteRepository::loadWhite(Renderer &renderer) {
   std::map<TileType, std::string> images = {
-      {TILE_DEFAULT,   PATH "white_square.png"},
-      {TILE_MOVE,      PATH "white_square_move.png"},
-      {TILE_ENTANGLED, PATH "white_square_entangled.png"},
-      {TILE_QUANTUM,   PATH "white_square_quantum.png"},
-      {TILE_SPLIT,     PATH "white_square_split.png"},
-      {TILE_MERGE,     PATH "white_square_merge.png"},
-      {TILE_SELECTED,  PATH "current_tile.png"},
+          {TILE_DEFAULT,   BOARD_PATH "white_square.png"},
+          {TILE_MOVE,      BOARD_PATH "white_square_move.png"},
+          {TILE_ENTANGLED, BOARD_PATH "white_square_entangled.png"},
+          {TILE_QUANTUM,   BOARD_PATH "white_square_quantum.png"},
+          {TILE_SPLIT,     BOARD_PATH "white_square_split.png"},
+          {TILE_MERGE,     BOARD_PATH "white_square_merge.png"},
+          {TILE_SELECTED,  BOARD_PATH "current_tile.png"},
   };
   for (auto &pair: images) {
     // TODO: renderer.getHeight() maybe?
@@ -39,13 +39,13 @@ void TileSpriteRepository::loadWhite(Renderer &renderer) {
 
 void TileSpriteRepository::loadBlack(Renderer &renderer) {
   std::map<TileType, std::string> images = {
-      {TILE_DEFAULT,   PATH "black_square.png"},
-      {TILE_MOVE,      PATH "black_square_move.png"},
-      {TILE_ENTANGLED, PATH "black_square_entangled.png"},
-      {TILE_QUANTUM,   PATH "black_square_quantum.png"},
-      {TILE_SPLIT,     PATH "black_square_split.png"},
-      {TILE_MERGE,     PATH "black_square_merge.png"},
-      {TILE_SELECTED,  PATH "current_tile.png"},
+          {TILE_DEFAULT,   BOARD_PATH "black_square.png"},
+          {TILE_MOVE,      BOARD_PATH "black_square_move.png"},
+          {TILE_ENTANGLED, BOARD_PATH "black_square_entangled.png"},
+          {TILE_QUANTUM,   BOARD_PATH "black_square_quantum.png"},
+          {TILE_SPLIT,     BOARD_PATH "black_square_split.png"},
+          {TILE_MERGE,     BOARD_PATH "black_square_merge.png"},
+          {TILE_SELECTED,  BOARD_PATH "current_tile.png"},
   };
   for (auto &pair: images) {
     TextureSprite tile(renderer, pair.second,

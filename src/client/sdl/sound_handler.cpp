@@ -3,16 +3,15 @@
 #include <utility>
 
 #define NUMBER_OF_DIFFERENT_CHUNKS 5
-
-#define PATH "resources/sounds/"
+#define BUTTONS_PATH "resources/sounds/"
 
 SoundHandler::SoundHandler(SDL2pp::Mixer &mixer)
-    : mixer(mixer), music(PATH "music.mp3"), mutex(),
-      playing_music(false), playing_sounds(true), music_started(false) {
+        : mixer(mixer), music(BUTTONS_PATH "music.mp3"), mutex(),
+          playing_music(false), playing_sounds(true), music_started(false) {
   chunks.reserve(NUMBER_OF_DIFFERENT_CHUNKS);
-  chunks.emplace_back(SDL2pp::Chunk(PATH "split.wav"));
-  chunks.emplace_back(SDL2pp::Chunk(PATH "merge.wav"));
-  chunks.emplace_back(SDL2pp::Chunk(PATH "capture.wav"));
+  chunks.emplace_back(SDL2pp::Chunk(BUTTONS_PATH "split.wav"));
+  chunks.emplace_back(SDL2pp::Chunk(BUTTONS_PATH "merge.wav"));
+  chunks.emplace_back(SDL2pp::Chunk(BUTTONS_PATH "capture.wav"));
 }
 
 void SoundHandler::toggleMusic() {

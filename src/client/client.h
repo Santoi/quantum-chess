@@ -36,7 +36,8 @@ private:
                     TextSpriteRepository &text_sprite_repository,
                     uint8_t frame_rate);
 
-  void executeGame(Window &window, Game &game, Socket &socket, Font &font,
+  void executeGame(Window &window, Game &game, Socket &socket,
+                   CoordinateTransformer &coordinate_transformer, Font &font,
                    ButtonSpriteRepository &button_sprite_repository,
                    TextSpriteRepository &text_sprite_repository,
                    uint8_t frame_rate);

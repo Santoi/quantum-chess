@@ -23,7 +23,7 @@ private:
   DrawableContainer<DrawableText> error_log;
   DrawableContainer<DrawableText> turn_log;
   DrawableTextEntryButton current_message;
-  CoordinateTransformer transformer;
+  CoordinateTransformer &transformer;
   std::mutex mutex;
   TextSpriteRepository &text_repository;
   ButtonSpriteRepository &button_repository;
@@ -32,7 +32,8 @@ private:
 public:
   GameScene(Window &window, DrawableBoard &board, Font &font,
             TextSpriteRepository &text_repository,
-            ButtonSpriteRepository &button_repository);
+            ButtonSpriteRepository &button_repository,
+            CoordinateTransformer &transformer_);
 
   // Render the whole in-game scene
   void render() override;

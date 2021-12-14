@@ -1,0 +1,13 @@
+#!/bin/bash
+cd /usr/local/share/quantum_chess
+if [ -z "$1" ]
+  then
+    /usr/local/bin/__quantum_chess_server
+    exit
+fi
+if [ -z "$2" ]
+  then
+    /usr/local/bin/__quantum_chess_server "$1"
+    exit
+fi
+/usr/local/bin/__quantum_chess_server "$1" "$2"

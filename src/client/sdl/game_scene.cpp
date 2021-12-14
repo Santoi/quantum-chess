@@ -17,16 +17,17 @@
 
 GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
                      TextSpriteRepository &text_repository,
-                     ButtonSpriteRepository &button_repository)
-    : Scene(window), font(font), chess(board),
-      chat(MAX_CHAT_MESSAGES),
-      log(MAX_LOG_MESSAGES), error_log(
-        MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
-      current_message(text_repository, button_repository, "CHAT HERE"),
-      transformer(),
-      mutex(),
-      text_repository(text_repository),
-      button_repository(button_repository) {}
+                     ButtonSpriteRepository &button_repository,
+                     CoordinateTransformer &transformer_)
+        : Scene(window), font(font), chess(board),
+          chat(MAX_CHAT_MESSAGES),
+          log(MAX_LOG_MESSAGES), error_log(
+                MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
+          current_message(text_repository, button_repository, "CHAT HERE"),
+          transformer(transformer_),
+          mutex(),
+          text_repository(text_repository),
+          button_repository(button_repository) {}
 
 void
 GameScene::addChatMessage(const std::string &nickname, const std::string &id,

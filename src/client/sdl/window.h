@@ -33,7 +33,6 @@ public:
   double getMinRatio() const;
 
   void setMaxHeight(size_t height);
-
 };
 
 

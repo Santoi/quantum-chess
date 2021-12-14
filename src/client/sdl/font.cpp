@@ -15,11 +15,11 @@
 #define PURPLE {0x80, 0x00, 0x80}
 #define TEAL {0x00, 0xff, 0xff}
 
-#define PATH "resources/fonts/"
+#define FONTS_PATH "resources/fonts/"
 
 Font::Font(int ptx, int index)
     : ttf(),
-      mono_font(PATH "erusfont.pcf", ptx, index),
+      mono_font(FONTS_PATH "erusfont.pcf", ptx, index),
       colors({
                  {'k', BLACK},
                  {'w', WHITE},

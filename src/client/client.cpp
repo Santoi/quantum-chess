@@ -24,6 +24,7 @@
 
 #define FONT_SIZE 10
 #define MAX_CHAR_ENTRY 29
+#define CONFIG_PATH "config_files/client_config.txt"
 
 Client::Client() : role(ClientData::ROLE_SPECTATOR) {}
 
@@ -77,9 +78,8 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
   }
 }
 
-// TODO modularizar
 void Client::execute() {
-  std::ifstream config_file("config.txt");
+  std::ifstream config_file(CONFIG_PATH);
   ConfigFile config(config_file);
   Window window(std::stoi(config.getValue("res_width")),
                 std::stoi(config.getValue("res_height")));
@@ -98,17 +98,21 @@ void Client::execute() {
   Socket socket = login.getClientSocket();
   role = login.getRole();
 
-  Game game(window, send, role, font);
-  executeGame(window, game, socket, font, button_sprite_repository,
+  CoordinateTransformer coordinate_transformer;
+  Game game(window, send, role, font, coordinate_transformer);
+  executeGame(window, game, socket, coordinate_transformer,
+              font, button_sprite_repository,
               text_sprite_repository, frame_rate);
 }
 
-void Client::executeGame(Window &window, Game &game, Socket &socket, Font &font,
+void Client::executeGame(Window &window, Game &game, Socket &socket,
+                         CoordinateTransformer &coordinate_transformer,
+                         Font &font,
                          ButtonSpriteRepository &button_sprite_repository,
                          TextSpriteRepository &text_sprite_repository,
                          uint8_t frame_rate) {
   GameScene scene(window, game.getBoard(), font, text_sprite_repository,
-                  button_sprite_repository);
+                  button_sprite_repository, coordinate_transformer);
   Chat chat(send, scene);
   ChessLog chess_log(scene);
   ErrorLog error_log(scene);

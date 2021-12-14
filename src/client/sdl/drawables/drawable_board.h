@@ -31,11 +31,11 @@ private:
   TileSpriteRepository tile_repository;
   TextSpriteRepository text_repository;
   bool current;
-  std::pair<PixelCoordinate, DrawableTile> current_tile;
+  std::pair<BoardPosition, DrawableTile> current_tile;
   std::mutex mutex;
 
 public:
-  DrawableBoard(Window &window, const std::string &image, int width, int height,
+  DrawableBoard(Window &window, int width, int height,
                 Font &font);
 
   ~DrawableBoard() = default;
@@ -59,7 +59,7 @@ public:
   void mergeTile(const BoardPosition &pos);
 
   // Set the selected tile as selected
-  void currentTile(const PixelCoordinate &coordinate);
+  void currentTile(const BoardPosition &position);
 
   // Set the default tiles
   void setDefault();

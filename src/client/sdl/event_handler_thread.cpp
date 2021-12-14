@@ -17,7 +17,7 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game,
           last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
-  while (true) {
+  while (open) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
@@ -106,23 +106,13 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_y: {
-      if (!text_entry.isEnabled()) {
+      if (!text_entry.isEnabled())
         screen_handler.switchOpenStatusIfLeaveMatchScreenIsRendering(open);
-        //open = false;
-      }
       break;
     }
     case SDLK_s: {
       if (!text_entry.isEnabled())
         screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
-      break;
-    }
-    case SDLK_o: {
-      if (!text_entry.isEnabled()) {
-     //   if (!game_scene.renderingLeaveMatchScreen())
-        //  return;
-        //game.request tie()
-      }
       break;
     }
     case SDLK_BACKSPACE: {

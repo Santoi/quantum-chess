@@ -1,14 +1,15 @@
 #include "event_handler_thread.h"
 #include "../../common/chess_exception.h"
+#include "screen_handler.h"
 #include "../game/chat.h"
 #include <iostream>
 #include <list>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
-                                       GameScene &game_scene,
+                                       ScreenHandler &screen_handler_,
                                        Chat &chat_, TextEntry &text_entry)
         : HandlerThread(true), window(window), game(game),
-          game_scene(game_scene),
+          screen_handler(screen_handler_),
           text_entry(text_entry),
           split(false), merge(false),
           first_click(false), second_click(false), penultimate_click(),
@@ -87,47 +88,47 @@ void EventHandlerThread::handleKeyDown() {
         game.toggleMusic();
       break;
     }
+    case SDLK_h: {
+      if (!text_entry.isEnabled()) {
+        std::cout << "h!" << std::endl;
+        screen_handler.toggleHelpScreen();
+      }
+      break;
+    }
     case SDLK_r: {
       if (!text_entry.isEnabled()) {
         std::cout << "r!" << std::endl;
-        if (game_scene.renderingHelpScreen())
-          return;
-        game_scene.startRenderingLeaveScreen();
+        screen_handler.activateLeaveScreen();
       }
       break;
     }
     case SDLK_c: {
       if (!text_entry.isEnabled()) {
         std::cout << "c!" << std::endl;
-        if (!game_scene.renderingLeaveMatchScreen())
-          return;
-        game_scene.stopRenderingLeaveScreen();
+        screen_handler.deactivateLeaveScreen();
       }
       break;
     }
     case SDLK_y: {
       if (!text_entry.isEnabled()) {
         std::cout << "y!" << std::endl;
-        if (!game_scene.renderingLeaveMatchScreen())
-          return;
-        open = false;
+        screen_handler.switchOpenStatusIfLeaveMatchScreenIsRendering(open);
+        //open = false;
       }
       break;
     }
     case SDLK_s: {
       if (!text_entry.isEnabled()) {
         std::cout << "s!" << std::endl;
-        if (!game_scene.renderingLeaveMatchScreen())
-          return;
-        game.surrender();
+        screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
       }
       break;
     }
     case SDLK_o: {
       if (!text_entry.isEnabled()) {
         std::cout << "o!" << std::endl;
-        if (!game_scene.renderingLeaveMatchScreen())
-          return;
+     //   if (!game_scene.renderingLeaveMatchScreen())
+        //  return;
         //game.request tie()
       }
       break;

@@ -7,11 +7,14 @@
 #include "drawables/drawable_container.h"
 #include "drawables/drawable_chat_message.h"
 #include "scene.h"
+#include "screen_handler.h"
 #include "sprite_repositories/button_sprite_repository.h"
 #include "drawables/drawable_text_entry_button.h"
 
 
 class Window;
+
+class ScreenHandler;
 
 class GameScene : public Scene {
 private:
@@ -22,9 +25,8 @@ private:
     DrawableContainer<DrawableText> error_log;
     DrawableContainer<DrawableText> turn_log;
     DrawableTextEntryButton current_message;
-    CoordinateTransformer& transformer;
-    bool render_help_screen;
-    bool render_leave_match_screen;
+    CoordinateTransformer &transformer;
+    ScreenHandler &screen_handler;
     std::mutex mutex;
     TextSpriteRepository &text_repository;
     ButtonSpriteRepository &button_repository;
@@ -32,15 +34,9 @@ private:
     TextureSprite* leave_sprite;
     std::string current_message_text;
 
-    void renderHelpScreen();
-
-    void renderLeaveMatchScreen();
-
-    void renderGame();
-
 public:
     GameScene(Window &window, DrawableBoard &board, Font &font,
-              bool client_is_spectator,
+              ScreenHandler &screen_handler,
               TextSpriteRepository &text_repository,
               ButtonSpriteRepository &button_repository,
               CoordinateTransformer &transformer_);
@@ -71,6 +67,12 @@ public:
     bool wasChatClicked(PixelCoordinate &pixel);
 
     void disableChat();
+
+    void renderHelpScreen();
+
+    void renderLeaveMatchScreen();
+
+    void renderGame();
 
     void stopRenderingHelpScreen();
 

@@ -107,7 +107,11 @@ Luego, se pasa a la selección de partida, donde se puede seleccionar entre unir
     <img src="docs/images/readme/login_select_match.jpg" alt="Pantalla de log in" height="350"/>
 </p>
 
-#AGREGAR PANTALLA DE ROL
+Luego, se pasa a seleccionar el rol, se puede elegir entre blancas, negras y espectador. Indicandose que rol no esta disponible con una cruz roja sobre el botón.
+
+<p align=center>
+    <img src="docs/images/readme/login_select_role.jpg" alt="Pantalla de log in" height="350"/>
+</p>
 
 ## Como jugar
 

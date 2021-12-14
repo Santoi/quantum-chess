@@ -336,3 +336,24 @@ Por ejemplo, si se carga un archivo como se muestra a continuación, se obtiene 
 <p align=center>
     <img src="docs/images/readme/example_file.png" alt="Tablero cargado con archivo" height="400"/>
 </p>
+
+
+## Ascii Chess
+
+El Ascii Chess se realizó como herramienta de *debugging* durante la etapa inicial del desarrollo. Puede ser jugado, aunque solo contiene movimientos clásicos.
+
+Para jugarlo se debe compilar el programa (no instalarlo), y ejecutar
+
+    bash ascii.sh
+
+Para jugar simplemente se debe ingresar el comando
+
+    M initial_x initial_y final_x final_y
+
+donde las coordenadas en x van de A a H y en y de 0 a 7.
+
+Se puede salir presionando la tecla `q`.
+
+<p align=center>
+    <img src="docs/images/readme/ascii_chess.jpg" alt="Pantalla de log in" />
+</p>

@@ -95,11 +95,6 @@ void EventHandlerThread::handleKeyDown() {
         screen_handler.toggleHelpScreen();
       break;
     }
-    case SDLK_r: {
-      if (!text_entry.isEnabled())
-        screen_handler.activateLeaveScreen();
-      break;
-    }
     case SDLK_c: {
       if (!text_entry.isEnabled())
         screen_handler.deactivateLeaveScreen();

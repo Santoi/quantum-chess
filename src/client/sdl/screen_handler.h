@@ -23,8 +23,6 @@ public:
 
     void toggleHelpScreen();
 
-    void activateLeaveScreen();
-
     void deactivateLeaveScreen();
 
     void switchOpenStatusIfLeaveMatchScreenIsRendering(std::atomic<bool>& open);

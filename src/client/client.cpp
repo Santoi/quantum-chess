@@ -144,8 +144,6 @@ void Client::handleGame(Socket&& socket,
   TurnLog turn_log(scene);
   TextEntry text_entry(scene.getChatWidth() / font.size());
 
-  RemoteClientSender sender_thread(socket, send);
-  RemoteClientReceiver receiver_thread(socket, received);
   ActionThread action_thread(received, game, chat, chess_log, error_log,
                              turn_log);
   EventHandlerThread event_handler(window, game,screen_handler,

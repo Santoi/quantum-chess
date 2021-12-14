@@ -116,13 +116,13 @@ Luego, como estructura utilizada para la lógica contiene un *map*, donde la cla
 
 El tablero posee métodos para ejercer movimientos, tales como: ```move()```, ```split()``` y ```merge()```; para obtener información, tales como ```getEntangledOf()```, ```getPossibleMovesOf()```, etcétera; y métodos de carga como ```load()```, que permite cargar un tablero desde un archivo de texto (explicado en el manual de usuario).
 
-## Position y QuantumPosition
+### Position y QuantumPosition
 
 Las posiciones son representadas por la clase ```Position```, la cual contiene las coordenadas en x e y. 
 
 Las posiciones cuánticas, son representadas por la clase ```QuantumPosition```. Estas contienen un objeto ```Position```, la probabilidad correspondiente a la posición y un puntero a su ```Chessman```, si lo tuviera.
 
-## Chessman
+### Chessman
 
 La clase ```Chessman``` es una clase abstracta que representa a cada pieza de ajedrez del tablero. Posee una referencia al tablero al que pertenece, ya que debe efectuar acciones sobre este, una lista de las posiciones en las que se encuentra (```QuantumPosition```), y un ```bool``` indicando su color. Además posee una referencia a un ```EntanglementLog``` conteniendo todos los entrelazamientos que existen en el tablero.
 
@@ -173,14 +173,9 @@ Cuando se mide una pieza, se miden a su vez todas las piezas que dependan de ell
 
 Todos estos casos son responsabilidad de ```EntanglementLog``` y están contemplados en ella.
 
-### Tests?
+### Tests
 
-### Entrelazamiento
- 
-### Movimientos posibles
-
-### Logs
-
+Los comportamientos del juego fueron chequeados mediante tests utilizando el framework de ```Google Test``` y ejecutados utilizand ```valgrind```. Se puede encontrar como correr los tests en los manuales de usuario.
 
 
 <!--## Diagrama de hilos

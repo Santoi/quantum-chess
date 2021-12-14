@@ -9,9 +9,7 @@
 
 [Link al repositorio](https://github.com/santoi/quantum-chess)
 
-## Ejecucion
-
-### Dependencias
+## Dependencias
 * Git
 * Make
 * CMake
@@ -20,7 +18,45 @@
 * SDL2 (paquetes ```libsdl2-dev```, ```libsdl2-mixer-dev```, ```libsdl2-ttf-dev```, ```libsdl2-image-dev```)
 * Valgrind (solo si se desea correr con el mismo)
 
+## Instalación
+
+Para instalar el programam, primeramente se debe clonar el repositorio en una consola utilizando
+    
+    git clone --recurse-submodules git@github.com:Santoi/quantum-chess
+
+luego, estando ubicado en la carpeta del repositorio, se debe ejecutar el script de instalación con permisos de super usuario.
+
+    sudo bash install.sh
+
+Esto copiará los archivos tanto binarios como de recursos en las carpetas correspondientes. Para desinstalar, de la misma manera, se debe ejecutar
+
+    sudo bash uninstall.sh
+
+### Ejecución del server
+
+Para ejecutar el server, se debe ejecutar la siguiente linea en una terminal desde cualquier ubicación, donde ```port``` es el puerto en el que se abrirá el server y ```config_file``` el archivo de configuración del tablero, el cual debe estar ubicado en ```/usr/local/share/quantum_chess/boards/``` (solo el nombre del archivo, sin esta primera carpeta). Si no se explicita este último parámetro, se utilizara el archivo ```default.txt```.
+
+    quantum_chess_server <port> [config_file]
+
+### Ejecución del cliente
+
+Al instalar, se creará un acceso directo al cliente del juego en la sección de Juegos del sistema operativo, que permite ejecutarlo directamente.
+
+<p align=center>
+    <img src="docs/images/readme/desktop_file.png" alt="Acceso directo" height="400"/>
+</p>
+
+También es posible ejecutarlo desde una consola, estando en cualquier ubicación, utilizando
+
+    quantum_chess
+
+
+
+## Compilación (sin instalación)
+Para compilar el programa sin instalarlo, se deben seguir los siguientes pasos. De esta manera se pueden correr los tests y las ejecuciones del programa utilizando *valgrind*.
+
 ### Compilación
+
 Para compilar, en una consola se debe clonar el resositorio utilizando
     
     git clone --recurse-submodules git@github.com:Santoi/quantum-chess
@@ -36,9 +72,9 @@ Para ejecutar el server, se debe ejecutar la siguiente linea, donde ```port``` e
 
 ### Ejecución del cliente
 
-Para ejecutar el cliente, se debe ejecutar la siguiente linea, donde ```host``` es el host donde se encuentra corriendo el server y ```port``` el puerto.
+Para ejecutar el cliente, se debe ejecutar la siguiente linea
 
-    bash client.sh <host> <port>
+    bash client.sh
 
 ### Ejecución de tests y valgrind
 
@@ -221,9 +257,13 @@ En la zona derecha de la pantalla, se pueden visualizar 4 secciones: el log de e
 </p>
 
 
+### Flip de tablero
+
+El tablero se puede dar vuelta, cambiando entre vista desde el lado de las blancas y de las negras utilizando la tecla `F`.
+
 ### Activación de musica y sonidos
 
-La música puede ser activada y desactivada utilizando la tecla ```M```. Los efectos de sonidos pueden ser desactivados utilizando la telca ```N```.
+La música puede ser activada y desactivada utilizando la tecla ```M```. Los efectos de sonidos pueden ser desactivados utilizando la tecla ```N```.
 
 ### Cancelando movimientos
 
@@ -233,7 +273,7 @@ Todos los movimientos pueden ser cancelados con la tecla ```ESC```
 
 El archivo de configuracion permite cargar tableros pre-definidos. Esto es para el server, por lo que un server inicializado con un archivo, lo usará para todas sus partidas.
 
- Los archivos de configuración deben ser guardados en texto plano en la carpeta ```boards/```.
+ Los archivos de configuración deben ser guardados en texto plano en la carpeta ```/usr/local/share/quantum_chess/boards```.
 
 Cada pieza debe ser colocada en una línea distinta, teniendo la siguiente forma:
     

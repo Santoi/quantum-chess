@@ -154,9 +154,9 @@ void LoginScene::renderPlayAnotherMatchButtons(Button& yes_button,
                                                Button& no_button) {
   size_t width = window.getWidth();
   question_play_other_match.render(0, 0, width, window.getHeight());
-  size_t button_height = width * .05, button_width = width * .1;
-  size_t delta_x = button_width;
-
+  size_t button_height, button_width;
+  button_height = button_width = width * .1;
+  size_t delta_x = width * .01;
   yes_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
                                 button_height * 2,
                                 button_width,

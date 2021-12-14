@@ -19,9 +19,6 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
           {"role_black",       BUTTONS_PATH "available_black_role.png"},
           {"role_spectator",   BUTTONS_PATH "spectator_role.png"},
           {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"},
-          {"keep_playing", "resources/sprites/keep_playing_question.png"},
-     	    {"help", "resources/sprites/help_image.png"},
-      	  {"leave", "resources/sprites/leave_match_question.png"}
 };
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,

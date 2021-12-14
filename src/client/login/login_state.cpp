@@ -281,9 +281,7 @@ ChooseToKeepPlayingState::ChooseToKeepPlayingState(Login& login_,
                                ButtonSpriteRepository &button_sprite_repository,
                                TextSpriteRepository &text_sprite_repository)
                          :LoginState(login_,
-                          button_sprite_repository, text_sprite_repository),
-                          question_sprite(&button_sprite_repository.
-                                          getPressed("keep_playing")) {
+                          button_sprite_repository, text_sprite_repository) {
   buttons_ptr.push_back(std::move(
           make_unique<OptionButton>(button_sprite_repository,
                                       text_sprite_repository, "YES", "yes")));

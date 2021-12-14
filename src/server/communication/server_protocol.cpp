@@ -194,7 +194,6 @@ void ServerProtocol::fillEntangledChessmenInstruction(Socket &socket,
 }
 void ServerProtocol::fillSurrenderInstruction(Socket &socket, const ClientData &data,
                                               std::shared_ptr<Instruction> &instruc_ptr) {
-  std::cout << "Surrender received" << std::endl;
   instruc_ptr = std::make_shared<SurrenderInstruction>(data);
 }
 
@@ -356,13 +355,3 @@ void ServerProtocol::fillPacketWithSoundMessage(Packet &packet, uint8_t sound) {
   packet.addByte(SOUND_PREFIX);
   addNumber8ToPacket(packet, sound);
 }
-
-void ServerProtocol::fillPacketWithSurrenderMessage(Packet &packet,
-                                                    const ClientData &client_data,
-                                                    std::string timestamp) {
-  packet.addByte(SURRENDER_PREFIX);
-  changeNumberToBigEndianAndAddToPacket(packet, client_data.id);
-  addStringAndItsLengthToPacket(packet, client_data.name);
-  addStringAndItsLengthToPacket(packet, timestamp);
-}
-

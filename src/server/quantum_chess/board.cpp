@@ -174,6 +174,26 @@ bool Board::isThere(Chessman *chessman) {
                      });
 }
 
+void Board::surrender(const ClientData::Role surrender_rol) {
+  if (finished)
+    ChessException("Game is already over: cannot surrender.");
+  if (surrender_rol == ClientData::ROLE_SPECTATOR)
+    ChessException("Spectator cannot surrender");
+  std::string surrended_color;
+  std::string winner_color;
+  if (surrender_rol == ClientData::ROLE_WHITE) {
+    surrended_color = "white";
+    winner_color = "black";
+  } else {
+    surrended_color =  "black";
+    winner_color = "white";
+  }
+  pushToLog("End of the game, " + winner_color + " wins");
+  pushToLog(surrended_color + "  surrendered: ");
+  endGame();
+}
+
+
 void
 Board::loadVectorOfSquareData(std::vector<SquareData> &data) {
   data.reserve(board.size());

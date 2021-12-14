@@ -90,43 +90,36 @@ void EventHandlerThread::handleKeyDown() {
     }
     case SDLK_h: {
       if (!text_entry.isEnabled()) {
-        std::cout << "h!" << std::endl;
         screen_handler.toggleHelpScreen();
       }
       break;
     }
     case SDLK_r: {
       if (!text_entry.isEnabled()) {
-        std::cout << "r!" << std::endl;
         screen_handler.activateLeaveScreen();
       }
       break;
     }
     case SDLK_c: {
       if (!text_entry.isEnabled()) {
-        std::cout << "c!" << std::endl;
         screen_handler.deactivateLeaveScreen();
       }
       break;
     }
     case SDLK_y: {
       if (!text_entry.isEnabled()) {
-        std::cout << "y!" << std::endl;
         screen_handler.switchOpenStatusIfLeaveMatchScreenIsRendering(open);
         //open = false;
       }
       break;
     }
     case SDLK_s: {
-      if (!text_entry.isEnabled()) {
-        std::cout << "s!" << std::endl;
+      if (!text_entry.isEnabled())
         screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
-      }
       break;
     }
     case SDLK_o: {
       if (!text_entry.isEnabled()) {
-        std::cout << "o!" << std::endl;
      //   if (!game_scene.renderingLeaveMatchScreen())
         //  return;
         //game.request tie()

@@ -7,6 +7,7 @@ ScreenHandler::ScreenHandler(bool client_is_spectator_)
 }
 
 void ScreenHandler::renderCurrentState(GameScene &game_scene) {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   if (!render_help_screen && !render_leave_match_screen) //most likely case
     game_scene.renderGame();
   else if (render_help_screen)

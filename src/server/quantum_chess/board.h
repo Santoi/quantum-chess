@@ -10,6 +10,7 @@
 #include "pseudo_random_coin.h"
 #include "chessman/entanglement_log.h"
 #include "client_data.h"
+#include "../../common/client_data.h"
 
 #define LOADER_COMMENT '#'
 
@@ -118,6 +119,9 @@ public:
 
   // Pop strings from log to list (log is a stack).
   void popLog(std::list<std::string> &popped);
+
+  //
+  void surrender(const ClientData::Role surrender_rol);
 };
 
 

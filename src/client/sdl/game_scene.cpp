@@ -14,6 +14,7 @@
 #define MIN_CHAT_WIDTH 200
 #define MAX_CHAT_WIDTH 400
 #define CHAT_WIDTH 300
+#define SCENES_PATH "resources/sprites/game_scenes/"
 
 GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
                      ScreenHandler &screen_handler_,
@@ -30,9 +31,10 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
           mutex(),
           text_repository(text_repository),
           button_repository(button_repository),
-          help_sprite(&button_repository.getPressed("help")),
-          leave_sprite(&button_repository.getPressed("spectator_leave")),
-          surrender_leave_sprite(&button_repository.getPressed("player_leave")){
+          help_sprite(window.renderer(), SCENES_PATH "help_image.png"),
+          leave_sprite(window.renderer(), SCENES_PATH "leave_match_question.png"),
+          surrender_leave_sprite(window.renderer(),
+                                 SCENES_PATH "leave_surrender_match.png") {
 }
 
 void
@@ -75,18 +77,18 @@ void GameScene::addCurrentMessage(const std::string &text) {
 
 void GameScene::renderLeaveMatchScreenForPlayers() {
   int width = window.getWidth(), height = window.getHeight();
-  surrender_leave_sprite->render(0, 0, width, height);
+  surrender_leave_sprite.render(0, 0, width, height);
 }
 
 
 void GameScene::renderLeaveMatchScreenForSpectators() {
   int width = window.getWidth(), height = window.getHeight();
-  leave_sprite->render(0, 0, width, height);
+  leave_sprite.render(0, 0, width, height);
 }
 
 void GameScene::renderHelpScreen() {
   int width = window.getWidth(), height = window.getHeight();
-  help_sprite->render(0, 0, width, height);
+  help_sprite.render(0, 0, width, height);
 }
 
 void GameScene::renderGame() {

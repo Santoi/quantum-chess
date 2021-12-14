@@ -11,7 +11,6 @@
 #include "sprite_repositories/button_sprite_repository.h"
 #include "drawables/drawable_text_entry_button.h"
 
-
 class Window;
 
 class ScreenHandler;
@@ -30,9 +29,9 @@ private:
     std::mutex mutex;
     TextSpriteRepository &text_repository;
     ButtonSpriteRepository &button_repository;
-    TextureSprite* help_sprite;
-    TextureSprite* leave_sprite;
-    TextureSprite* surrender_leave_sprite;
+    TextureSprite help_sprite;
+    TextureSprite leave_sprite;
+    TextureSprite surrender_leave_sprite;
     std::string current_message_text;
 
 public:

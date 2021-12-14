@@ -1,6 +1,6 @@
 #include "remote_client_instructions.h"
 #include "client_protocol.h"
-#include "../game/position.h"
+#include "../game/board_position.h"
 #include "../game/game.h"
 #include "../game/chat.h"
 #include "../game/error_log.h"
@@ -66,8 +66,8 @@ void RemoteClientLoadBoardInstruction::makeAction(Game &game, Chat &chat,
 }
 
 RemoteClientMoveInstruction::RemoteClientMoveInstruction(
-    const Position &initial_,
-    const Position &final_) : initial(initial_), final(final_) {}
+    const BoardPosition &initial_,
+    const BoardPosition &final_) : initial(initial_), final(final_) {}
 
 void RemoteClientMoveInstruction::makeAction(Game &game, Chat &chat,
                                              ChessLog &chess_log,
@@ -95,7 +95,7 @@ void RemoteClientExceptionInstruction::fillPacketWithInstructionsToSend(
 }
 
 RemoteClientPossibleMovesInstruction::RemoteClientPossibleMovesInstruction
-    (std::list<Position> &&positions_) :
+    (std::list<BoardPosition> &&positions_) :
     positions(std::move(positions_)) {}
 
 void RemoteClientPossibleMovesInstruction::makeAction(Game &game, Chat &chat,
@@ -113,7 +113,7 @@ RemoteClientPossibleMovesInstruction::fillPacketWithInstructionsToSend(
 }
 
 RemoteClientPossibleSplitsInstruction::RemoteClientPossibleSplitsInstruction
-    (std::list<Position> &&positions_) :
+    (std::list<BoardPosition> &&positions_) :
     positions(std::move(positions_)) {}
 
 void RemoteClientPossibleSplitsInstruction::makeAction(Game &game, Chat &chat,
@@ -131,7 +131,7 @@ RemoteClientPossibleSplitsInstruction::fillPacketWithInstructionsToSend(
 }
 
 RemoteClientPossibleMergesInstruction::RemoteClientPossibleMergesInstruction
-    (std::list<Position>
+    (std::list<BoardPosition>
      &&positions_) :
     positions(std::move(positions_)) {}
 
@@ -155,7 +155,8 @@ RemoteClientPossibleMergesInstruction::fillPacketWithInstructionsToSend(
 
 
 RemoteClientSplitInstruction::RemoteClientSplitInstruction(
-    const Position &from_, const Position &to1_, const Position &to2_)
+    const BoardPosition &from_, const BoardPosition &to1_,
+    const BoardPosition &to2_)
     : from(from_), to1(to1_), to2(to2_) {}
 
 void RemoteClientSplitInstruction::makeAction(Game &game, Chat &chat,
@@ -169,7 +170,8 @@ fillPacketWithInstructionsToSend(Packet &packet, ClientProtocol &protocol) {
 }
 
 RemoteClientMergeInstruction::RemoteClientMergeInstruction(
-    const Position &from1_, const Position &from2_, const Position &to_)
+    const BoardPosition &from1_, const BoardPosition &from2_,
+    const BoardPosition &to_)
     : from1(from1_), from2(from2_), to(to_) {}
 
 void RemoteClientMergeInstruction::makeAction(Game &game, Chat &chat,
@@ -183,7 +185,7 @@ fillPacketWithInstructionsToSend(Packet &packet, ClientProtocol &protocol) {
 }
 
 RemoteClientSameChessmanInstruction::RemoteClientSameChessmanInstruction
-    (std::list<Position> &&positions_) :
+    (std::list<BoardPosition> &&positions_) :
     positions(std::move(positions_)) {}
 
 void RemoteClientSameChessmanInstruction::makeAction(Game &game, Chat &chat,
@@ -201,7 +203,8 @@ RemoteClientSameChessmanInstruction::fillPacketWithInstructionsToSend(
 }
 
 RemoteClientEntangledChessmanInstruction::
-RemoteClientEntangledChessmanInstruction(std::list<Position> &&positions_) :
+RemoteClientEntangledChessmanInstruction(std::list<BoardPosition> &&positions_)
+    :
     positions(std::move(positions_)) {}
 
 void

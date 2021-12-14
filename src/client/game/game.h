@@ -50,19 +50,19 @@ public:
   void currentTile(const PixelCoordinate &coordinate);
 
   // Tell board which tiles to mark as move tiles
-  void moveTiles(const std::list<Position> &positions);
+  void moveTiles(const std::list<BoardPosition> &positions);
 
   // Tell board which tiles to mark as entangled tiles
-  void entangledTiles(const std::list<Position> &positions);
+  void entangledTiles(const std::list<BoardPosition> &positions);
 
   // Tell board which tiles to mark as quantum tiles
-  void quantumTiles(const std::list<Position> &positions);
+  void quantumTiles(const std::list<BoardPosition> &positions);
 
   // Tell board which tiles to mark as split tiles
-  void splitTiles(const std::list<Position> &positions);
+  void splitTiles(const std::list<BoardPosition> &positions);
 
   // Tell board which tiles to mark as merge tiles
-  void mergeTiles(const std::list<Position> &positions);
+  void mergeTiles(const std::list<BoardPosition> &positions);
 
   // Move a chessman from source to destination positions
   void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);

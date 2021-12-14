@@ -4,7 +4,7 @@
 #include <string>
 #include <list>
 #include <vector>
-#include "../game/position.h"
+#include "../game/board_position.h"
 #include "../../ascii_chess/ascii_board.h"
 #include "../../common/packet.h"
 #include "client_protocol.h"
@@ -114,13 +114,14 @@ public:
 };
 
 class RemoteClientMoveInstruction : public RemoteClientInstruction {
-  Position initial;
-  Position final;
+  BoardPosition initial;
+  BoardPosition final;
 
 public:
   RemoteClientMoveInstruction() = delete;
 
-  RemoteClientMoveInstruction(const Position &initial_, const Position &final_);
+  RemoteClientMoveInstruction(const BoardPosition &initial_,
+                              const BoardPosition &final_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -151,13 +152,13 @@ public:
 };
 
 class RemoteClientPossibleMovesInstruction : public RemoteClientInstruction {
-  std::list<Position> positions;
+  std::list<BoardPosition> positions;
 
 public:
   RemoteClientPossibleMovesInstruction() = delete;
 
   explicit RemoteClientPossibleMovesInstruction(
-      std::list<Position> &&positions_);
+      std::list<BoardPosition> &&positions_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -170,12 +171,12 @@ public:
 };
 
 class RemoteClientPossibleSplitsInstruction : public RemoteClientInstruction {
-  std::list<Position> positions;
+  std::list<BoardPosition> positions;
 
 public:
   RemoteClientPossibleSplitsInstruction() = delete;
 
-  RemoteClientPossibleSplitsInstruction(std::list<Position>
+  RemoteClientPossibleSplitsInstruction(std::list<BoardPosition>
                                         &&positions_);
 
   void
@@ -189,12 +190,12 @@ public:
 };
 
 class RemoteClientPossibleMergesInstruction : public RemoteClientInstruction {
-  std::list<Position> positions;
+  std::list<BoardPosition> positions;
 
 public:
   RemoteClientPossibleMergesInstruction() = delete;
 
-  RemoteClientPossibleMergesInstruction(std::list<Position>
+  RemoteClientPossibleMergesInstruction(std::list<BoardPosition>
                                         &&positions_);
 
   void
@@ -208,15 +209,16 @@ public:
 };
 
 class RemoteClientSplitInstruction : public RemoteClientInstruction {
-  Position from;
-  Position to1;
-  Position to2;
+  BoardPosition from;
+  BoardPosition to1;
+  BoardPosition to2;
 
 public:
   RemoteClientSplitInstruction() = delete;
 
   RemoteClientSplitInstruction(
-      const Position &from, const Position &to1, const Position &to2);
+      const BoardPosition &from, const BoardPosition &to1,
+      const BoardPosition &to2);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -229,15 +231,16 @@ public:
 };
 
 class RemoteClientMergeInstruction : public RemoteClientInstruction {
-  Position from1;
-  Position from2;
-  Position to;
+  BoardPosition from1;
+  BoardPosition from2;
+  BoardPosition to;
 
 public:
   RemoteClientMergeInstruction() = delete;
 
   RemoteClientMergeInstruction(
-      const Position &from1_, const Position &from2_, const Position &to_);
+      const BoardPosition &from1_, const BoardPosition &from2_,
+      const BoardPosition &to_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
@@ -250,12 +253,12 @@ public:
 };
 
 class RemoteClientSameChessmanInstruction : public RemoteClientInstruction {
-  std::list<Position> positions;
+  std::list<BoardPosition> positions;
 
 public:
   RemoteClientSameChessmanInstruction() = delete;
 
-  RemoteClientSameChessmanInstruction(std::list<Position>
+  RemoteClientSameChessmanInstruction(std::list<BoardPosition>
                                       &&positions_);
 
   void
@@ -270,12 +273,12 @@ public:
 
 class RemoteClientEntangledChessmanInstruction
     : public RemoteClientInstruction {
-  std::list<Position> positions;
+  std::list<BoardPosition> positions;
 
 public:
   RemoteClientEntangledChessmanInstruction() = delete;
 
-  RemoteClientEntangledChessmanInstruction(std::list<Position>
+  RemoteClientEntangledChessmanInstruction(std::list<BoardPosition>
                                            &&positions_);
 
   void

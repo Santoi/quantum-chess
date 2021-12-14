@@ -118,9 +118,9 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
-    std::list<Position> coords;
+    std::list<BoardPosition> coords;
     for (size_t i = 0; i < 8; i++) {
-      Position pos(0, i);
+      BoardPosition pos(0, i);
       coords.push_back(pos);
     }
 

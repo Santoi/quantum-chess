@@ -58,38 +58,38 @@ public:
   ~ClientProtocol() = default;
 
   void
-  fillPacketWithMoveMessage(Packet &packet, Position &initial,
-                            Position &final);
+  fillPacketWithMoveMessage(Packet &packet, BoardPosition &initial,
+                            BoardPosition &final);
 
   void fillPacketWithPossibleMovesMessage(Packet &packet,
-                                          const Position &position);
+                                          const BoardPosition &position);
 
   void getAvailableRoles(Socket &socket, std::list<ClientData::Role> &roles);
 
   void sendChosenRole(Socket &socket, ClientData::Role role);
 
   void
-  fillPacketWithPossibleSplitsMessage(Packet &packet, const Position &position);
+  fillPacketWithPossibleSplitsMessage(Packet &packet, const BoardPosition &position);
 
-  void fillPacketWithSplitMessage(Packet &packet, Position &from, Position &to1,
-                                  Position &to2);
-
-  void
-  fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position);
+  void fillPacketWithSplitMessage(Packet &packet, BoardPosition &from, BoardPosition &to1,
+                                  BoardPosition &to2);
 
   void
-  fillPacketWithPossibleMergesMessage(Packet &packet, const Position &position1,
-                                      const Position &position2);
+  fillPacketWithPossibleMergesMessage(Packet &packet, const BoardPosition &position);
 
   void
-  fillPacketWithSameChessmanInstruction(Packet &packet, Position &position);
+  fillPacketWithPossibleMergesMessage(Packet &packet, const BoardPosition &position1,
+                                      const BoardPosition &position2);
+
+  void
+  fillPacketWithSameChessmanInstruction(Packet &packet, BoardPosition &position);
 
   void
   fillPacketWithEntangledChessmanInstruction(Packet &packet,
-                                             Position &position);
+                                             BoardPosition &position);
 
-  void fillPacketWithMergeMessage(Packet &packet, const Position &from1,
-                                  const Position &from2, const Position &to);
+  void fillPacketWithMergeMessage(Packet &packet, const BoardPosition &from1,
+                                  const BoardPosition &from2, const BoardPosition &to);
 
 private:
   // Gets necessary information to create the RemoteClientChatInstruction

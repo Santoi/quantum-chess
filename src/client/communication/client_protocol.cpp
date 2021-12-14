@@ -69,8 +69,8 @@ void ClientProtocol::fillPacketWithChatMessage(Packet &packet,
 }
 
 void
-ClientProtocol::fillPacketWithMoveMessage(Packet &packet, Position &initial,
-                                          Position &final) {
+ClientProtocol::fillPacketWithMoveMessage(Packet &packet, BoardPosition &initial,
+                                          BoardPosition &final) {
   packet.addByte(MOVE_PREFIX);
   packet.addByte(initial.x());
   packet.addByte(initial.y());
@@ -79,8 +79,8 @@ ClientProtocol::fillPacketWithMoveMessage(Packet &packet, Position &initial,
 }
 
 void
-ClientProtocol::fillPacketWithSplitMessage(Packet &packet, Position &from,
-                                           Position &to1, Position &to2) {
+ClientProtocol::fillPacketWithSplitMessage(Packet &packet, BoardPosition &from,
+                                           BoardPosition &to1, BoardPosition &to2) {
   packet.addByte(SPLIT_PREFIX);
   packet.addByte(from.x());
   packet.addByte(from.y());
@@ -91,9 +91,9 @@ ClientProtocol::fillPacketWithSplitMessage(Packet &packet, Position &from,
 }
 
 void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
-                                                const Position &from1,
-                                                const Position &from2,
-                                                const Position &to) {
+                                                const BoardPosition &from1,
+                                                const BoardPosition &from2,
+                                                const BoardPosition &to) {
   packet.addByte(MERGE_PREFIX);
   packet.addByte(from1.x());
   packet.addByte(from1.y());
@@ -105,7 +105,7 @@ void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
 
 void
 ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
-                                                   const Position &position) {
+                                                   const BoardPosition &position) {
   packet.addByte(POSSIBLE_MOVES_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
@@ -113,7 +113,7 @@ ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
 
 void
 ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
-                                                    const Position &position) {
+                                                    const BoardPosition &position) {
   packet.addByte(POSSIBLE_SPLITS_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
@@ -121,7 +121,7 @@ ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
 
 void
 ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
-                                                    const Position &position) {
+                                                    const BoardPosition &position) {
   packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 1);
   addNumber8ToPacket(packet, position.x());
@@ -130,8 +130,8 @@ ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
 
 void
 ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
-                                                    const Position &position1,
-                                                    const Position &position2) {
+                                                    const BoardPosition &position1,
+                                                    const BoardPosition &position2) {
   packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 2);
   addNumber8ToPacket(packet, position1.x());
@@ -142,7 +142,7 @@ ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
 
 void
 ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
-                                                      Position &position) {
+                                                      BoardPosition &position) {
   packet.addByte(SAME_CHESSMAN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
@@ -150,7 +150,7 @@ ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
 
 void
 ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
-                                                           Position &position) {
+                                                           BoardPosition &position) {
   packet.addByte(ENTANGLED_CHESSMEN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
@@ -208,7 +208,7 @@ fillLoadBoardInstruction(Socket &socket,
     chessman += white ? "w" : "b";
     uint8_t x = getNumber8FromSocket(socket);
     uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    BoardPosition position(x, y);
     uint16_t prob_int = getNumber16FromSocket(socket);
     double prob = ((double) prob_int + 1) / (UINT16_MAX + 1);
     chessman_data_vector.push_back(ChessmanData(position, chessman, prob));
@@ -232,11 +232,11 @@ fillPossibleMovesInstruction(Socket &socket,
                              std::shared_ptr<RemoteClientInstruction>
                              &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
-  std::list<Position> posible_moves;
+  std::list<BoardPosition> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
     uint8_t x = getNumber8FromSocket(socket);
     uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    BoardPosition position(x, y);
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientPossibleMovesInstruction>(
@@ -248,11 +248,11 @@ fillPossibleSplitsInstruction(Socket &socket,
                               std::shared_ptr<RemoteClientInstruction>
                               &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
-  std::list<Position> posible_moves;
+  std::list<BoardPosition> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
     uint8_t x = getNumber8FromSocket(socket);
     uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    BoardPosition position(x, y);
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientPossibleSplitsInstruction>(
@@ -264,11 +264,11 @@ void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
                                                        RemoteClientInstruction>
                                                    &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
-  std::list<Position> posible_moves;
+  std::list<BoardPosition> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
     uint8_t x = getNumber8FromSocket(socket);
     uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    BoardPosition position(x, y);
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientPossibleMergesInstruction>(
@@ -280,11 +280,11 @@ fillSameChessmanInstruction(Socket &socket,
                             std::shared_ptr<RemoteClientInstruction>
                             &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
-  std::list<Position> posible_moves;
+  std::list<BoardPosition> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
     uint8_t x = getNumber8FromSocket(socket);
     uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    BoardPosition position(x, y);
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientSameChessmanInstruction>(
@@ -296,11 +296,11 @@ fillEntangledChessmanInstruction(Socket &socket,
                                  std::shared_ptr<RemoteClientInstruction>
                                  &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
-  std::list<Position> posible_moves;
+  std::list<BoardPosition> posible_moves;
   for (uint8_t i = 0; i < amount; i++) {
     uint8_t x = getNumber8FromSocket(socket);
     uint8_t y = getNumber8FromSocket(socket);
-    Position position(x, y);
+    BoardPosition position(x, y);
     posible_moves.push_back(position);
   }
   ptr_instruction = make_unique<RemoteClientEntangledChessmanInstruction>(

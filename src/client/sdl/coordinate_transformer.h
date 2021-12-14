@@ -2,16 +2,16 @@
 #define QUANTUM_CHESS_PROJ_COORDINATE_TRANSFORMER_H
 
 #include "pixel_coordinate.h"
-#include "../game/position.h"
+#include "../game/board_position.h"
 
 class CoordinateTransformer {
 public:
-  void position2Pixel(const Position &position,
+  void position2Pixel(const BoardPosition &position,
                       PixelCoordinate &pixel, int width,
                       int height);
 
   void pixel2Position(const PixelCoordinate &pixel,
-                      Position &position, int width,
+                      BoardPosition &position, int width,
                       int height);
 };
 

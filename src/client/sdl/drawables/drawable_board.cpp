@@ -36,19 +36,19 @@ DrawableBoard::DrawableBoard(Window &window, const std::string &image,
     std::string letter(l);
     DrawableText numbers(text_repository, num, 't');
     DrawableText letters(text_repository, letter, 't');
-    Position row(-1, i);
-    Position column(i, -1);
+    BoardPosition row(8, i);
+    BoardPosition column(i, -1);
     positions.insert(
-        std::pair<const Position, DrawableText>(row, std::move(numbers)));
+        std::pair<const BoardPosition, DrawableText>(row, std::move(numbers)));
     positions.insert(
-        std::pair<const Position, DrawableText>(column,
-                                                std::move(letters)));
+        std::pair<const BoardPosition, DrawableText>(column,
+                                                     std::move(letters)));
     for (size_t j = 0; j < 8; j++) {
-      const Position position(i, j);
+      const BoardPosition position(i, j);
       DrawableTile tile(renderer, position.isEven(), tile_repository);
-      board.insert(std::pair<const Position, DrawableTile>(position,
-                                                           std::move(
-                                                               tile)));
+      board.insert(std::pair<const BoardPosition, DrawableTile>(position,
+                                                                std::move(
+                                                                    tile)));
     }
   }
 }
@@ -58,37 +58,37 @@ void DrawableBoard::load(std::vector<ChessmanData> &chessman_data_vector) {
   chessmen.clear();
   for (auto &chessman_data: chessman_data_vector) {
     DrawableChessman chessman(renderer, chessman_repository, chessman_data);
-    chessmen.insert(std::pair<const Position, DrawableChessman>
+    chessmen.insert(std::pair<const BoardPosition, DrawableChessman>
                         (chessman_data.position,
                          std::move(chessman)));
   }
 }
 
-void DrawableBoard::moveTile(const Position &pos) {
+void DrawableBoard::moveTile(const BoardPosition &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_MOVE);
 }
 
-void DrawableBoard::quantumTile(const Position &pos) {
+void DrawableBoard::quantumTile(const BoardPosition &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_QUANTUM);
 }
 
-void DrawableBoard::entangledTile(const Position &pos) {
+void DrawableBoard::entangledTile(const BoardPosition &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_ENTANGLED);
 }
 
-void DrawableBoard::splitTile(const Position &pos) {
+void DrawableBoard::splitTile(const BoardPosition &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_SPLIT);
 }
 
-void DrawableBoard::mergeTile(const Position &pos) {
+void DrawableBoard::mergeTile(const BoardPosition &pos) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (board.count(pos))
     board.at(pos).loadTile(TileSpriteRepository::TILE_MERGE);

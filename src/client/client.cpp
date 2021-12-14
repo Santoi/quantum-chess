@@ -1,7 +1,7 @@
 #include "client.h"
 #include "sdl/window.h"
 #include "sdl/game_scene.h"
-#include "game/position.h"
+#include "game/board_position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
 #include "../common/packet.h"

@@ -10,9 +10,6 @@ SurrenderInstruction::SurrenderInstruction(const ClientData &instructor_data_)
 void SurrenderInstruction::makeActionAndNotify(Match &match) {
   try {
     match.getBoard().surrender(instructor_data.role);
-    std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<SurrenderInstruction>(
-            instructor_data);
-    match.addInstrToAllListeningQueues(this_instruct_ptr);
   } catch (const ChessException &e) {
     std::shared_ptr<Instruction> error_instr =
             std::make_shared<ChessExceptionInstruction>(instructor_data,

@@ -176,9 +176,9 @@ bool Board::isThere(Chessman *chessman) {
 
 void Board::surrender(const ClientData::Role surrender_rol) {
   if (finished)
-    ChessException("Game is already over: cannot surrender.");
+    throw ChessException("Cannot surrender: game over"); 
   if (surrender_rol == ClientData::ROLE_SPECTATOR)
-    ChessException("Spectator cannot surrender");
+    throw ChessException("Spectator cannot surrender");
   std::string surrended_color;
   std::string winner_color;
   if (surrender_rol == ClientData::ROLE_WHITE) {

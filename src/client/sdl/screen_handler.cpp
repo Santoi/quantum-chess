@@ -29,6 +29,7 @@ void ScreenHandler::toggleHelpScreen() {
 
 
 void ScreenHandler::toggleLeaveScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_help_screen)
     return;
   render_leave_match_screen = !render_leave_match_screen;
@@ -51,14 +52,12 @@ void ScreenHandler::switchOpenStatusIfLeaveMatchScreenIsRendering(
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     open = false;
-  render_leave_match_screen = false;
 }
 
 void ScreenHandler::surrenderMatchIfLeaveMatchScreenIsRendering(Game &game) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     game.surrender();
-  toggleLeaveScreen();
 }
 
 bool ScreenHandler::renderingGame() {

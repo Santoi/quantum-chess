@@ -3,6 +3,7 @@
 
 #include "instruction.h"
 #include "../../quantum_chess/board.h"
+#include <string>
 
 class ChatInstruction : public Instruction {
 private:
@@ -22,7 +23,8 @@ public:
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 
   ~ChatInstruction() override = default;
 };

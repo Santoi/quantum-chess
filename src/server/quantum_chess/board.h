@@ -5,11 +5,14 @@
 #include <vector>
 #include <stack>
 #include <memory>
+#include <string>
+#include <list>
 #include "position.h"
 #include "chessman/chessman.h"
 #include "pseudo_random_coin.h"
 #include "chessman/entanglement_log.h"
 #include "client_data.h"
+#include "../../common/client_data.h"
 
 #define LOADER_COMMENT '#'
 
@@ -64,8 +67,8 @@ public:
   void getPossibleMergesOf(const Position &position,
                            std::list<Position> &output);
 
-  // Loads in output possible merges of two chessman_ in position (possible moves
-  // that share both).
+  // Loads in output possible merges of two chessman_ in position
+  // (possible moves that share both).
   void
   getPossibleMergesOf(const Position &position1, const Position &position2,
                       std::list<Position> &output);
@@ -78,12 +81,12 @@ public:
   void
   getEntangledOf(const Position &position1, std::list<Position> &output);
 
-  // Returns a pointer to chessman_ in position. Returns nullptr if there isnt
+  // Returns a pointer to chessman_ in position. Returns nullptr if there isn't
   // a chessman_.
   Chessman *getChessmanAt(const Position &position);
 
   // Returns true if chessman_ is in the board (in the map).
-  bool isThere(Chessman *chessman);
+  bool isThere(const Chessman *chessman);
 
   // Add a chessman_ in position given.
   void addChessmanIn(const Position &position, Chessman *chessman);
@@ -118,6 +121,10 @@ public:
 
   // Pop strings from log to list (log is a stack).
   void popLog(std::list<std::string> &popped);
+
+  //Finishes the game and pushes to log the message of winner color
+  //and the surrenderer color.
+  void surrender(bool player_white);
 };
 
 

@@ -40,33 +40,62 @@ public:
 
   bool isPixelInBoard(const PixelCoordinate &pixel);
 
+  // Reset board tiles
   void setDefaultBoard();
 
-  void moveTiles(const std::list<Position> &positions);
+  // Reset board tiles, excluding the selected one
+  void setDefaultBoardWithCurrent();
 
-  void entangledTiles(const std::list<Position> &positions);
+  // Tell board which tile was selected
+  void currentTile(const PixelCoordinate &coordinate);
 
-  void quantumTiles(const std::list<Position> &positions);
+  // Tell board which tiles to mark as move tiles
+  void moveTiles(const std::list<BoardPosition> &positions);
 
-  void splitTiles(const std::list<Position> &positions);
+  // Tell board which tiles to mark as entangled tiles
+  void entangledTiles(const std::list<BoardPosition> &positions);
 
-  void mergeTiles(const std::list<Position> &positions);
+  // Tell board which tiles to mark as quantum tiles
+  void quantumTiles(const std::list<BoardPosition> &positions);
 
-  void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
+  // Tell board which tiles to mark as split tiles
+  void splitTiles(const std::list<BoardPosition> &positions);
 
+  // Tell board which tiles to mark as merge tiles
+  void mergeTiles(const std::list<BoardPosition> &positions);
+
+  // Move a chessman from source to destination positions
+  void moveChessman(const PixelCoordinate &orig, const PixelCoordinate &dest);
+
+  // Split a chessman into `to1` and `to2` positions
+  void splitChessman(const PixelCoordinate &from, const PixelCoordinate &to1,
+                     const PixelCoordinate &to2);
+
+  // Merge two chessmen into one tile
+  void mergeChessman(const PixelCoordinate &from1, const PixelCoordinate &from2,
+                     const PixelCoordinate &to);
+
+  // Load chessmen positions into the board
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
-  void askMoveTiles(PixelCoordinate &coords);
+  // Request posible move tiles to server
+  void askMoveTiles(const PixelCoordinate &coords);
 
-  void askSplitTiles(PixelCoordinate &coords);
+  // Request posible split tiles to server
+  void askSplitTiles(const PixelCoordinate &coords);
 
-  void splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
-                     PixelCoordinate &to2);
+  // Request posible merge tiles to server, for only 1 chessman
+  void askMergeTiles(const PixelCoordinate &coords);
 
+  // Request posible merge tiles to server, when 2 chessmen are selected
+  void
+  askMergeTiles(const PixelCoordinate &coords1, const PixelCoordinate &coords2);
 
-  void askMergeTiles(PixelCoordinate &coords);
+  // Request positions from entangled chessmen to the selected chessman
+  void askEntangledTiles(const PixelCoordinate &coords);
 
-  void askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2);
+  // Request positions from the selected chessman's superpositions
+  void askQuantumTiles(const PixelCoordinate &coords);
 
   void playSplitSound();
 
@@ -74,24 +103,15 @@ public:
 
   void playCaptureSound();
 
-  void askEntangledTiles(PixelCoordinate &coords);
-
-  void askQuantumTiles(PixelCoordinate &coords);
-
-  void mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
-                     PixelCoordinate &to);
-
   void toggleSounds();
 
   void toggleMusic();
 
-  void currentTile(const PixelCoordinate &coordinate);
-
-  void setDefaultBoardWithCurrent();
-
   ClientData::Role getPlayerRole();
 
   void flipBoard();
+
+    void surrender();
 };
 
 

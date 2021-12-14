@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <vector>
+#include <list>
 #include "../src/server/quantum_chess/board.h"
 #include "../src/server/quantum_chess/chessman/tower.h"
 #include "../src/server/quantum_chess/chessman/tower.h"
@@ -53,13 +54,13 @@ TEST(Tower, CalculatePosibleMovesWithEmptyBoard) {
   chessman->calculatePossibleMoves(Position(5, 1), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 2),
-      Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6),
-      Position(5, 7), Position(0, 1),
-      Position(1, 1), Position(2, 1),
-      Position(3, 1), Position(4, 1),
-      Position(6, 1), Position(7, 1),
+          Position(5, 0), Position(5, 2),
+          Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6),
+          Position(5, 7), Position(0, 1),
+          Position(1, 1), Position(2, 1),
+          Position(3, 1), Position(4, 1),
+          Position(6, 1), Position(7, 1),
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -141,11 +142,11 @@ TEST(Bishop, CalculatePosibleMovesWithEmptyBoard) {
   bishop->calculatePossibleMoves(Position(2, 1), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(1, 0), Position(3, 2),
-      Position(4, 3), Position(5, 4),
-      Position(6, 5), Position(7, 6),
-      Position(3, 0), Position(1, 2),
-      Position(0, 3)
+          Position(1, 0), Position(3, 2),
+          Position(4, 3), Position(5, 4),
+          Position(6, 5), Position(7, 6),
+          Position(3, 0), Position(1, 2),
+          Position(0, 3)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -230,10 +231,10 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
   king->calculatePossibleMoves(Position(2, 1), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(3, 1), Position(3, 2),
-      Position(2, 2), Position(1, 2),
-      Position(1, 1), Position(1, 0),
-      Position(2, 0), Position(3, 0)
+          Position(3, 1), Position(3, 2),
+          Position(2, 2), Position(1, 2),
+          Position(1, 1), Position(1, 0),
+          Position(2, 0), Position(3, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -242,16 +243,16 @@ TEST(King, CalculatePosibleMovesWithEmptyBoard) {
 TEST(Knight, CalculatePosibleMovesSurrounded) {
   Board board;
   std::vector<Position> sorround = {
-      Position(5, 4), Position(5, 5),
-      Position(4, 5), Position(3, 5),
-      Position(3, 4), Position(3, 3),
-      Position(4, 3), Position(5, 3)
+          Position(5, 4), Position(5, 5),
+          Position(4, 5), Position(3, 5),
+          Position(3, 4), Position(3, 3),
+          Position(4, 3), Position(5, 3)
   };
   std::list<Position> posible_moves_gt = {
-      Position(6, 5), Position(5, 6),
-      Position(3, 6), Position(2, 5),
-      Position(2, 3), Position(3, 2),
-      Position(5, 2), Position(6, 3),
+          Position(6, 5), Position(5, 6),
+          Position(3, 6), Position(2, 5),
+          Position(2, 3), Position(3, 2),
+          Position(5, 2), Position(6, 3),
   };
 
   for (size_t i = 0; i < sorround.size(); i++) {
@@ -274,7 +275,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
   Chessman *chessman = board.getChessmanAt(Position(1, 1));
 
   std::list<Position> posible_moves_gt = {
-      Position(1, 2), Position(1, 3),
+          Position(1, 2), Position(1, 3),
   };
 
   std::list<Position> posible_moves;
@@ -285,7 +286,7 @@ TEST(Pawn, PosibleMoveWithEmptyBoard) {
   chessman->move(Position(1, 1), Position(1, 3));
 
   posible_moves_gt = {
-      Position(1, 4)
+          Position(1, 4)
   };
 
   chessman->calculatePossibleMoves(Position(1, 3), posible_moves);
@@ -303,7 +304,7 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCaptureButSameColor) {
   board.addNewChessman('P', Position(0, 2), true);
 
   std::list<Position> posible_moves_gt = {
-      Position(1, 2), Position(1, 3)
+          Position(1, 2), Position(1, 3)
   };
 
   std::list<Position> posible_moves;
@@ -322,8 +323,8 @@ TEST(Pawn, PosibleMoveWithChessmanInPositionToCapture) {
   board.addNewChessman('P', Position(0, 2), false);
 
   std::list<Position> posible_moves_gt = {
-      Position(1, 2), Position(2, 2),
-      Position(0, 2), Position(1, 3)
+          Position(1, 2), Position(2, 2),
+          Position(0, 2), Position(1, 3)
   };
 
   std::list<Position> posible_moves;
@@ -1334,13 +1335,13 @@ TEST(Chessman, calculatePosibleSplitsWithEmptyBoardAndEnemy) {
   tower->calculatePossibleSplits(Position(5, 1), posible_splits);
 
   std::list<Position> posible_splits_gt = {
-      Position(5, 0), Position(5, 2),
-      Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6),
-      Position(5, 7), Position(0, 1),
-      Position(1, 1), Position(2, 1),
-      Position(3, 1), Position(4, 1),
-      Position(6, 1), Position(7, 1),
+          Position(5, 0), Position(5, 2),
+          Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6),
+          Position(5, 7), Position(0, 1),
+          Position(1, 1), Position(2, 1),
+          Position(3, 1), Position(4, 1),
+          Position(6, 1), Position(7, 1),
   };
 
   EXPECT_EQ(posible_splits, posible_splits_gt);
@@ -1349,10 +1350,10 @@ TEST(Chessman, calculatePosibleSplitsWithEmptyBoardAndEnemy) {
   tower->calculatePossibleSplits(Position(5, 1), posible_splits);
 
   posible_splits_gt = {
-      Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6), Position(0, 1), Position(1, 1),
-      Position(2, 1), Position(3, 1), Position(4, 1), Position(6, 1),
-      Position(7, 1),
+          Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6), Position(0, 1), Position(1, 1),
+          Position(2, 1), Position(3, 1), Position(4, 1), Position(6, 1),
+          Position(7, 1),
   };
 
   EXPECT_EQ(posible_splits, posible_splits_gt);
@@ -1369,13 +1370,13 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndEnemy) {
   tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   std::list<Position> posible_merges_gt = {
-      Position(5, 0), Position(5, 2),
-      Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6),
-      Position(5, 7), Position(0, 1),
-      Position(1, 1), Position(2, 1),
-      Position(3, 1), Position(4, 1), Position(6, 1),
-      Position(7, 1), Position(5, 1)
+          Position(5, 0), Position(5, 2),
+          Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6),
+          Position(5, 7), Position(0, 1),
+          Position(1, 1), Position(2, 1),
+          Position(3, 1), Position(4, 1), Position(6, 1),
+          Position(7, 1), Position(5, 1)
   };
 
   EXPECT_EQ(posible_merges, posible_merges_gt);
@@ -1384,10 +1385,10 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndEnemy) {
   tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   posible_merges_gt = {
-      Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6), Position(0, 1), Position(1, 1),
-      Position(2, 1), Position(3, 1), Position(4, 1),
-      Position(6, 1), Position(7, 1), Position(5, 1)
+          Position(5, 0), Position(5, 2), Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6), Position(0, 1), Position(1, 1),
+          Position(2, 1), Position(3, 1), Position(4, 1),
+          Position(6, 1), Position(7, 1), Position(5, 1)
   };
 
   EXPECT_EQ(posible_merges, posible_merges_gt);
@@ -1404,13 +1405,13 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndAlly) {
   tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   std::list<Position> posible_merges_gt = {
-      Position(5, 0), Position(5, 2),
-      Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6),
-      Position(5, 7), Position(0, 1),
-      Position(1, 1), Position(2, 1),
-      Position(3, 1), Position(4, 1),
-      Position(6, 1), Position(7, 1), Position(5, 1)
+          Position(5, 0), Position(5, 2),
+          Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6),
+          Position(5, 7), Position(0, 1),
+          Position(1, 1), Position(2, 1),
+          Position(3, 1), Position(4, 1),
+          Position(6, 1), Position(7, 1), Position(5, 1)
   };
 
   EXPECT_EQ(posible_merges, posible_merges_gt);
@@ -1419,13 +1420,13 @@ TEST(Chessman, calculatePosibleMergeWithEmptyBoardAndAlly) {
   tower->calculatePossibleMerges(Position(5, 1), posible_merges);
 
   posible_merges_gt = {
-      Position(5, 0), Position(5, 2),
-      Position(5, 3), Position(5, 4),
-      Position(5, 5), Position(5, 6),
-      Position(5, 7), Position(0, 1),
-      Position(1, 1), Position(2, 1),
-      Position(3, 1), Position(4, 1),
-      Position(6, 1), Position(7, 1), Position(5, 1)
+          Position(5, 0), Position(5, 2),
+          Position(5, 3), Position(5, 4),
+          Position(5, 5), Position(5, 6),
+          Position(5, 7), Position(0, 1),
+          Position(1, 1), Position(2, 1),
+          Position(3, 1), Position(4, 1),
+          Position(6, 1), Position(7, 1), Position(5, 1)
   };
 
   EXPECT_EQ(posible_merges, posible_merges_gt);
@@ -1450,7 +1451,6 @@ TEST(Chessman, CannotMergeDifferentChessman) {
   board.addNewChessman('T', Position(7, 1), true);
   Chessman *tower_1 = board.getChessmanAt(Position(4, 1));
   Chessman *tower_2 = board.getChessmanAt(Position(7, 1));
-  std::list<Position> posible_merges;
 
   tower_1->split(Position(4, 1), Position(5, 1), Position(4, 2));
   tower_2->split(Position(7, 1), Position(7, 2), Position(6, 1));
@@ -1463,7 +1463,6 @@ TEST(King, CastlingKingHasMovementAvailableWithTowerToLeft) {
   Board board;
   board.addNewChessman('T', Position(0, 0), true);
   board.addNewChessman('K', Position(4, 0), true);
-  Chessman *tower = board.getChessmanAt(Position(0, 0));
   Chessman *king = board.getChessmanAt(Position(4, 0));
 
   std::list<Position> posible_moves;
@@ -1471,9 +1470,9 @@ TEST(King, CastlingKingHasMovementAvailableWithTowerToLeft) {
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-      Position(3, 0), Position(2, 0)
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0), Position(2, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1483,7 +1482,6 @@ TEST(King, CastlingKingHasMovementAvailableWithTowerToRight) {
   Board board;
   board.addNewChessman('T', Position(7, 0), true);
   board.addNewChessman('K', Position(4, 0), true);
-  Chessman *tower = board.getChessmanAt(Position(0, 0));
   Chessman *king = board.getChessmanAt(Position(4, 0));
 
   std::list<Position> posible_moves;
@@ -1491,9 +1489,9 @@ TEST(King, CastlingKingHasMovementAvailableWithTowerToRight) {
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-      Position(3, 0), Position(6, 0)
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0), Position(6, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1514,9 +1512,9 @@ TEST(King, AlreadyMovedTowerCantCastle) {
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-      Position(3, 0)
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1526,7 +1524,6 @@ TEST(King, AlreadyMovedKingCantCastle) {
   Board board;
   board.addNewChessman('T', Position(0, 0), true);
   board.addNewChessman('K', Position(4, 0), true);
-  Chessman *tower = board.getChessmanAt(Position(0, 0));
   Chessman *king = board.getChessmanAt(Position(4, 0));
 
   std::list<Position> posible_moves;
@@ -1537,9 +1534,9 @@ TEST(King, AlreadyMovedKingCantCastle) {
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
   std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-      Position(3, 0)
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1),
+          Position(3, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1550,7 +1547,6 @@ TEST(King, CantLongCastleWithClassicPieceInTheMiddleInLongCastling) {
   board.addNewChessman('T', Position(0, 0), true);
   board.addNewChessman('K', Position(4, 0), true);
   board.addNewChessman('Q', Position(3, 0), true);
-  Chessman *tower = board.getChessmanAt(Position(0, 0));
   Chessman *king = board.getChessmanAt(Position(4, 0));
   Chessman *queen = board.getChessmanAt(Position(3, 0));
 
@@ -1558,17 +1554,12 @@ TEST(King, CantLongCastleWithClassicPieceInTheMiddleInLongCastling) {
 
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-  };
-
   queen->move(Position(3, 0), Position(2, 0));
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1), Position(3, 0)
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1577,8 +1568,8 @@ TEST(King, CantLongCastleWithClassicPieceInTheMiddleInLongCastling) {
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
   posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1), Position(3, 0)
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1589,7 +1580,6 @@ TEST(King, LongCastleWithQuantumPieceInTheMiddle) {
   board.addNewChessman('T', Position(0, 0), true);
   board.addNewChessman('K', Position(4, 0), true);
   board.addNewChessman('Q', Position(3, 1), true);
-  Chessman *tower = board.getChessmanAt(Position(0, 0));
   Chessman *king = board.getChessmanAt(Position(4, 0));
   Chessman *queen = board.getChessmanAt(Position(3, 1));
 
@@ -1599,17 +1589,12 @@ TEST(King, LongCastleWithQuantumPieceInTheMiddle) {
 
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-  };
-
   queen->move(Position(3, 0), Position(2, 0));
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1), Position(3, 0)
+  std::list<Position> posible_moves_gt = {
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1618,9 +1603,9 @@ TEST(King, LongCastleWithQuantumPieceInTheMiddle) {
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
   posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1), Position(3, 0),
-      Position(2, 0)
+          Position(5, 0), Position(5, 1),
+          Position(4, 1), Position(3, 1), Position(3, 0),
+          Position(2, 0)
   };
 
   EXPECT_EQ(posible_moves, posible_moves_gt);
@@ -1636,8 +1621,6 @@ TEST(King, LongCastleMoveWithQuantumInTheMiddleAndThenMeasureQueenWasThere) {
   Chessman *queen = board.getChessmanAt(Position(0, 1));
 
   queen->split(Position(0, 1), Position(1, 0), Position(1, 1));
-
-  std::list<Position> posible_moves;
 
   king->move(Position(4, 0), Position(2, 0));
 
@@ -1668,8 +1651,6 @@ TEST(King, LongCastleMoveWithQuantumInTheMiddleAndThenMeasureQueenWasNotThere) {
   Chessman *queen = board.getChessmanAt(Position(0, 1));
 
   queen->split(Position(0, 1), Position(1, 1), Position(1, 0));
-
-  std::list<Position> posible_moves;
 
   king->move(Position(4, 0), Position(2, 0));
 

@@ -5,6 +5,7 @@
 #include <memory>
 #include <condition_variable>
 #include <iostream>
+#include <string>
 
 template<class T>
 class BlockingQueue {
@@ -17,18 +18,12 @@ private:
 public:
   BlockingQueue();
 
-  //Moves other_queue.queue to this new BlockingQueue.queue. Because mutex is a non-movable object,
-  //a brand new mutex is created. This means there is no relation between other_queue.mutex and
-  //the new blockingqueue mutex. For this reason, it only makes sense to start using the blocking
-  //queue once it is certain that it is not going to be moved anymore.
   BlockingQueue(BlockingQueue &&other_queue) noexcept;
 
-  //Locks the mutex, pushes the instruct_ptr to queue and notifies using the conditional variable.
+  // Pushes the pointer to queue and notifies using the conditional variable
   void push(std::shared_ptr<T> ptr);
 
-  //If the queue is not empty, the instruct_ptr points to the first element in the queue, and the
-  //pop method is called over the queue. If the queue is empty, a unique lock is applied to the mutex,
-  //and it waits until an element is added to que queue, and the sequence described before is done.
+  // Wait for the queue to be non-empty, then pop
   std::shared_ptr<T> pop();
 
   void close();
@@ -49,12 +44,12 @@ public:
 
 template<class T>
 BlockingQueue<T>::BlockingQueue()
-        : queue(), condition_variable(), mutex(), closed_queue(false) {}
+    : queue(), condition_variable(), mutex(), closed_queue(false) {}
 
 template<class T>
 BlockingQueue<T>::BlockingQueue(BlockingQueue<T> &&other_queue) noexcept
-        :queue(std::move(other_queue.queue)), condition_variable(),
-         mutex(), closed_queue(other_queue.closed_queue) {
+    :queue(std::move(other_queue.queue)), condition_variable(),
+     mutex(), closed_queue(other_queue.closed_queue) {
 }
 
 template<class T>
@@ -82,9 +77,7 @@ std::shared_ptr<T> BlockingQueue<T>::pop() {
 template<class T>
 void BlockingQueue<T>::close() {
   std::unique_lock<std::mutex> u_lock(mutex);
-  // Se marca la cola como cerrada.
   closed_queue = true;
-  // Se notifica a todos los hilos que se cerro la cola.
   condition_variable.notify_all();
 }
 

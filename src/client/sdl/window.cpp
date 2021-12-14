@@ -51,7 +51,3 @@ void Window::setMaxHeight(size_t height) {
 double Window::getMinRatio() const {
   return WINDOW_MIN_RATIO;
 }
-
-void Window::setSize(size_t width, size_t height) {
-  window_.SetSize(width, height);
-}

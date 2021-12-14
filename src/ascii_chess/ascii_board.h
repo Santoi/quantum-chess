@@ -15,7 +15,7 @@ public:
   void draw();
 
   void load(std::vector<Position> &positions, std::vector<bool> colors,
-            std::vector<char> &character);
+            const std::vector<char> &character);
 };
 
 

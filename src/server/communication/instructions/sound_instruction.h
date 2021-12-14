@@ -16,17 +16,15 @@ private:
 public:
   SoundInstruction() = delete;
 
-  //Creates a ChatInstruction, saving the client_id and message passed to the function parameters.
   explicit SoundInstruction(uint8_t sound_);
 
   // Does nothing
   void makeActionAndNotify(Match &match) override;
 
-  //Gets the instructor's nickname from the ClientDataRepository using the object's instructor_id
-  //attribute, and calls the protocol method fillPacketWithChatMessage to fill the given packet.
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 
   ~SoundInstruction() override = default;
 };

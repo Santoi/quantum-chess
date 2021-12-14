@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_POSSIBLE_MOVES_INSTRUCTION_H
 
 #include "instruction.h"
+#include <list>
 
 class PossibleMovesInstruction : public Instruction {
   const ClientData &instructor_data;
@@ -15,8 +16,10 @@ public:
   void makeActionAndNotify(Match &match) override;
 
   void
-  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                  Packet &packet,
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

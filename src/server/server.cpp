@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <string>
 
 #define BOARDS_PATH "boards/"
 

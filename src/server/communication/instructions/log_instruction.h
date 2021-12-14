@@ -3,6 +3,8 @@
 
 #include "instruction.h"
 #include "../../quantum_chess/board.h"
+#include <list>
+#include <string>
 
 class LogInstruction : public Instruction {
 private:
@@ -11,14 +13,15 @@ private:
 public:
   LogInstruction() = delete;
 
-  LogInstruction(std::list<std::string> &&log_);
+  explicit LogInstruction(std::list<std::string> &&log_);
 
   // Send log message to all clients.
   void makeActionAndNotify(Match &match) override;
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 
   ~LogInstruction() override = default;
 };

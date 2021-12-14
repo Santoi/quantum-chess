@@ -1,4 +1,5 @@
 #include "text_entry.h"
+#include <string>
 #include "../sdl/renderer.h"
 #include <mutex>
 #include <cstdint>

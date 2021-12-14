@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_MATCH_H
 
 #include <list>
+#include <vector>
 #include "../../common/socket.h"
 #include "clients_map.h"
 #include "../../common/blocking_queue.h"
@@ -27,7 +28,7 @@ private:
 
 public:
   // Constructor. Receives an ifstream reference to file with board.
-  Match(std::ifstream &file_);
+  explicit Match(std::ifstream &file_);
 
   Match(Match &&other);
 
@@ -68,7 +69,7 @@ protected:
 
 private:
   // Ask client for data and returns a ClientData instruction with it.
-  ClientData askClientData(Socket &socket, uint16_t client_id);
+  ClientData askClientData(const Socket &socket, uint16_t client_id);
 
   // TODO pasar referencia?
   // Returns a list of roles availables.

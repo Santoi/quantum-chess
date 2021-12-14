@@ -28,6 +28,7 @@ public:
   copy(Sprite &sprite, size_t x_src, size_t y_src, size_t x_dst, size_t y_dst,
        size_t width, size_t height);
 
+  // Return the minimum window dimension between width and height
   size_t getMinDimension() const;
 
   size_t getWidth() const;

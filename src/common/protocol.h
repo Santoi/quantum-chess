@@ -4,30 +4,30 @@
 #include "packet.h"
 #include "socket.h"
 #include <arpa/inet.h>
+#include <string>
 
 class Protocol {
 protected:
-    //Adds 1. the given string length (in Big Endian) and 2. the string to the given packet.
-    void addStringAndItsLengthToPacket(Packet& packet, const std::string& string);
+  // Adds the given string, and it's length in Big Endian, to the given packet
+  void addStringAndItsLengthToPacket(Packet &packet, const std::string &string);
 
-    //Transforms the given number in host order to Big Endian and then adds it to the given packet.
-    void changeNumberToBigEndianAndAddToPacket(Packet& packet, const uint16_t& number);
+  void
+  changeNumberToBigEndianAndAddToPacket(Packet &packet, const uint16_t &number);
 
-    //Gets the Big Endian number from socket, transforms it to host order and returns it.
-    uint16_t getNumber16FromSocket(Socket& socket);
+  uint16_t getNumber16FromSocket(const Socket &socket);
 
-    //Reads the next message from socket, saving it in the message string.
-    void getMessageFromSocket(Socket& socket, std::string& message);
+  // Reads the next message from socket, saving it in the message string.
+  void getMessageFromSocket(const Socket &socket, std::string &message);
 
-    char getCharFromSocket(Socket &socket);
+  char getCharFromSocket(const Socket &socket);
 
-    uint8_t getNumber8FromSocket(Socket &socket);
+  uint8_t getNumber8FromSocket(const Socket &socket);
 
-    void addNumber8ToPacket(Packet &packet, const uint8_t &number);
+  void addNumber8ToPacket(Packet &packet, const uint8_t &number);
 
 private:
-    //Gets from socket the string of size size_of_word, and saves it in the message string.
-    void getMessageOfSizeFromSocket(Socket& socket, std::string& message, const uint16_t& size_of_word);
+  void getMessageOfSizeFromSocket(const Socket &socket, std::string &message,
+                                  const uint16_t &size_of_word);
 };
 
 

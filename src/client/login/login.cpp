@@ -3,9 +3,13 @@
 #include "../../common/client_data.h"
 #include "../../common/unique_ptr.h"
 #include <iostream>
+#include <map>
+#include <string>
+#include <list>
+#include <vector>
 
 Login::Login()
-    : client_socket_ptr(nullptr) {
+    : client_socket_ptr(nullptr), role(ClientData::ROLE_SPECTATOR) {
 }
 
 void Login::connectToServer(const std::string &ip_, const std::string &port_) {
@@ -31,11 +35,7 @@ Socket Login::getClientSocket() {
   return std::move(*client_socket_ptr);
 }
 
-std::string Login::getClientNickName() {
-  return client_nick_name;
-}
-
-void Login::chooseMatchNumber(int match_number) {
+void Login::sendChosenMatchToServer(int match_number) {
   ClientProtocol protocol;
   protocol.sendChosenGame(*client_socket_ptr, match_number);
 }
@@ -44,7 +44,7 @@ void Login::saveNickName(const std::string &nick_name) {
   client_nick_name = nick_name;
 }
 
-std::list<ClientData::Role> Login::getAvailableRoles() {
+std::list<ClientData::Role> Login::getAvailableRolesFromServer() {
   std::list<ClientData::Role> available_roles;
   ClientProtocol protocol;
   protocol.getAvailableRoles(*client_socket_ptr, available_roles);
@@ -56,7 +56,7 @@ void Login::sendSavedNickNameToServer() {
   protocol.sendClientsNickName(*client_socket_ptr, client_nick_name);
 }
 
-void Login::sendChosenRole(ClientData::Role role_) {
+void Login::saveAndSendChosenRoleToServer(ClientData::Role role_) {
   ClientProtocol protocol;
   protocol.sendChosenRole(*client_socket_ptr, role_);
   role = role_;

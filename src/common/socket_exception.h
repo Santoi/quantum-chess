@@ -9,7 +9,7 @@ private:
   std::string msg;
 
 public:
-  explicit SocketException(std::string msg) noexcept;
+  explicit SocketException(std::string &&msg) noexcept;
 
 /*
   SocketException(const SocketException &other) noexcept = default;

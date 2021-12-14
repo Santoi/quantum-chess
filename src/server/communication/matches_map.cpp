@@ -1,4 +1,6 @@
 #include "matches_map.h"
+#include <map>
+#include <vector>
 
 MatchesMap::MatchesMap() : next_match_id(1), accepted_clients(0), map(),
                            mutex() {}
@@ -22,7 +24,7 @@ bool MatchesMap::matchExists(uint16_t match_id) {
 
 void
 MatchesMap::getMatchesData(
-        std::map<uint16_t, std::vector<ClientData>> &data) {
+    std::map<uint16_t, std::vector<ClientData>> &data) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   for (auto &match: map) {
     std::vector<ClientData> vector;

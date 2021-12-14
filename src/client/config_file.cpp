@@ -1,4 +1,5 @@
 #include "config_file.h"
+#include <string>
 #include <fstream>
 
 #define CHARACTER '='
@@ -24,7 +25,7 @@ void ConfigFile::loadFile(std::ifstream &file) {
   }
 }
 
-const std::string & ConfigFile::getValue(const std::string &key) {
+const std::string &ConfigFile::getValue(const std::string &key) {
   return configs.at(key);
 }
 

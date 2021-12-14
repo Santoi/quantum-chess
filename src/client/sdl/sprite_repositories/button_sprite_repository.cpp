@@ -1,4 +1,6 @@
 #include "button_sprite_repository.h"
+#include <map>
+#include <string>
 
 #define BUTTONS_PATH "resources/sprites/button/"
 

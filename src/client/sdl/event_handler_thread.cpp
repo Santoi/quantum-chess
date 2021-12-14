@@ -111,8 +111,10 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_s: {
-      if (!text_entry.isEnabled())
+      if (!text_entry.isEnabled()) {
         screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
+        screen_handler.toggleLeaveScreen();
+      }
       break;
     }
     case SDLK_BACKSPACE: {

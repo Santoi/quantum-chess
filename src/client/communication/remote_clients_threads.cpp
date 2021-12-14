@@ -1,35 +1,33 @@
 #include "remote_clients_threads.h"
+#include <string>
 #include "client_protocol.h"
 #include <iostream>
 #include "remote_client_instructions.h"
-#include "../../common/src/blocking_queue.h"
-#include "../../common/src/socket_closed.h"
+#include "../../common/blocking_queue.h"
+#include "../../common/socket_closed.h"
 
-RemoteClientSender::RemoteClientSender(Socket &client_socket,
-                                       BlockingQueue<RemoteClientInstruction> &send_queue_)
-        : client_socket(client_socket), send_queue(send_queue_) {
-}
-
-void RemoteClientSender::readFromStandardInput(std::string &message) {
-  std::getline(std::cin, message);
+RemoteClientSender::
+RemoteClientSender(Socket &client_socket,
+                   BlockingQueue<RemoteClientInstruction> &send_queue_)
+    : client_socket(client_socket), send_queue(send_queue_) {
 }
 
 void RemoteClientSender::run() {
   ClientProtocol protocol;
   try {
     while (true) {
-      std::shared_ptr<RemoteClientInstruction> instruction;
-      send_queue.pop(instruction);
+      auto instruction = send_queue.pop();
       protocol.sendInstruction(client_socket, instruction);
     }
   }
-  catch (const BlockingQueueClosed &e) {}
+  catch(const BlockingQueueClosed &e) {}
 }
 
 
-RemoteClientReceiver::RemoteClientReceiver(Socket &client_socket,
-                                           BlockingQueue<RemoteClientInstruction> &queue_)
-        : client_socket(client_socket), queue(queue_), socket_closed(false) {}
+RemoteClientReceiver::
+RemoteClientReceiver(Socket &client_socket,
+                     BlockingQueue<RemoteClientInstruction> &queue_)
+    : client_socket(client_socket), queue(queue_), socket_closed(false) {}
 
 void RemoteClientReceiver::receiveMessage() {
   std::shared_ptr<RemoteClientInstruction> ptr_instruction;
@@ -43,7 +41,7 @@ void RemoteClientReceiver::run() {
     while (true)
       this->receiveMessage();
   }
-  catch (const SocketClosed &e) {
+  catch(const SocketClosed &e) {
     if (!socket_closed)
       std::cerr << "Error: connection with server lost" << std::endl;
   }

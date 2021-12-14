@@ -1,18 +1,25 @@
 #ifndef QUANTUM_CHESS_PROJ_COORDINATE_TRANSFORMER_H
 #define QUANTUM_CHESS_PROJ_COORDINATE_TRANSFORMER_H
 
+#include <atomic>
 #include "pixel_coordinate.h"
-#include "../position.h"
+#include "../game/board_position.h"
 
 class CoordinateTransformer {
+  std::atomic<bool> flipped;
+
 public:
-  void position2Pixel(const Position &position,
+  CoordinateTransformer();
+
+  void position2Pixel(const BoardPosition &position,
                       PixelCoordinate &pixel, int width,
                       int height);
 
   void pixel2Position(const PixelCoordinate &pixel,
-                      Position &position, int width,
+                      BoardPosition &position, int width,
                       int height);
+
+  void flip();
 };
 
 

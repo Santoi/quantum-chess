@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <vector>
-#include "../src/server/src/quantum_chess/pseudo_random_coin.h"
+#include "../src/server/quantum_chess/pseudo_random_coin.h"
 
 TEST(PseudoRandomCoin, FiftyFiftyWithSameObject) {
   int runs = 100000;

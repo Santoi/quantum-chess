@@ -1,2 +1,1 @@
-./build/src/client/client "$1" "$2"
-
+./build/src/client/client

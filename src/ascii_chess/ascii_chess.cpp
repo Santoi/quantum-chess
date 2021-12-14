@@ -1,13 +1,13 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-#include "../common/src/chess_exception.h"
+#include "../common/chess_exception.h"
 #include "ascii_chess.h"
 
 AsciiChess::AsciiChess() : board() {}
 
 void AsciiChess::execute() {
-  std::ifstream file("default.txt");
+  std::ifstream file("boards/default.txt");
   board.load(file);
   draw();
   while (true) {
@@ -16,7 +16,7 @@ void AsciiChess::execute() {
         break;
       draw();
     }
-    catch (const ChessException &e) {
+    catch(const ChessException &e) {
       std::cerr << "Error: " << e.what() << std::endl;
     }
   }
@@ -28,7 +28,7 @@ void AsciiChess::draw() {
     for (int8_t j = 0; j < 8; j++) {
       Position position(j, i);
       std::cout << "[";
-      if (Chessman *chessman = board.getChessmanAt(position))
+      if (const Chessman *chessman = board.getChessmanAt(position))
         std::cout << *chessman;
       else
         std::cout << " ";
@@ -63,7 +63,7 @@ bool AsciiChess::readCommand() {
       throw ChessException("posicion invalida");
 
     board.move(Position((uint8_t) x1 - 'A', (uint8_t) y1),
-               Position((uint8_t) x2 - 'A', (uint8_t) y2), false);
+               Position((uint8_t) x2 - 'A', (uint8_t) y2), board.isNextWhite());
   }
   return false;
 }

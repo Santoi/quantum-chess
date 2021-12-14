@@ -1,0 +1,10 @@
+# White chessmen
+TA1W
+KE1W
+PA2W
+PG5W
+
+# Black chessmen
+KE7B
+QC3B
+BF1B

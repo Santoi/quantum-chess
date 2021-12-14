@@ -6,24 +6,25 @@
 #include <string>
 
 TextureSprite::TextureSprite(Renderer &renderer, const std::string &file_name,
-                             int width,
-                             int height) : Sprite(renderer, file_name,
-                                                  width, height) {}
+                             size_t width,
+                             size_t height) : Sprite(renderer, file_name,
+                                                     width, height) {}
 
-void TextureSprite::render(int x_src, int y_src, int x, int y, int width_src,
-                           int height_src, int width, int height) {
+void TextureSprite::render(size_t x_src, size_t y_src, size_t x, size_t y,
+                           size_t width_src,
+                           size_t height_src, size_t width, size_t height) {
   width_ = width;
   height_ = height;
   renderer.copy(*this, x_src, y_src, x, y, width_src, height_src);
 }
 
-void TextureSprite::render(int x, int y, int width, int height) {
+void TextureSprite::render(size_t x, size_t y, size_t width, size_t height) {
   width_ = width;
   height_ = height;
   renderer.copy(*this, x, y);
 }
 
-void TextureSprite::render(int x, int y) {
+void TextureSprite::render(size_t x, size_t y) {
   renderer.copy(*this, x, y);
 }
 
@@ -39,28 +40,8 @@ void TextureSprite::setAlpha(float alpha) {
   sprite_.SetAlphaMod(alpha * 255);
 }
 
-float TextureSprite::getAlpha() const {
-  return sprite_.GetAlphaMod() / 255.0f;
-}
-
-int TextureSprite::getImageWidth() const {
-  return sprite_.GetWidth();
-}
-
 int TextureSprite::getImageHeight() const {
   return sprite_.GetHeight();
-}
-
-void
-TextureSprite::loadImage(const std::string &file_name, int width, int height) {
-  if (width == 0)
-    width = width_;
-  if (height == 0)
-    height = height_;
-  SDL2pp::Texture new_sprite(renderer.renderer(), file_name);
-  sprite_ = std::move(new_sprite);
-  width_ = width;
-  height_ = height;
 }
 
 TextureSprite &TextureSprite::operator=(TextureSprite &&other) noexcept {

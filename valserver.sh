@@ -1,1 +1,1 @@
-valgrind ./build/src/server/src/server "$1" ${2-default.txt}
+valgrind ./build/src/server/server "$1" ${2-default.txt}

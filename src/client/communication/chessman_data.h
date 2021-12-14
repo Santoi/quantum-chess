@@ -2,15 +2,16 @@
 #define QUANTUM_CHESS_PROJ_CHESSMAN_DATA_H
 
 
-#include "../position.h"
+#include "../game/board_position.h"
+#include <string>
 
 typedef struct ChessmanData {
-    const Position position;
-    const std::string chessman;
-    const double probability;
+  const BoardPosition position;
+  const std::string chessman;
+  const double probability;
 
-    ChessmanData(const Position & position_, std::string chessman_,
-                 double prob);
+  ChessmanData(const BoardPosition &position_, std::string chessman_,
+               double prob);
 } ChessmanData;
 
 

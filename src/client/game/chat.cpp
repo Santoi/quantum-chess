@@ -1,9 +1,10 @@
 #include "chat.h"
-#include  "../sdl/scene.h"
+#include  "../sdl/game_scene.h"
+#include <string>
 
 Chat::Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
-           Scene &scene)
-        : send_queue(send_queue_), scene(scene) {}
+           GameScene &scene)
+    : send_queue(send_queue_), scene(scene) {}
 
 void Chat::sendMessage(const std::string &message) {
   if (message.empty())
@@ -18,4 +19,11 @@ Chat::addMessage(uint16_t client_id, std::string nickname, std::string message,
   scene.addChatMessage(nickname, std::to_string(client_id), timestamp, message);
 }
 
+bool Chat::enableIfPixelIsInChat(const PixelCoordinate &pixel) {
+  return scene.wasChatClicked(pixel);
+}
+
+void Chat::disable() {
+  scene.disableChat();
+}
 

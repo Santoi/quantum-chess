@@ -3,6 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
+//#include "scene.h"
 
 class Sprite;
 
@@ -21,16 +22,18 @@ public:
 
   // SDL2pp wrappers
   // Render the sprite starting at (x, y)
-  void copy(Sprite &sprite, int x, int y);
+  void copy(Sprite &sprite, size_t x, size_t y);
 
-  void copy(Sprite &sprite, int x_src, int y_src, int x_dst, int y_dst,
-            int width, int height);
+  void
+  copy(Sprite &sprite, size_t x_src, size_t y_src, size_t x_dst, size_t y_dst,
+       size_t width, size_t height);
 
-  int getMinDimension() const;
+  // Return the minimum window dimension between width and height
+  size_t getMinDimension() const;
 
-  int getWidth() const;
+  size_t getWidth() const;
 
-  int getHeight() const;
+  size_t getHeight() const;
 };
 
 

@@ -1,0 +1,3 @@
+res_width=720
+res_height=480
+frame_rate=60

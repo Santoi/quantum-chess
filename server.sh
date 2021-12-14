@@ -1,1 +1,1 @@
-./build/src/server/src/server "$1" ${2-default.txt}
+./build/src/server/server $1 ${2-default.txt}

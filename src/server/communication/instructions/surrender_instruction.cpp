@@ -11,7 +11,10 @@ SurrenderInstruction::SurrenderInstruction(const ClientData &instructor_data_)
 
 void SurrenderInstruction::makeActionAndNotify(Match &match) {
   try {
-    match.getBoard().surrender(instructor_data.role);
+    if (instructor_data.role == ClientData::ROLE_SPECTATOR)
+      throw ChessException("Spectator cannot surrender");
+    match.getBoard().surrender(instructor_data.role ==
+                               ClientData::ROLE_WHITE);
   } catch (const ChessException &e) {
     std::shared_ptr<Instruction> error_instr =
             std::make_shared<ChessExceptionInstruction>(instructor_data,

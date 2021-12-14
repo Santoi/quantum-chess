@@ -122,8 +122,9 @@ public:
   // Pop strings from log to list (log is a stack).
   void popLog(std::list<std::string> &popped);
 
-  //
-  void surrender(const ClientData::Role surrender_rol);
+  //Finishes the game and pushes to log the message of winner color
+  //and the surrenderer color.
+  void surrender(const bool player_white);
 };
 
 

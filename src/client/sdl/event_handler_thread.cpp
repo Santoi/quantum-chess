@@ -56,6 +56,7 @@ void EventHandlerThread::handleKeyDown() {
       text_entry.disableEntry();
       chat.disable();
       game.setDefaultBoard();
+      screen_handler.renderGameScreen();
       first_click = false;
       second_click = false;
       split = false;
@@ -95,21 +96,19 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_r: {
-      if (!text_entry.isEnabled()) {
+      if (!text_entry.isEnabled())
         screen_handler.activateLeaveScreen();
-      }
       break;
     }
     case SDLK_c: {
-      if (!text_entry.isEnabled()) {
+      if (!text_entry.isEnabled())
         screen_handler.deactivateLeaveScreen();
-      }
       break;
     }
     case SDLK_y: {
       if (!text_entry.isEnabled()) {
-        screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
         screen_handler.switchOpenStatusIfLeaveMatchScreenIsRendering(open);
+        screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
       }
       break;
     }

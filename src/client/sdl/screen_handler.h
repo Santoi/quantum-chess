@@ -32,6 +32,10 @@ public:
     void surrenderMatchIfLeaveMatchScreenIsRendering(Game &game);
 
     bool renderingGame();
+
+    void toggleLeaveScreen();
+
+    void renderGameScreen();
 };
 
 

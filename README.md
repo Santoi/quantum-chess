@@ -272,25 +272,18 @@ En la zona derecha de la pantalla, se pueden visualizar 4 secciones: el log de e
     <img src="docs/images/readme/chat_show.gif" alt="Chat" height="450"/>
 </p>
 
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> b70ea06e3842f153e103187841ee9bb1c371cb4b
 ### Flip de tablero
 
 El tablero se puede dar vuelta, cambiando entre vista desde el lado de las blancas y de las negras utilizando la tecla `F`.
 
-<<<<<<< HEAD
 ### Ayuda
 
 Se puede abrir la ayuda del huego utilizando la tecla `H`.
 
-### Rencdición
+### Rendición
 
-=======
->>>>>>> b70ea06e3842f153e103187841ee9bb1c371cb4b
+Se puede rendirse de la partida apretando la tecla `S`.
+
 ### Activación de musica y sonidos
 
 La música puede ser activada y desactivada utilizando la tecla ```M```. Los efectos de sonidos pueden ser desactivados utilizando la tecla ```N```.

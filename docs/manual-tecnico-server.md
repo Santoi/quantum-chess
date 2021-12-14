@@ -104,6 +104,77 @@ por ejemplo, si se quisiera enviar información de un caballo blanco al 50% en l
 
 ## Lógica del Quantum Chess
 
+La estructura del juego se encuentra separada del resto del server. Se comunican a través de la API ofrecida por la clase ```Board```, la cual representa al tablero y sobre la que se pueden ejercer distintos movimientos como pedidos de información.
+
+DIAGRAMA DE CLASES
+
+
+### Tablero
+La clase ```Board```, como se dijo anteriormente, representa al tablero, contiene primeramente un vector con todas las piezas existentes en el tablero (incluso las capturadas), debido al uso de polimorfismo para las piezas, estas son almacendas utilizando *smart pointers*. 
+
+Luego, como estructura utilizada para la lógica contiene un *map*, donde la clave es la posición y el valor un puntero a la pieza que esté allí. De esta manera se tiene facil acceso a cada pieza del tablero.
+
+El tablero posee métodos para ejercer movimientos, tales como: ```move()```, ```split()``` y ```merge()```; para obtener información, tales como ```getEntangledOf()```, ```getPossibleMovesOf()```, etcétera; y métodos de carga como ```load()```, que permite cargar un tablero desde un archivo de texto (explicado en el manual de usuario).
+
+## Position y QuantumPosition
+
+Las posiciones son representadas por la clase ```Position```, la cual contiene las coordenadas en x e y. 
+
+Las posiciones cuánticas, son representadas por la clase ```QuantumPosition```. Estas contienen un objeto ```Position```, la probabilidad correspondiente a la posición y un puntero a su ```Chessman```, si lo tuviera.
+
+## Chessman
+
+La clase ```Chessman``` es una clase abstracta que representa a cada pieza de ajedrez del tablero. Posee una referencia al tablero al que pertenece, ya que debe efectuar acciones sobre este, una lista de las posiciones en las que se encuentra (```QuantumPosition```), y un ```bool``` indicando su color. Además posee una referencia a un ```EntanglementLog``` conteniendo todos los entrelazamientos que existen en el tablero.
+
+### Validación de movimientos
+
+Los posibles movimientos de cada pieza es resuelto utilizando polimorfismo. Cada clase hija de ```Chessman``` posee un método ```calculateMoves()```, la cual devuelve una lista, conteniendo todos los posibles movimientos que puede hacer una pieza. Esto es 'crudo', es decir, no se consideran aspecto como piezas ocupando el camino, simplemente se limita a ver que movimiento puede hacer una pieza.
+
+Luego, se valida que el movimiento (o split, etc) sea valido considerando el resto del tablero (que el camino este libre de piezas clásicas, que la pieza del casillero final sea cuántica o del equipo contrario, etc). Esto se hace a través de funciones como ```calculatePossibleMoves()```, la cual devuelve una lista filtrada con los movimientos posibles.
+
+Esta función utiliza otras dos tales como ```getChessmanInPath()``` y ```checkFreePath```, las cuales calculan los casilleros por los que debe ir una pieza para llegar a su destino, y devuelve las piezas que se encuentre en el o si es posible realizarlo.
+
+Validaciones extras tales como el enroque para el rey o el primer movimiento o la captura del peón son validadas en cada clase particular utilizando, de nuevo, polimorfismo.
+
+### Movimiento y captura
+
+La lógica de los movimientos es simple, siempre que se mantengan las piezas en estado clásico, para *measure* y entrelazamientos ver las secciones siguientes. El movimiento consiste en chequear que el movimiento sea valido, y luego cambiar la posición de la pieza tanto en ella misma (en la posición que corresponda) y luego actualizar el tablero quitando la pieza del lugar que ocupaba antes, agregandola en la nueva posición (actualizando el *map* perteneciente a la clase ```Board```).
+
+Si existiese una pieza del equipo contrario en la posición final 
+
+### Piezas cuánticas, lista de posiciones, *split* y *merge*
+
+En el movimiento *split*, una pieza se parte de dos en dos, pasando a estar en un estado "cuántico" donde la posición real de la pieza no está definida. Cuando se realice un *measure*, se definirá la posición real de la pieza. 
+
+Si bien esto es así en la "teoría" del juego, la implementación real define que posición tiene la pieza al momento de realizar el *split*. Cuando este se realiza, se sortea una moneda utilizado la clase ```PseudoRandomCoin```, decidiendo así que posición de las dos elegidas es la real.
+
+Las distintas posiciones que puede tener una pieza al mismo tiempo, se representan mediante una lista de ```QuantumPosition```. Esta lista posee la única particularidad de que se mantiene siempre en la primera posición de la lista se encuentra la verdadera.
+
+De esta manera, cuando se realiza un movimiento simple, se actualiza directamente la posición que se modificó.
+
+Cuando se hace un *split*, se sortea entonces cual es la posición verdadera (incluso aunque la original no lo fuera). Esta reemplaza a la antigua posición, y se agrega seguidamente la nueva. Ambas con la probabilidad de la antigua a la mitad. Realizando esto, si la antigua posición era la verdadera, la que sale sorteada verdadera en el *split* queda como verdadera absoluta.
+
+El caso contrario, el *merge*, se realiza sumando las probabilidades de las dos posiciones iniciales. Luego, si, alguna de las dos es la verdadera, se actualiza allí la nueva posicion, y se elimina la otra. Si ninguna de las dos es la verdadera, se coloca en la primera de las dos (lo cual, se hace por comodidad ya que no tiene importancia).
+
+### Entrelazado y medicion
+
+Para la resolución del entrelazado, entre varias opciones, se optó por el uso de un log de entrelazamientos, la clase ```EntanglementLog```. Esta clase lleva nota de todos los entrelazamientos que existen. Para ello, guarda en cada anotación dos ```QuantumPosition```, las dos entrelazadas. Se estableció como regla que solo se puede entrelazar de una pieza a la vez y no más de una vez dos piezas. Cuando se mide una pieza, todas las piezas que dependan de ella deberían medirse tambien, aunque no siempre es una relación directa. Al entrelazar, se decide que pieza es la verdadera de la que se parte, según si la que se encuentra en medio del camino es la verdadera de la otra pieza.
+
+Cuando se mide una pieza, pueden ocurrir dos situaciones:
+* La pieza está allí, con lo que todas las demás posiciones se descartan.
+* La pieza no está allí, con lo que se deben propagar las probabilidades de las demás y contemplar ciertos casos con los entrelazamientos.
+
+Cabe aclarar, que solo se entrelazan las posiciones que interactuan en el movimiento (es decir, la pieza que se mueve y la que se encuentre en el medio del camino).
+
+Cuando se mide una pieza, se miden a su vez todas las piezas que dependan de ella, dependiendo de ciertas condiciones, por ejemplo:
+
+* Si la pieza no está allí, pero por ejemplo hay otra posición de la pieza que sigue entrelazada con la otra, entonces la otra no debe ser medida.
+* Si una pieza que se mide no está entrelazada con otra pieza, pero todas las demás si estaban entrelazada con ella, se debería medir igualmente la otra pieza.
+
+Todos estos casos son responsabilidad de ```EntanglementLog``` y están contemplados en ella.
+
+### Tests?
+
 ### Entrelazamiento
  
 ### Movimientos posibles

@@ -78,7 +78,7 @@ void GameScene::addCurrentMessage(const std::string &text) {
 
 void GameScene::renderLeaveMatchScreenForPlayers() {
   int width = window.getWidth(), height = window.getHeight();
-  surrender_leave_sprite.render(0, 0, width, height);
+  leave_sprite.render(0, 0, width, height);
 }
 
 

@@ -6,6 +6,7 @@ SurrenderInstruction::SurrenderInstruction(const ClientData &instructor_data_)
 
 void SurrenderInstruction::makeActionAndNotify(Match &match) {
   //match.end()
+  std::cout << "notifying listening queues" << std::endl;
   std::shared_ptr<Instruction> this_instruct_ptr = std::make_shared<SurrenderInstruction>(
                                                           instructor_data);
   match.addInstrToAllListeningQueues(this_instruct_ptr);
@@ -15,6 +16,7 @@ void SurrenderInstruction::makeActionAndNotify(Match &match) {
 void SurrenderInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
                                                            Packet &packet,
                                                            const ClientData &client_receiver_data) {
+  std::cout << "sending packet to client" << client_receiver_data.id << std::endl;
   protocol.fillPacketWithSurrenderMessage(packet, instructor_data, getTimeStamp());
 }
 

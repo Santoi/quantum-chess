@@ -150,6 +150,7 @@ void ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
 
 void ClientProtocol::fillPacketWithSurrenderMessage(Packet &packet) {
   packet.addByte(SURRENDER_PREFIX);
+  std::cout << "s sent" << std::endl;
 }
 
 void ClientProtocol::sendInstruction(Socket &socket,

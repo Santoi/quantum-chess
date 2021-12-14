@@ -8,6 +8,7 @@
 #include "../game/turn_log.h"
 #include <iostream>
 #include <utility>
+#include <sstream>
 
 void RemoteClientInstruction::fillPacketWithInstructionsToSend(Packet &packet,
                                                                ClientProtocol &protocol) {
@@ -268,7 +269,8 @@ void RemoteClientLogInstruction::makeAction(Game &game, Chat &chat,
 
 void
 RemoteClientLogInstruction::fillPacketWithInstructionsToSend(Packet &packet,
-                                                             ClientProtocol &protocol) {}
+                                                             ClientProtocol &protocol)
+                                                             {}
 
 RemoteClientSurrenderInstruction::RemoteClientSurrenderInstruction(uint16_t client_id,
                                                                 const std::string &nick_name_,
@@ -283,7 +285,12 @@ RemoteClientSurrenderInstruction::makeAction(Game &game, Chat &chat,
                                              ChessLog &chess_log,
                                              ErrorLog &error_log,
                                              TurnLog &turn_log) {
-  //Put in log ?
+ // std::string str_client_id = std::to_string(client_id);
+  std::stringstream ss;
+  ss << client_id << " " << nick_name << "has surrended at" << time_stamp;
+  std::string message = ss.str();
+  std::cout << message << std::endl;
+  chess_log.addMessage(message);
 }
 
 void RemoteClientSurrenderInstruction::fillPacketWithInstructionsToSend(Packet &packet,

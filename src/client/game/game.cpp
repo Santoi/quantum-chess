@@ -233,5 +233,6 @@ void Game::surrender() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
     return;
+  std::cout << "Pushing instruction" << std::endl;
   send_queue.push(std::make_shared<RemoteClientSurrenderInstruction>());
 }

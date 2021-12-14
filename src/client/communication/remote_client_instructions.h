@@ -329,9 +329,9 @@ public:
 
 class RemoteClientSurrenderInstruction
         : public RemoteClientInstruction {
-    const uint16_t client_id;
-    const std::string nick_name;
-    const std::string time_stamp;
+    uint16_t client_id;
+    std::string nick_name;
+    std::string time_stamp;
 
 public:
     RemoteClientSurrenderInstruction() = default;

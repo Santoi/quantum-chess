@@ -194,6 +194,7 @@ void ServerProtocol::fillEntangledChessmenInstruction(Socket &socket,
 }
 void ServerProtocol::fillSurrenderInstruction(Socket &socket, const ClientData &data,
                                               std::shared_ptr<Instruction> &instruc_ptr) {
+  std::cout << "Surrender received" << std::endl;
   instruc_ptr = std::make_shared<SurrenderInstruction>(data);
 }
 
@@ -238,6 +239,7 @@ ServerProtocol::receiveAndFillInstruction(Socket &socket,
       break;
     case SURRENDER_PREFIX:
       fillSurrenderInstruction(socket, client_data, instruct_ptr);
+      break;
     default:
       throw std::runtime_error("invalid message received");
   }

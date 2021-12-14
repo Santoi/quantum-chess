@@ -8,11 +8,11 @@ ScreenHandler::ScreenHandler(bool client_is_spectator_)
 
 void ScreenHandler::renderCurrentState(GameScene &game_scene) {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  if (!render_help_screen && !render_leave_match_screen) //most likely case
+  if (!render_help_screen && !render_leave_match_screen) { //most likely case
     game_scene.renderGame();
-  else if (render_help_screen)
+  } else if (render_help_screen) {
     game_scene.renderHelpScreen();
-  else {
+  } else {
     if (client_is_spectator)
       game_scene.renderLeaveMatchScreenForSpectators();
     else
@@ -40,7 +40,8 @@ void ScreenHandler::deactivateLeaveScreen() {
   render_leave_match_screen = false;
 }
 
-void ScreenHandler::switchOpenStatusIfLeaveMatchScreenIsRendering(std::atomic<bool>& open) {
+void ScreenHandler::switchOpenStatusIfLeaveMatchScreenIsRendering(
+                                                  std::atomic<bool>& open) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     open = false;

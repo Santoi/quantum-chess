@@ -31,6 +31,7 @@ public:
 
   DrawableChessman &operator=(const DrawableChessman &other) = default;
 
+  // Render chessman with the current probability
   void render(int x, int y);
 
   ~DrawableChessman();

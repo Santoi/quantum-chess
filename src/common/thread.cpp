@@ -5,7 +5,7 @@ Thread::Thread() : thread() {
 }
 
 Thread::Thread(Thread &&other_thread) noexcept
-        : thread(std::move(other_thread.thread)) {
+    : thread(std::move(other_thread.thread)) {
 }
 
 void Thread::start() {
@@ -20,10 +20,10 @@ void Thread::runCatchingExceptions() {
   try {
     run();
   }
-  catch (const std::exception &e) {
+  catch(const std::exception &e) {
     std::cerr << "Error:" << e.what() << std::endl;
   }
-  catch (...) {
+  catch(...) {
     std::cerr << "Unknown error" << std::endl;
   }
 }

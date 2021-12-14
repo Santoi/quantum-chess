@@ -1,7 +1,7 @@
 #include "client.h"
 #include <iostream>
 
-int main(void) {
+int main() {
   try {
     Client client;
     client.execute();

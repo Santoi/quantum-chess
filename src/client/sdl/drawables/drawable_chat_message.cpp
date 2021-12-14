@@ -1,4 +1,5 @@
 #include "drawable_chat_message.h"
+#include <string>
 
 DrawableChatMessage::DrawableChatMessage(Renderer &renderer, Font &font,
                                          const std::string &name,
@@ -6,13 +7,13 @@ DrawableChatMessage::DrawableChatMessage(Renderer &renderer, Font &font,
                                          const std::string &time,
                                          const std::string &message,
                                          TextSpriteRepository &repository) :
-        renderer(renderer),
-        font(font),
-        name(repository, name, 'w'),
-        id(repository, "#" + id, 't'),
-        time(repository, time, 'd'),
-        message(repository, message, 'w'),
-        repository(repository) {}
+    renderer(renderer),
+    font(font),
+    name(repository, name, 'w'),
+    id(repository, "#" + id, 't'),
+    time(repository, time, 'd'),
+    message(repository, message, 'w'),
+    repository(repository) {}
 
 void DrawableChatMessage::render(int x, int y) {
   int x_pos = x, y_pos = y;
@@ -36,10 +37,10 @@ void DrawableChatMessage::render(int x, int y) {
 }
 
 DrawableChatMessage::DrawableChatMessage(DrawableChatMessage &&other) noexcept:
-        renderer(other.renderer), font(other.font), name(std::move(other.name)),
-        id(std::move(other.id)),
-        time(std::move(other.time)), message(std::move(other.message)),
-        repository(other.repository) {}
+    renderer(other.renderer), font(other.font), name(std::move(other.name)),
+    id(std::move(other.id)),
+    time(std::move(other.time)), message(std::move(other.message)),
+    repository(other.repository) {}
 
 int DrawableChatMessage::getDrawableHeight() const {
   return height;

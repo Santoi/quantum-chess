@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_POSSIBLE_MERGES_INSTRUCTION_H
 
 #include "instruction.h"
+#include <list>
 
 class PossibleMergesInstruction : public Instruction {
   const ClientData &instructor_data;
@@ -16,8 +17,10 @@ public:
 
   // Does nothing.
   void
-  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+  fillPacketWithInstructionToSend(ServerProtocol &protocol,
+                                  Packet &packet,
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

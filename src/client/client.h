@@ -23,7 +23,7 @@ private:
   BlockingQueue<RemoteClientInstruction> send;
   ClientData::Role role;
 
-  void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
+  void gameRenderLoop(GameScene &scene, Game &game, const TextEntry &text_entry,
                       HandlerThread &handler, Renderer &renderer,
                       uint8_t frame_rate);
 
@@ -31,19 +31,25 @@ private:
                        HandlerThread &login_handler, Renderer &renderer,
                        uint8_t frame_rate);
 
+  bool executeLogin(Window &window, Login &login,
+                    ButtonSpriteRepository &button_sprite_repository,
+                    TextSpriteRepository &text_sprite_repository,
+                    uint8_t frame_rate);
+
+  void executeGame(Window &window, Game &game, Socket &socket,
+                   CoordinateTransformer &coordinate_transformer, Font &font,
+                   ButtonSpriteRepository &button_sprite_repository,
+                   TextSpriteRepository &text_sprite_repository,
+                   uint8_t frame_rate);
 
 public:
-  Client() = default;
+  Client();
 
-  //Executes client. To stop execution, type "exit" to stdin. If single_threaded_client is true,
-  //then the client is single threaded and the work sequence is: 1. send instruction to server and
-  //2. receive instruction from server, until the client decides to exit. If single_threaded_client is
-  //false, then both remote_sender and remote_receiver threads are started, and client can receive
-  //and send instruction without any synchronization. When the command "exit" is read, both sender and
-  //receiver threads are joined and the execution is finished.
+  // Execute client login and game.
+  // Executes the client threads, such as the receiver, sender, action,
+  // event handler and drawer (the main one)
   void execute();
 
-  //Se destruye el socket cliente.
   ~Client() = default;
 };
 

@@ -1,5 +1,7 @@
 #include "tile_sprite_repository.h"
 #include "../drawables/drawable_tile.h"
+#include <map>
+#include <string>
 
 #define BOARD_PATH "resources/sprites/board/"
 

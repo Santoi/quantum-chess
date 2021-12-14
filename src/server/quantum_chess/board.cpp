@@ -12,6 +12,9 @@
 #include <memory>
 #include <sstream>
 #include <fstream>
+#include <string>
+#include <list>
+#include <vector>
 
 Board::Board()
     : chessmen(), board(), next_white(true), coin(), entanglement_log(),
@@ -167,7 +170,7 @@ bool Board::isNextWhite() const {
   return next_white;
 }
 
-bool Board::isThere(Chessman *chessman) {
+bool Board::isThere(const Chessman *chessman) {
   return std::any_of(board.begin(), board.end(),
                      [&](std::pair<const Position, Chessman *> pair) {
                        return pair.second == chessman;
@@ -197,9 +200,9 @@ void Board::surrender(const ClientData::Role surrender_rol) {
 void
 Board::loadVectorOfSquareData(std::vector<SquareData> &data) {
   data.reserve(board.size());
-  for (auto &it: board) {
-    data.emplace_back(it.second->charId(), it.second->isWhite(), it.first,
-                      it.second->getProbability(it.first));
+  for (auto it = board.begin(); it != board.end(); ++it) {
+    data.emplace_back(it->second->charId(), it->second->isWhite(), it->first,
+                      it->second->getProbability(it->first));
   }
 }
 

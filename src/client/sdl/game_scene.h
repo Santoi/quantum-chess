@@ -3,13 +3,14 @@
 
 #include "sprite_repositories/text_sprite_repository.h"
 #include "sprite_repositories/chessman_sprite_repository.h"
-#include "drawables/drawable_chess.h"
+#include "drawables/drawable_board.h"
 #include "drawables/drawable_container.h"
 #include "drawables/drawable_chat_message.h"
 #include "scene.h"
 #include "screen_handler.h"
 #include "sprite_repositories/button_sprite_repository.h"
 #include "drawables/drawable_text_entry_button.h"
+#include <string>
 
 class Window;
 
@@ -51,19 +52,6 @@ public:
 
     int getChessHeight();
 
-    void addChatMessage(const std::string &nickname, const std::string &id,
-                        const std::string &timestamp, const std::string &message);
-
-    void addLogMessage(std::string text);
-
-    void addErrorLogMessage(std::string text);
-
-    void addCurrentMessage(const std::string &text);
-
-    void addTurnLogMessage(std::string text);
-
-    void clearErrorLog();
-
     bool wasChatClicked(PixelCoordinate &pixel);
 
     void disableChat();
@@ -73,6 +61,27 @@ public:
     void renderLeaveMatchScreenForSpectators();
 
     void renderLeaveMatchScreenForPlayers();
+
+  // Create and add a chat message to the chat
+  void addChatMessage(const std::string &nickname, const std::string &id,
+                      const std::string &timestamp, const std::string &message);
+
+  // Create and add a log message to the chat
+  void addLogMessage(std::string text);
+
+  // Create and add an error log message to the chat
+  void addErrorLogMessage(std::string text);
+
+  // Create and add current message to the text entry box
+  void addCurrentMessage(const std::string &text);
+
+  // Create and add a "whose turn it is" message to the chat
+  void addTurnLogMessage(std::string text);
+
+  // Erase all error log messages
+  void clearErrorLog();
+
+  bool wasChatClicked(const PixelCoordinate &pixel);
 
     void renderGame();
 };

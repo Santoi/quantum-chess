@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_KNIGHT_H
 
 #include <vector>
+#include <list>
 #include <string>
 #include "chessman.h"
 #include "../position.h"

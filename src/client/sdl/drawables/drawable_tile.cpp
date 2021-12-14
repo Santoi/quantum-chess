@@ -7,16 +7,14 @@ DrawableTile::DrawableTile(Renderer &renderer, bool black_,
     sprite_(&repository.getTile(TileSpriteRepository::TILE_DEFAULT, black_)),
     repository(&repository), black(black_) {}
 
-DrawableTile::DrawableTile(DrawableTile &&other) noexcept: renderer(
-    other.renderer),
-                                                           sprite_(
-                                                               other.sprite_),
-                                                           repository(
-                                                               other.repository),
-                                                           black(other.black) {}
+DrawableTile::DrawableTile(DrawableTile &&other) noexcept:
+    renderer(other.renderer),
+    sprite_(other.sprite_),
+    repository(other.repository),
+    black(other.black) {}
 
 void DrawableTile::render(int x, int y) {
-  int size = renderer->getMinDimension() / 10;
+  size_t size = renderer->getMinDimension() / 10;
   sprite_->render(x, y, size, size);
 }
 

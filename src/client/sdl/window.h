@@ -18,7 +18,7 @@ private:
   SoundHandler sound_handler_;
 
 public:
-  Window(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
+  explicit Window(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 
   SDL2pp::Window &window();
 
@@ -33,8 +33,6 @@ public:
   double getMinRatio() const;
 
   void setMaxHeight(size_t height);
-
-  void setSize(size_t width, size_t height);
 };
 
 

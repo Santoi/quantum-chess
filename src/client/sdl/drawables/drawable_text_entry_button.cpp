@@ -1,6 +1,7 @@
 #include "drawable_text_entry_button.h"
 
 #include <utility>
+#include <string>
 
 DrawableTextEntryButton::DrawableTextEntryButton(
     TextSpriteRepository &text_repository,
@@ -22,7 +23,7 @@ void DrawableTextEntryButton::setAreaAndPosition(int x_, int y_, int width_,
   height = height_;
 }
 
-bool DrawableTextEntryButton::pixelIsOnTextEntry(
+bool DrawableTextEntryButton::isPixelOnTextEntry(
     const PixelCoordinate &pixel) {
   is_pressed = (pixel.x() > x && pixel.x() < x + width &&
                 pixel.y() > y && pixel.y() < y + height);

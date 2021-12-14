@@ -1,5 +1,6 @@
 #include "chat.h"
 #include  "../sdl/game_scene.h"
+#include <string>
 
 Chat::Chat(BlockingQueue<RemoteClientInstruction> &send_queue_,
            GameScene &scene)
@@ -18,7 +19,7 @@ Chat::addMessage(uint16_t client_id, std::string nickname, std::string message,
   scene.addChatMessage(nickname, std::to_string(client_id), timestamp, message);
 }
 
-bool Chat::enableIfPixelIsInChat(PixelCoordinate &pixel) {
+bool Chat::enableIfPixelIsInChat(const PixelCoordinate &pixel) {
   return scene.wasChatClicked(pixel);
 }
 

@@ -2,6 +2,8 @@
 #include "log_instruction.h"
 #include "../../../common/chess_exception.h"
 #include "chess_exception_instruction.h"
+#include <string>
+#include <list>
 
 SurrenderInstruction::SurrenderInstruction(const ClientData &instructor_data_)
                     :instructor_data(instructor_data_) {
@@ -26,5 +28,6 @@ void SurrenderInstruction::makeActionAndNotify(Match &match) {
 
 
 void SurrenderInstruction::fillPacketWithInstructionToSend(ServerProtocol &protocol,
-                                                           Packet &packet,
-                                                           const ClientData &client_receiver_data) {}
+                                                Packet &packet,
+                                                const ClientData
+                                                &client_receiver_data) {}

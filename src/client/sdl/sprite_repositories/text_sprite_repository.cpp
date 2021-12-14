@@ -1,4 +1,7 @@
 #include "text_sprite_repository.h"
+#include <string>
+#include <list>
+#include <map>
 
 TextSpriteRepository::TextSpriteRepository(Renderer
                                            &renderer, Font &font)

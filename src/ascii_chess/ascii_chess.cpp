@@ -16,7 +16,7 @@ void AsciiChess::execute() {
         break;
       draw();
     }
-    catch (const ChessException &e) {
+    catch(const ChessException &e) {
       std::cerr << "Error: " << e.what() << std::endl;
     }
   }
@@ -28,7 +28,7 @@ void AsciiChess::draw() {
     for (int8_t j = 0; j < 8; j++) {
       Position position(j, i);
       std::cout << "[";
-      if (Chessman *chessman = board.getChessmanAt(position))
+      if (const Chessman *chessman = board.getChessmanAt(position))
         std::cout << *chessman;
       else
         std::cout << " ";

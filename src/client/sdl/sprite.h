@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_SPRITE_H
 
 #include "renderer.h"
+#include <string>
 #include <SDL2pp/SDL2pp.hh>
 
 class Renderer;
@@ -27,9 +28,11 @@ public:
 
   SDL2pp::Texture &sprite();
 
-  void render(size_t x, size_t y);
+  // Render sprite with current width and height
+  virtual void render(size_t x, size_t y);
 
-  void render(size_t x, size_t y, size_t width, size_t height);
+  // Render sprite with a new width and height
+  virtual void render(size_t x, size_t y, size_t width, size_t height);
 };
 
 

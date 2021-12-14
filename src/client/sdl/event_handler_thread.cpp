@@ -4,6 +4,7 @@
 #include "../game/chat.h"
 #include <iostream>
 #include <list>
+#include <string>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
                                        ScreenHandler &screen_handler_,
@@ -43,10 +44,6 @@ void EventHandlerThread::run() {
         break;
     }
   }
-}
-
-bool EventHandlerThread::isOpen() {
-  return open;
 }
 
 void EventHandlerThread::handleKeyDown() {
@@ -156,7 +153,8 @@ void EventHandlerThread::handleKeyUp() {
   }
 }
 
-void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
+void EventHandlerThread::handleMouseButtonLeft(const SDL_MouseButtonEvent
+                                               &mouse) {
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (chat.enableIfPixelIsInChat(pixel)) {
@@ -169,64 +167,32 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
       return;
     }
 
-    std::list<Position> coords;
+    std::list<BoardPosition> coords;
     for (size_t i = 0; i < 8; i++) {
-      Position pos(0, i);
+      BoardPosition pos(0, i);
       coords.push_back(pos);
     }
+
     if (!first_click) { // actually, if this is the first click
-      game.currentTile(pixel);
-      if (split)
-        game.askSplitTiles(pixel);
-      else if (merge)
-        game.askMergeTiles(pixel);
-      else
-        game.askMoveTiles(pixel);
-      first_click = true;
-      last_click = pixel;
+      handleUserFirstClick(pixel);
       return;
     }
 
     if (!second_click) { // actually, if this is the second click
-      if (split) {
-        penultimate_click = last_click;
-        last_click = pixel;
-        second_click = true;
-      } else if (merge) {
-        penultimate_click = last_click;
-        game.askMergeTiles(pixel, last_click);
-        last_click = pixel;
-        second_click = true;
-      } else {
-        game.moveChessman(last_click, pixel);
-        game.setDefaultBoard();
-        first_click = false;
-      }
+      handleUserSecondClick(pixel);
       return;
     }
 
     // third click
-    if (split) {
-      game.splitChessman(penultimate_click, last_click, pixel);
-      game.setDefaultBoard();
-      first_click = false;
-      second_click = false;
-      split = false;
-    }
-    if (merge) {
-      game.mergeChessman(penultimate_click, last_click, pixel);
-      game.setDefaultBoard();
-      first_click = false;
-      second_click = false;
-      merge = false;
-    }
+    handleUserThirdClick(pixel);
   }
   catch(const ChessException &e) {
     std::cerr << e.what() << std::endl;
   }
 }
 
-void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
+void EventHandlerThread::handleMouseButtonRight(const SDL_MouseButtonEvent
+                                                      &mouse) {
   PixelCoordinate pixel(mouse.x, mouse.y);
   if (!game.isPixelInBoard(pixel)) {
     text_entry.disableEntry();
@@ -239,7 +205,8 @@ void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
   game.askQuantumTiles(pixel);
 }
 
-void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
+void
+EventHandlerThread::handleWindowChange(const SDL_WindowEvent &window_event) {
   if (window_event.event == SDL_WINDOWEVENT_RESIZED) {
     // TODO solo anda en el de santi
     window.setMaxHeight(window_event.data1 / window.getMinRatio());
@@ -257,4 +224,50 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
       chat.sendMessage(text_entry.getText());
       text_entry.clear();
     }
+}
+
+void EventHandlerThread::handleUserFirstClick(const PixelCoordinate &pixel) {
+  game.currentTile(pixel);
+  if (split)
+    game.askSplitTiles(pixel);
+  else if (merge)
+    game.askMergeTiles(pixel);
+  else
+    game.askMoveTiles(pixel);
+  first_click = true;
+  last_click = pixel;
+}
+
+void EventHandlerThread::handleUserSecondClick(const PixelCoordinate &pixel) {
+  if (split) {
+    penultimate_click = last_click;
+    last_click = pixel;
+    second_click = true;
+  } else if (merge) {
+    penultimate_click = last_click;
+    game.askMergeTiles(pixel, last_click);
+    last_click = pixel;
+    second_click = true;
+  } else {
+    game.moveChessman(last_click, pixel);
+    game.setDefaultBoard();
+    first_click = false;
+  }
+}
+
+void EventHandlerThread::handleUserThirdClick(const PixelCoordinate &pixel) {
+  if (split) {
+    game.splitChessman(penultimate_click, last_click, pixel);
+    game.setDefaultBoard();
+    first_click = false;
+    second_click = false;
+    split = false;
+  }
+  if (merge) {
+    game.mergeChessman(penultimate_click, last_click, pixel);
+    game.setDefaultBoard();
+    first_click = false;
+    second_click = false;
+    merge = false;
+  }
 }

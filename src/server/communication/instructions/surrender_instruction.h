@@ -4,20 +4,20 @@
 #include "../../../common/client_data.h"
 #include "instruction.h"
 
-class SurrenderInstruction: public Instruction {
-    const ClientData &instructor_data;
+class SurrenderInstruction : public Instruction {
+  const ClientData &instructor_data;
 
 public:
-    SurrenderInstruction() = delete;
+  SurrenderInstruction() = delete;
 
-    explicit SurrenderInstruction(const ClientData &instructor_data);
+  explicit SurrenderInstruction(const ClientData &instructor_data);
 
-    void makeActionAndNotify(Match &match) override;
+  void makeActionAndNotify(Match &match) override;
 
-    void
-    fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                    const ClientData
-                                    &client_receiver_data) override;
+  void
+  fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

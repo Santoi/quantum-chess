@@ -439,6 +439,10 @@ El objeto que está siendo accedido por ambos hilos es el LoginStateHandler, por
 lo que se utiliza un mutex en esta clase para evitar problemas a la hora de
 acceder al estado actual.
 
+### Manejo de hilos en el juego
+
+![thread_diagram_game](images/manual_tecnico/client/client_thread_diagram.png)
+
 # Algo más que un Login
 
 El login es necesario para que el usuario pueda interactuar con el programa
@@ -459,10 +463,10 @@ ConnectingToServerState) tal como se mostró en la primera sección de este
 manual, y su ejecución no cambia.
 
 Si el booleano == true, significa que el Login sí se había conectado antes al
-servidor, por lo que este almacena strings para ip y puerto correctos. El login
-entonces se crea con el estado ChooseToKeepPlayingState, donde al usuario se le
-presentarán dos botones: "Sí" si este quiere seguir jugando, y "No" si no. Se
-presenta un diagrama de secuencias explicando estos casos.
+servidor, por lo que este almacena strings para ip y puerto son correctos. El
+login entonces se crea con el estado ChooseToKeepPlayingState, donde al usuario
+se le presentarán dos botones: "Sí" si este quiere seguir jugando, y "No" si no.
+Se presenta un diagrama de secuencias explicando estos casos.
 
 ![login_sequence_choose_to_stay_state](images/manual_tecnico/login/login_sequence_choose_to_stay_state.png)
 

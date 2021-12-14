@@ -17,7 +17,7 @@ A continuación se muestra el diagrama de hilos del Server.
 
 
 <p align=center>
-    <img src="images/manual_tecnico/server/server_threads.png" alt="DIagrama de hilos del server">
+    <img src="images/manual_tecnico/server/server_thread_diag.png" alt="DIagrama de hilos del server">
 </p>
 
 ## Conexión
@@ -45,7 +45,9 @@ de la cola bloqueante de *sockets* que carga el primero.
 *Lobby thread*, además, tiene la responsabilidad de hacer *join* a los hilos de
 partidas y de conexión de clientes inutilizados.
 
-DIAGRAMA DE SECUENCIA CONEXIÓN
+<p align=center>
+    <img src="images/manual_tecnico/server/server_connection_seq.jpg" alt="Diagrama conexion">
+</p>
 
 ### Organizador de partidas y pseudoprotocolo de conexión
 
@@ -315,7 +317,7 @@ Si existiese una pieza del equipo contrario en la posición final, esta será
 quitada de esa posición y reemplazada por la nueva pieza.
 
 <p align=center>
-    <img src="images/manual_tecnico/server/movement_sequence.png" alt="DIagrama de hilos del server">
+    <img src="images/manual_tecnico/server/movement_sequence.png" alt="Diagrama de secuencia de movimeinto">
 </p>
 
 ### Piezas cuánticas, lista de posiciones, *split* y *merge*
@@ -400,7 +402,6 @@ le realiza modulo 2 para obtener el booleano.
    <p align=center>
     <img src="images/manual_tecnico/server/mod.png" alt="Ecuacion 3" width=150>
   </p>
-
 
 ### Tests
 

@@ -42,6 +42,7 @@ public:
               ButtonSpriteRepository &button_repository,
               CoordinateTransformer &transformer_);
 
+    //Render the whole in-game scene
     void render() override;
 
     int getChatWidth();
@@ -51,16 +52,6 @@ public:
     int getChessWidth();
 
     int getChessHeight();
-
-    bool wasChatClicked(PixelCoordinate &pixel);
-
-    void disableChat();
-
-    void renderHelpScreen();
-
-    void renderLeaveMatchScreenForSpectators();
-
-    void renderLeaveMatchScreenForPlayers();
 
   // Create and add a chat message to the chat
   void addChatMessage(const std::string &nickname, const std::string &id,
@@ -83,7 +74,15 @@ public:
 
   bool wasChatClicked(const PixelCoordinate &pixel);
 
-    void renderGame();
+  void disableChat();
+
+  void renderGame();
+    
+  void renderHelpScreen();
+
+  void renderLeaveMatchScreenForPlayers();
+
+  void renderLeaveMatchScreenForSpectators();
 };
 
 

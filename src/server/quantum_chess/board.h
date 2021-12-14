@@ -124,7 +124,7 @@ public:
 
   //Finishes the game and pushes to log the message of winner color
   //and the surrenderer color.
-  void surrender(const bool player_white);
+  void surrender(bool player_white);
 };
 
 

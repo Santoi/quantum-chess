@@ -88,26 +88,25 @@ void EventHandlerThread::handleKeyDown() {
       break;
     }
     case SDLK_h: {
-      if (!text_entry.isEnabled()) {
+      if (!text_entry.isEnabled())
         screen_handler.toggleHelpScreen();
-      }
       break;
     }
     case SDLK_r: {
-      if (!text_entry.isEnabled()) {
+      if (!text_entry.isEnabled())
         screen_handler.activateLeaveScreen();
-      }
       break;
     }
     case SDLK_c: {
-      if (!text_entry.isEnabled()) {
+      if (!text_entry.isEnabled())
         screen_handler.deactivateLeaveScreen();
-      }
       break;
     }
     case SDLK_y: {
-      if (!text_entry.isEnabled())
+      if (!text_entry.isEnabled()) {
         screen_handler.switchOpenStatusIfLeaveMatchScreenIsRendering(open);
+        screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
+      }
       break;
     }
     case SDLK_s: {

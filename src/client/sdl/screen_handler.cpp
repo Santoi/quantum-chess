@@ -20,12 +20,18 @@ void ScreenHandler::renderCurrentState(GameScene &game_scene) {
   }
 }
 
-
 void ScreenHandler::toggleHelpScreen() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     return;
   render_help_screen = !render_help_screen;
+}
+
+
+void ScreenHandler::toggleLeaveScreen() {
+  if (render_help_screen)
+    return;
+  render_leave_match_screen = !render_leave_match_screen;
 }
 
 void ScreenHandler::activateLeaveScreen() {
@@ -52,7 +58,7 @@ void ScreenHandler::surrenderMatchIfLeaveMatchScreenIsRendering(Game &game) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     game.surrender();
-  render_leave_match_screen = false;
+  toggleLeaveScreen();
 }
 
 bool ScreenHandler::renderingGame() {

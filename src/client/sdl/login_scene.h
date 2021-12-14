@@ -8,6 +8,7 @@
 #include "../logic/text_entry_button.h"
 #include "scene.h"
 #include "../login/login_state_handler.h"
+#include <vector>
 
 class LoginStateHandler;
 
@@ -24,18 +25,18 @@ private:
                                       TextEntryButton &name_text_entry);
 
   // Return an iterator pointing to the first button to render
-  __gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
+  __gnu_cxx::__normal_iterator<std::unique_ptr<Button> *,
+      std::vector<std::unique_ptr<Button>>>
   findFirstButtonToRender(std::vector<std::unique_ptr<Button>> &match_buttons,
                           size_t match_to_render);
 
 public:
-
   LoginScene() = delete;
 
-  LoginScene(Window &window,
-             LoginStateHandler &login_state_handler);
+  LoginScene(Window &window, LoginStateHandler &login_state_handler);
 
-  void render();
+  // Render the current login state scene
+  void render() override;
 
   void renderChoosingMatchButtons(
       std::vector<std::unique_ptr<Button>> &match_buttons,
@@ -44,15 +45,13 @@ public:
       RefreshMatchesButton &refresh_matches_button, size_t matches_page,
       size_t matches_per_page);
 
-  void renderConnectedSprite(TextureSprite &texture);
-
   void renderConnectionToServerButtons(Button &connect_button,
                                        TextEntryButton &ip_text_entry,
                                        TextEntryButton &port_text_entry,
                                        TextEntryButton &name_text_entry);
 
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
-                          Button &spectator_role_button, Button& return_button);
+                          Button &spectator_role_button);
 
   void renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button,
                                      TextureSprite& question_text);

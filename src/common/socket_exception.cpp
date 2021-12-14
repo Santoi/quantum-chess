@@ -2,7 +2,7 @@
 #include <string>
 #include <utility>
 
-SocketException::SocketException(std::string msg) noexcept: msg(
+SocketException::SocketException(std::string &&msg) noexcept: msg(
     std::move(msg)) {}
 
 const char *SocketException::what() const noexcept {

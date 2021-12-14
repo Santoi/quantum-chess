@@ -21,7 +21,7 @@ class Client {
 private:
   ClientData::Role role;
 
-  void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
+  void gameRenderLoop(GameScene &scene, Game &game, const TextEntry &text_entry,
                       HandlerThread &handler, Renderer &renderer,
                       uint8_t frame_rate);
 
@@ -29,33 +29,34 @@ private:
                        HandlerThread &login_handler, Renderer &renderer,
                        uint8_t frame_rate);
 
-  void handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprite_repository,
-                                  TextSpriteRepository& text_sprite_repository, Window& window,
-                                  Renderer& renderer, uint8_t frame_rate, bool& login_was_closed);
+  void handleFirstLogin(Login& login,
+                        ButtonSpriteRepository& button_sprite_repository,
+                        TextSpriteRepository& text_sprite_repository,
+                        Window& window,
+                        Renderer& renderer,
+                        uint8_t frame_rate, bool& login_was_closed);
 
-  void handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
-                            TextSpriteRepository& text_sprite_repository, Window& window,
-                            Renderer& renderer, Font& font, uint8_t frame_rate,
-                            bool& game_quitted);
+  void handleGame(Socket&& socket,
+                  ButtonSpriteRepository& button_sprite_repository,
+                  TextSpriteRepository& text_sprite_repository, Window& window,
+                  Renderer& renderer, Font& font, uint8_t frame_rate,
+                  bool& game_quitted);
 
   void handleSelectAnotherMatchOrQuit(Login& login,
-                                      ButtonSpriteRepository& button_sprite_repository,
-                                      TextSpriteRepository& text_sprite_repository,
-                                      Window& window, Renderer& renderer,
-                                      uint8_t frame_rate, bool& keep_playing,
-                                      bool& login_was_closed);
-public:
-  Client() = default;
+                             ButtonSpriteRepository& button_sprite_repository,
+                             TextSpriteRepository& text_sprite_repository,
+                             Window& window, Renderer& renderer,
+                             uint8_t frame_rate, bool& keep_playing,
+                             bool& login_was_closed);
 
-  //Executes client. To stop execution, type "exit" to stdin. If single_threaded_client is true,
-  //then the client is single threaded and the work sequence is: 1. send instruction to server and
-  //2. receive instruction from server, until the client decides to exit. If single_threaded_client is
-  //false, then both remote_sender and remote_receiver threads are started, and client can receive
-  //and send instruction without any synchronization. When the command "exit" is read, both sender and
-  //receiver threads are joined and the execution is finished.
+public:
+  Client();
+
+  // Execute client login and game.
+  // Executes the client threads, such as the receiver, sender, action,
+  // event handler and drawer (the main one)
   void execute();
 
-  //Se destruye el socket cliente.
   ~Client() = default;
 };
 

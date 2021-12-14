@@ -20,10 +20,11 @@ void LoginScene::render() {
   login_state_handler.render(*this);
 }
 
-void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
-                                                TextEntryButton &ip_text_entry,
-                                                TextEntryButton &port_text_entry,
-                                                TextEntryButton &name_text_entry) {
+void
+LoginScene::setConnectionButtonsDimensions(Button &connect_button,
+                                           TextEntryButton &ip_text_entry,
+                                           TextEntryButton &port_text_entry,
+                                           TextEntryButton &name_text_entry) {
   size_t width = window.getWidth();
   size_t height = window.getHeight();
   size_t button_height = height / 15;
@@ -49,10 +50,11 @@ void LoginScene::setConnectionButtonsDimensions(Button &connect_button,
                                     button_height);
 }
 
-void LoginScene::renderConnectionToServerButtons(Button &connect_button,
-                                                 TextEntryButton &ip_text_entry,
-                                                 TextEntryButton &port_text_entry,
-                                                 TextEntryButton &name_text_entry) {
+void
+LoginScene::renderConnectionToServerButtons(Button &connect_button,
+                                            TextEntryButton &ip_text_entry,
+                                            TextEntryButton &port_text_entry,
+                                            TextEntryButton &name_text_entry) {
   setConnectionButtonsDimensions(connect_button, ip_text_entry,
                                  port_text_entry, name_text_entry);
   ip_text_entry.render();
@@ -61,7 +63,8 @@ void LoginScene::renderConnectionToServerButtons(Button &connect_button,
   connect_button.render();
 }
 
-__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *, std::vector<std::unique_ptr<Button>>>
+__gnu_cxx::__normal_iterator<std::unique_ptr<Button> *,
+    std::vector<std::unique_ptr<Button>>>
 LoginScene::findFirstButtonToRender(
     std::vector<std::unique_ptr<Button>> &match_buttons,
     size_t match_to_render) {
@@ -114,18 +117,13 @@ void LoginScene::renderChoosingMatchButtons(
   refresh_matches_button.render();
 }
 
-void LoginScene::renderConnectedSprite(TextureSprite &texture) {
-  size_t width = window.getWidth();
-  size_t height = window.getHeight();
-  texture.render(0, 0, width, height);
-}
-
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
                                     Button &spectator_role_button,
                                     Button &return_button) {
   size_t width = window.getWidth();
-  size_t button_height = width * .1, button_width = width * .1;
+  size_t button_height, button_width;
+  button_height = button_width = width * .1;
   size_t delta_x = width * .01;
   white_role_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
                                        button_height * 2,
@@ -148,11 +146,12 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
   return_button.render();
 }
 
-void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button,
+void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button,
+                                               Button& no_button,
                                                TextureSprite& question_text) {
   size_t width = window.getWidth();
-  size_t button_height = width * .1, button_width = width * .1;
-  size_t delta_x = width * .01;
+  size_t button_height = width * .05, button_width = width * .1;
+  size_t delta_x = button_width;
 
   yes_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
                                 button_height * 2,

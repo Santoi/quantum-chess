@@ -7,6 +7,7 @@
 #include "../sprite_repositories/button_sprite_repository.h"
 #include "../sprite_repositories/text_sprite_repository.h"
 #include "drawable_text.h"
+#include <string>
 
 class Renderer;
 
@@ -24,7 +25,6 @@ private:
   size_t width;
 
 public:
-
   DrawableButton(ButtonSpriteRepository &button_repository,
                  TextSpriteRepository &text_repository,
                  std::string &&type, std::string &&text);
@@ -33,7 +33,9 @@ public:
 
   void render();
 
-  bool pixelIsOnButton(const PixelCoordinate &pixel_);
+  // Sets and returns pressed state, regarding according to if pixel is on the
+  // button
+  bool isPixelOnButton(const PixelCoordinate &pixel_);
 
   void disablePressedStatus();
 

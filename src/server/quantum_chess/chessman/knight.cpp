@@ -1,10 +1,11 @@
 #include <vector>
 #include <string>
+#include <list>
 #include "knight.h"
 
 Knight::Knight(const Position &position, bool white_, Board &board_,
                EntanglementLog &entanglement_log_) :
-        Chessman(position, white_, board_, entanglement_log_) {}
+    Chessman(position, white_, board_, entanglement_log_) {}
 
 void Knight::calculateMoves(const Position &initial,
                             std::list<Position> &possible_moves)

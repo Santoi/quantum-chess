@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_MATCH_H
 
 #include <list>
+#include <vector>
 #include "../../common/socket.h"
 #include "clients_map.h"
 #include "../../common/blocking_queue.h"
@@ -27,7 +28,7 @@ private:
 
 public:
   // Constructor. Receives an ifstream reference to file with board.
-  Match(std::ifstream &file_);
+  explicit Match(std::ifstream &file_);
 
   Match(Match &&other);
 

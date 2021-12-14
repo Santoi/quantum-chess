@@ -30,10 +30,10 @@ public:
 
   DrawableChatMessage(DrawableChatMessage &&other) noexcept;
 
+  // Render a chat message with sender's nickname, ID and timestamps
   void render(int x, int y);
 
   int getDrawableHeight() const;
-
 };
 
 

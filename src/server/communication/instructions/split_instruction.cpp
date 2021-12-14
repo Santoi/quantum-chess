@@ -4,6 +4,8 @@
 #include "chess_exception_instruction.h"
 #include "sound_instruction.h"
 #include "log_instruction.h"
+#include <string>
+#include <list>
 
 SplitInstruction::SplitInstruction(const ClientData &instructor_data,
                                    const Position &from_,
@@ -20,26 +22,26 @@ void SplitInstruction::makeActionAndNotify(Match &match) {
     match.getBoard().split(from, to1, to2,
                            instructor_data.role == ClientData::ROLE_WHITE);
   }
-  catch (const ChessException &e) {
+  catch(const ChessException &e) {
     std::shared_ptr<Instruction> error_instr =
-            std::make_shared<ChessExceptionInstruction>(instructor_data,
-                                                        e.what());
+        std::make_shared<ChessExceptionInstruction>(instructor_data,
+                                                    e.what());
     match.addInstrToClientListeningQueue(instructor_data.id, error_instr);
     return;
   }
   std::shared_ptr<Instruction> this_instruct_ptr =
-          std::make_shared<LoadBoardInstruction>();
+      std::make_shared<LoadBoardInstruction>();
   match.addInstrToUpdateQueue(this_instruct_ptr);
 
   std::list<std::string> log;
   match.getBoard().popLog(log);
   // Send Log
   auto log_ptr = std::make_shared<LogInstruction>(
-          std::move(log));
+      std::move(log));
   match.addInstrToAllListeningQueues(log_ptr);
 
   std::shared_ptr<Instruction> sound_str =
-          std::make_shared<SoundInstruction>(SPLIT_SOUND);
+      std::make_shared<SoundInstruction>(SPLIT_SOUND);
   match.addInstrToAllListeningQueues(sound_str);
 }
 

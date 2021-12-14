@@ -3,6 +3,8 @@
 #include "../../common/network_address_info_exception.h"
 #include "unavailable_role_exception.h"
 #include "invalid_nick_name_exception.h"
+#include <string>
+#include <list>
 
 LoginStateHandler::LoginStateHandler(Login &login,
                                      ButtonSpriteRepository &button_repository,
@@ -12,10 +14,12 @@ LoginStateHandler::LoginStateHandler(Login &login,
       button_repository(button_repository),
       text_repository(text_repository), continue_playing(true) {
   if (!login_has_connected_to_server)
-    current_state = make_unique<ConnectingToServerState>(login, button_repository,
+    current_state = make_unique<ConnectingToServerState>(login,
+                                                         button_repository,
                                                          text_repository);
   else
-    current_state = make_unique<ChooseToKeepPlayingState>(login, button_repository,
+    current_state = make_unique<ChooseToKeepPlayingState>(login,
+                                                          button_repository,
                                                           text_repository);
 }
 
@@ -74,31 +78,32 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
                              "ERROR",
                              "Invalid IP:port. Try again.",
                              nullptr);
-    current_state->resetPressedButtons();
+    current_state->resetAllButtonsToNotPressedState();
     std::cerr << "Error: " << error.what() << std::endl;
     return;
   } catch(const UnavailableRoleException &error) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",
-                             "The selected role is unavailable. Select a different role.",
+                             "The selected role is unavailable. "
+                             "Select a different role.",
                              nullptr);
-    current_state->resetPressedButtons();
+    current_state->resetAllButtonsToNotPressedState();
     std::cerr << "Error: " << error.what() << std::endl;
     return;
   } catch(const InvalidNickNameException &error) {
-      SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                               "ERROR",
-                               error.what(),
-                               nullptr);
-      current_state->resetPressedButtons();
-      std::cerr << "Error: " << error.what() << std::endl;
-      return;
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                             "ERROR",
+                             error.what(),
+                             nullptr);
+    current_state->resetAllButtonsToNotPressedState();
+    std::cerr << "Error: " << error.what() << std::endl;
+    return;
   } catch(const std::exception &e) {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "ERROR",
                              "Invalid IP:port. Try again.",
                              nullptr);
-    current_state->resetPressedButtons();
+    current_state->resetAllButtonsToNotPressedState();
     std::cerr << "Error: " << e.what() << std::endl;
     return;
   } catch(...) {
@@ -112,9 +117,9 @@ void LoginStateHandler::render(LoginScene &login_scene) {
   current_state->render(login_scene);
 }
 
-void LoginStateHandler::resetPressedButtons() {
+void LoginStateHandler::resetAllButtonsToNotPressedState() {
   std::lock_guard<std::mutex> lock_guard(mutex);
-  current_state->resetPressedButtons();
+  current_state->resetAllButtonsToNotPressedState();
 }
 
 bool LoginStateHandler::loginIsNeeded() {

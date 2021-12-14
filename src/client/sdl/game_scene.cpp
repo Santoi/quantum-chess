@@ -4,7 +4,7 @@
 #include "window.h"
 #include "sprite_repositories/chessman_sprite_repository.h"
 #include "drawables/drawable_board.h"
-
+#include <string>
 
 #define MAX_CHAT_MESSAGES 9
 #define MAX_LOG_MESSAGES 13
@@ -110,11 +110,6 @@ int GameScene::getChatWidth() {
   return CHAT_WIDTH;
 }
 
-int GameScene::getChatHeight() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
-  return window.getHeight();
-}
-
 int GameScene::getChessWidth() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   return window.getWidth() - CHAT_WIDTH;
@@ -125,14 +120,14 @@ int GameScene::getChessHeight() {
   return window.getHeight();
 }
 
-bool GameScene::wasChatClicked(PixelCoordinate &pixel) {
-  return current_message.pixelIsOnTextEntry(pixel);
+bool GameScene::wasChatClicked(const PixelCoordinate &pixel) {
+  return current_message.isPixelOnTextEntry(pixel);
 }
 
 void GameScene::disableChat() {
   // hack, chat is never there
   PixelCoordinate p(0, 0);
-  current_message.pixelIsOnTextEntry(p);
+  current_message.isPixelOnTextEntry(p);
 }
 
 void GameScene::stopRenderingHelpScreen() {

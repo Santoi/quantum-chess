@@ -27,7 +27,7 @@ public:
   Packet();
 
   // Permite agregar bytes al paquete desde un char *.
-  void addBytes(char *bytes, const uint32_t &size);
+  void addBytes(const char *bytes, const uint32_t &size);
 
   // Permite agregar bytes al paquete desde un string.
   void addBytes(const std::string &bytes);

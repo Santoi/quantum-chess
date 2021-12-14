@@ -1,5 +1,6 @@
 #include "turn_log.h"
 #include  "../sdl/game_scene.h"
+#include <string>
 
 TurnLog::TurnLog(GameScene &scene) : scene(scene) {}
 

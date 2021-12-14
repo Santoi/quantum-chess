@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_SAME_CHESSMAN_INSTRUCTION_H
 
 #include "instruction.h"
+#include <list>
 
 class SameChessmanInstruction : public Instruction {
   const ClientData &instructor_data;
@@ -17,7 +18,8 @@ public:
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

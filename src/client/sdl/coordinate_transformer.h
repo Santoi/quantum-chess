@@ -3,7 +3,7 @@
 
 #include <atomic>
 #include "pixel_coordinate.h"
-#include "../game/position.h"
+#include "../game/board_position.h"
 
 class CoordinateTransformer {
   std::atomic<bool> flipped;
@@ -11,14 +11,12 @@ class CoordinateTransformer {
 public:
   CoordinateTransformer();
 
-  explicit CoordinateTransformer(bool flipped_);
-
-  void position2Pixel(const Position &position,
+  void position2Pixel(const BoardPosition &position,
                       PixelCoordinate &pixel, int width,
                       int height);
 
   void pixel2Position(const PixelCoordinate &pixel,
-                      Position &position, int width,
+                      BoardPosition &position, int width,
                       int height);
 
   void flip();

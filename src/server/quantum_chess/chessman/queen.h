@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <list>
 #include "chessman.h"
 #include "../position.h"
 

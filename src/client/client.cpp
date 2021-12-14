@@ -1,7 +1,7 @@
 #include "client.h"
 #include "sdl/window.h"
 #include "sdl/game_scene.h"
-#include "game/position.h"
+#include "game/board_position.h"
 #include "communication/client_protocol.h"
 #include "communication/action_thread.h"
 #include "../common/packet.h"
@@ -24,10 +24,12 @@
 
 #define FONT_SIZE 10
 #define MAX_CHAR_ENTRY 29
-
 #define CONFIG_PATH "config_files/client_config.txt"
 
-void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
+Client::Client() : role(ClientData::ROLE_SPECTATOR) {}
+
+void Client::gameRenderLoop(GameScene &scene, Game &game,
+                            const TextEntry &text_entry,
                             HandlerThread &handler, Renderer &renderer,
                             uint8_t frame_rate) {
   if (frame_rate == 0)
@@ -76,9 +78,11 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
   }
 }
 
-void Client::handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprite_repository,
-                      TextSpriteRepository& text_sprite_repository, Window& window,
-                      Renderer& renderer, uint8_t frame_rate, bool& login_was_closed) {
+void Client::handleFirstLogin(Login& login,
+                      ButtonSpriteRepository& button_sprite_repository,
+                      TextSpriteRepository& text_sprite_repository,
+                      Window& window, Renderer& renderer,
+                      uint8_t frame_rate, bool& login_was_closed) {
   LoginStateHandler login_state_handler(login, button_sprite_repository,
                                         text_sprite_repository, false);
   LoginScene login_scene(window, login_state_handler);
@@ -90,16 +94,20 @@ void Client::handleFirstLogin(Login& login, ButtonSpriteRepository& button_sprit
   login_was_closed = login_handler.was_closed();
 }
 
-void startThreads(RemoteClientSender& sender_thread, RemoteClientReceiver& receiver_thread,
-                  ActionThread& action_thread, EventHandlerThread& event_handler) {
+void startThreads(RemoteClientSender& sender_thread,
+                  RemoteClientReceiver& receiver_thread,
+                  ActionThread& action_thread,
+                  EventHandlerThread& event_handler) {
   sender_thread.start();
   receiver_thread.start();
   action_thread.start();
   event_handler.start();
 }
 
-void joinThreads(RemoteClientSender& sender_thread, RemoteClientReceiver& receiver_thread,
-                 ActionThread& action_thread, EventHandlerThread& event_handler) {
+void joinThreads(RemoteClientSender& sender_thread,
+                 RemoteClientReceiver& receiver_thread,
+                 ActionThread& action_thread,
+                 EventHandlerThread& event_handler) {
   action_thread.join();
   event_handler.join();
   sender_thread.join();
@@ -112,8 +120,10 @@ void closeBlockingQueues(BlockingQueue<RemoteClientInstruction>& received,
   send.close();
 }
 
-void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_repository,
-                        TextSpriteRepository& text_sprite_repository, Window& window,
+void Client::handleGame(Socket&& socket,
+                        ButtonSpriteRepository& button_sprite_repository,
+                        TextSpriteRepository& text_sprite_repository,
+                        Window& window,
                         Renderer& renderer, Font& font, uint8_t frame_rate,
                         bool& game_quitted) {
   BlockingQueue<RemoteClientInstruction> received;
@@ -131,8 +141,8 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
   TurnLog turn_log(scene);
   TextEntry text_entry(scene.getChatWidth() / font.size());
 
-  ActionThread action_thread(received, game, chat, chess_log, error_log,
-                             turn_log);
+  ActionThread action_thread(received, game, chat, chess_log,
+                             error_log, turn_log);
   EventHandlerThread event_handler(window, game, scene, chat, text_entry);
 
   startThreads(sender_thread, receiver_thread, action_thread, event_handler);
@@ -140,7 +150,8 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
   // comment if you dont want to go crazy while debugging.
   //sound_handler.playMusic();
 
-  gameRenderLoop(scene, game, text_entry, event_handler, renderer, frame_rate);
+  gameRenderLoop(scene, game, text_entry, event_handler,
+                 renderer, frame_rate);
 
   closeBlockingQueues(received, send);
 
@@ -151,11 +162,11 @@ void Client::handleGame(Socket&& socket, ButtonSpriteRepository& button_sprite_r
 }
 
 void Client::handleSelectAnotherMatchOrQuit(Login& login,
-                                            ButtonSpriteRepository& button_sprite_repository,
-                                            TextSpriteRepository& text_sprite_repository,
-                                            Window& window, Renderer& renderer,
-                                            uint8_t frame_rate, bool& keep_playing,
-                                            bool& login_was_closed) {
+                               ButtonSpriteRepository& button_sprite_repository,
+                               TextSpriteRepository& text_sprite_repository,
+                               Window& window, Renderer& renderer,
+                               uint8_t frame_rate, bool& keep_playing,
+                               bool& login_was_closed) {
   LoginStateHandler login_state_handler(login, button_sprite_repository,
                                         text_sprite_repository, true);
   LoginScene login_scene(window, login_state_handler);
@@ -192,8 +203,9 @@ void Client::execute() {
     Socket socket = login.getClientSocket();
     role = login.getRole();
     bool game_quitted = false;
-    handleGame(std::move(socket), button_sprite_repository, text_sprite_repository,
-                window, renderer, font, frame_rate, game_quitted);
+    handleGame(std::move(socket), button_sprite_repository,
+               text_sprite_repository, window, renderer, font,
+               frame_rate, game_quitted);
     if (game_quitted)
       return;
     handleSelectAnotherMatchOrQuit(login, button_sprite_repository,

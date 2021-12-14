@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_SERVER_H
 
 #include <list>
+#include <string>
 #include "../common/socket.h"
 #include "communication/client_handler.h"
 
@@ -13,10 +14,9 @@ private:
 public:
   Server() = delete;
 
-  //Creates a new server, using the host and service parameters to create the acceptor_socket.
   Server(const char *host, const char *service);
 
-  // Executes server.
+  // Executes server until 'q' is read from stdin
   void execute(const std::string &filename);
 
   ~Server() = default;

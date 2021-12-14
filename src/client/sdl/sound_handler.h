@@ -1,5 +1,5 @@
-#ifndef QUANTUM_CHESS_PROJ_SOUNDHANDLER_H
-#define QUANTUM_CHESS_PROJ_SOUNDHANDLER_H
+#ifndef QUANTUM_CHESS_PROJ_SOUND_HANDLER_H
+#define QUANTUM_CHESS_PROJ_SOUND_HANDLER_H
 
 #include <SDL2pp/Mixer.hh>
 #include <vector>
@@ -22,9 +22,16 @@ public:
 
   explicit SoundHandler(SDL2pp::Mixer &mixer);
 
+  // Start music player
   void playMusic();
 
+  // Pause music player
   void pauseMusic();
+
+  //Resumes music via mixer.
+  void resumeMusic();
+
+  void toggleMusic();
 
   void playSplitSound() const;
 
@@ -32,14 +39,8 @@ public:
 
   void playCaptureSound() const;
 
-  void toggleMusic();
-
   void toggleSounds();
-
-  void resumeMusic();
-
-  void stopMusic();
 };
 
 
-#endif //QUANTUM_CHESS_PROJ_SOUNDHANDLER_H
+#endif //QUANTUM_CHESS_PROJ_SOUND_HANDLER_H

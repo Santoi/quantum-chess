@@ -20,7 +20,8 @@ public:
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 };
 
 

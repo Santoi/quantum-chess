@@ -7,7 +7,7 @@
 
 Packet::Packet() : array(PREDEFINED_SIZE_BLOCK), sent_(0), read_(0), size_(0) {}
 
-void Packet::addBytes(char *bytes, const uint32_t &size) {
+void Packet::addBytes(const char *bytes, const uint32_t &size) {
   expandUntilMatchSize(size);
   for (size_t i = 0; i < size; i++, size_++) {
     array[size_] = bytes[i];

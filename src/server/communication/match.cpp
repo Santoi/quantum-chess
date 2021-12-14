@@ -8,18 +8,21 @@
 #include "instructions/load_board_instruction.h"
 #include "instructions/chat_instruction.h"
 #include "../../common/socket.h"
+#include <string>
+#include <vector>
+#include <list>
 
 // TODO maps de listening queues y client hanlders hay que hacerlos protegidos,
 //  podria haber race condition si el cliente manda algo y justo se une alguien.
 
 Match::Match(std::ifstream &file_)
-        : Thread(), board(), clients_map(), match_updates_queue(),
-          file(file_) {}
+    : Thread(), board(), clients_map(), match_updates_queue(),
+      file(file_) {}
 
 Match::Match(Match &&other) : Thread(std::move(other)),
                               board(std::move(other.board)), clients_map(),
                               match_updates_queue(
-                                      std::move(other.match_updates_queue)),
+                                  std::move(other.match_updates_queue)),
                               file(other.file) {}
 
 ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
@@ -39,8 +42,8 @@ void Match::addClientToMatch(Socket &&client_socket, uint16_t client_id) {
   clients_map.addNewClient(std::move(client_socket), match_updates_queue,
                            client_data);
   clients_map.startClient(client_id);
-  std::shared_ptr<Instruction> chat_instruction = std::make_shared<ChatInstruction>(
-          client_data, "has joined");
+  auto chat_instruction = std::make_shared<ChatInstruction>(client_data,
+                                                            "has joined");
   match_updates_queue.push(chat_instruction);
   LoadBoardInstruction instruction;
   match_updates_queue.push(std::make_shared<LoadBoardInstruction>(instruction));
@@ -54,8 +57,9 @@ void Match::stop() {
   match_updates_queue.close();
 }
 
-void Match::addInstrToClientListeningQueue(uint16_t client_id,
-                                           std::shared_ptr<Instruction> &instr_ptr) {
+void
+Match::addInstrToClientListeningQueue(uint16_t client_id,
+                                      std::shared_ptr<Instruction> &instr_ptr) {
   clients_map.pushInstrToClientListeningQueue(client_id, instr_ptr);
 }
 
@@ -73,7 +77,7 @@ Match::addInstrToUpdateQueue(std::shared_ptr<Instruction> instr_ptr) {
 void Match::checkAndNotifyUpdates() {
   auto instruct_ptr = match_updates_queue.pop();
   instruct_ptr->makeActionAndNotify(
-          *this);
+      *this);
 }
 
 void Match::run() {
@@ -82,7 +86,7 @@ void Match::run() {
     while (true)
       checkAndNotifyUpdates();
   }
-  catch (const BlockingQueueClosed &error) {
+  catch(const BlockingQueueClosed &error) {
     clients_map.stopAllClients();
   }
 }
@@ -91,11 +95,11 @@ void Match::runCatchingExceptions() {
   try {
     run();
   }
-  catch (const std::exception &e) {
+  catch(const std::exception &e) {
     clients_map.stopAllClients();
     std::cerr << "Error:" << e.what() << std::endl;
   }
-  catch (...) {
+  catch(...) {
     clients_map.stopAllClients();
     std::cerr << "Unknown error" << std::endl;
   }

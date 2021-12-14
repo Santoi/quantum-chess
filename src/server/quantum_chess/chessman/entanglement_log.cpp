@@ -1,6 +1,7 @@
 #include "entanglement_log.h"
 #include <algorithm>
 #include <map>
+#include <list>
 
 
 void EntanglementLog::add(QuantumPosition &pos1,
@@ -30,15 +31,15 @@ EntanglementLog::deleteEntanglementsOf(const QuantumPosition &position) {
 
 void
 EntanglementLog::deleteEntanglementsOfWith(
-        std::list<Entanglement>::iterator from, const Chessman &chessman1,
-        const Chessman &chessman2) {
+    std::list<Entanglement>::iterator from, const Chessman &chessman1,
+    const Chessman &chessman2) {
   for (auto it = from; it != log.end();) {
     if ((it->first.isMyChessman(chessman1) &&
          it->second.isMyChessman(chessman2)) ||
         (it->second.isMyChessman(chessman1) &&
-         it->first.isMyChessman(chessman2))) {
+         it->first.isMyChessman(chessman2)))
       it = log.erase(it);
-    } else
+    else
       ++it;
   }
 }
@@ -67,8 +68,8 @@ void EntanglementLog::getEntangledOf(const Chessman &chessman,
 
 void
 EntanglementLog::deleteEntanglementsWhichAreNotSharedBy(
-        const QuantumPosition &pos1,
-        const QuantumPosition &pos2) {
+    const QuantumPosition &pos1,
+    const QuantumPosition &pos2) {
   // First for position 1
   for (auto it = log.begin(); it != log.end();) {
     if (*it == pos1) {
@@ -94,7 +95,7 @@ EntanglementLog::deleteEntanglementsWhichAreNotSharedBy(
 }
 
 void EntanglementLog::measureIfEntangledWithAllPositionsInList(
-        std::list<QuantumPosition *> &list) {
+    std::list<QuantumPosition *> &list) {
   size_t list_size = list.size();
   std::map<QuantumPosition *, size_t> counters;
   for (auto &entanglement: log) {
@@ -133,14 +134,16 @@ void EntanglementLog::measureEntanglements(const Chessman &chessman,
   for (auto it = log.begin(); it != log.end();) {
     if (*it == position) {
       if (!chessmanIsEntangledMoreThanOnceWithPosition(chessman, it->getOther(
-              position))) {
+          position))) {
         QuantumPosition &other = it->getOther(position);
         it = log.erase(it);
         to_measure.push_back(&other);
-      } else
+      } else {
         it = log.erase(it);
-    } else
+      }
+    } else {
       ++it;
+    }
   }
 
   // Measure at the end to not corrupt the log iterator.
@@ -149,7 +152,7 @@ void EntanglementLog::measureEntanglements(const Chessman &chessman,
 }
 
 bool EntanglementLog::chessmanIsEntangledMoreThanOnceWithPosition(
-        const Chessman &chessman, const QuantumPosition &position) {
+    const Chessman &chessman, const QuantumPosition &position) {
   size_t counter = 0;
   for (auto entangled: log) {
     if (entangled == position &&
@@ -172,9 +175,9 @@ EntanglementLog::find(const QuantumPosition &pos1,
 }
 
 EntanglementLog::Entanglement::Entanglement(
-        QuantumPosition &pos1_,
-        QuantumPosition &pos2_) :
-        first(pos1_), second(pos2_) {}
+    QuantumPosition &pos1_,
+    QuantumPosition &pos2_) :
+    first(pos1_), second(pos2_) {}
 
 bool EntanglementLog::Entanglement::operator==(const QuantumPosition &pos) {
   return first == pos || second == pos;

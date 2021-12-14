@@ -6,7 +6,7 @@
 #include "client_handler.h"
 #include "../../common/socket.h"
 #include "../../common/client_data.h"
-//#include "instructions/instruction.h"
+#include <vector>
 #include "../../common/blocking_queue.h"
 
 class Instruction;

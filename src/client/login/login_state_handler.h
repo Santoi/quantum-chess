@@ -54,8 +54,12 @@ public:
 
   ~LoginStateHandler() = default;
 
+  //Calls current state's same name method.
   void resetAllButtonsToNotPressedState();
-
+	
+  //Returns true if client wants to keep playing 
+  //and has not connected to match. Else returns
+  //false.
   bool loginIsNeeded();
 
   bool continuePlaying();

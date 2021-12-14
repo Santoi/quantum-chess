@@ -17,6 +17,7 @@
 #include "game/error_log.h"
 #include "game/turn_log.h"
 #include "config_file.h"
+#include "sdl/screen_handler.h"
 #include <SDL2pp/Mixer.hh>
 #include <iostream>
 #include <sstream>
@@ -133,8 +134,10 @@ void Client::handleGame(Socket&& socket,
 
   CoordinateTransformer coordinate_transformer;
   Game game(window, send, role, font, coordinate_transformer);
-  GameScene scene(window, game.getBoard(), font, text_sprite_repository,
-                  button_sprite_repository, coordinate_transformer);
+  ScreenHandler screen_handler(role == ClientData::ROLE_SPECTATOR);
+  GameScene scene(window, game.getBoard(), font, screen_handler,
+                  text_sprite_repository,button_sprite_repository,
+                  coordinate_transformer);
   Chat chat(send, scene);
   ChessLog chess_log(scene);
   ErrorLog error_log(scene);
@@ -143,7 +146,8 @@ void Client::handleGame(Socket&& socket,
 
   ActionThread action_thread(received, game, chat, chess_log,
                              error_log, turn_log);
-  EventHandlerThread event_handler(window, game, scene, chat, text_entry);
+  EventHandlerThread event_handler(window, game, screen_handler,
+                                   chat, text_entry);
 
   startThreads(sender_thread, receiver_thread, action_thread, event_handler);
 

@@ -110,6 +110,8 @@ public:
   ClientData::Role getPlayerRole();
 
   void flipBoard();
+
+    void surrender();
 };
 
 

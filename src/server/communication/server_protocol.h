@@ -58,6 +58,7 @@
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
 #define LOG_PREFIX 'j'
+#define SURRENDER_PREFIX 'z'
 
 class Instruction;
 
@@ -68,24 +69,25 @@ public:
   ServerProtocol() = default;
 
   // Sends to socket info about running matches.
-  void sendMatchesInfo(Socket &socket,
+  void sendMatchesInfo(const Socket &socket,
                        const std::map<uint16_t, std::vector<ClientData>>
                        &matches_data);
 
   // Returns number of match received from socket.
-  uint16_t receiveChosenGame(Socket &socket);
+  uint16_t receiveChosenGame(const Socket &socket);
 
   //Receives from socket the remote client's nick name,
   // storing it in the nick_name parameter.
-  void getNickName(Socket &socket, std::string &nick_name);
+  void getNickName(const Socket &socket, std::string &nick_name);
 
   // Receives a instruction from socket, creates a new instruction according
   // to it and stores it in insttruct_ptr.
-  void receiveAndFillInstruction(Socket &socket, const ClientData &client_data,
+  void receiveAndFillInstruction(const Socket &socket,
+                                 const ClientData &client_data,
                                  std::shared_ptr<Instruction> &instruct_ptr);
 
   // Sends a packet filled with an instruction.
-  void sendPacket(Socket &socket,
+  void sendPacket(const Socket &socket,
                   std::shared_ptr<Instruction> &instruct_ptr,
                   const ClientData &client_data);
 
@@ -127,7 +129,7 @@ public:
                      const std::list<ClientData::Role> &roles);
 
   // Receives a player selected role.
-  ClientData::Role receivePlayerRole(Socket &socket,
+  ClientData::Role receivePlayerRole(const Socket &socket,
                                      const std::list<ClientData::Role> &roles);
 
   // Fill packet with a message with positions that are the same chessman_.
@@ -151,47 +153,55 @@ public:
 
 private:
   // Creates a chat instruction receiving the incoming message.
-  void fillChatInstruction(Socket &socket, const ClientData &client_data,
+  void fillChatInstruction(const Socket &socket, const ClientData &client_data,
                            std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates a movement instruction receiving the incoming message.
-  void fillMovementInstruction(Socket &socket, const ClientData &client_data,
+  void fillMovementInstruction(const Socket &socket,
+                               const ClientData &client_data,
                                std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates a possible moves instruction receiving the incoming message.
-  void fillPossibleMovesInstruction(Socket &socket, const ClientData &data,
+  void fillPossibleMovesInstruction(const Socket &socket,
+                                    const ClientData &data,
                                     std::shared_ptr<Instruction> &sharedPtr);
 
   // Creates a split instruction receiving the incoming message.
-  void fillSplitInstruction(Socket &socket,
+  void fillSplitInstruction(const Socket &socket,
                             const ClientData &client_data,
                             std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates a merge instruction receiving the incoming message.
-  void fillMergeInstruction(Socket &socket,
+  void fillMergeInstruction(const Socket &socket,
                             const ClientData &client_data,
                             std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates a possible splits instruction receiving the incoming message.
   void
-  fillPossibleSplitsInstruction(Socket &socket, const ClientData &client_data,
+  fillPossibleSplitsInstruction(const Socket &socket,
+                                const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates a possible merges instruction receiving the incoming message.
   void
-  fillPossibleMergesInstruction(Socket &socket, const ClientData &client_data,
+  fillPossibleMergesInstruction(const Socket &socket,
+                                const ClientData &client_data,
                                 std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates a same chessman_ instruction receiving the incoming message.
   void
-  fillSameChessmanInstruction(Socket &socket, const ClientData &client_data,
+  fillSameChessmanInstruction(const Socket &socket,
+                              const ClientData &client_data,
                               std::shared_ptr<Instruction> &instruct_ptr);
 
   // Creates an entangled chessmen instruction receiving the incoming message.
-  void fillEntangledChessmenInstruction(Socket &socket,
+  void fillEntangledChessmenInstruction(const Socket &socket,
                                         const ClientData &client_data,
                                         std::shared_ptr<Instruction>
                                         &instruct_ptr);
+
+    void fillSurrenderInstruction(const Socket &socket, const ClientData &data,
+                                  std::shared_ptr<Instruction> &instruc_ptr);
 };
 
 

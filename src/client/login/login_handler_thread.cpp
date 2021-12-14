@@ -72,7 +72,7 @@ void LoginHandlerThread::handleMouseButtonLeft() {
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(const SDL_MouseButtonEvent
-                                                &mouse) {
+                                               &mouse) {
   PixelCoordinate pixel(mouse.x, mouse.y);
   std::list<std::reference_wrapper<Button>> active_buttons;
   login_state_handler.fillWithActiveButtons(active_buttons);

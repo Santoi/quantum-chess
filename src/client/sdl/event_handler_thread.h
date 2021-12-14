@@ -9,13 +9,16 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+
 class GameScene;
+
+class ScreenHandler;
 
 class EventHandlerThread : public HandlerThread {
 private:
   Window &window;
   Game &game;
-  GameScene &game_scene;
+  ScreenHandler &screen_handler;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;
   bool client_quitted;
@@ -54,13 +57,13 @@ private:
 
 public:
   explicit EventHandlerThread(Window &window, Game &game,
-                              GameScene &game_scene,
+                              ScreenHandler &screen_handler,
                               Chat &chat_, TextEntry &text_entry);
 
   // Event loop
   void run() override;
 
-    bool clientQuitted();
+  bool clientQuitted();
 };
 
 

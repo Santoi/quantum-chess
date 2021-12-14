@@ -51,7 +51,7 @@ public:
                                        TextEntryButton &name_text_entry);
 
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
-                          Button &spectator_role_button);
+                          Button &spectator_role_button, Button &return_button);
 
   void renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button,
                                      TextureSprite& question_text);

@@ -38,8 +38,7 @@ ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                         std::list<std::string> &tokens) {
   if (drawable.isPixelOnButton(pixel_)) {
-    for (auto it = text_entries_ptr.begin();
-          it != text_entries_ptr.end(); ++it)
+    for (auto it = text_entries_ptr.begin(); it != text_entries_ptr.end(); ++it)
       tokens.push_back((**it).getText());
     return true;
   }

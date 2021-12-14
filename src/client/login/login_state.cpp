@@ -297,9 +297,8 @@ bool ChooseToKeepPlayingState::clientIsConnectedToMatch() {
 }
 
 void ChooseToKeepPlayingState::render(LoginScene &login_scene) {
-  login_scene.renderLeaveMatchOptionButtons(*buttons_ptr[0],
-                                            *buttons_ptr[1],
-                                            *question_sprite);
+  login_scene.renderPlayAnotherMatchButtons(*buttons_ptr[0],
+                                            *buttons_ptr[1]);
 }
 
 void ChooseToKeepPlayingState::fillWithActiveButtons(

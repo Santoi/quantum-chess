@@ -18,6 +18,7 @@ class LoginScene : public Scene {
 private:
   LoginStateHandler &login_state_handler;
   TextureSprite background;
+  TextureSprite question_play_other_match;
 
   void setConnectionButtonsDimensions(Button &connect_button,
                                       TextEntryButton &ip_text_entry,
@@ -53,8 +54,7 @@ public:
   void renderRolesButtons(Button &white_role_button, Button &black_role_button,
                           Button &spectator_role_button, Button &return_button);
 
-  void renderLeaveMatchOptionButtons(Button& yes_button, Button& no_button,
-                                     TextureSprite& question_text);
+  void renderPlayAnotherMatchButtons(Button& yes_button, Button& no_button);
 };
 
 

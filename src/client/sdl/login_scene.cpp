@@ -5,6 +5,7 @@
 #define MAX_MATCH_BUTTON_COUNT 8
 
 #define BACKGROUND_SPRITE "resources/sprites/background/login-background.jpg"
+#define QUESTION_SPRITE "resources/sprites/login_sprites/play_another_match.png"
 
 LoginScene::LoginScene(Window &window,
                        LoginStateHandler &login_state_handler)
@@ -13,7 +14,10 @@ LoginScene::LoginScene(Window &window,
         login_state_handler(login_state_handler),
         background(window.renderer(), BACKGROUND_SPRITE,
                    window.getWidth(),
-                   window.getHeight()) {}
+                   window.getHeight()),
+        question_play_other_match(window.renderer(), QUESTION_SPRITE,
+                                  window.getWidth(),
+                                  window.getHeight()) {}
 
 void LoginScene::render() {
   background.render(0, 0, window.getWidth(), window.getHeight());
@@ -146,10 +150,10 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
   return_button.render();
 }
 
-void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button,
-                                               Button& no_button,
-                                               TextureSprite& question_text) {
+void LoginScene::renderPlayAnotherMatchButtons(Button& yes_button,
+                                               Button& no_button) {
   size_t width = window.getWidth();
+  question_play_other_match.render(0, 0, width, window.getHeight());
   size_t button_height = width * .05, button_width = width * .1;
   size_t delta_x = button_width;
 
@@ -163,5 +167,4 @@ void LoginScene::renderLeaveMatchOptionButtons(Button& yes_button,
                                button_height);
   yes_button.render();
   no_button.render();
-  question_text.render(0, 0, width, width * 0.2);
 }

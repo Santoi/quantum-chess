@@ -32,6 +32,7 @@ private:
     ButtonSpriteRepository &button_repository;
     TextureSprite* help_sprite;
     TextureSprite* leave_sprite;
+    TextureSprite* surrender_leave_sprite;
     std::string current_message_text;
 
 public:
@@ -70,21 +71,11 @@ public:
 
     void renderHelpScreen();
 
-    void renderLeaveMatchScreen();
+    void renderLeaveMatchScreenForSpectators();
+
+    void renderLeaveMatchScreenForPlayers();
 
     void renderGame();
-
-    void stopRenderingHelpScreen();
-
-    void startRenderingHelpScreen();
-
-    void stopRenderingLeaveScreen();
-
-    void startRenderingLeaveScreen();
-
-    bool renderingHelpScreen();
-
-    bool renderingLeaveMatchScreen();
 };
 
 

@@ -11,8 +11,12 @@ void ScreenHandler::renderCurrentState(GameScene &game_scene) {
     game_scene.renderGame();
   else if (render_help_screen)
     game_scene.renderHelpScreen();
-  else
-    game_scene.renderLeaveMatchScreen();
+  else {
+    if (client_is_spectator)
+      game_scene.renderLeaveMatchScreenForSpectators();
+    else
+      game_scene.renderLeaveMatchScreenForPlayers();
+  }
 }
 
 

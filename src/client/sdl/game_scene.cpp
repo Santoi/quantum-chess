@@ -30,9 +30,9 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
           mutex(),
           text_repository(text_repository),
           button_repository(button_repository),
-          help_sprite(&button_repository.getPressed("help")) {
-    leave_sprite = &button_repository.getPressed("spectator_leave");
-  //  leave_sprite = &button_repository.getPressed("player_leave");
+          help_sprite(&button_repository.getPressed("help")),
+          leave_sprite(&button_repository.getPressed("spectator_leave")),
+          surrender_leave_sprite(&button_repository.getPressed("player_leave")){
 }
 
 void
@@ -73,7 +73,13 @@ void GameScene::addCurrentMessage(const std::string &text) {
   current_message_text = text;
 }
 
-void GameScene::renderLeaveMatchScreen() {
+void GameScene::renderLeaveMatchScreenForPlayers() {
+  int width = window.getWidth(), height = window.getHeight();
+  surrender_leave_sprite->render(0, 0, width, height);
+}
+
+
+void GameScene::renderLeaveMatchScreenForSpectators() {
   int width = window.getWidth(), height = window.getHeight();
   leave_sprite->render(0, 0, width, height);
 }

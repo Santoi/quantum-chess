@@ -27,7 +27,8 @@
 
 Client::Client() : role(ClientData::ROLE_SPECTATOR) {}
 
-void Client::gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
+void Client::gameRenderLoop(GameScene &scene, Game &game,
+                            const TextEntry &text_entry,
                             HandlerThread &handler, Renderer &renderer,
                             uint8_t frame_rate) {
   if (frame_rate == 0)

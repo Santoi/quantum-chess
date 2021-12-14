@@ -49,13 +49,15 @@ void ClientProtocol::sendChosenGame(Socket &socket, uint16_t game_number) {
 }
 
 void
-ClientProtocol::sendClientsNickName(Socket &socket, std::string &nick_name) {
+ClientProtocol::sendClientsNickName(const Socket &socket,
+                                    const std::string &nick_name) {
   Packet packet;
   this->addStringAndItsLengthToPacket(packet, nick_name);
   socket.send(packet);
 }
 
-void ClientProtocol::sendChosenRole(Socket &socket, ClientData::Role role) {
+void
+ClientProtocol::sendChosenRole(const Socket &socket, ClientData::Role role) {
   Packet packet;
   addNumber8ToPacket(packet, role);
   socket.send(packet);
@@ -69,8 +71,9 @@ void ClientProtocol::fillPacketWithChatMessage(Packet &packet,
 }
 
 void
-ClientProtocol::fillPacketWithMoveMessage(Packet &packet, BoardPosition &initial,
-                                          BoardPosition &final) {
+ClientProtocol::fillPacketWithMoveMessage(Packet &packet,
+                                          const BoardPosition &initial,
+                                          const BoardPosition &final) {
   packet.addByte(MOVE_PREFIX);
   packet.addByte(initial.x());
   packet.addByte(initial.y());
@@ -79,8 +82,10 @@ ClientProtocol::fillPacketWithMoveMessage(Packet &packet, BoardPosition &initial
 }
 
 void
-ClientProtocol::fillPacketWithSplitMessage(Packet &packet, BoardPosition &from,
-                                           BoardPosition &to1, BoardPosition &to2) {
+ClientProtocol::fillPacketWithSplitMessage(Packet &packet,
+                                           const BoardPosition &from,
+                                           const BoardPosition &to1,
+                                           const BoardPosition &to2) {
   packet.addByte(SPLIT_PREFIX);
   packet.addByte(from.x());
   packet.addByte(from.y());
@@ -103,35 +108,35 @@ void ClientProtocol::fillPacketWithMergeMessage(Packet &packet,
   packet.addByte(to.y());
 }
 
-void
-ClientProtocol::fillPacketWithPossibleMovesMessage(Packet &packet,
-                                                   const BoardPosition &position) {
+void ClientProtocol::
+fillPacketWithPossibleMovesMessage(Packet &packet,
+                                   const BoardPosition &position) {
   packet.addByte(POSSIBLE_MOVES_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void
-ClientProtocol::fillPacketWithPossibleSplitsMessage(Packet &packet,
-                                                    const BoardPosition &position) {
+void ClientProtocol::
+fillPacketWithPossibleSplitsMessage(Packet &packet,
+                                    const BoardPosition &position) {
   packet.addByte(POSSIBLE_SPLITS_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void
-ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
-                                                    const BoardPosition &position) {
+void ClientProtocol::
+fillPacketWithPossibleMergesMessage(Packet &packet,
+                                    const BoardPosition &position) {
   packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 1);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void
-ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
-                                                    const BoardPosition &position1,
-                                                    const BoardPosition &position2) {
+void ClientProtocol::
+fillPacketWithPossibleMergesMessage(Packet &packet,
+                                    const BoardPosition &position1,
+                                    const BoardPosition &position2) {
   packet.addByte(POSSIBLE_MERGES_PREFIX);
   addNumber8ToPacket(packet, 2);
   addNumber8ToPacket(packet, position1.x());
@@ -140,17 +145,17 @@ ClientProtocol::fillPacketWithPossibleMergesMessage(Packet &packet,
   addNumber8ToPacket(packet, position2.y());
 }
 
-void
-ClientProtocol::fillPacketWithSameChessmanInstruction(Packet &packet,
-                                                      BoardPosition &position) {
+void ClientProtocol::
+fillPacketWithSameChessmanInstruction(Packet &packet,
+                                      const BoardPosition &position) {
   packet.addByte(SAME_CHESSMAN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
 }
 
-void
-ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
-                                                           BoardPosition &position) {
+void ClientProtocol::
+fillPacketWithEntangledChessmanInstruction(Packet &packet,
+                                           const BoardPosition &position) {
   packet.addByte(ENTANGLED_CHESSMEN_PREFIX);
   addNumber8ToPacket(packet, position.x());
   addNumber8ToPacket(packet, position.y());
@@ -158,7 +163,7 @@ ClientProtocol::fillPacketWithEntangledChessmanInstruction(Packet &packet,
 
 
 void ClientProtocol::
-sendInstruction(Socket &socket,
+sendInstruction(const Socket &socket,
                 std::shared_ptr<RemoteClientInstruction> &instruction) {
   Packet packet;
   instruction->fillPacketWithInstructionsToSend(packet, *this);

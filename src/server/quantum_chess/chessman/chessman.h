@@ -85,7 +85,7 @@ protected:
       Chessman *> &chessman_in_path, bool final_same_color_free) const;
 
   // Returns true if chessman_ is already entangled.
-  bool chessmanIsAlreadyEntangled(Chessman &chessman);
+  bool chessmanIsAlreadyEntangled(const Chessman &chessman);
 
   // Checks if chessman_ is in board. If not, it throws exception.
   void checkIsInBoardOrFail(const Position &position);

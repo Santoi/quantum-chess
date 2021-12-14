@@ -85,7 +85,7 @@ public:
   Chessman *getChessmanAt(const Position &position);
 
   // Returns true if chessman_ is in the board (in the map).
-  bool isThere(Chessman *chessman);
+  bool isThere(const Chessman *chessman);
 
   // Add a chessman_ in position given.
   void addChessmanIn(const Position &position, Chessman *chessman);

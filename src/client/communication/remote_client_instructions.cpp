@@ -16,7 +16,8 @@ void RemoteClientInstruction::
 fillPacketWithInstructionsToSend(Packet &packet,
                                  ClientProtocol &protocol) {}
 
-RemoteClientChatInstruction::RemoteClientChatInstruction(std::string message_) :
+RemoteClientChatInstruction::RemoteClientChatInstruction(
+    const std::string &message_) :
     client_id(0), nickname(), message(message_), timestamp() {}
 
 RemoteClientChatInstruction::RemoteClientChatInstruction(uint16_t client_id,

@@ -86,6 +86,6 @@ ClientsMap::getAvailableRoles(bool &white_available, bool &black_available) {
 void ClientsMap::loadWithClientData(std::vector<ClientData> &vector) const {
   vector.clear();
   vector.reserve(clients.size());
-  for (auto &client: clients)
-    vector.push_back(client.second.getData());
+  for (auto it = clients.begin(); it != clients.end(); ++it)
+    vector.push_back(it->second.getData());
 }

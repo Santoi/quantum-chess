@@ -62,7 +62,7 @@ public:
   // Erase all error log messages
   void clearErrorLog();
 
-  bool wasChatClicked(PixelCoordinate &pixel);
+  bool wasChatClicked(const PixelCoordinate &pixel);
 
   void disableChat();
 };

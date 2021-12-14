@@ -586,7 +586,7 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
   }
 }
 
-bool Chessman::chessmanIsAlreadyEntangled(Chessman &chessman) {
+bool Chessman::chessmanIsAlreadyEntangled(const Chessman &chessman) {
   return entanglement_log.areEntangled(*this, chessman);
 }
 

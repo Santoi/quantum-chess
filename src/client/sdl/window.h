@@ -34,7 +34,6 @@ public:
 
   void setMaxHeight(size_t height);
 
-  void setSize(size_t width, size_t height);
 };
 
 

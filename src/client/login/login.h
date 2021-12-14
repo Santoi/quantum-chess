@@ -32,8 +32,6 @@ public:
   //Return moved socket.
   Socket getClientSocket();
 
-  std::string getClientNickName();
-
   std::list<ClientData::Role> getAvailableRolesFromServer();
 
   void saveAndSendChosenRoleToServer(ClientData::Role role_);

@@ -65,7 +65,7 @@ public:
                               std::string message,
                               std::string timestamp);
 
-  explicit RemoteClientChatInstruction(std::string message_);
+  explicit RemoteClientChatInstruction(const std::string &message_);
 
   //Prints to stdout "instructor_nick_name sends message"
   void
@@ -91,7 +91,7 @@ public:
   //Prints to stdout "instructor_nick_name left the game"
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   ~RemoteClientExitMessageInstruction() = default;
 };
@@ -108,7 +108,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   ~RemoteClientLoadBoardInstruction() = default;
 };
@@ -125,7 +125,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -143,7 +143,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -162,7 +162,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -176,12 +176,12 @@ class RemoteClientPossibleSplitsInstruction : public RemoteClientInstruction {
 public:
   RemoteClientPossibleSplitsInstruction() = delete;
 
-  RemoteClientPossibleSplitsInstruction(std::list<BoardPosition>
-                                        &&positions_);
+  explicit RemoteClientPossibleSplitsInstruction(std::list<BoardPosition>
+                                                 &&positions_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -195,12 +195,12 @@ class RemoteClientPossibleMergesInstruction : public RemoteClientInstruction {
 public:
   RemoteClientPossibleMergesInstruction() = delete;
 
-  RemoteClientPossibleMergesInstruction(std::list<BoardPosition>
-                                        &&positions_);
+  explicit RemoteClientPossibleMergesInstruction(std::list<BoardPosition>
+                                                 &&positions_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -222,7 +222,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -244,7 +244,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -258,12 +258,12 @@ class RemoteClientSameChessmanInstruction : public RemoteClientInstruction {
 public:
   RemoteClientSameChessmanInstruction() = delete;
 
-  RemoteClientSameChessmanInstruction(std::list<BoardPosition>
-                                      &&positions_);
+  explicit RemoteClientSameChessmanInstruction(std::list<BoardPosition>
+                                               &&positions_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -278,12 +278,12 @@ class RemoteClientEntangledChessmanInstruction
 public:
   RemoteClientEntangledChessmanInstruction() = delete;
 
-  RemoteClientEntangledChessmanInstruction(std::list<BoardPosition>
-                                           &&positions_);
+  explicit RemoteClientEntangledChessmanInstruction(std::list<BoardPosition>
+                                                    &&positions_);
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -302,7 +302,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;
@@ -321,7 +321,7 @@ public:
 
   void
   makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
-             TurnLog &turn_log);
+             TurnLog &turn_log) override;
 
   void fillPacketWithInstructionsToSend(Packet &packet,
                                         ClientProtocol &protocol) override;

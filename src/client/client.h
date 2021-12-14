@@ -23,7 +23,7 @@ private:
   BlockingQueue<RemoteClientInstruction> send;
   ClientData::Role role;
 
-  void gameRenderLoop(GameScene &scene, Game &game, TextEntry &text_entry,
+  void gameRenderLoop(GameScene &scene, Game &game, const TextEntry &text_entry,
                       HandlerThread &handler, Renderer &renderer,
                       uint8_t frame_rate);
 

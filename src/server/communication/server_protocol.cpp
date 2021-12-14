@@ -44,7 +44,7 @@ void ServerProtocol::sendMatchesInfo(Socket &socket,
 }
 
 void
-ServerProtocol::sendAvailableRoles(Socket &socket,
+ServerProtocol::sendAvailableRoles(const Socket &socket,
                                    const std::list<ClientData::Role> &roles) {
   Packet packet;
   addNumber8ToPacket(packet, roles.size());
@@ -347,7 +347,7 @@ fillPacketWithEntangledChessmanInstruction(Packet &packet,
 }
 
 void ServerProtocol::fillPacketLogMessage(Packet &packet,
-                                          std::list<std::string> &log) {
+                                          const std::list<std::string> &log) {
   packet.addByte(LOG_PREFIX);
   changeNumberToBigEndianAndAddToPacket(packet, log.size());
   for (auto &entry: log) {

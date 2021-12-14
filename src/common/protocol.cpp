@@ -19,7 +19,7 @@ void Protocol::addNumber8ToPacket(Packet &packet, const uint8_t &number) {
   packet.addBytes(number);
 }
 
-uint16_t Protocol::getNumber16FromSocket(Socket &socket) {
+uint16_t Protocol::getNumber16FromSocket(const Socket &socket) {
   Packet packet;
   socket.receive(packet, 2);
   if (packet.size() != 2)
@@ -29,7 +29,7 @@ uint16_t Protocol::getNumber16FromSocket(Socket &socket) {
   return ntohs(number);
 }
 
-char Protocol::getCharFromSocket(Socket &socket) {
+char Protocol::getCharFromSocket(const Socket &socket) {
   Packet packet;
   socket.receive(packet, 1);
   if (packet.size() != 1)
@@ -48,8 +48,9 @@ uint8_t Protocol::getNumber8FromSocket(Socket &socket) {
   return *number;
 }
 
-void Protocol::getMessageOfSizeFromSocket(Socket &socket, std::string &message,
-                                          const uint16_t &size_of_word) {
+void
+Protocol::getMessageOfSizeFromSocket(const Socket &socket, std::string &message,
+                                     const uint16_t &size_of_word) {
   Packet packet;
   socket.receive(packet, size_of_word);
   if (packet.size() != size_of_word)

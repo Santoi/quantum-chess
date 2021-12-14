@@ -27,7 +27,7 @@ public:
                   std::string timestamp);
 
   // Enables text input from user if pixel is inside the text box
-  bool enableIfPixelIsInChat(PixelCoordinate &pixel);
+  bool enableIfPixelIsInChat(const PixelCoordinate &pixel);
 
   // Disable input from user
   void disable();

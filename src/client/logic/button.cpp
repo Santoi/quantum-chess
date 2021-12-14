@@ -38,8 +38,8 @@ ConnectButton::ConnectButton(ButtonSpriteRepository &button_repository,
 bool ConnectButton::fillTokensIfClicked(const PixelCoordinate &pixel_,
                                         std::list<std::string> &tokens) {
   if (drawable.isPixelOnButton(pixel_)) {
-    for (const auto &text_entry: text_entries_ptr)
-      tokens.push_back((*text_entry).getText());
+    for (auto it = text_entries_ptr.begin(); it != text_entries_ptr.end(); ++it)
+      tokens.push_back((**it).getText());
     return true;
   }
   return false;
@@ -75,7 +75,8 @@ PickMatchButton::PickMatchButton(ButtonSpriteRepository &button_repository,
     match_info = "NEW GAME";
   } else {
     match_info += client_info;
-    match_info[-2] = '\0'; // remove the last comma
+    // remove the last comma
+    match_info = match_info.substr(0, match_info.size() - 2);
   }
   drawable.setText(std::move(match_info), 'k');
 }

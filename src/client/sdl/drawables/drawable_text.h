@@ -23,8 +23,6 @@ public:
 
   DrawableText(const DrawableText &other) = delete;
 
-  size_t length() const;
-
   size_t getDrawableWidth() const;
 
   size_t getDrawableHeight() const;

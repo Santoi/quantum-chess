@@ -9,22 +9,13 @@
 
 class Font {
   SDL2pp::SDLTTF ttf;
-  SDL2pp::Font regular_font;
   SDL2pp::Font mono_font;
-  SDL2pp::Font bold_font;
-  SDL2pp::Font italic_font;
   std::map<char, SDL_Color> colors;
 
 public:
   explicit Font(int ptx, int index = 0);
 
-  SDL2pp::Surface renderText(const std::string &text, char color = 'w');
-
   SDL2pp::Surface renderMonoText(const std::string &text, char color = 'w');
-
-  SDL2pp::Surface renderBoldText(const std::string &text, char color = 'w');
-
-  SDL2pp::Surface renderItalicText(const std::string &text, char color = 'w');
 
   size_t size() const;
 

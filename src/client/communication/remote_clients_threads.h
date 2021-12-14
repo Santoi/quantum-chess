@@ -11,7 +11,6 @@ class RemoteClientSender : public Thread {
 private:
   Socket &client_socket;
   BlockingQueue<RemoteClientInstruction> &send_queue;
-  bool sender_is_active;
 
 public:
   RemoteClientSender() = delete;

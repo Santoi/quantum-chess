@@ -18,40 +18,25 @@
 #define PATH "resources/fonts/"
 
 Font::Font(int ptx, int index)
-    : ttf(), regular_font(PATH "font-regular.ttf", ptx, index),
+    : ttf(),
       mono_font(PATH "erusfont.pcf", ptx, index),
-      bold_font(PATH "erusfontbold.pcf", ptx, index),
-      italic_font(PATH "font-italic.ttf", ptx, index) {
-  colors = {
-      {'k', BLACK},
-      {'w', WHITE},
-      {'r', RED},
-      {'g', GREEN},
-      {'b', BLUE},
-      {'y', YELLOW},
-      {'n', NAVY},
-      {'f', FUCHSIA},
-      {'l', LIME},
-      {'p', PURPLE},
-      {'d', GRAY},
-      {'t', TEAL},
-  };
-}
-
-SDL2pp::Surface Font::renderText(const std::string &text, char color) {
-  return regular_font.RenderText_Solid(text, colors[color]);
-}
+      colors({
+                 {'k', BLACK},
+                 {'w', WHITE},
+                 {'r', RED},
+                 {'g', GREEN},
+                 {'b', BLUE},
+                 {'y', YELLOW},
+                 {'n', NAVY},
+                 {'f', FUCHSIA},
+                 {'l', LIME},
+                 {'p', PURPLE},
+                 {'d', GRAY},
+                 {'t', TEAL},
+             }) {}
 
 SDL2pp::Surface Font::renderMonoText(const std::string &text, char color) {
   return mono_font.RenderText_Solid(text, colors[color]);
-}
-
-SDL2pp::Surface Font::renderBoldText(const std::string &text, char color) {
-  return bold_font.RenderText_Solid(text, colors[color]);
-}
-
-SDL2pp::Surface Font::renderItalicText(const std::string &text, char color) {
-  return italic_font.RenderText_Solid(text, colors[color]);
 }
 
 size_t Font::size() const {
@@ -60,8 +45,8 @@ size_t Font::size() const {
 
 std::list<char> Font::getColors() const {
   std::list<char> color_list;
-  for (auto color: colors) {
-    color_list.push_back(color.first);
+  for (auto it = colors.begin(); it != colors.end(); ++it) {
+    color_list.push_back(it->first);
   }
   return color_list;
 }

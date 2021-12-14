@@ -155,7 +155,8 @@ void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
   game.askQuantumTiles(pixel);
 }
 
-void EventHandlerThread::handleWindowChange(SDL_WindowEvent &window_event) {
+void
+EventHandlerThread::handleWindowChange(const SDL_WindowEvent &window_event) {
   if (window_event.event == SDL_WINDOWEVENT_RESIZED) {
     // TODO solo anda en el de santi
     window.setMaxHeight(window_event.data1 / window.getMinRatio());
@@ -175,7 +176,7 @@ void EventHandlerThread::handleTextInput(const std::string &text) {
     }
 }
 
-void EventHandlerThread::handleUserFirstClick(PixelCoordinate &pixel) {
+void EventHandlerThread::handleUserFirstClick(const PixelCoordinate &pixel) {
   game.currentTile(pixel);
   if (split)
     game.askSplitTiles(pixel);
@@ -187,7 +188,7 @@ void EventHandlerThread::handleUserFirstClick(PixelCoordinate &pixel) {
   last_click = pixel;
 }
 
-void EventHandlerThread::handleUserSecondClick(PixelCoordinate &pixel) {
+void EventHandlerThread::handleUserSecondClick(const PixelCoordinate &pixel) {
   if (split) {
     penultimate_click = last_click;
     last_click = pixel;
@@ -204,7 +205,7 @@ void EventHandlerThread::handleUserSecondClick(PixelCoordinate &pixel) {
   }
 }
 
-void EventHandlerThread::handleUserThirdClick(PixelCoordinate &pixel) {
+void EventHandlerThread::handleUserThirdClick(const PixelCoordinate &pixel) {
   if (split) {
     game.splitChessman(penultimate_click, last_click, pixel);
     game.setDefaultBoard();

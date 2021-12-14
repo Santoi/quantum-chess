@@ -123,7 +123,8 @@ public:
 
   // Sends a message with available roles in list.
   void
-  sendAvailableRoles(Socket &socket, const std::list<ClientData::Role> &roles);
+  sendAvailableRoles(const Socket &socket,
+                     const std::list<ClientData::Role> &roles);
 
   // Receives a player selected role.
   ClientData::Role receivePlayerRole(Socket &socket,
@@ -144,7 +145,7 @@ public:
 
   // Fills a packet with a log message.
   void fillPacketLogMessage(Packet &packet,
-                            std::list<std::string> &log);
+                            const std::list<std::string> &log);
 
   ~ServerProtocol() = default;
 

@@ -40,7 +40,7 @@ public:
   void sendChosenGame(Socket &socket, uint16_t game_number);
 
   //It sends to the client socket the client's nick_name, following the protocol
-  void sendClientsNickName(Socket &socket, std::string &nick_name);
+  void sendClientsNickName(const Socket &socket, const std::string &nick_name);
 
   void fillPacketWithChatMessage(Packet &packet, const std::string &message);
 
@@ -52,44 +52,50 @@ public:
                           std::shared_ptr<RemoteClientInstruction>
                           &ptr_instruction);
 
-  void sendInstruction(Socket &socket,
+  void sendInstruction(const Socket &socket,
                        std::shared_ptr<RemoteClientInstruction> &instruction);
 
   ~ClientProtocol() = default;
 
   void
-  fillPacketWithMoveMessage(Packet &packet, BoardPosition &initial,
-                            BoardPosition &final);
+  fillPacketWithMoveMessage(Packet &packet, const BoardPosition &initial,
+                            const BoardPosition &final);
 
   void fillPacketWithPossibleMovesMessage(Packet &packet,
                                           const BoardPosition &position);
 
   void getAvailableRoles(Socket &socket, std::list<ClientData::Role> &roles);
 
-  void sendChosenRole(Socket &socket, ClientData::Role role);
+  void sendChosenRole(const Socket &socket, ClientData::Role role);
 
   void
-  fillPacketWithPossibleSplitsMessage(Packet &packet, const BoardPosition &position);
+  fillPacketWithPossibleSplitsMessage(Packet &packet,
+                                      const BoardPosition &position);
 
-  void fillPacketWithSplitMessage(Packet &packet, BoardPosition &from, BoardPosition &to1,
-                                  BoardPosition &to2);
+  void fillPacketWithSplitMessage(Packet &packet, const BoardPosition &from,
+                                  const BoardPosition &to1,
+                                  const BoardPosition &to2);
 
   void
-  fillPacketWithPossibleMergesMessage(Packet &packet, const BoardPosition &position);
+  fillPacketWithPossibleMergesMessage(Packet &packet,
+                                      const BoardPosition &position);
 
   void
-  fillPacketWithPossibleMergesMessage(Packet &packet, const BoardPosition &position1,
+  fillPacketWithPossibleMergesMessage(Packet &packet,
+                                      const BoardPosition &position1,
                                       const BoardPosition &position2);
 
   void
-  fillPacketWithSameChessmanInstruction(Packet &packet, BoardPosition &position);
+  fillPacketWithSameChessmanInstruction(Packet &packet,
+                                        const BoardPosition &position);
 
   void
   fillPacketWithEntangledChessmanInstruction(Packet &packet,
-                                             BoardPosition &position);
+                                             const BoardPosition &position);
 
   void fillPacketWithMergeMessage(Packet &packet, const BoardPosition &from1,
-                                  const BoardPosition &from2, const BoardPosition &to);
+                                  const BoardPosition &from2,
+                                  const BoardPosition &to);
 
 private:
   // Gets necessary information to create the RemoteClientChatInstruction

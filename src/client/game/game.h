@@ -65,36 +65,37 @@ public:
   void mergeTiles(const std::list<BoardPosition> &positions);
 
   // Move a chessman from source to destination positions
-  void moveChessman(PixelCoordinate &orig, PixelCoordinate &dest);
+  void moveChessman(const PixelCoordinate &orig, const PixelCoordinate &dest);
 
   // Split a chessman into `to1` and `to2` positions
-  void splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
-                     PixelCoordinate &to2);
+  void splitChessman(const PixelCoordinate &from, const PixelCoordinate &to1,
+                     const PixelCoordinate &to2);
 
   // Merge two chessmen into one tile
-  void mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
-                     PixelCoordinate &to);
+  void mergeChessman(const PixelCoordinate &from1, const PixelCoordinate &from2,
+                     const PixelCoordinate &to);
 
   // Load chessmen positions into the board
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
   // Request posible move tiles to server
-  void askMoveTiles(PixelCoordinate &coords);
+  void askMoveTiles(const PixelCoordinate &coords);
 
   // Request posible split tiles to server
-  void askSplitTiles(PixelCoordinate &coords);
+  void askSplitTiles(const PixelCoordinate &coords);
 
   // Request posible merge tiles to server, for only 1 chessman
-  void askMergeTiles(PixelCoordinate &coords);
+  void askMergeTiles(const PixelCoordinate &coords);
 
   // Request posible merge tiles to server, when 2 chessmen are selected
-  void askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2);
+  void
+  askMergeTiles(const PixelCoordinate &coords1, const PixelCoordinate &coords2);
 
   // Request positions from entangled chessmen to the selected chessman
-  void askEntangledTiles(PixelCoordinate &coords);
+  void askEntangledTiles(const PixelCoordinate &coords);
 
   // Request positions from the selected chessman's superpositions
-  void askQuantumTiles(PixelCoordinate &coords);
+  void askQuantumTiles(const PixelCoordinate &coords);
 
   void playSplitSound();
 

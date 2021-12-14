@@ -123,8 +123,10 @@ void King::splitWithCastling(const Position &final1, const Position &final2) {
     board.addChessmanIn(Position(4, first_line), this);
     positions.emplace_back(4, first_line, 0.5, this);
     shortCastling(++it);
-    auto tower_left = (Tower *) board.getChessmanAt(Position(3, first_line));
-    auto tower_right = (Tower *) board.getChessmanAt(Position(5, first_line));
+    auto tower_left = dynamic_cast<Tower *>(board.getChessmanAt(
+        Position(3, first_line)));
+    auto tower_right = dynamic_cast<Tower *>(board.getChessmanAt(
+        Position(5, first_line)));
     tower_left->entangle(Position(3, first_line), Position(0, first_line),
                          *this,
                          Position(2, first_line));
@@ -147,8 +149,10 @@ void King::splitWithCastling(const Position &final1, const Position &final2) {
     board.addChessmanIn(Position(4, first_line), this);
     positions.emplace_back(4, first_line, 0.5, this);
     longCastling(++it);
-    auto tower_left = (Tower *) board.getChessmanAt(Position(3, first_line));
-    auto tower_right = (Tower *) board.getChessmanAt(Position(5, first_line));
+    auto tower_left = dynamic_cast<Tower *>(board.getChessmanAt(
+        Position(3, first_line)));
+    auto tower_right = dynamic_cast<Tower *>(board.getChessmanAt(
+        Position(5, first_line)));
     tower_left->entangle(Position(3, first_line), Position(0, first_line),
                          *this,
                          Position(2, first_line));
@@ -174,7 +178,8 @@ void King::splitWithCastling(const Position &final1, const Position &final2) {
       positions.emplace_front(no_castling_pos, 0.5, this);
     else
       positions.emplace_back(no_castling_pos, 0.5, this);
-    auto tower_left = (Tower *) board.getChessmanAt(Position(3, first_line));
+    auto tower_left = dynamic_cast<Tower *>(board.getChessmanAt(
+        Position(3, first_line)));
     tower_left->entangle(Position(3, first_line), Position(0, first_line),
                          *this,
                          Position(2, first_line));
@@ -194,7 +199,8 @@ void King::splitWithCastling(const Position &final1, const Position &final2) {
       positions.emplace_front(no_castling_pos, 0.5, this);
     else
       positions.emplace_back(no_castling_pos, 0.5, this);
-    auto tower_right = (Tower *) board.getChessmanAt(Position(5, first_line));
+    auto tower_right = dynamic_cast<Tower *>(board.getChessmanAt(
+        Position(5, first_line)));
     tower_right->entangle(Position(5, first_line), Position(7, first_line),
                           *this,
                           Position(6, first_line));
@@ -206,7 +212,8 @@ void King::splitWithCastling(const Position &final1, const Position &final2) {
 void
 King::longCastling(
     const std::_List_iterator<QuantumPosition> &position_to_castle) {
-  Tower *tower = (Tower *) board.getChessmanAt(Position(0, first_line));
+  Tower *tower = dynamic_cast<Tower *>(board.getChessmanAt(
+      Position(0, first_line)));
   // Move tower.
   tower->move(Position(0, first_line), Position(3, first_line));
   if (board.getChessmanAt(Position(1, first_line))) {
@@ -224,7 +231,8 @@ King::longCastling(
 
 void King::shortCastling(
     const std::_List_iterator<QuantumPosition> &position_to_castle) {
-  Tower *tower = (Tower *) board.getChessmanAt(Position(7, first_line));
+  Tower *tower = dynamic_cast<Tower *>(board.getChessmanAt(
+      Position(7, first_line)));
   tower->move(Position(7, first_line), Position(5, first_line));
   position_to_castle->setPosition(Position(6, first_line));
   board.addChessmanOfIn(Position(4, first_line), Position(6, first_line));
@@ -234,13 +242,12 @@ bool King::checkShortCastling() const {
   auto supposed_tower = board.getChessmanAt(Position(7, first_line));
   if (!supposed_tower)
     return false;
-  std::pair<Position, Chessman *> chessman_in_path;
   if (board.getChessmanAt(Position(5, first_line)) ||
       board.getChessmanAt(Position(6, first_line)))
     return false;
 
   if (supposed_tower->charId() == 'T') {
-    auto *tower = (Tower *) supposed_tower;
+    auto *tower = dynamic_cast<Tower *>(supposed_tower);
     if (tower->isWhite() == white && tower->hasNotMovedYet())
       return true;
   }
@@ -260,7 +267,7 @@ bool King::checkLongCastling() const {
     return false;
 
   if (supposed_tower->charId() == 'T') {
-    auto *tower = (Tower *) supposed_tower;
+    auto *tower = dynamic_cast<Tower *>(supposed_tower);
     if (tower->isWhite() == white && tower->hasNotMovedYet())
       return true;
   }

@@ -60,15 +60,16 @@ void ConnectingToServerState::render(LoginScene &login_scene) {
 
 void ConnectingToServerState::fillWithActiveButtons(
     std::list<std::reference_wrapper<Button>> &active_buttons) {
-  for (auto &button: buttons_ptr)
-    active_buttons.emplace_back(*button);
+  for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); ++it)
+    active_buttons.emplace_back(**it);
 }
 
 void ConnectingToServerState::fillWithActiveTextEntryButtons(
     std::list<std::reference_wrapper<TextEntryButton>> &
     active_text_entries) {
-  for (auto &button: text_entry_buttons_ptr)
-    active_text_entries.emplace_back(*button);
+  for (auto it = text_entry_buttons_ptr.begin();
+       it != text_entry_buttons_ptr.end(); ++it)
+    active_text_entries.emplace_back(**it);
 }
 
 int ConnectingToServerState::processTokens(std::list<std::string> &&tokens) {
@@ -129,8 +130,8 @@ SelectingMatchState::render(LoginScene &login_scene) {
 
 void SelectingMatchState::fillWithActiveButtons(
     std::list<std::reference_wrapper<Button>> &active_buttons) {
-  for (auto &button: buttons_ptr)
-    active_buttons.emplace_back(*button);
+  for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); ++it)
+    active_buttons.emplace_back(**it);
   active_buttons.emplace_back(next_matches_button);
   active_buttons.emplace_back(previous_matches_button);
   active_buttons.emplace_back(refresh_matches_button);
@@ -217,8 +218,8 @@ SelectingRoleState::render(LoginScene &login_scene) {
 
 void SelectingRoleState::fillWithActiveButtons(
     std::list<std::reference_wrapper<Button>> &active_buttons) {
-  for (auto &button: buttons_ptr)
-    active_buttons.emplace_back(*button);
+  for (auto it = buttons_ptr.begin(); it != buttons_ptr.end(); ++it)
+    active_buttons.emplace_back(**it);
 }
 
 void SelectingRoleState::fillWithActiveTextEntryButtons(

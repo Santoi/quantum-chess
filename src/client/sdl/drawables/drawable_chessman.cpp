@@ -20,6 +20,7 @@ DrawableChessman &
 DrawableChessman::operator=(DrawableChessman &&other) noexcept {
   renderer = std::move(other.renderer);
   sprite_ = std::move(other.sprite_);
+  fill = std::move(other.fill);
   probability = other.probability;
   return *this;
 }

@@ -119,7 +119,8 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
                                     Button &spectator_role_button) {
   size_t width = window.getWidth();
-  size_t button_height = width * .1, button_width = width * .1;
+  size_t button_height, button_width;
+  button_height = button_width = width * .1;
   size_t delta_x = width * .01;
   white_role_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
                                        button_height * 2,

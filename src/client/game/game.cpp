@@ -56,7 +56,7 @@ void Game::moveTiles(const std::list<BoardPosition> &positions) {
     board.moveTile(position);
 }
 
-void Game::askMoveTiles(PixelCoordinate &coords) {
+void Game::askMoveTiles(const PixelCoordinate &coords) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position;
   transformer.pixel2Position(coords, position, x_scale, y_scale);
@@ -64,7 +64,7 @@ void Game::askMoveTiles(PixelCoordinate &coords) {
       std::list<BoardPosition>(1, position)));
 }
 
-void Game::askSplitTiles(PixelCoordinate &coords) {
+void Game::askSplitTiles(const PixelCoordinate &coords) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position;
   transformer.pixel2Position(coords, position, x_scale, y_scale);
@@ -72,7 +72,7 @@ void Game::askSplitTiles(PixelCoordinate &coords) {
       std::list<BoardPosition>(1, position)));
 }
 
-void Game::askMergeTiles(PixelCoordinate &coords) {
+void Game::askMergeTiles(const PixelCoordinate &coords) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position;
   transformer.pixel2Position(coords, position, x_scale, y_scale);
@@ -80,7 +80,8 @@ void Game::askMergeTiles(PixelCoordinate &coords) {
       std::list<BoardPosition>(1, position)));
 }
 
-void Game::askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2) {
+void Game::askMergeTiles(const PixelCoordinate &coords1,
+                         const PixelCoordinate &coords2) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position1, position2;
   transformer.pixel2Position(coords1, position1, x_scale, y_scale);
@@ -93,7 +94,7 @@ void Game::askMergeTiles(PixelCoordinate &coords1, PixelCoordinate &coords2) {
 }
 
 void
-Game::askEntangledTiles(PixelCoordinate &coords) {
+Game::askEntangledTiles(const PixelCoordinate &coords) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position;
   transformer.pixel2Position(coords, position, x_scale, y_scale);
@@ -103,7 +104,7 @@ Game::askEntangledTiles(PixelCoordinate &coords) {
 }
 
 void
-Game::askQuantumTiles(PixelCoordinate &coords) {
+Game::askQuantumTiles(const PixelCoordinate &coords) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   BoardPosition position;
   transformer.pixel2Position(coords, position, x_scale, y_scale);
@@ -147,7 +148,8 @@ void Game::currentTile(const PixelCoordinate &coordinate) {
   board.currentTile(new_coordinate);
 }
 
-void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
+void
+Game::moveChessman(const PixelCoordinate &orig, const PixelCoordinate &dest) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
     throw ChessException("spectators can't play");
@@ -157,8 +159,9 @@ void Game::moveChessman(PixelCoordinate &orig, PixelCoordinate &dest) {
   send_queue.push(std::make_shared<RemoteClientMoveInstruction>(orig_, dest_));
 }
 
-void Game::splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
-                         PixelCoordinate &to2) {
+void
+Game::splitChessman(const PixelCoordinate &from, const PixelCoordinate &to1,
+                    const PixelCoordinate &to2) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
     throw ChessException("spectators can't play");
@@ -170,8 +173,9 @@ void Game::splitChessman(PixelCoordinate &from, PixelCoordinate &to1,
       std::make_shared<RemoteClientSplitInstruction>(from_, to1_, to2_));
 }
 
-void Game::mergeChessman(PixelCoordinate &from1, PixelCoordinate &from2,
-                         PixelCoordinate &to) {
+void
+Game::mergeChessman(const PixelCoordinate &from1, const PixelCoordinate &from2,
+                    const PixelCoordinate &to) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (role == ClientData::ROLE_SPECTATOR)
     throw ChessException("spectators can't play");

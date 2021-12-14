@@ -36,7 +36,7 @@ public:
   LoginScene(Window &window, LoginStateHandler &login_state_handler);
 
   // Render the current login state scene
-  void render();
+  void render() override;
 
   void renderChoosingMatchButtons(
       std::vector<std::unique_ptr<Button>> &match_buttons,

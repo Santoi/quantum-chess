@@ -97,7 +97,7 @@ int GameScene::getChessHeight() {
   return window.getHeight();
 }
 
-bool GameScene::wasChatClicked(PixelCoordinate &pixel) {
+bool GameScene::wasChatClicked(const PixelCoordinate &pixel) {
   return current_message.isPixelOnTextEntry(pixel);
 }
 

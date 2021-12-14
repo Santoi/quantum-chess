@@ -29,7 +29,7 @@ void AsciiBoard::draw() {
 
 void AsciiBoard::load(std::vector<Position> &positions,
                       std::vector<bool> colors,
-                      std::vector<char> &character) {
+                      const std::vector<char> &character) {
   board = std::map<Position, AsciiChessman>();
   for (size_t i = 0; i < positions.size(); i++) {
     AsciiChessman chessman(colors[i], character[i]);

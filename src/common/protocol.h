@@ -14,19 +14,19 @@ protected:
   void
   changeNumberToBigEndianAndAddToPacket(Packet &packet, const uint16_t &number);
 
-  uint16_t getNumber16FromSocket(Socket &socket);
+  uint16_t getNumber16FromSocket(const Socket &socket);
 
   // Reads the next message from socket, saving it in the message string.
   void getMessageFromSocket(Socket &socket, std::string &message);
 
-  char getCharFromSocket(Socket &socket);
+  char getCharFromSocket(const Socket &socket);
 
   uint8_t getNumber8FromSocket(Socket &socket);
 
   void addNumber8ToPacket(Packet &packet, const uint8_t &number);
 
 private:
-  void getMessageOfSizeFromSocket(Socket &socket, std::string &message,
+  void getMessageOfSizeFromSocket(const Socket &socket, std::string &message,
                                   const uint16_t &size_of_word);
 };
 

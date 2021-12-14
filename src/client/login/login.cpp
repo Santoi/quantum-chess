@@ -9,7 +9,7 @@
 #include <vector>
 
 Login::Login()
-    : client_socket_ptr(nullptr) {
+    : client_socket_ptr(nullptr), role(ClientData::ROLE_SPECTATOR) {
 }
 
 void Login::connectToServer(const std::string &ip_, const std::string &port_) {
@@ -33,10 +33,6 @@ Login::refreshMatches() {
 
 Socket Login::getClientSocket() {
   return std::move(*client_socket_ptr);
-}
-
-std::string Login::getClientNickName() {
-  return client_nick_name;
 }
 
 void Login::sendChosenMatchToServer(int match_number) {

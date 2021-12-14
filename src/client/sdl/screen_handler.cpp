@@ -62,5 +62,12 @@ void ScreenHandler::surrenderMatchIfLeaveMatchScreenIsRendering(Game &game) {
 }
 
 bool ScreenHandler::renderingGame() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
   return !(render_leave_match_screen || render_help_screen);
+}
+
+void ScreenHandler::renderGameScreen() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  render_leave_match_screen = false;
+  render_help_screen = false;
 }

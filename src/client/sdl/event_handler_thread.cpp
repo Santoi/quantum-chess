@@ -54,6 +54,7 @@ void EventHandlerThread::handleKeyDown() {
       text_entry.disableEntry();
       chat.disable();
       game.setDefaultBoard();
+      screen_handler.renderGameScreen();
       first_click = false;
       second_click = false;
       split = false;

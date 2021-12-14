@@ -234,3 +234,10 @@ void Game::flipBoard() {
   setDefaultBoard();
   transformer.flip();
 }
+
+void Game::surrender() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  if (role == ClientData::ROLE_SPECTATOR)
+    return;
+  send_queue.push(std::make_shared<RemoteClientSurrenderInstruction>());
+}

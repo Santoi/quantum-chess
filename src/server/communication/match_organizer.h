@@ -33,7 +33,7 @@ public:
 
 private:
   // Sends matches information to client and receive the chosen one.
-  uint16_t getClientChosenMatch(Socket &client_socket);
+  uint16_t getClientChosenMatch(const Socket &client_socket);
 };
 
 #endif //QUANTUM_CHESS_PROJ_MATCH_ORGANIZER_H

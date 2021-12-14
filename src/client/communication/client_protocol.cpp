@@ -12,7 +12,7 @@
 #include "../../common/socket_closed.h"
 
 std::map<uint16_t, std::vector<ClientData>>
-ClientProtocol::receiveMatchesInfo(Socket &socket) {
+ClientProtocol::receiveMatchesInfo(const Socket &socket) {
   std::map<uint16_t, std::vector<ClientData>> matches_info;
   uint16_t matches_amount = getNumber16FromSocket(socket);
   for (uint16_t i = 0; i < matches_amount; i++) {
@@ -34,7 +34,7 @@ ClientProtocol::receiveMatchesInfo(Socket &socket) {
   return matches_info;
 }
 
-void ClientProtocol::getAvailableRoles(Socket &socket,
+void ClientProtocol::getAvailableRoles(const Socket &socket,
                                        std::list<ClientData::Role> &roles) {
   uint8_t amount = getNumber8FromSocket(socket);
   for (uint8_t i = 0; i < amount; i++) {
@@ -42,7 +42,8 @@ void ClientProtocol::getAvailableRoles(Socket &socket,
   }
 }
 
-void ClientProtocol::sendChosenGame(Socket &socket, uint16_t game_number) {
+void ClientProtocol::sendChosenGame(const Socket &socket,
+                                    uint16_t game_number) {
   Packet packet;
   this->changeNumberToBigEndianAndAddToPacket(packet, (uint16_t) game_number);
   socket.send(packet);
@@ -161,6 +162,9 @@ fillPacketWithEntangledChessmanInstruction(Packet &packet,
   addNumber8ToPacket(packet, position.y());
 }
 
+void ClientProtocol::fillPacketWithSurrenderMessage(Packet &packet) {
+  packet.addByte(SURRENDER_PREFIX);
+}
 
 void ClientProtocol::
 sendInstruction(const Socket &socket,
@@ -171,7 +175,7 @@ sendInstruction(const Socket &socket,
 }
 
 void
-ClientProtocol::fillChatInstruction(Socket &socket,
+ClientProtocol::fillChatInstruction(const Socket &socket,
                                     std::shared_ptr<RemoteClientInstruction> &
                                     ptr_instruction) {
   std::string nick_name;
@@ -189,7 +193,7 @@ ClientProtocol::fillChatInstruction(Socket &socket,
 }
 
 void
-ClientProtocol::fillExitInstruction(Socket &socket,
+ClientProtocol::fillExitInstruction(const Socket &socket,
                                     std::shared_ptr<RemoteClientInstruction> &
                                     ptr_instruction) {
   std::string nick_name;
@@ -198,7 +202,7 @@ ClientProtocol::fillExitInstruction(Socket &socket,
 }
 
 void ClientProtocol::
-fillLoadBoardInstruction(Socket &socket,
+fillLoadBoardInstruction(const Socket &socket,
                          std::shared_ptr<RemoteClientInstruction> &
                          ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
@@ -223,7 +227,7 @@ fillLoadBoardInstruction(Socket &socket,
       std::move(chessman_data_vector), white);
 }
 
-void ClientProtocol::fillShortLogInstruction(Socket &socket,
+void ClientProtocol::fillShortLogInstruction(const Socket &socket,
                                              std::shared_ptr<
                                                  RemoteClientInstruction>
                                              &ptr_instruction) {
@@ -233,7 +237,7 @@ void ClientProtocol::fillShortLogInstruction(Socket &socket,
 }
 
 void ClientProtocol::
-fillPossibleMovesInstruction(Socket &socket,
+fillPossibleMovesInstruction(const Socket &socket,
                              std::shared_ptr<RemoteClientInstruction>
                              &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
@@ -249,7 +253,7 @@ fillPossibleMovesInstruction(Socket &socket,
 }
 
 void ClientProtocol::
-fillPossibleSplitsInstruction(Socket &socket,
+fillPossibleSplitsInstruction(const Socket &socket,
                               std::shared_ptr<RemoteClientInstruction>
                               &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
@@ -264,7 +268,7 @@ fillPossibleSplitsInstruction(Socket &socket,
       std::move(posible_moves));
 }
 
-void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
+void ClientProtocol::fillPossibleMergesInstruction(const Socket &socket,
                                                    std::shared_ptr<
                                                        RemoteClientInstruction>
                                                    &ptr_instruction) {
@@ -281,7 +285,7 @@ void ClientProtocol::fillPossibleMergesInstruction(Socket &socket,
 }
 
 void ClientProtocol::
-fillSameChessmanInstruction(Socket &socket,
+fillSameChessmanInstruction(const Socket &socket,
                             std::shared_ptr<RemoteClientInstruction>
                             &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
@@ -297,7 +301,7 @@ fillSameChessmanInstruction(Socket &socket,
 }
 
 void ClientProtocol::
-fillEntangledChessmanInstruction(Socket &socket,
+fillEntangledChessmanInstruction(const Socket &socket,
                                  std::shared_ptr<RemoteClientInstruction>
                                  &ptr_instruction) {
   uint8_t amount = getNumber8FromSocket(socket);
@@ -313,7 +317,7 @@ fillEntangledChessmanInstruction(Socket &socket,
 }
 
 void ClientProtocol::
-fillSoundInstruction(Socket &socket,
+fillSoundInstruction(const Socket &socket,
                      std::shared_ptr<RemoteClientInstruction>
                      &ptr_instruction) {
   uint8_t sound = getNumber8FromSocket(socket);
@@ -322,7 +326,7 @@ fillSoundInstruction(Socket &socket,
 
 
 void ClientProtocol::
-fillLogInstruction(Socket &socket,
+fillLogInstruction(const Socket &socket,
                    std::shared_ptr<RemoteClientInstruction> &ptr) {
   std::list<std::string> log;
   uint16_t amount = getNumber16FromSocket(socket);
@@ -334,10 +338,9 @@ fillLogInstruction(Socket &socket,
   ptr = std::make_shared<RemoteClientLogInstruction>(std::move(log));
 }
 
-void
-ClientProtocol::receiveInstruction(Socket &socket,
-                                   std::shared_ptr<RemoteClientInstruction> &
-                                   ptr_instruction) {
+void ClientProtocol::receiveInstruction(const Socket &socket,
+                                        std::shared_ptr<RemoteClientInstruction>
+                                                &ptr_instruction) {
   Packet packet;
   socket.receive(packet, 1);
   if (packet.size() != 1)

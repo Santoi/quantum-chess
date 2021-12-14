@@ -11,7 +11,7 @@ MatchOrganizer::MatchOrganizer(std::ifstream &file_)
     : matches_map(), file(file_) {
 }
 
-uint16_t MatchOrganizer::getClientChosenMatch(Socket &client_socket) {
+uint16_t MatchOrganizer::getClientChosenMatch(const Socket &client_socket) {
   ServerProtocol protocol;
   uint16_t match_number = 0;
   // Sends data, if client sends REFRESH (UINT16_MAX) then data is sent again.

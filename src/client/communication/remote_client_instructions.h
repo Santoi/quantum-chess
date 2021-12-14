@@ -329,4 +329,20 @@ public:
   ~RemoteClientLogInstruction() = default;
 };
 
+class RemoteClientSurrenderInstruction
+        : public RemoteClientInstruction {
+public:
+    RemoteClientSurrenderInstruction() = default;
+
+    void
+    makeAction(Game &game, Chat &chat, ChessLog &chess_log, ErrorLog &error_log,
+               TurnLog &turn_log) override;
+
+    void fillPacketWithInstructionsToSend(Packet &packet,
+                                          ClientProtocol &protocol) override;
+
+    ~RemoteClientSurrenderInstruction() = default;
+};
+
+
 #endif //QUANTUM_CHESS_PROJ_REMOTE_CLIENT_INSTRUCTIONS_H

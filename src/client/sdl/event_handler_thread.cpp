@@ -1,20 +1,23 @@
 #include "event_handler_thread.h"
 #include "../../common/chess_exception.h"
+#include "screen_handler.h"
 #include "../game/chat.h"
 #include <iostream>
 #include <list>
 #include <string>
 
 EventHandlerThread::EventHandlerThread(Window &window, Game &game,
+                                       ScreenHandler &screen_handler_,
                                        Chat &chat_, TextEntry &text_entry)
         : HandlerThread(true), window(window), game(game),
+          screen_handler(screen_handler_),
           text_entry(text_entry),
           split(false), merge(false),
           first_click(false), second_click(false), penultimate_click(),
           last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
-  while (true) {
+  while (open) {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_QUIT:
@@ -34,6 +37,8 @@ void EventHandlerThread::run() {
         break;
       case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
         SDL_MouseButtonEvent mouse = event.button;
+        if (!screen_handler.renderingGame())
+          break;
         if (mouse.button == SDL_BUTTON_LEFT)
           handleMouseButtonLeft(mouse);
         else if (mouse.button == SDL_BUTTON_RIGHT)
@@ -49,6 +54,7 @@ void EventHandlerThread::handleKeyDown() {
       text_entry.disableEntry();
       chat.disable();
       game.setDefaultBoard();
+      screen_handler.renderGameScreen();
       first_click = false;
       second_click = false;
       split = false;
@@ -82,6 +88,35 @@ void EventHandlerThread::handleKeyDown() {
         game.toggleMusic();
       break;
     }
+    case SDLK_h: {
+      if (!text_entry.isEnabled())
+        screen_handler.toggleHelpScreen();
+      break;
+    }
+    case SDLK_r: {
+      if (!text_entry.isEnabled())
+        screen_handler.activateLeaveScreen();
+      break;
+    }
+    case SDLK_c: {
+      if (!text_entry.isEnabled())
+        screen_handler.deactivateLeaveScreen();
+      break;
+    }
+    case SDLK_y: {
+      if (!text_entry.isEnabled()) {
+        screen_handler.switchOpenStatusIfLeaveMatchScreenIsRendering(open);
+        screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
+      }
+      break;
+    }
+    case SDLK_s: {
+      if (!text_entry.isEnabled()) {
+        screen_handler.surrenderMatchIfLeaveMatchScreenIsRendering(game);
+        screen_handler.toggleLeaveScreen();
+      }
+      break;
+    }
     case SDLK_BACKSPACE: {
       if (text_entry.isEnabled())
         text_entry.backspace();
@@ -112,7 +147,8 @@ void EventHandlerThread::handleKeyUp() {
   }
 }
 
-void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
+void EventHandlerThread::handleMouseButtonLeft(const SDL_MouseButtonEvent
+                                               &mouse) {
   try {
     PixelCoordinate pixel(mouse.x, mouse.y);
     if (chat.enableIfPixelIsInChat(pixel)) {
@@ -149,7 +185,8 @@ void EventHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
   }
 }
 
-void EventHandlerThread::handleMouseButtonRight(SDL_MouseButtonEvent &mouse) {
+void EventHandlerThread::handleMouseButtonRight(const SDL_MouseButtonEvent
+                                                      &mouse) {
   PixelCoordinate pixel(mouse.x, mouse.y);
   if (!game.isPixelInBoard(pixel)) {
     text_entry.disableEntry();

@@ -9,10 +9,16 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+
+class GameScene;
+
+class ScreenHandler;
+
 class EventHandlerThread : public HandlerThread {
 private:
   Window &window;
   Game &game;
+  ScreenHandler &screen_handler;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;
   PixelCoordinate penultimate_click;
@@ -28,10 +34,10 @@ private:
 
   // Handle chessman movement, splitting and merging if click is on the board
   // Otherwise handle chat input
-  void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
+  void handleMouseButtonLeft(const SDL_MouseButtonEvent &mouse);
 
   // Handle entangled and quantum chessmen relations
-  void handleMouseButtonRight(SDL_MouseButtonEvent &mouse);
+  void handleMouseButtonRight(const SDL_MouseButtonEvent &mouse);
 
   // Resize the game window
   void handleWindowChange(const SDL_WindowEvent &window_event);
@@ -50,6 +56,7 @@ private:
 
 public:
   explicit EventHandlerThread(Window &window, Game &game,
+                              ScreenHandler &screen_handler,
                               Chat &chat_, TextEntry &text_entry);
 
   // Event loop

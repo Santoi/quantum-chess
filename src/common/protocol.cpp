@@ -38,7 +38,7 @@ char Protocol::getCharFromSocket(const Socket &socket) {
   return character;
 }
 
-uint8_t Protocol::getNumber8FromSocket(Socket &socket) {
+uint8_t Protocol::getNumber8FromSocket(const Socket &socket) {
   Packet packet;
   socket.receive(packet, 1);
   if (packet.size() != 1)
@@ -58,7 +58,8 @@ Protocol::getMessageOfSizeFromSocket(const Socket &socket, std::string &message,
   packet.getBytes(message, size_of_word);
 }
 
-void Protocol::getMessageFromSocket(Socket &socket, std::string &message) {
+void Protocol::getMessageFromSocket(const Socket &socket,
+                                    std::string &message) {
   uint16_t size_of_nick_name = this->getNumber16FromSocket(socket);
   ((Protocol) (*this)).getMessageOfSizeFromSocket(socket, message,
                                                   size_of_nick_name);

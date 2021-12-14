@@ -17,11 +17,11 @@ protected:
   uint16_t getNumber16FromSocket(const Socket &socket);
 
   // Reads the next message from socket, saving it in the message string.
-  void getMessageFromSocket(Socket &socket, std::string &message);
+  void getMessageFromSocket(const Socket &socket, std::string &message);
 
   char getCharFromSocket(const Socket &socket);
 
-  uint8_t getNumber8FromSocket(Socket &socket);
+  uint8_t getNumber8FromSocket(const Socket &socket);
 
   void addNumber8ToPacket(Packet &packet, const uint8_t &number);
 

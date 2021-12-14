@@ -25,6 +25,7 @@
 #define MOVE_PREFIX 'm'
 #define SOUND_PREFIX 'i'
 #define LOG_PREFIX 'j'
+#define SURRENDER_PREFIX 'z'
 
 class RemoteClientInstruction;
 
@@ -34,10 +35,10 @@ public:
 
   //Given the client socket, it returns the number of games running in server
   std::map<uint16_t, std::vector<ClientData>>
-  receiveMatchesInfo(Socket &socket);
+  receiveMatchesInfo(const Socket &socket);
 
   //It sends to the client socket the game_number received as parameter
-  void sendChosenGame(Socket &socket, uint16_t game_number);
+  void sendChosenGame(const Socket &socket, uint16_t game_number);
 
   //It sends to the client socket the client's nick_name, following the protocol
   void sendClientsNickName(const Socket &socket, const std::string &nick_name);
@@ -48,7 +49,7 @@ public:
   // to create the appropriate RemoteClientInstruction.
   // After the function ends, the ptr_instruction points to a valid instruction
   // that can be executed calling the makeAction instruction
-  void receiveInstruction(Socket &socket,
+  void receiveInstruction(const Socket &socket,
                           std::shared_ptr<RemoteClientInstruction>
                           &ptr_instruction);
 
@@ -64,7 +65,8 @@ public:
   void fillPacketWithPossibleMovesMessage(Packet &packet,
                                           const BoardPosition &position);
 
-  void getAvailableRoles(Socket &socket, std::list<ClientData::Role> &roles);
+  void getAvailableRoles(const Socket &socket,
+                         std::list<ClientData::Role> &roles);
 
   void sendChosenRole(const Socket &socket, ClientData::Role role);
 
@@ -97,12 +99,14 @@ public:
                                   const BoardPosition &from2,
                                   const BoardPosition &to);
 
+  void fillPacketWithSurrenderMessage(Packet &packet);
+
 private:
   // Gets necessary information to create the RemoteClientChatInstruction
   // (the instructor's nickname and the corresponding message)
   // After the function ends, the ptr_instruction points to this
   // new ChatInstruction
-  void fillChatInstruction(Socket &socket,
+  void fillChatInstruction(const Socket &socket,
                            std::shared_ptr<RemoteClientInstruction> &
                            ptr_instruction);
 
@@ -110,43 +114,43 @@ private:
   // (the instructor's nickname, this is, the person that left the match)
   // After the function ends, the ptr_instruction points to this
   // new ExitInstruction
-  void fillExitInstruction(Socket &socket,
+  void fillExitInstruction(const Socket &socket,
                            std::shared_ptr<RemoteClientInstruction> &
                            ptr_instruction);
 
-  void fillLoadBoardInstruction(Socket &socket,
+  void fillLoadBoardInstruction(const Socket &socket,
                                 std::shared_ptr<RemoteClientInstruction>
                                 &ptr_instruction);
 
-  void fillShortLogInstruction(Socket &socket,
+  void fillShortLogInstruction(const Socket &socket,
                                std::shared_ptr<RemoteClientInstruction>
                                &instruction);
 
-  void fillPossibleMovesInstruction(Socket &socket,
+  void fillPossibleMovesInstruction(const Socket &socket,
                                     std::shared_ptr<RemoteClientInstruction>
                                     &ptr_instruction);
 
-  void fillPossibleSplitsInstruction(Socket &socket,
+  void fillPossibleSplitsInstruction(const Socket &socket,
                                      std::shared_ptr<RemoteClientInstruction>
                                      &ptr_instruction);
 
-  void fillPossibleMergesInstruction(Socket &socket,
+  void fillPossibleMergesInstruction(const Socket &socket,
                                      std::shared_ptr<RemoteClientInstruction>
                                      &ptr_instruction);
 
-  void fillSameChessmanInstruction(Socket &socket,
+  void fillSameChessmanInstruction(const Socket &socket,
                                    std::shared_ptr<RemoteClientInstruction>
                                    &ptr_instruction);
 
-  void fillEntangledChessmanInstruction(Socket &socket,
+  void fillEntangledChessmanInstruction(const Socket &socket,
                                         std::shared_ptr<RemoteClientInstruction>
                                         &ptr_instruction);
 
-  void fillSoundInstruction(Socket &socket,
+  void fillSoundInstruction(const Socket &socket,
                             std::shared_ptr<RemoteClientInstruction>
                             &ptr_instruction);
 
-  void fillLogInstruction(Socket &socket,
+  void fillLogInstruction(const Socket &socket,
                           std::shared_ptr<RemoteClientInstruction> &ptr);
 };
 

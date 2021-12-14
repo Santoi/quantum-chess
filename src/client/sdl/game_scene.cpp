@@ -14,8 +14,10 @@
 #define MIN_CHAT_WIDTH 200
 #define MAX_CHAT_WIDTH 400
 #define CHAT_WIDTH 300
+#define SCENES_PATH "resources/sprites/game_scenes/"
 
 GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
+                     ScreenHandler &screen_handler_,
                      TextSpriteRepository &text_repository,
                      ButtonSpriteRepository &button_repository,
                      CoordinateTransformer &transformer_)
@@ -25,9 +27,16 @@ GameScene::GameScene(Window &window, DrawableBoard &board, Font &font,
                 MAX_ERROR_LOG_MESSAGES), turn_log(MAX_TURN_LOG_MESSAGES),
           current_message(text_repository, button_repository, "CHAT HERE"),
           transformer(transformer_),
+          screen_handler(screen_handler_),
           mutex(),
           text_repository(text_repository),
-          button_repository(button_repository) {}
+          button_repository(button_repository),
+          help_sprite(window.renderer(), SCENES_PATH "help_image.png"),
+          leave_sprite(window.renderer(),
+                       SCENES_PATH "leave_match_question.png"),
+          surrender_leave_sprite(window.renderer(),
+                                 SCENES_PATH "leave_surrender_match.png") {
+}
 
 void
 GameScene::addChatMessage(const std::string &nickname, const std::string &id,
@@ -67,8 +76,23 @@ void GameScene::addCurrentMessage(const std::string &text) {
   current_message_text = text;
 }
 
-void GameScene::render() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
+void GameScene::renderLeaveMatchScreenForPlayers() {
+  int width = window.getWidth(), height = window.getHeight();
+  surrender_leave_sprite.render(0, 0, width, height);
+}
+
+
+void GameScene::renderLeaveMatchScreenForSpectators() {
+  int width = window.getWidth(), height = window.getHeight();
+  leave_sprite.render(0, 0, width, height);
+}
+
+void GameScene::renderHelpScreen() {
+  int width = window.getWidth(), height = window.getHeight();
+  help_sprite.render(0, 0, width, height);
+}
+
+void GameScene::renderGame() {
   int width = window.getWidth(), height = window.getHeight();
 
   chess.render(transformer, width - CHAT_WIDTH, height);
@@ -81,6 +105,11 @@ void GameScene::render() {
                                      height - font.size() * 2, CHAT_WIDTH,
                                      font.size() * 2);
   current_message.render(current_message_text);
+}
+
+void GameScene::render() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  screen_handler.renderCurrentState(*this);
 }
 
 int GameScene::getChatWidth() {

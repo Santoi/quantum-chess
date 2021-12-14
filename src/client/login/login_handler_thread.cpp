@@ -71,7 +71,8 @@ void LoginHandlerThread::handleMouseButtonLeft() {
   login_state_handler.resetAllButtonsToNotPressedState();
 }
 
-void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {
+void LoginHandlerThread::handleMouseButtonLeft(const SDL_MouseButtonEvent
+                                               &mouse) {
   PixelCoordinate pixel(mouse.x, mouse.y);
   std::list<std::reference_wrapper<Button>> active_buttons;
   login_state_handler.fillWithActiveButtons(active_buttons);

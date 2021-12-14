@@ -7,42 +7,51 @@
 #include "drawables/drawable_container.h"
 #include "drawables/drawable_chat_message.h"
 #include "scene.h"
+#include "screen_handler.h"
 #include "sprite_repositories/button_sprite_repository.h"
 #include "drawables/drawable_text_entry_button.h"
 #include <string>
 
-
 class Window;
+
+class ScreenHandler;
 
 class GameScene : public Scene {
 private:
-  Font &font;
-  DrawableBoard &chess;
-  DrawableContainer<DrawableChatMessage> chat;
-  DrawableContainer<DrawableText> log;
-  DrawableContainer<DrawableText> error_log;
-  DrawableContainer<DrawableText> turn_log;
-  DrawableTextEntryButton current_message;
-  CoordinateTransformer &transformer;
-  std::mutex mutex;
-  TextSpriteRepository &text_repository;
-  ButtonSpriteRepository &button_repository;
-  std::string current_message_text;
+    Font &font;
+    DrawableBoard &chess;
+    DrawableContainer<DrawableChatMessage> chat;
+    DrawableContainer<DrawableText> log;
+    DrawableContainer<DrawableText> error_log;
+    DrawableContainer<DrawableText> turn_log;
+    DrawableTextEntryButton current_message;
+    CoordinateTransformer &transformer;
+    ScreenHandler &screen_handler;
+    std::mutex mutex;
+    TextSpriteRepository &text_repository;
+    ButtonSpriteRepository &button_repository;
+    TextureSprite help_sprite;
+    TextureSprite leave_sprite;
+    TextureSprite surrender_leave_sprite;
+    std::string current_message_text;
 
 public:
-  GameScene(Window &window, DrawableBoard &board, Font &font,
-            TextSpriteRepository &text_repository,
-            ButtonSpriteRepository &button_repository,
-            CoordinateTransformer &transformer_);
+    GameScene(Window &window, DrawableBoard &board, Font &font,
+              ScreenHandler &screen_handler,
+              TextSpriteRepository &text_repository,
+              ButtonSpriteRepository &button_repository,
+              CoordinateTransformer &transformer_);
 
-  // Render the whole in-game scene
-  void render() override;
+    //Render the whole in-game scene
+    void render() override;
 
-  int getChatWidth();
+    int getChatWidth();
 
-  int getChessWidth();
+    int getChatHeight();
 
-  int getChessHeight();
+    int getChessWidth();
+
+    int getChessHeight();
 
   // Create and add a chat message to the chat
   void addChatMessage(const std::string &nickname, const std::string &id,
@@ -66,6 +75,14 @@ public:
   bool wasChatClicked(const PixelCoordinate &pixel);
 
   void disableChat();
+
+  void renderGame();
+    
+  void renderHelpScreen();
+
+  void renderLeaveMatchScreenForPlayers();
+
+  void renderLeaveMatchScreenForSpectators();
 };
 
 

@@ -25,7 +25,7 @@ Match::Match(Match &&other) : Thread(std::move(other)),
                                   std::move(other.match_updates_queue)),
                               file(other.file) {}
 
-ClientData Match::askClientData(Socket &socket, uint16_t client_id) {
+ClientData Match::askClientData(const Socket &socket, uint16_t client_id) {
   ServerProtocol protocol;
   std::string nickname;
   protocol.getNickName(socket, nickname);

@@ -17,13 +17,13 @@
 #include <vector>
 
 Board::Board()
-    : chessmen(), board(), next_white(true), coin(), entanglement_log(),
-      finished(false) {}
+        : chessmen(), board(), next_white(true), coin(), entanglement_log(),
+          finished(false) {}
 
 Board::Board(bool random)
-    : chessmen(), board(), next_white(true), coin(random),
-      entanglement_log(),
-      finished(false) {}
+        : chessmen(), board(), next_white(true), coin(random),
+          entanglement_log(),
+          finished(false) {}
 
 void Board::addNewChessman(char chessman_, Position position_,
                            bool white_) {
@@ -82,7 +82,7 @@ void Board::merge(const Position &initial1, const Position &initial2,
   if (player_white != next_white)
     throw ChessException("it is not your turn!");
   Chessman *chessman_1 = getChessmanAt(initial1),
-      *chessman_2 = getChessmanAt(initial2);
+          *chessman_2 = getChessmanAt(initial2);
   if (!chessman_1 || !chessman_2)
     throw ChessException("there is no chessman_ there");
   if (chessman_1 != chessman_2)
@@ -176,6 +176,24 @@ bool Board::isThere(const Chessman *chessman) {
                        return pair.second == chessman;
                      });
 }
+
+void Board::surrender(bool player_white) {
+  if (finished)
+    throw ChessException("Cannot surrender: game over");
+  std::string surrended_color;
+  std::string winner_color;
+  if (player_white) {
+    surrended_color = "white";
+    winner_color = "black";
+  } else {
+    surrended_color = "black";
+    winner_color = "white";
+  }
+  pushToLog("Game over, " + winner_color + " wins");
+  pushToLog(surrended_color + "  surrendered: ");
+  endGame();
+}
+
 
 void
 Board::loadVectorOfSquareData(std::vector<SquareData> &data) {

@@ -38,7 +38,7 @@ public:
 private:
   void handleTextInput(const std::string &input);
 
-  void handleMouseButtonLeft(SDL_MouseButtonEvent &mouse);
+  void handleMouseButtonLeft(const SDL_MouseButtonEvent &mouse);
 
   void handleKeyDown();
 

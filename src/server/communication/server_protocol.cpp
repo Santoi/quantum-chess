@@ -12,6 +12,7 @@
 #include "instructions/same_chessman_instruction.h"
 #include "instructions/entangled_chessman_instruction.h"
 #include "instructions/merge_instruction.h"
+#include "instructions/surrender_instruction.h"
 #include "../../common/socket_closed.h"
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -23,7 +24,7 @@
 
 #define POSSIBLE_MOVES_PREFIX 'a'
 
-void ServerProtocol::sendMatchesInfo(Socket &socket,
+void ServerProtocol::sendMatchesInfo(const Socket &socket,
                                      const std::map<uint16_t,
                                          std::vector<ClientData>>
                                      &matches_data) {
@@ -53,12 +54,12 @@ ServerProtocol::sendAvailableRoles(const Socket &socket,
   socket.send(packet);
 }
 
-uint16_t ServerProtocol::receiveChosenGame(Socket &socket) {
+uint16_t ServerProtocol::receiveChosenGame(const Socket &socket) {
   return (uint16_t) (this->getNumber16FromSocket(socket));
 }
 
 ClientData::Role
-ServerProtocol::receivePlayerRole(Socket &socket,
+ServerProtocol::receivePlayerRole(const Socket &socket,
                                   const std::list<ClientData::Role> &roles) {
   auto role = (ClientData::Role) getNumber8FromSocket(socket);
   if (std::find(roles.begin(), roles.end(), role) != roles.end())
@@ -66,11 +67,11 @@ ServerProtocol::receivePlayerRole(Socket &socket,
   throw std::runtime_error("invalid role");
 }
 
-void ServerProtocol::getNickName(Socket &socket, std::string &nick_name) {
+void ServerProtocol::getNickName(const Socket &socket, std::string &nick_name) {
   this->getMessageFromSocket(socket, nick_name);
 }
 
-void ServerProtocol::fillChatInstruction(Socket &socket,
+void ServerProtocol::fillChatInstruction(const Socket &socket,
                                          const ClientData &client_data,
                                          std::shared_ptr<Instruction>
                                          &instruct_ptr) {
@@ -80,7 +81,7 @@ void ServerProtocol::fillChatInstruction(Socket &socket,
                                                    std::move(message));
 }
 
-void ServerProtocol::fillMovementInstruction(Socket &socket,
+void ServerProtocol::fillMovementInstruction(const Socket &socket,
                                              const ClientData &client_data,
                                              std::shared_ptr<Instruction>
                                              &instruct_ptr) {
@@ -94,7 +95,7 @@ void ServerProtocol::fillMovementInstruction(Socket &socket,
                                                        final);
 }
 
-void ServerProtocol::fillSplitInstruction(Socket &socket,
+void ServerProtocol::fillSplitInstruction(const Socket &socket,
                                           const ClientData &client_data,
                                           std::shared_ptr<Instruction>
                                           &instruct_ptr) {
@@ -112,7 +113,7 @@ void ServerProtocol::fillSplitInstruction(Socket &socket,
                                                     final2);
 }
 
-void ServerProtocol::fillMergeInstruction(Socket &socket,
+void ServerProtocol::fillMergeInstruction(const Socket &socket,
                                           const ClientData &client_data,
                                           std::shared_ptr<Instruction>
                                           &instruct_ptr) {
@@ -129,7 +130,7 @@ void ServerProtocol::fillMergeInstruction(Socket &socket,
                                                     initial2, final);
 }
 
-void ServerProtocol::fillPossibleMovesInstruction(Socket &socket,
+void ServerProtocol::fillPossibleMovesInstruction(const Socket &socket,
                                                   const ClientData &client_data,
                                                   std::shared_ptr<Instruction>
                                                   &instruct_ptr) {
@@ -144,7 +145,7 @@ void ServerProtocol::fillPossibleMovesInstruction(Socket &socket,
 }
 
 void
-ServerProtocol::fillPossibleSplitsInstruction(Socket &socket,
+ServerProtocol::fillPossibleSplitsInstruction(const Socket &socket,
                                               const ClientData &client_data,
                                               std::shared_ptr<Instruction>
                                               &instruct_ptr) {
@@ -159,7 +160,7 @@ ServerProtocol::fillPossibleSplitsInstruction(Socket &socket,
 }
 
 void
-ServerProtocol::fillPossibleMergesInstruction(Socket &socket,
+ServerProtocol::fillPossibleMergesInstruction(const Socket &socket,
                                               const ClientData &client_data,
                                               std::shared_ptr<Instruction>
                                               &instruct_ptr) {
@@ -180,7 +181,7 @@ ServerProtocol::fillPossibleMergesInstruction(Socket &socket,
                                                                  positions));
 }
 
-void ServerProtocol::fillSameChessmanInstruction(Socket &socket,
+void ServerProtocol::fillSameChessmanInstruction(const Socket &socket,
                                                  const ClientData &client_data,
                                                  std::shared_ptr<Instruction>
                                                  &instruct_ptr) {
@@ -195,7 +196,7 @@ void ServerProtocol::fillSameChessmanInstruction(Socket &socket,
 }
 
 void
-ServerProtocol::fillEntangledChessmenInstruction(Socket &socket,
+ServerProtocol::fillEntangledChessmenInstruction(const Socket &socket,
                                                  const ClientData &client_data,
                                                  std::shared_ptr<Instruction>
                                                  &instruct_ptr) {
@@ -208,10 +209,15 @@ ServerProtocol::fillEntangledChessmenInstruction(Socket &socket,
                                                                 std::move(
                                                                     positions));
 }
-
+void ServerProtocol::fillSurrenderInstruction(const Socket &socket,
+                                              const ClientData &data,
+                                              std::shared_ptr<Instruction>
+                                                      &instruc_ptr) {
+  instruc_ptr = std::make_shared<SurrenderInstruction>(data);
+}
 
 void
-ServerProtocol::receiveAndFillInstruction(Socket &socket,
+ServerProtocol::receiveAndFillInstruction(const Socket &socket,
                                           const ClientData &client_data,
                                           std::shared_ptr<Instruction>
                                           &instruct_ptr) {
@@ -248,6 +254,9 @@ ServerProtocol::receiveAndFillInstruction(Socket &socket,
       break;
     case MERGE_PREFIX:
       fillMergeInstruction(socket, client_data, instruct_ptr);
+      break;
+    case SURRENDER_PREFIX:
+      fillSurrenderInstruction(socket, client_data, instruct_ptr);
       break;
     default:
       throw std::runtime_error("invalid message received");
@@ -355,7 +364,7 @@ void ServerProtocol::fillPacketLogMessage(Packet &packet,
   }
 }
 
-void ServerProtocol::sendPacket(Socket &socket,
+void ServerProtocol::sendPacket(const Socket &socket,
                                 std::shared_ptr<Instruction> &instruct_ptr,
                                 const ClientData &client_data) {
   Packet packet;
@@ -373,13 +382,3 @@ void ServerProtocol::fillPacketWithSoundMessage(Packet &packet, uint8_t sound) {
   packet.addByte(SOUND_PREFIX);
   addNumber8ToPacket(packet, sound);
 }
-
-
-
-
-
-
-
-
-
-

@@ -33,9 +33,10 @@ public:
 
     bool renderingGame();
 
-    void toggleLeaveScreen();
-
     void renderGameScreen();
+
+private:
+    void toggleLeaveScreen();
 };
 
 

@@ -8,6 +8,12 @@ En este programa, el server es el encargado de conectar a los clientes entre si,
 
 Se puede dividir al server en dos grandes estructuras: la de lógica de conexión y la de la lógica del juego. Ambas interactuan a través de clase ```Board```, la cual actúa como API para el juego. 
 
+A continuación se muestra el diagrama de hilos del Server.
+
+
+<p align=center>
+    <img src="images/manual_tecnico/server/server_threads.png" alt="DIagrama de hilos del server">
+</p>
 
 ## Conexión
 
@@ -38,7 +44,7 @@ Luego, el server envia los roles que estan disponibles, para ello, se envia la c
 Se muestra en la Figura un diagrama de la comunicación realizada, para el caso en que se selecciona una partida ya creada previamente.
 
 <p align=center>
-    <img src="images/manual_tecnico/server/connection_server_client.png" alt="DIagrama de hilos del server">
+    <img src="images/manual_tecnico/server/connection_server_client.png" alt="Intercambio paquetes en conexión server-cliente">
 </p>
 
 ## Partidas y clientes
@@ -106,7 +112,9 @@ por ejemplo, si se quisiera enviar información de un caballo blanco al 50% en l
 
 La estructura del juego se encuentra separada del resto del server. Se comunican a través de la API ofrecida por la clase ```Board```, la cual representa al tablero y sobre la que se pueden ejercer distintos movimientos como pedidos de información.
 
-DIAGRAMA DE CLASES
+<p align=center>
+    <img src="images/manual_tecnico/server/quantum_chess_class_diagram.png" alt="DIagrama de hilos del server">
+</p>
 
 
 ### Tablero
@@ -126,6 +134,12 @@ Las posiciones cuánticas, son representadas por la clase ```QuantumPosition```.
 
 La clase ```Chessman``` es una clase abstracta que representa a cada pieza de ajedrez del tablero. Posee una referencia al tablero al que pertenece, ya que debe efectuar acciones sobre este, una lista de las posiciones en las que se encuentra (```QuantumPosition```), y un ```bool``` indicando su color. Además posee una referencia a un ```EntanglementLog``` conteniendo todos los entrelazamientos que existen en el tablero.
 
+Los distintos comportamientos de las distintas piezas se implementan mediante polimorfismo, en el diagrama se puede ver los distintos métodos que implementan. Por ejemplo, el peón implementa nuevamente ```move()``` ya que debe setear su flag de primer movimiento en ```false```.
+
+<p align=center>
+    <img src="images/manual_tecnico/server/chessman_class_diagram.png" alt="DIagrama de hilos del server">
+</p>
+
 ### Validación de movimientos
 
 Los posibles movimientos de cada pieza es resuelto utilizando polimorfismo. Cada clase hija de ```Chessman``` posee un método ```calculateMoves()```, la cual devuelve una lista, conteniendo todos los posibles movimientos que puede hacer una pieza. Esto es 'crudo', es decir, no se consideran aspecto como piezas ocupando el camino, simplemente se limita a ver que movimiento puede hacer una pieza.
@@ -140,7 +154,11 @@ Validaciones extras tales como el enroque para el rey o el primer movimiento o l
 
 La lógica de los movimientos es simple, siempre que se mantengan las piezas en estado clásico, para *measure* y entrelazamientos ver las secciones siguientes. El movimiento consiste en chequear que el movimiento sea valido, y luego cambiar la posición de la pieza tanto en ella misma (en la posición que corresponda) y luego actualizar el tablero quitando la pieza del lugar que ocupaba antes, agregandola en la nueva posición (actualizando el *map* perteneciente a la clase ```Board```).
 
-Si existiese una pieza del equipo contrario en la posición final 
+Si existiese una pieza del equipo contrario en la posición final, esta será quitada de esa posición y reemplazada por la nueva pieza.
+
+<p align=center>
+    <img src="images/manual_tecnico/server/movement_sequence.png" alt="DIagrama de hilos del server">
+</p>
 
 ### Piezas cuánticas, lista de posiciones, *split* y *merge*
 
@@ -173,9 +191,19 @@ Cuando se mide una pieza, se miden a su vez todas las piezas que dependan de ell
 
 Todos estos casos son responsabilidad de ```EntanglementLog``` y están contemplados en ella.
 
+<p align=center>
+    <img src="images/manual_tecnico/server/entanglement_sequence.png" alt="DIagrama de hilos del server">
+</p>
+
+### Generador de números aleatorios
+
+Se utiliza como generador de números aleatorios la clase ```PseudoRandomCoin```, la cual posee un único metodo llamado ```flip()```, el cual devuelve un booleano ```true``` o ```false``` con probabilidad 50% (comprobado mediante los tests correspondientes). 
+
+Esta clase es implementada utilizando un generador pseudo aleatorio de tipo *mersenne twister engine* de 64 bits. Se obtiene el número de 64 bits, y luego se le realiza modulo 2 para obtener el booleano. $$C = mod(X, 2)$$
+
 ### Tests
 
-Los comportamientos del juego fueron chequeados mediante tests utilizando el framework de ```Google Test``` y ejecutados utilizand ```valgrind```. Se puede encontrar como correr los tests en los manuales de usuario.
+Los comportamientos del juego fueron chequeados mediante tests utilizando el framework de ```Google Test``` y ejecutados utilizand ```valgrind```. Se puede encontrar como correr los tests en el manual de usuario.
 
 
 <!--## Diagrama de hilos

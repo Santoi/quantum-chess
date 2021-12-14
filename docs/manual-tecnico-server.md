@@ -193,8 +193,14 @@ Se mantienen a lo largo de todas las instrucciones las siguientes convenciones:
   endian*. Esto permite una precisión de $1/2^{16}$. Como no interesa el valor
   de probabilidad 0, se tiene que el numero 0 mapea a $1/2^{16}$ y el número
   UINT16_MAX (65536) mapea a 1. Por lo tanto, las ecuaciones para hacer la
-  codificación y la decodificación, son, respectivamente: $$c(d) = d\,\,(
-  \text{UINT16\_MAX} + 1) - 1$$ $$d(c) = \frac{c + 1}{\text{UINT16\_MAX + 1}}$$
+  codificación y la decodificación, son, respectivamente:
+
+  <p align=center>
+    <img src="images/manual_tecnico/server/c_d.png" alt="Ecuacion 1" width=300>
+  </p>
+   <p align=center>
+    <img src="images/manual_tecnico/server/d_c.png" alt="Ecuacion 2" width=300>
+  </p>
 
 ### Ejemplo con instrucción de carga
 
@@ -390,7 +396,11 @@ tests correspondientes).
 
 Esta clase es implementada utilizando un generador pseudo aleatorio de tipo *
 mersenne twister engine* de 64 bits. Se obtiene el número de 64 bits, y luego se
-le realiza modulo 2 para obtener el booleano. $$C = mod(X, 2)$$
+le realiza modulo 2 para obtener el booleano.
+   <p align=center>
+    <img src="images/manual_tecnico/server/mod.png" alt="Ecuacion 3" width=150>
+  </p>
+
 
 ### Tests
 
@@ -398,24 +408,3 @@ Los comportamientos del juego fueron chequeados mediante tests utilizando el
 framework de ```Google Test``` y ejecutados utilizand ```valgrind```. Se puede
 encontrar como correr los tests en el manual de usuario.
 
-
-<!--## Diagrama de hilos
-
-### Server
-
-A continuaciṕon se muestra el diagrama de hilos del server. Se detallan más adelante el trabajo principal de cada hilo.
-<p align=center>
-    <img src="images/manual_tecnico/server_threads.png" alt="DIagrama de hilos del server">
-</p>
-
-* **Hilo principal** (main thread): simplemente lanza el hilo aceptador y queda a la espera de una entrada de texto por standard input que le indique la finalización del programa.
-
-* **Hilo aceptador** (acceptor thread): lanza el hilo de lobby y queda a la espera de que un cliente se conecte a su socket en escucha, una vez que recibe la conexión, pushea el socket del cliente a una cola bloqueante que es esperada por el hilo de lobby.
-
-* **Hilo de lobby** (lobby thread): este hilo pasa la mayor parte del tiempo bloqueado en un pop de la cola bloqueante de sockets de clientes nuevos (que carga el hilo aceptador). Cuando un nuevo socket de cliente llega, este hilo se encarga de preguntarle a que partida quiere conectarse e información al cliente. Luego, si la partida no existe, se crea. Y luego, existiese o no la partida, se crea un nuevo cliente (lanzandose sus hilos recibidor y enviador), y se agrega a la partida correspondiente.
-
-* **Hilo de partida** (match thread): existe un hilo de este tipo por cada partida existente. Este hilo pasa la mayor parte del tiempo esperando que se ingrese una instrucción a la cola bloqueante de updates. Cuando llega una instrucción, se ejecuta, y de ser necesario se pushea un mensaje a la cola de salida de los distintos clientes (podría ser a todos o a uno, depende de la instrucción).
-
-* **Hilo recibidor** (receiver thread): existe uno por cada cliente. Se encarga de esperar que llegue un mensaje de su cliente, y lo pushea a la cola bloqueante de update del match thread.
-
-* **Hilo enviador** (sender thread): existe uno por cada cliente. Pasa la mayoria del tiempo bloqueado esperando a que el match thread pushee algo a la cola de envios. Cuando algo aparece lo envia por su socket conectado al cliente.-->

@@ -44,10 +44,12 @@ void ScreenHandler::switchOpenStatusIfLeaveMatchScreenIsRendering(std::atomic<bo
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     open = false;
+  render_leave_match_screen = false;
 }
 
 void ScreenHandler::surrenderMatchIfLeaveMatchScreenIsRendering(Game &game) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   if (render_leave_match_screen)
     game.surrender();
+  render_leave_match_screen = false;
 }

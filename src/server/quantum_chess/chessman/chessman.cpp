@@ -306,7 +306,6 @@ Chessman::checkIsAValidMerge(const Position &initial1, const Position &final) {
   return OK;
 }
 
-// TODO posible moves to list
 void Chessman::calculatePossibleMoves(const Position &initial,
                                       std::list<Position> &possible_moves) {
   calculateMoves(initial, possible_moves);

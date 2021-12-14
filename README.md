@@ -9,9 +9,7 @@
 
 [Link al repositorio](https://github.com/santoi/quantum-chess)
 
-## Ejecucion
-
-### Dependencias
+## Dependencias
 * Git
 * Make
 * CMake
@@ -20,7 +18,45 @@
 * SDL2 (paquetes ```libsdl2-dev```, ```libsdl2-mixer-dev```, ```libsdl2-ttf-dev```, ```libsdl2-image-dev```)
 * Valgrind (solo si se desea correr con el mismo)
 
+## Instalación
+
+Para instalar el programam, primeramente se debe clonar el repositorio en una consola utilizando
+    
+    git clone --recurse-submodules git@github.com:Santoi/quantum-chess
+
+luego, estando ubicado en la carpeta del repositorio, se debe ejecutar el script de instalación con permisos de super usuario.
+
+    sudo bash install.sh
+
+Esto copiará los archivos tanto binarios como de recursos en las carpetas correspondientes. Para desinstalar, de la misma manera, se debe ejecutar
+
+    sudo bash uninstall.sh
+
+### Ejecución del server
+
+Para ejecutar el server, se debe ejecutar la siguiente linea en una terminal desde cualquier ubicación, donde ```port``` es el puerto en el que se abrirá el server y ```config_file``` el archivo de configuración del tablero, el cual debe estar ubicado en ```/usr/local/share/quantum_chess/boards/``` (solo el nombre del archivo, sin esta primera carpeta). Si no se explicita este último parámetro, se utilizara el archivo ```default.txt```.
+
+    quantum_chess_server <port> [config_file]
+
+### Ejecución del cliente
+
+Al instalar, se creará un acceso directo al cliente del juego en la sección de Juegos del sistema operativo, que permite ejecutarlo directamente.
+
+<p align=center>
+    <img src="docs/images/readme/desktop_file.png" alt="Acceso directo" height="300"/>
+</p>
+
+También es posible ejecutarlo desde una consola, estando en cualquier ubicación, utilizando
+
+    quantum_chess
+
+
+
+## Compilación (sin instalación)
+Para compilar el programa sin instalarlo, se deben seguir los siguientes pasos. De esta manera se pueden correr los tests y las ejecuciones del programa utilizando *valgrind*.
+
 ### Compilación
+
 Para compilar, en una consola se debe clonar el resositorio utilizando
     
     git clone --recurse-submodules git@github.com:Santoi/quantum-chess
@@ -36,9 +72,9 @@ Para ejecutar el server, se debe ejecutar la siguiente linea, donde ```port``` e
 
 ### Ejecución del cliente
 
-Para ejecutar el cliente, se debe ejecutar la siguiente linea, donde ```host``` es el host donde se encuentra corriendo el server y ```port``` el puerto.
+Para ejecutar el cliente, se debe ejecutar la siguiente linea
 
-    bash client.sh <host> <port>
+    bash client.sh
 
 ### Ejecución de tests y valgrind
 
@@ -49,13 +85,33 @@ Para ejecutar los tests se debe correr la siguiente linea, para ello se debe ten
 Para ejecutar el servidor o el cliente con Valgrind, se ejecuta de la misma manera detallada en la sección anterior pero con los scripts
 
         bash valserver.sh <port> [config_file]
-        bash valclient.sh <host> <port>
+        bash valclient.sh
 
 ### Limpieza de build
 
 Para limpiar la build, simplemente se debe borrar la carpeta ```build``` con
 
     rm -r build
+
+## Uniendose a una partida
+
+Una vez se ejecuta el programa, se encuentra la pantalla de inicio de sesión, allí se deberá ingresar la dirección IP del host y el puerto correspondientes al server.
+
+<p align=center>
+    <img src="docs/images/readme/login_start.jpg" alt="Pantalla de log in" height="350"/>
+</p>
+
+Luego, se pasa a la selección de partida, donde se puede seleccionar entre unirse a una partida existente o crear una nueva. Con el boton 'Refresh' se puede obtener una actualización de las partidas. Los botones 'Previous' y 'Next' permiten ir hacia adelante en la lista de partidas o hacia atrás si hay más del máximo de partidas por pantalla.
+
+<p align=center>
+    <img src="docs/images/readme/login_select_match.jpg" alt="Pantalla de log in" height="350"/>
+</p>
+
+Luego, se pasa a seleccionar el rol, se puede elegir entre blancas, negras y espectador. Indicandose que rol no esta disponible con una cruz roja sobre el botón.
+
+<p align=center>
+    <img src="docs/images/readme/login_select_role.jpg" alt="Pantalla de log in" height="350"/>
+</p>
 
 ## Como jugar
 
@@ -213,27 +269,42 @@ En la zona derecha de la pantalla, se pueden visualizar 4 secciones: el log de e
  1. El log de errores se muestra en rojo, cuando un movimiento no se haya podido completar por algún error del usuario (tal como un movimiento inválido, no es su turno, etcetera).
  2. El log de turnos se muestra en verde, e indica quien debe jugar.
  3. El log de movimientos detalla en vivo cuales fueron los últimos movimientos realizados en la partida y sus consecuencias.
- 4. El chat permite conversar con los otros jugadores y observadores. Para utilizarlo se deberá hacer clic sobre la barra negra de la derecha, allí se podrá tipear. Los mensajes son enviados utilizando ```ENTER``` o automáticamente al llegar al final de la linea. Para voler al juego, solo se debe presionar sobre el tablero (este primer toque no activará ninguna casilla).
+ 4. El chat permite conversar con los otros jugadores y observadores. Para utilizarlo se deberá hacer la entrada de texto que indica 'CHAT HERE', allí se podrá tipear. Los mensajes son enviados utilizando ```ENTER``` o automáticamente al llegar al final de la linea. Para voler al juego, solo se debe presionar sobre el tablero (este primer toque no activará ninguna casilla).
 
 
  <p align=center>
-    <img src="docs/images/readme/chat.gif" alt="Chat" height="450"/>
+    <img src="docs/images/readme/chat_show.gif" alt="Chat" height="450"/>
 </p>
 
+### Flip de tablero
+
+El tablero se puede dar vuelta, cambiando entre vista desde el lado de las blancas y de las negras utilizando la tecla `F`.
+
+### Ayuda
+
+Se puede abrir la ayuda del huego utilizando la tecla `H`.
+
+### Rendición
+
+Se puede rendirse de la partida apretando la tecla `S`.
 
 ### Activación de musica y sonidos
 
-La música puede ser activada y desactivada utilizando la tecla ```M```. Los efectos de sonidos pueden ser desactivados utilizando la telca ```N```.
+La música puede ser activada y desactivada utilizando la tecla ```M```. Los efectos de sonidos pueden ser desactivados utilizando la tecla ```N```.
 
 ### Cancelando movimientos
 
 Todos los movimientos pueden ser cancelados con la tecla ```ESC```
 
+## Archivo de configuración del juego
+
+El juego permite configurar parámetros a traves del archivo de configuración ubicado en ```/usr/local/share/quantum_chess/config_files/config.txt``` donde se puede modificar resolución y *frame rate*.
+
 ## Archivo de configuración del tablero
 
 El archivo de configuracion permite cargar tableros pre-definidos. Esto es para el server, por lo que un server inicializado con un archivo, lo usará para todas sus partidas.
 
- Los archivos de configuración deben ser guardados en texto plano en la carpeta ```boards/```.
+ Los archivos de configuración deben ser guardados en texto plano en la carpeta ```/usr/local/share/quantum_chess/boards```.
 
 Cada pieza debe ser colocada en una línea distinta, teniendo la siguiente forma:
     
@@ -264,4 +335,25 @@ Por ejemplo, si se carga un archivo como se muestra a continuación, se obtiene 
 
 <p align=center>
     <img src="docs/images/readme/example_file.png" alt="Tablero cargado con archivo" height="400"/>
+</p>
+
+
+## Ascii Chess
+
+El Ascii Chess se realizó como herramienta de *debugging* durante la etapa inicial del desarrollo. Puede ser jugado, aunque solo contiene movimientos clásicos.
+
+Para jugarlo se debe compilar el programa (no instalarlo), y ejecutar
+
+    bash ascii.sh
+
+Para jugar simplemente se debe ingresar el comando
+
+    M initial_x initial_y final_x final_y
+
+donde las coordenadas en x van de A a H y en y de 0 a 7.
+
+Se puede salir presionando la tecla `q`.
+
+<p align=center>
+    <img src="docs/images/readme/ascii_chess.jpg" alt="Pantalla de log in" />
 </p>

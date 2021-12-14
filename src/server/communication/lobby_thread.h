@@ -6,6 +6,7 @@
 #include "../../common/blocking_queue.h"
 #include "match_organizer.h"
 #include "client_connection_thread.h"
+#include <list>
 
 // Thread that push sockets of new clients from a blocking queue and creates
 // and handles threads of clients connections. It also handles closed matches.

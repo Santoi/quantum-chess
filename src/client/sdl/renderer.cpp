@@ -4,10 +4,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <algorithm>
 
-Renderer::Renderer(SDL2pp::Window &window) : renderer_(window,
-                                                       -1,
-                                                       SDL_RENDERER_ACCELERATED) {
-}
+Renderer::Renderer(SDL2pp::Window &window) :
+    renderer_(window, -1, SDL_RENDERER_ACCELERATED) {}
 
 void Renderer::copy(Sprite &sprite, size_t x, size_t y) {
   const SDL2pp::Rect dest(x, y, sprite.width(), sprite.height());

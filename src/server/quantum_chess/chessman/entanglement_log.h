@@ -2,6 +2,7 @@
 #define QUANTUM_CHESS_PROJ_ENTANGLEMENT_LOG_H
 
 #include "../quantum_position.h"
+#include <list>
 
 // Represents a list where entanglements are noted.
 class EntanglementLog {
@@ -47,8 +48,9 @@ public:
                                               const QuantumPosition &pos2);
 
   // Returns true if a chessman_ is entangled more than once with a position.
-  bool chessmanIsEntangledMoreThanOnceWithPosition(const Chessman &chessman,
-                                                   const QuantumPosition &position);
+  bool
+  chessmanIsEntangledMoreThanOnceWithPosition(const Chessman &chessman,
+                                              const QuantumPosition &position);
 
   // Measures entanglements of a position of a chessman_.
   void
@@ -72,7 +74,7 @@ public:
   // Returns true if chessmen are entangled.
   bool areEntangled(const Chessman &chessman1, const Chessman &chessman2);
 
-  // Loads positions list with all chessmen entangled with chessman_.
+  // Load positions list with all chessmen entangled with chessman_.
   void getEntangledOf(const Chessman &chessman,
                       std::list<const Chessman *> &positions);
 };

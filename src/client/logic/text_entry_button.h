@@ -15,7 +15,6 @@ private:
   bool expecting_text_entry;
 
 public:
-
   TextEntryButton() = delete;
 
   TextEntryButton(ButtonSpriteRepository &button_repository,
@@ -24,8 +23,10 @@ public:
 
   void setAreaAndPosition(int x_, int y_, int width, int height);
 
+  // Checks if pixel is on text entry
   bool enableTextEntryIfClicked(const PixelCoordinate &pixel);
 
+  //Concat text to text entry if expecting_text_entry is true.
   void concatIfEnabled(const std::string &text_);
 
   void backspaceIfEnabled();
@@ -35,9 +36,6 @@ public:
   void disableTextEntry();
 
   void render();
-
-private:
-  bool pixelIsOnTextEntry(const PixelCoordinate &pixel);
 };
 
 

@@ -1,11 +1,12 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <list>
 #include "queen.h"
 
 Queen::Queen(const Position &position, bool white_, Board &board_,
              EntanglementLog &entanglement_log_) :
-        Chessman(position, white_, board_, entanglement_log_) {}
+    Chessman(position, white_, board_, entanglement_log_) {}
 
 void Queen::calculateMoves(const Position &initial,
                            std::list<Position> &possible_moves)

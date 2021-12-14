@@ -31,13 +31,6 @@ void SoundHandler::playMusic() {
   playing_music = true;
 }
 
-void SoundHandler::stopMusic() {
-  std::lock_guard<std::mutex> lock_guard(mutex);
-  mixer.PauseMusic();
-  music_started = false;
-  playing_music = false;
-}
-
 void SoundHandler::resumeMusic() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   mixer.ResumeMusic();

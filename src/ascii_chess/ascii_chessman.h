@@ -6,14 +6,15 @@
 #define GREEN   "\033[32m"
 
 class AsciiChessman {
-    bool isWhite;
-    char character;
+  bool isWhite;
+  char character;
 public:
-    AsciiChessman(bool isWhite_, char character_);
+  AsciiChessman(bool isWhite_, char character_);
 
-    AsciiChessman(const AsciiChessman &) = default;
+  AsciiChessman(const AsciiChessman &) = default;
 
-    friend std::ostream& operator<< (std::ostream & os, const AsciiChessman & chessman);
+  friend std::ostream &
+  operator<<(std::ostream &os, const AsciiChessman &chessman);
 };
 
 

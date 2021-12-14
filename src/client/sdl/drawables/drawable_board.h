@@ -4,7 +4,7 @@
 #include "drawable_chessman.h"
 #include "drawable_tile.h"
 #include "../sprite_repositories/chessman_sprite_repository.h"
-#include "../../game/position.h"
+#include "../../game/board_position.h"
 #include "../../communication/chessman_data.h"
 #include "../texture_sprite.h"
 #include "../renderer.h"
@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <utility>
 
 class Renderer;
 
@@ -23,14 +24,14 @@ class DrawableBoard {
 private:
   Renderer &renderer;
   TextureSprite background;
-  std::map<const Position, DrawableChessman> chessmen;
-  std::map<const Position, DrawableTile> board;
-  std::map<const Position, DrawableText> positions;
+  std::map<const BoardPosition, DrawableChessman> chessmen;
+  std::map<const BoardPosition, DrawableTile> board;
+  std::map<const BoardPosition, DrawableText> positions;
   ChessmanSpriteRepository chessman_repository;
   TileSpriteRepository tile_repository;
   TextSpriteRepository text_repository;
   bool current;
-  std::pair<Position, DrawableTile> current_tile;
+  std::pair<BoardPosition, DrawableTile> current_tile;
   std::mutex mutex;
 
 public:
@@ -39,33 +40,35 @@ public:
 
   ~DrawableBoard() = default;
 
-  void render();
-
-  std::map<const Position, DrawableTile> getTiles();
-
-  std::map<const Position, DrawableChessman> getChessmen();
-
-  TextureSprite &getBackground();
-
+  // Replace current chessmen with the chessmen vector in their new positions
   void load(std::vector<ChessmanData> &chessman_data_vector);
 
-  void moveTile(const Position &pos);
+  // Set the given position's tile as a move tile
+  void moveTile(const BoardPosition &pos);
 
-  void quantumTile(const Position &pos);
+  // Set the given position's tile as a quantum tile
+  void quantumTile(const BoardPosition &pos);
 
-  void entangledTile(const Position &pos);
+  // Set the given position's tile as an entangled tile
+  void entangledTile(const BoardPosition &pos);
 
-  void splitTile(const Position &pos);
+  // Set the given position's tile as a split tile
+  void splitTile(const BoardPosition &pos);
 
-  void mergeTile(const Position &pos);
+  // Set the given position's tile as a merge tile
+  void mergeTile(const BoardPosition &pos);
 
+  // Set the selected tile as selected
+  void currentTile(const BoardPosition &position);
+
+  // Set the default tiles
   void setDefault();
 
-  void render(CoordinateTransformer &transformer, int width, int height);
-
-  void currentTile(const Position &position);
-
+  // Set the default tiles, except for the current tiles
   void setDefaultWithCurrent();
+
+  // Render the current board
+  void render(CoordinateTransformer &transformer, int width, int height);
 };
 
 

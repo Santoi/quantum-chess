@@ -2,12 +2,14 @@
 #include "../logic/button.h"
 #include "../logic/text_entry_button.h"
 #include <list>
+#include <string>
 
 LoginHandlerThread::LoginHandlerThread(Login &login,
                                        LoginStateHandler &login_state_handler) :
     HandlerThread(true),
     login(login),
     login_state_handler(login_state_handler),
+    event(),
     expecting_text_entry(false),
     was_closed_(false) {}
 
@@ -66,7 +68,7 @@ void LoginHandlerThread::handleTextInput(const std::string &new_text) {
 }
 
 void LoginHandlerThread::handleMouseButtonLeft() {
-  login_state_handler.resetPressedButtons();
+  login_state_handler.resetAllButtonsToNotPressedState();
 }
 
 void LoginHandlerThread::handleMouseButtonLeft(SDL_MouseButtonEvent &mouse) {

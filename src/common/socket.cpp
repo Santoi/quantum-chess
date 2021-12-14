@@ -1,15 +1,12 @@
 #include "socket.h"
 #include "socket_closed.h"
 #include "socket_exception.h"
-#include "unique_ptr.h"
 #include <cerrno>
 #include <cstring>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#include <cstdint>
-#include <cstdio>
+#include <vector>
 #include <iostream>
 
 #define ERROR -1

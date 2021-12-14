@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "server.h"
 
 #define SUCCESS 0

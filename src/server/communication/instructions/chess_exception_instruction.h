@@ -4,6 +4,7 @@
 #include "../../../common/client_data.h"
 #include "instruction.h"
 #include <map>
+#include <string>
 
 class Instruction;
 
@@ -23,7 +24,8 @@ public:
 
   void
   fillPacketWithInstructionToSend(ServerProtocol &protocol, Packet &packet,
-                                  const ClientData &client_receiver_data) override;
+                                  const ClientData
+                                  &client_receiver_data) override;
 
   ~ChessExceptionInstruction() override = default;
 };

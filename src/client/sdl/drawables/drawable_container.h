@@ -20,8 +20,10 @@ public:
 
   explicit DrawableContainer(unsigned int max_drawables_);
 
+  // Push drawable to container, and pops the oldest one if filled
   void addDrawable(T &&drawable);
 
+  // Render drawables from down to up, separating them by their height
   void render(int x, int y);
 
   void clear();
@@ -29,12 +31,12 @@ public:
 
 template<class T>
 DrawableContainer<T>::DrawableContainer()
-        :max_drawables(NO_LIMIT) {
+    :max_drawables(NO_LIMIT) {
 }
 
 template<class T>
 DrawableContainer<T>::DrawableContainer(unsigned int max_drawables_)
-        :max_drawables(max_drawables_) {
+    :max_drawables(max_drawables_) {
 }
 
 template<class T>

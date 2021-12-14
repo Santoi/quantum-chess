@@ -131,4 +131,22 @@ Antes de la etapa final de la documentación técnica, se procede a mostrar las 
 
 Cuando se quiere un programa responsivo para el usuario se necesita hacer uso de hilos. En el caso de la pantalla de Login, dado la información que se ha mostrado a lo largo de este manual técnico se propone el uso de solo dos hilos: uno para renderizar y otro para manejar la interacción con el usuario, de la siguiente forma:
 
-![threads_diagram_for_login](images/manual_tecnico/login/threads_diagram_for_login.png)
+![threads_diagram_for_login](images/manual_tecnico/login/threads_diagram_for_login.jpg)
+
+El objeto que está siendo accedido por ambos hilos es el LoginStateHandler, por lo que se utiliza un mutex en esta clase para evitar problemas a la hora de acceder al estado actual.
+
+# Algo más que un Login
+
+El login es necesario para que el usuario pueda interactuar con el programa cliente y este pueda comunicarse con el servidor, y ese era su objetivo inicial. Sin embargo, dado su diseño compacto y extensible, se vio la posibilidad de aprovechar el login que ya está implementado para crear nuevas funcionalidades que se piensan fundamentales en un juego en línea. Una de estas es la posibilidad de navegar por el juego: poder entrar en una partida y regresar a la pantalla de selección de partidas para volver a jugar, esto sin la necesidad de parar de ejecutar el programa, volver a ejecutarlo y volver a poner los datos de ip y puerto. 
+
+Esto le da al usuario una libertad que antes no hubiera tenido. Para hacerlo, el constructor del LoginStateHandler recibe un booleano que denota si el Login se había conectado antes al server. Si este no es el caso (booleano == false) entonces se crea un controlador de estados (con estado actual ConnectingToServerState) tal como se mostró en la primera sección de este manual, y su ejecución no cambia.
+
+Si el booleano == true, significa que el Login sí se había conectado antes al servidor, por lo que este almacena strings para ip y puerto correctos. El login entonces se crea con el estado ChooseToKeepPlayingState, donde al usuario se le presentarán dos botones: "Sí" si este quiere seguir jugando, y "No" si no. Se presenta un diagrama de secuencias explicando estos casos.
+
+![login_sequence_choose_to_stay_state](images/manual_tecnico/login/login_sequence_choose_to_stay_state.png)
+
+Tal como se muestra: si el usuario quisiera volver a jugar, el controlador de estados pasa al SelectingMatchState, y pasa la misma secuencia de antes. Caso contrario, se guarda el estado que el cliente no quiere jugar y que se puede cerrar el programa. Ahora se muestra un diagrama de flujo de todo el programa.
+
+![programs_flow_chart](images/manual_tecnico/login/programs_flow_chart.jpg)
+
+

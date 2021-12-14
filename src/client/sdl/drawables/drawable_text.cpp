@@ -31,10 +31,6 @@ void DrawableText::render(size_t x, size_t y) {
   }
 }
 
-size_t DrawableText::length() const {
-  return text.size();
-}
-
 size_t DrawableText::getDrawableWidth() const {
   return text.size() * text_sprite_repository.getSpriteSize();
 }

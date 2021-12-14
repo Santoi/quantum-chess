@@ -2,6 +2,7 @@
 #include <vector>
 #include <list>
 #include <utility>
+#include <string>
 #include <algorithm>
 #include <iostream>
 #include "chessman.h"
@@ -9,8 +10,8 @@
 
 Chessman::Chessman(const Position &position_, bool white_, Board &board_,
                    EntanglementLog &entanglement_log_) :
-        positions(1, QuantumPosition(position_, 1, this)),
-        board(board_), white(white_), entanglement_log(entanglement_log_) {}
+    positions(1, QuantumPosition(position_, 1, this)),
+    board(board_), white(white_), entanglement_log(entanglement_log_) {}
 
 
 bool Chessman::move(const Position &initial, const Position &final) {
@@ -509,7 +510,7 @@ void Chessman::entangle(const Position &initial, const Position &final,
                                          other.positions.end(), other_position);
   // New probabilities calculation.
   double entangled_prob =
-          other_qp.getProb();
+      other_qp.getProb();
   double initial_prob = initial_qp_it->getProb();
   double new_initial_prob = entangled_prob * initial_prob;
   double new_final_prob = initial_prob * (1 - entangled_prob);
@@ -585,7 +586,7 @@ void Chessman::moveValidationExceptionThrower(MoveValidationStatus status) {
   }
 }
 
-bool Chessman::chessmanIsAlreadyEntangled(Chessman &chessman) {
+bool Chessman::chessmanIsAlreadyEntangled(const Chessman &chessman) {
   return entanglement_log.areEntangled(*this, chessman);
 }
 

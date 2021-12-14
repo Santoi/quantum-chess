@@ -3,6 +3,7 @@
 #include "position.h"
 #include "../../common/chess_exception.h"
 #include "quantum_position.h"
+#include <string>
 
 Position::Position() : x_(0), y_(0) {}
 
@@ -12,7 +13,7 @@ Position::Position(uint8_t x, uint8_t y) : x_(x), y_(y) {
 }
 
 Position::Position(const QuantumPosition &position) :
-        x_(position.x()), y_(position.y()) {}
+    x_(position.x()), y_(position.y()) {}
 
 uint8_t Position::x() const {
   return x_;

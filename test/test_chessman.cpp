@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 #include <vector>
+#include <list>
 #include "../src/server/quantum_chess/board.h"
 #include "../src/server/quantum_chess/chessman/tower.h"
 #include "../src/server/quantum_chess/chessman/tower.h"
@@ -1450,7 +1451,6 @@ TEST(Chessman, CannotMergeDifferentChessman) {
   board.addNewChessman('T', Position(7, 1), true);
   Chessman *tower_1 = board.getChessmanAt(Position(4, 1));
   Chessman *tower_2 = board.getChessmanAt(Position(7, 1));
-  std::list<Position> posible_merges;
 
   tower_1->split(Position(4, 1), Position(5, 1), Position(4, 2));
   tower_2->split(Position(7, 1), Position(7, 2), Position(6, 1));
@@ -1558,15 +1558,10 @@ TEST(King, CantLongCastleWithClassicPieceInTheMiddleInLongCastling) {
 
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-  };
-
   queen->move(Position(3, 0), Position(2, 0));
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  posible_moves_gt = {
+  std::list<Position> posible_moves_gt = {
       Position(5, 0), Position(5, 1),
       Position(4, 1), Position(3, 1), Position(3, 0)
   };
@@ -1599,15 +1594,10 @@ TEST(King, LongCastleWithQuantumPieceInTheMiddle) {
 
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  std::list<Position> posible_moves_gt = {
-      Position(5, 0), Position(5, 1),
-      Position(4, 1), Position(3, 1),
-  };
-
   queen->move(Position(3, 0), Position(2, 0));
   king->calculatePossibleMoves(Position(4, 0), posible_moves);
 
-  posible_moves_gt = {
+  std::list<Position> posible_moves_gt = {
       Position(5, 0), Position(5, 1),
       Position(4, 1), Position(3, 1), Position(3, 0)
   };
@@ -1636,8 +1626,6 @@ TEST(King, LongCastleMoveWithQuantumInTheMiddleAndThenMeasureQueenWasThere) {
   Chessman *queen = board.getChessmanAt(Position(0, 1));
 
   queen->split(Position(0, 1), Position(1, 0), Position(1, 1));
-
-  std::list<Position> posible_moves;
 
   king->move(Position(4, 0), Position(2, 0));
 
@@ -1668,8 +1656,6 @@ TEST(King, LongCastleMoveWithQuantumInTheMiddleAndThenMeasureQueenWasNotThere) {
   Chessman *queen = board.getChessmanAt(Position(0, 1));
 
   queen->split(Position(0, 1), Position(1, 1), Position(1, 0));
-
-  std::list<Position> posible_moves;
 
   king->move(Position(4, 0), Position(2, 0));
 

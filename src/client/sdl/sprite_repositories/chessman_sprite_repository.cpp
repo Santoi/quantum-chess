@@ -1,5 +1,7 @@
 #include "chessman_sprite_repository.h"
 #include "../texture_sprite.h"
+#include <map>
+#include <string>
 
 #define CHESSMAN_PATH "resources/sprites/chessman/"
 

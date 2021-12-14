@@ -20,13 +20,16 @@ private:
   std::map<TileType, TextureSprite> white_tiles;
   std::map<TileType, TextureSprite> black_tiles;
 
+  // Load white tiles sprites
   void loadWhite(Renderer &renderer);
 
+  // Load black tiles sprites
   void loadBlack(Renderer &renderer);
 
 public:
   explicit TileSpriteRepository(Renderer &renderer);
 
+  // Get the TileType sprite
   TextureSprite &getTile(TileType type, bool black);
 };
 

@@ -54,3 +54,7 @@ void ScreenHandler::surrenderMatchIfLeaveMatchScreenIsRendering(Game &game) {
     game.surrender();
   render_leave_match_screen = false;
 }
+
+bool ScreenHandler::renderingGame() {
+  return !(render_leave_match_screen || render_help_screen);
+}

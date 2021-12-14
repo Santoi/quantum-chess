@@ -37,6 +37,8 @@ void EventHandlerThread::run() {
         break;
       case SDL_MOUSEBUTTONDOWN: // Any extra case must be added above this one
         SDL_MouseButtonEvent mouse = event.button;
+        if (!screen_handler.renderingGame())
+          break;
         if (mouse.button == SDL_BUTTON_LEFT)
           handleMouseButtonLeft(mouse);
         else if (mouse.button == SDL_BUTTON_RIGHT)

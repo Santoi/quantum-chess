@@ -30,6 +30,8 @@ public:
     void switchOpenStatusIfLeaveMatchScreenIsRendering(std::atomic<bool>& open);
 
     void surrenderMatchIfLeaveMatchScreenIsRendering(Game &game);
+
+    bool renderingGame();
 };
 
 

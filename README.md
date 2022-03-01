@@ -162,7 +162,7 @@ Una pieza partida podrá ser reunida de nuevo mediante el movimiento merge. Una 
 Para realizar el merge, se debe mantener presionada la tecla ```LEFT CTRL``` y hacer clic izquierdo en la pieza que se quiere mergear. Se mostrarán en marrón las casillas a donde se puede hacer un merge. Luego se debe clickear (ya no hace falta seguir apretando la tecla) y seleccionar la otra pieza con la que se quiere mergear. El color marrón cambiara a las casillas a las que ambas piezas pueden moverse. Un tercer clic en una casilla valida, efectuará el merge.
 
 <p align=center>
-    <img src="docs/images/readme/split.gif" alt="Tablero cargado con archivo" height="400"/>
+    <img src="docs/images/readme/merge.gif" alt="Tablero cargado con archivo" height="400"/>
 </p>
 
 

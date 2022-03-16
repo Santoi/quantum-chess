@@ -13,7 +13,8 @@ EventHandlerThread::EventHandlerThread(Window &window, Game &game,
           screen_handler(screen_handler_),
           text_entry(text_entry),
           split(false), merge(false),
-          first_click(false), second_click(false), penultimate_click(),
+          first_click(false), second_click(false),
+          client_quitted(false), penultimate_click(),
           last_click(), chat(chat_) {}
 
 void EventHandlerThread::run() {
@@ -22,7 +23,8 @@ void EventHandlerThread::run() {
     switch (event.type) {
       case SDL_QUIT:
         open = false;
-        return;
+        client_quitted = true;
+        break;
       case SDL_WINDOWEVENT:
         handleWindowChange(event.window);
         break;
@@ -91,11 +93,6 @@ void EventHandlerThread::handleKeyDown() {
     case SDLK_h: {
       if (!text_entry.isEnabled())
         screen_handler.toggleHelpScreen();
-      break;
-    }
-    case SDLK_r: {
-      if (!text_entry.isEnabled())
-        screen_handler.activateLeaveScreen();
       break;
     }
     case SDLK_c: {
@@ -264,4 +261,8 @@ void EventHandlerThread::handleUserThirdClick(const PixelCoordinate &pixel) {
     second_click = false;
     merge = false;
   }
+}
+
+bool EventHandlerThread::clientQuitted() {
+  return client_quitted;
 }

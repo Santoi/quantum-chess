@@ -19,8 +19,6 @@ class LoginScene;
 
 class Client {
 private:
-  BlockingQueue<RemoteClientInstruction> received;
-  BlockingQueue<RemoteClientInstruction> send;
   ClientData::Role role;
 
   void gameRenderLoop(GameScene &scene, Game &game, const TextEntry &text_entry,
@@ -31,16 +29,25 @@ private:
                        HandlerThread &login_handler, Renderer &renderer,
                        uint8_t frame_rate);
 
-  bool executeLogin(Window &window, Login &login,
-                    ButtonSpriteRepository &button_sprite_repository,
-                    TextSpriteRepository &text_sprite_repository,
-                    uint8_t frame_rate);
+  void handleFirstLogin(Login& login,
+                        ButtonSpriteRepository& button_sprite_repository,
+                        TextSpriteRepository& text_sprite_repository,
+                        Window& window,
+                        Renderer& renderer,
+                        uint8_t frame_rate, bool& login_was_closed);
 
-  void executeGame(Window &window, Game &game, Socket &socket,
-                   CoordinateTransformer &coordinate_transformer, Font &font,
-                   ButtonSpriteRepository &button_sprite_repository,
-                   TextSpriteRepository &text_sprite_repository,
-                   uint8_t frame_rate);
+  void handleGame(Socket&& socket,
+                  ButtonSpriteRepository& button_sprite_repository,
+                  TextSpriteRepository& text_sprite_repository, Window& window,
+                  Renderer& renderer, Font& font, uint8_t frame_rate,
+                  bool& game_quitted);
+
+  void handleSelectAnotherMatchOrQuit(Login& login,
+                             ButtonSpriteRepository& button_sprite_repository,
+                             TextSpriteRepository& text_sprite_repository,
+                             Window& window, Renderer& renderer,
+                             uint8_t frame_rate, bool& keep_playing,
+                             bool& login_was_closed);
 
 public:
   Client();

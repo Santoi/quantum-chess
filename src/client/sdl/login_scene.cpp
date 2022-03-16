@@ -5,6 +5,7 @@
 #define MAX_MATCH_BUTTON_COUNT 8
 
 #define BACKGROUND_SPRITE "resources/sprites/background/login-background.jpg"
+#define QUESTION_SPRITE "resources/sprites/login_sprites/play_another_match.png"
 
 LoginScene::LoginScene(Window &window,
                        LoginStateHandler &login_state_handler)
@@ -13,7 +14,10 @@ LoginScene::LoginScene(Window &window,
         login_state_handler(login_state_handler),
         background(window.renderer(), BACKGROUND_SPRITE,
                    window.getWidth(),
-                   window.getHeight()) {}
+                   window.getHeight()),
+        question_play_other_match(window.renderer(), QUESTION_SPRITE,
+                                  window.getWidth(),
+                                  window.getHeight()) {}
 
 void LoginScene::render() {
   background.render(0, 0, window.getWidth(), window.getHeight());
@@ -119,7 +123,8 @@ void LoginScene::renderChoosingMatchButtons(
 
 void LoginScene::renderRolesButtons(Button &white_role_button,
                                     Button &black_role_button,
-                                    Button &spectator_role_button) {
+                                    Button &spectator_role_button,
+                                    Button &return_button) {
   size_t width = window.getWidth();
   size_t button_height, button_width;
   button_height = button_width = width * .1;
@@ -135,7 +140,31 @@ void LoginScene::renderRolesButtons(Button &white_role_button,
                                            button_height * 2,
                                            button_width,
                                            button_height);
+  return_button.setAreaAndPosition(width / 2 - button_width / 2 + delta_x,
+                                   button_height * 4,
+                                   button_width,
+                                   button_height / 2);
   white_role_button.render();
   black_role_button.render();
   spectator_role_button.render();
+  return_button.render();
+}
+
+void LoginScene::renderPlayAnotherMatchButtons(Button& yes_button,
+                                               Button& no_button) {
+  size_t width = window.getWidth();
+  question_play_other_match.render(0, 0, width, window.getHeight());
+  size_t button_height, button_width;
+  button_height = button_width = width * .1;
+  size_t delta_x = width * .01;
+  yes_button.setAreaAndPosition(width / 2 - button_width * 2 + delta_x,
+                                button_height * 2,
+                                button_width,
+                                button_height);
+  no_button.setAreaAndPosition(width / 2 + button_width + delta_x,
+                               button_height * 2,
+                               button_width,
+                               button_height);
+  yes_button.render();
+  no_button.render();
 }

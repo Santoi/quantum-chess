@@ -8,13 +8,20 @@
 
 LoginStateHandler::LoginStateHandler(Login &login,
                                      ButtonSpriteRepository &button_repository,
-                                     TextSpriteRepository &text_repository)
+                                     TextSpriteRepository &text_repository,
+                                     bool login_has_connected_to_server)
     : login(login),
       button_repository(button_repository),
-      text_repository(text_repository),
-      current_state(
-          make_unique<ConnectingToServerState>(login, button_repository,
-                                               text_repository)) {}
+      text_repository(text_repository), continue_playing(true) {
+  if (!login_has_connected_to_server)
+    current_state = make_unique<ConnectingToServerState>(login,
+                                                         button_repository,
+                                                         text_repository);
+  else
+    current_state = make_unique<ChooseToKeepPlayingState>(login,
+                                                          button_repository,
+                                                          text_repository);
+}
 
 bool LoginStateHandler::clientIsConnectedToMatch() {
   std::lock_guard<std::mutex> lock_guard(mutex);
@@ -28,8 +35,8 @@ void LoginStateHandler::fillWithActiveButtons(
 }
 
 void LoginStateHandler::fillWithActiveTextEntryButtons(
-    std::list<std::reference_wrapper<TextEntryButton>> &
-    active_text_entries) {
+  std::list<std::reference_wrapper<TextEntryButton>> &
+  active_text_entries) {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->fillWithActiveTextEntryButtons(active_text_entries);
 }
@@ -39,10 +46,13 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
     int aux = current_state->processTokens(std::move(tokens));
     usleep(500000);
     std::lock_guard<std::mutex> lock_guard(mutex);
-    if (aux != KEEP_STATE)
+    if (aux != KEEP_STATE && aux != STOP_PLAYING)
       current_state.reset();
     switch (aux) {
       case NEXT_STATE_CONNECT_TO_MATCH:
+      case RETURN_TO_SELECTING_MATCH_STATE:
+        if (aux == RETURN_TO_SELECTING_MATCH_STATE)
+            login.reconnectToServer();
         current_state = make_unique<SelectingMatchState>(login,
                                                          button_repository,
                                                          text_repository);
@@ -56,6 +66,9 @@ void LoginStateHandler::processTokens(std::list<std::string> &&tokens) {
         current_state = make_unique<ConnectedToMatchState>(login,
                                                            button_repository,
                                                            text_repository);
+        break;
+      case STOP_PLAYING:
+        continue_playing = false;
         break;
       default:
         break;
@@ -107,4 +120,14 @@ void LoginStateHandler::render(LoginScene &login_scene) {
 void LoginStateHandler::resetAllButtonsToNotPressedState() {
   std::lock_guard<std::mutex> lock_guard(mutex);
   current_state->resetAllButtonsToNotPressedState();
+}
+
+bool LoginStateHandler::loginIsNeeded() {
+  bool connected_to_match = clientIsConnectedToMatch();
+  return (!connected_to_match && continue_playing);
+}
+
+bool LoginStateHandler::continuePlaying() {
+  std::lock_guard<std::mutex> lock_guard(mutex);
+  return continue_playing;
 }

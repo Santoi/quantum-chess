@@ -23,6 +23,7 @@ protected:
   ButtonSpriteRepository &button_repository;
   TextSpriteRepository &text_repository;
   std::unique_ptr<LoginState> current_state;
+  bool continue_playing;
   std::mutex mutex;
 
 public:
@@ -30,7 +31,8 @@ public:
 
   explicit LoginStateHandler(Login &login,
                              ButtonSpriteRepository &button_repository,
-                             TextSpriteRepository &text_repository);
+                             TextSpriteRepository &text_repository,
+                             bool login_has_connected_to_server);
 
   //Returns call to current_state clientIsConnectedToMatch method.
   bool clientIsConnectedToMatch();
@@ -54,6 +56,13 @@ public:
 
   //Calls current state's same name method.
   void resetAllButtonsToNotPressedState();
+	
+  //Returns true if client wants to keep playing 
+  //and has not connected to match. Else returns
+  //false.
+  bool loginIsNeeded();
+
+  bool continuePlaying();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_STATE_HANDLER_H

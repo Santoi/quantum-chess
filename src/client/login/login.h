@@ -15,6 +15,8 @@
 class Login {
 private:
   std::unique_ptr<Socket> client_socket_ptr;
+  std::string ip;
+  std::string port;
   std::string client_nick_name;
   ClientData::Role role;
 
@@ -47,6 +49,8 @@ public:
 
   //Sends to server the refresh matches instruction.
   void refreshMatches();
+
+    void reconnectToServer();
 };
 
 #endif //QUANTUM_CHESS_PROJ_LOGIN_H

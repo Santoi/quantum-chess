@@ -21,6 +21,7 @@ private:
   ScreenHandler &screen_handler;
   TextEntry &text_entry;
   bool split, merge, first_click, second_click;
+  bool client_quitted;
   PixelCoordinate penultimate_click;
   PixelCoordinate last_click;
   SDL_Event event;
@@ -61,6 +62,8 @@ public:
 
   // Event loop
   void run() override;
+
+  bool clientQuitted();
 };
 
 

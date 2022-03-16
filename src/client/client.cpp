@@ -79,39 +79,61 @@ void Client::loginRenderLoop(LoginScene &login_renderer,
   }
 }
 
-void Client::execute() {
-  std::ifstream config_file(CONFIG_PATH);
-  ConfigFile config(config_file);
-  Window window(std::stoi(config.getValue("res_width")),
-                std::stoi(config.getValue("res_height")));
-  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
-  Renderer &renderer = window.renderer();
-  Font font(FONT_SIZE);
-  ButtonSpriteRepository button_sprite_repository(renderer);
-  TextSpriteRepository text_sprite_repository(renderer, font);
-  Login login;
+void Client::handleFirstLogin(Login& login,
+                      ButtonSpriteRepository& button_sprite_repository,
+                      TextSpriteRepository& text_sprite_repository,
+                      Window& window, Renderer& renderer,
+                      uint8_t frame_rate, bool& login_was_closed) {
+  LoginStateHandler login_state_handler(login, button_sprite_repository,
+                                        text_sprite_repository, false);
+  LoginScene login_scene(window, login_state_handler);
+  LoginHandlerThread login_handler(login, login_state_handler);
 
-  if (!executeLogin(window, login, button_sprite_repository,
-                    text_sprite_repository, frame_rate))
-    return;
+  login_handler.start();
+  loginRenderLoop(login_scene, login_handler, renderer, frame_rate);
+  login_handler.join();
+  login_was_closed = login_handler.was_closed();
+}
 
-  // if we are here the client is connected to a match
-  Socket socket = login.getClientSocket();
-  role = login.getRole();
+void startThreads(RemoteClientSender& sender_thread,
+                  RemoteClientReceiver& receiver_thread,
+                  ActionThread& action_thread,
+                  EventHandlerThread& event_handler) {
+  sender_thread.start();
+  receiver_thread.start();
+  action_thread.start();
+  event_handler.start();
+}
+
+void joinThreads(RemoteClientSender& sender_thread,
+                 RemoteClientReceiver& receiver_thread,
+                 ActionThread& action_thread,
+                 EventHandlerThread& event_handler) {
+  action_thread.join();
+  event_handler.join();
+  sender_thread.join();
+  receiver_thread.join();
+}
+
+void closeBlockingQueues(BlockingQueue<RemoteClientInstruction>& received,
+                         BlockingQueue<RemoteClientInstruction>& send) {
+  received.close();
+  send.close();
+}
+
+void Client::handleGame(Socket&& socket,
+                        ButtonSpriteRepository& button_sprite_repository,
+                        TextSpriteRepository& text_sprite_repository,
+                        Window& window,
+                        Renderer& renderer, Font& font, uint8_t frame_rate,
+                        bool& game_quitted) {
+  BlockingQueue<RemoteClientInstruction> received;
+  BlockingQueue<RemoteClientInstruction> send;
+  RemoteClientSender sender_thread(socket, send);
+  RemoteClientReceiver receiver_thread(socket, received);
 
   CoordinateTransformer coordinate_transformer;
   Game game(window, send, role, font, coordinate_transformer);
-  executeGame(window, game, socket, coordinate_transformer,
-              font, button_sprite_repository,
-              text_sprite_repository, frame_rate);
-}
-
-void Client::executeGame(Window &window, Game &game, Socket &socket,
-                         CoordinateTransformer &coordinate_transformer,
-                         Font &font,
-                         ButtonSpriteRepository &button_sprite_repository,
-                         TextSpriteRepository &text_sprite_repository,
-                         uint8_t frame_rate) {
   ScreenHandler screen_handler(role == ClientData::ROLE_SPECTATOR);
   GameScene scene(window, game.getBoard(), font, screen_handler,
                   text_sprite_repository,button_sprite_repository,
@@ -122,45 +144,79 @@ void Client::executeGame(Window &window, Game &game, Socket &socket,
   TurnLog turn_log(scene);
   TextEntry text_entry(scene.getChatWidth() / font.size());
 
-  RemoteClientSender sender_thread(socket, send);
-  RemoteClientReceiver receiver_thread(socket, received);
   ActionThread action_thread(received, game, chat, chess_log, error_log,
                              turn_log);
   EventHandlerThread event_handler(window, game,screen_handler,
                                    chat, text_entry);
 
-  receiver_thread.start();
-  sender_thread.start();
-  action_thread.start();
-  event_handler.start();
-  // comment if you don't want to go crazy while debugging.
+  startThreads(sender_thread, receiver_thread, action_thread, event_handler);
+
+  // comment if you dont want to go crazy while debugging.
   //sound_handler.playMusic();
 
-  gameRenderLoop(scene, game, text_entry, event_handler, window.renderer(),
-                 frame_rate);
+  gameRenderLoop(scene, game, text_entry, event_handler,
+                 renderer, frame_rate);
 
-  received.close();
-  send.close();
+  closeBlockingQueues(received, send);
+
   receiver_thread.notifySocketClosed();
   socket.shutdownAndClose();
-  action_thread.join();
-  event_handler.join();
-  sender_thread.join();
-  receiver_thread.join();
+  joinThreads(sender_thread, receiver_thread, action_thread, event_handler);
+  game_quitted = event_handler.clientQuitted();
 }
 
-bool Client::executeLogin(Window &window, Login &login,
-                          ButtonSpriteRepository &button_sprite_repository,
-                          TextSpriteRepository &text_sprite_repository,
-                          uint8_t frame_rate) {
+void Client::handleSelectAnotherMatchOrQuit(Login& login,
+                               ButtonSpriteRepository& button_sprite_repository,
+                               TextSpriteRepository& text_sprite_repository,
+                               Window& window, Renderer& renderer,
+                               uint8_t frame_rate, bool& keep_playing,
+                               bool& login_was_closed) {
   LoginStateHandler login_state_handler(login, button_sprite_repository,
-                                        text_sprite_repository);
+                                        text_sprite_repository, true);
   LoginScene login_scene(window, login_state_handler);
   LoginHandlerThread login_handler(login, login_state_handler);
-
   login_handler.start();
-  loginRenderLoop(login_scene, login_handler, window.renderer(), frame_rate);
+  loginRenderLoop(login_scene, login_handler, renderer, frame_rate);
   login_handler.join();
+  login_was_closed = login_handler.was_closed();
+  keep_playing = login_state_handler.continuePlaying();
+}
 
-  return !login_handler.was_closed();
+void Client::execute() {
+  std::ifstream config_file(CONFIG_PATH);
+  ConfigFile config(config_file);
+  Window window(std::stoi(config.getValue("res_width")),
+                std::stoi(config.getValue("res_height")));
+  uint8_t frame_rate = std::stoi(config.getValue("frame_rate"));
+  Renderer &renderer = window.renderer();
+  Font font(FONT_SIZE);
+  ButtonSpriteRepository button_sprite_repository(renderer);
+  TextSpriteRepository text_sprite_repository(renderer, font);
+
+  Login login;
+  bool login_was_closed;
+  handleFirstLogin(login, button_sprite_repository,
+                   text_sprite_repository, window,
+                   renderer, frame_rate, login_was_closed);
+  if (login_was_closed)
+    return;
+
+  bool keep_playing = true;
+  while (keep_playing) {
+  // if we are here the client is connected to a match.
+    Socket socket = login.getClientSocket();
+    role = login.getRole();
+    bool game_quitted = false;
+    handleGame(std::move(socket), button_sprite_repository,
+               text_sprite_repository, window, renderer, font,
+               frame_rate, game_quitted);
+    if (game_quitted)
+      return;
+    handleSelectAnotherMatchOrQuit(login, button_sprite_repository,
+                                   text_sprite_repository, window,
+                                   renderer, frame_rate,
+                                   keep_playing, login_was_closed);
+    if (login_was_closed)
+      return;
+  }
 }

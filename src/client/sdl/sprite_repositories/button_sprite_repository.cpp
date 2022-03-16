@@ -18,8 +18,8 @@ void ButtonSpriteRepository::loadPressed(Renderer &renderer) {
           {"role_white",       BUTTONS_PATH "available_white_role.png"},
           {"role_black",       BUTTONS_PATH "available_black_role.png"},
           {"role_spectator",   BUTTONS_PATH "spectator_role.png"},
-          {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"}
-  };
+          {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"},
+};
   for (auto &pair: images) {
     TextureSprite pressed_(renderer, pair.second,
                            renderer.getWidth() / 4,
@@ -36,8 +36,8 @@ void ButtonSpriteRepository::loadReleased(Renderer &renderer) {
           {"role_white",       BUTTONS_PATH "available_white_role.png"},
           {"role_black",       BUTTONS_PATH "available_black_role.png"},
           {"role_spectator",   BUTTONS_PATH "spectator_role.png"},
-          {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"}
-  };
+          {"unavailable_role", BUTTONS_PATH "unavailable_role_layer.png"},
+};
   for (auto &pair: images) {
     TextureSprite released_(renderer, pair.second,
                             renderer.getWidth() / 4,
